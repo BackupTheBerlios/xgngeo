@@ -12,7 +12,6 @@ stopped from interface).
 - XGngeo can now be run from any location without problem
 (images not loaded, etc.). ^^
 - Full support of GGF's xml file to get rom informations.
-- Deutsh translation.
 - Updated documentation.
 - A small source code clean-up. :p
 

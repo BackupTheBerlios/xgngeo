@@ -13,7 +13,7 @@ notice and this notice are preserved.
 
 @titlepage
 @title XGngeo's documentation
-@subtitle Version 14 - 2003.12.29
+@subtitle Version 14 - 2003.12.31
 @author The Choplair-network
 @insertcopying
 @end titlepage
@@ -158,7 +158,7 @@ XGngeo is developed by the Choplair-network, here comes the staff:
 @itemize
 @item French: @strong{Choplair}
 @item Polish: @strong{Matma} @email{matmaw[AT]poczta.onet.pl}
-@item Portuguese: @strong{Paulo Eduardo Chiva} @email{paulo.chiva[AT]ig.com.br}
+@item Portuguese: @strong{Matheus Villela} @email{matheusvillela[AT]list.ru}
 @item Spanish: @strong{Shilon} @email{slg[AT]bajoo.net}
 @end itemize
 

@@ -21,8 +21,7 @@ import gtk, os, string, re, gettext, gobject
 from sys import path as syspath
 
 #Change working directory to XGngeo's
-if syspath[0]: os.chdir(syspath[0])
-print syspath[0]
+os.chdir(os.path.abspath(syspath[0]))
 
 #Add `data/py/' to PATH, then import internal modules
 syspath.append("data/py/")
@@ -32,9 +31,7 @@ VERSION = 14
 gngeoPath = os.path.expanduser("~/.gngeo")
 
 #Internationalization
-gettext.bindtextdomain("xgngeo","data/lang")
-gettext.textdomain("xgngeo")
-_ = gettext.gettext
+gettext.install("xgngeo","data/lang")
 
 class XGngeo:
 	def keysConfig(self,widget):
