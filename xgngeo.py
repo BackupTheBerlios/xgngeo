@@ -25,7 +25,7 @@ os.chdir(syspath[0])
 
 #Add `data/py/' to PATH, then import internal modules
 syspath.append("data/py/")
-import command, configfile, history
+import command, configfile, history, rominfos
 
 VERSION = 14
 gngeoPath = os.path.expanduser("~/.gngeo")
@@ -172,7 +172,7 @@ class XGngeo:
 		self.introDialog = gtk.Dialog(_("Welcome! ^_^"))
 		self.introDialog.connect("delete_event",self.quit)
 
-		label = gtk.Label(_("The file \"%s\" was not found!\nWe need to configure Gngeo. Press OK to continue...") % self.configfile.get_path()[0])
+		label = gtk.Label(_("The configuration file of Gngeo was not found!\nWe have to create one. Press OK to continue...") % self.configfile.get_path()[0])
 		label.set_padding(5,10)
 		self.introDialog.vbox.pack_end(label)
 
@@ -240,7 +240,7 @@ class XGngeo:
 	def gngeoCheckExec(self,widget):
 		if self.cmd.isAlive(): pass
 		else: 
-			self.gngeoStop(kill=0)
+			self.gngeoStop(kill=0) #Do as `Stop' has been clicked...
 			self.file_menu_item.disconnect(self.checkexechandler) #Stop checking
 
 	def gngeoStop(self,widget=None,kill=1):
@@ -252,22 +252,26 @@ class XGngeo:
 		self.execMenu_item.set_sensitive(gtk.TRUE)
 
 	def romList(self,widget):
+		self.rominfos = rominfos.Rominfos(path=self.paramXGngeo["rominfosxml"])
+		
 		def setRomTemp(widget,data):
 			#If the selected rom is available
 			if data[0]==1:
 				if self.romFromList and self.romFromList!=data[1]:
-					self.listButton[self.romFromList].set_active(gtk.FALSE) #Desactive last selected Rom's button
+					self.listButton[self.romFromList].set_active(gtk.FALSE) #Desactivate last selected Rom's button.
 				if widget.get_active():	self.romFromList,self.romFromListName = data[1],data[2]
 				else: self.romFromList,self.romFromListName = None,None
 			#Update preview image
-			if os.path.isfile(os.path.join("images",data[1]+".png")): self.previewImage.set_from_file(os.path.join("images",data[1]+".png"))
-			elif os.path.isfile("images/unavailable.png"): self.previewImage.set_from_file("images/unavailable.png")
+			if os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png"))
+			elif os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png"))
 
 		def showAvailable(widget):
 			if widget.get_active():
 				for x in self.listButtonOther.values(): x.hide()
+				self.paramXGngeo["showavailableromsonly"] = "true"
 			else: #Show other Roms
 				for x in self.listButtonOther.values(): x.show()
+				self.paramXGngeo["showavailableromsonly"] = "false"
 
 		if self.busyState!=1:
 			self.busy(1)
@@ -282,8 +286,7 @@ class XGngeo:
 
 			table = gtk.Table(2,2)
 
-			buttonShowAvailable = gtk.CheckButton(_("Show only available Roms."))
-			buttonShowAvailable.set_active(gtk.TRUE)
+			buttonShowAvailable = gtk.CheckButton(_("Show available Roms only."))
 			buttonShowAvailable.connect("toggled",showAvailable)
 			table.attach(buttonShowAvailable,0,1,0,1,yoptions=gtk.SHRINK)
 
@@ -305,24 +308,29 @@ class XGngeo:
 			gamelistNames.sort() #Sort the Name list
 			self.listButton, self.listButtonOther = {}, {}
 
-			import gobject
-
-			model = gtk.TreeStore(gobject.TYPE_STRING)
-			view = gtk.TreeView(model)
-
+			box = gtk.VBox()
 			for name in gamelistNames:
-					iter = model.append(None)
-					model.set_value(iter, 0, "a")
+				if os.path.isfile(os.path.join(self.param["rompath"],gamelist[name]+".zip")):
+					self.listButton[gamelist[name]] = gtk.ToggleButton(name)
+					self.listButton[gamelist[name]].modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#69F"))
+					self.listButton[gamelist[name]].connect("clicked",setRomTemp,[1,gamelist[name],name])
+					box.pack_start(self.listButton[gamelist[name]])
+				else:
+					self.listButtonOther[gamelist[name]] = gtk.ToggleButton(name)
+					self.listButtonOther[gamelist[name]].set_inconsistent(gtk.TRUE)
+					self.listButtonOther[gamelist[name]].connect("clicked",setRomTemp,[0,gamelist[name]])
+					box.pack_start(self.listButtonOther[gamelist[name]])
 			del gamelist, gamelistNames
 
-			scrolled_window.add_with_viewport(view)
+			scrolled_window.add_with_viewport(box)
 
 			#Rom preview images
-			if(os.path.isdir("images")):
+			if(os.path.isdir(self.paramXGngeo["previewimagesdir"])):
 				self.previewImage = gtk.Image()
-				if os.path.isfile("images/unavailable.png"): self.previewImage.set_from_file("images/unavailable.png")
+				imgpath = os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")
+				if os.path.isfile(imgpath): self.previewImage.set_from_file(imgpath) #Display the ``unavailable" image by default.
 				table.attach(self.previewImage,1,2,0,2,gtk.SHRINK)
-			else: scrolled_window.set_size_request(-1,180) #Or window's height will be too small
+			scrolled_window.set_size_request(-1,180) #Set bigger window's height.
 	
 			self.listDialog.vbox.pack_start(table)
 
@@ -336,7 +344,7 @@ class XGngeo:
 			self.listDialog.action_area.pack_start(button)
 
 			self.listDialog.show_all()
-			buttonShowAvailable.emit("toggled") #Show only available Roms
+			if self.paramXGngeo["showavailableromsonly"]=="true": buttonShowAvailable.set_active(gtk.TRUE) #Activate button.
 	
 	def optParam(self,widget,data):
 		if data[0]=="blitter":
@@ -355,6 +363,7 @@ class XGngeo:
 			destroyInt = 4
 
 		self.fileSel = gtk.FileSelection(data[0][0])
+		self.fileSel.button_area.hide() #Hide the ``fileops" area.
 		self.fileSel.set_filename(os.path.dirname(data[0][1])+"/")
 		self.fileSel.connect("destroy",self.destroy,[self.fileSel,destroyInt]);
 		self.fileSel.ok_button.connect("clicked",data[1][0],data[1][1])
@@ -489,7 +498,7 @@ class XGngeo:
 			self.romrc.set_text(self.param["romrc"])
 			box2.pack_start(self.romrc)
 			button = gtk.Button(stock=gtk.STOCK_OPEN)
-			button.connect("clicked",self.fileSelect,[[_("Select the \"%s\" file") % "romrc",self.romrc.get_text()],[self.setPath,"romrc"]])
+			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "romrc",self.romrc.get_text()],[self.setPath,"romrc"]])
 			box2.pack_end(button,gtk.FALSE)
 			frame2.add(box2)
 			box.pack_start(frame2)
@@ -500,7 +509,7 @@ class XGngeo:
 			self.libglpath.set_text(self.param["libglpath"])
 			box2.pack_start(self.libglpath)
 			button = gtk.Button(stock=gtk.STOCK_OPEN)
-			button.connect("clicked",self.fileSelect,[[_("Select the \"%s\" file") % "libGL.so",self.libglpath.get_text()],[self.setPath,"libglpath"]])
+			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "libGL.so",self.libglpath.get_text()],[self.setPath,"libglpath"]])
 			box2.pack_end(button,gtk.FALSE)
 			frame2.add(box2)
 			box.pack_end(frame2)
@@ -707,11 +716,13 @@ class XGngeo:
 
 			frame2 = gtk.Frame("XML file containing Rom infos (optional):")
 			self.rominfosxml = gtk.Entry()
+			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
 			frame2.add(self.rominfosxml)
 			box.pack_start(frame2)
 
 			frame2 = gtk.Frame("Preview images directory (optional):")
 			self.previewimagesdir = gtk.Entry()
+			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
 			frame2.add(self.previewimagesdir)
 			box.pack_start(frame2)
 
@@ -813,9 +824,12 @@ class XGngeo:
 				if self.country_japan.get_active(): self.param["country"] = "japan" #country
 				elif self.country_usa.get_active(): self.param["country"] = "usa"
 				else: self.param["country"] = "europe"
-					
+				
+				#XGngeo's own params
 				self.paramXGngeo["autoexecrom"] = ("false","true")[self.autoexecrom.get_active()] #autoexecrom
 				self.paramXGngeo["historysize"] = int(self.historysize.get_value()) #historysize
+				self.paramXGngeo["rominfosxml"] = self.rominfosxml.get_text() #rominfosxml
+				self.paramXGngeo["previewimagesdir"] = self.previewimagesdir.get_text() #previewimagesdir
 
 				letsWrite = 1 #Let's write!
 
@@ -848,7 +862,6 @@ class XGngeo:
 	def __init__(self):
 		#Default values...
 		self.busyState=0
-		self.configfile = configfile.Configfile(gngeo=os.path.join(gngeoPath,"gngeorc"),xgngeo=os.path.join(os.getcwd(),"data/xgngeo.conf"))
 		self.busyStatus = "off"
 		self.param = {
 			#PATH
@@ -875,9 +888,13 @@ class XGngeo:
 			}
 		self.paramXGngeo = {
 			"autoexecrom":"false",
-			"historysize":5
+			"historysize":5,
+			"rominfosxml":"data/rominfos.xml",
+			"previewimagesdir":"data/previewimages/",
+			"showavailableromsonly":"true"
 			}
 		self.romPath = None
+		self.configfile = configfile.Configfile(gngeo=os.path.join(gngeoPath,"gngeorc"),xgngeo="data/xgngeo.conf")
 		self.history = history.History(path=os.path.join(gngeoPath,"history"))
 
 		self.execMenu_item = gtk.ImageMenuItem(gtk.STOCK_EXECUTE)

@@ -76,6 +76,10 @@ XGngeo's configuration file uses the same syntax than Gngeo's."""
 				else: xgngeoContent += "%s %s\n" % (key,val)
 			i+=1
 
+		#Add blank line at the end
+		gngeoContent += "\n"
+		xgngeoContent += "\n"
+
 		file = open(self.gngeoPath,"w") #Open (create if doesn't exist)
 		file.write(gngeoContent) #Write		
 		file.close() #And close
