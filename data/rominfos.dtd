@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+ 
+<!-- 
+  DTD for roms info in ggf and XGngeo!
+-->
+
+<!ELEMENT roms (info+)>
+<!ELEMENT info (set, manufacturer,players,genre,year,size,desc,rating)>
+<!ELEMENT set (#PCDATA)>
+<!ELEMENT manufacturer (#PCDATA)>
+<!ELEMENT players (#PCDATA)>
+<!ELEMENT genre (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT desc (#PCDATA)>
+<!ELEMENT rating (#PCDATA)>

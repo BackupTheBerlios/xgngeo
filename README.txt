@@ -20,4 +20,4 @@ With that one, you should get XGngeo running without any problem.
 For lastest updates and informations about XGngeo, please visit our homepage:
 http://choplair.tuxfamily.org/
 
-#$id: $
+#$Id$
