@@ -5,7 +5,7 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 14 - 2003.12.26
+Version 14 - 2003.12.29
 Copyleft 2003 Choplair-network.
 
      Copying and distribution of this file, with or without
@@ -26,9 +26,15 @@ Get started
   Configuration
 
 Focus on...
-  Preview images
+  Configuration files
+    `gngeorc'
+    `xgngeo.conf'
+  Rom list add-ons
+    Preview images
+    Rom infos
   Keys configuration
   Internationalization
+    New translation
 
 Help
 
@@ -68,7 +74,7 @@ chapter. Otherwise, you may now install it...
 Other requirements
 ==================
 
-In order to get XGngeo running, you need the following software
+In order to get XGngeo running, you need the following softwares
 installed on your computer:
 
    * The *Python* programming language (version 2.2 or more) -
@@ -108,22 +114,60 @@ configuration window.
 Focus on...
 ***********
 
-Preview images
-==============
+Configuration files
+===================
 
-This is an optional feature. XGngeo is able to display preview images
-while selecting any of the games in the list.
+XGngeo's configuration interface actualy manages options of 2
+configuration files in the same time. Both uses the same syntax to set
+values at variables.
+
+`gngeorc'
+---------
+
+That is the Gngeo's configuration file, situated in the `~/gngeo/'
+directory. That one let customize many params of the emulator (graphic,
+sound, etc.), some are very important (path to the `romrc' file, etc.).
+If at startup XGngeo doesn't find the `gngeorc' file, it invites you to
+create that one through its main configuration window.
+
+`xgngeo.conf'
+-------------
+
+That is the XGngeo's own configuration file, situated in the `data/'
+directory which is in the XGngeo's. This second file is less important,
+there are only options related to XGngeo (size of history, preview
+images' directory, etc.).  That's why most of these options are in the
+OTHER section of the main configuration window.
+
+Rom list add-ons
+================
+
+These are optional features which give you a confortable selection
+while selecting any game in the Rom list. They can be configured in the
+OTHER section of the main configuration window.
+
+Preview images
+--------------
+
+XGngeo is able to display preview image of any of the games selected in
+the list.
 It is fully compatible with the preview images used by other frontends
 such _GGF_.
-To enable the preview images, simply get the images pack archive (which
-you may get from Gngeo's homepage or at the Choplair-network...) and
-unpack it... A directory should be created, specify this one in CONFIG
-> OTHER > PREVIEW IMAGES DIRECTORY (OPTIONAL) then enjoy preview images!
+A preview images pack archive, which have to be unpacked somewhere, can
+be easily get from Gngeo's or Choplair-network's homepage...
+
+Rom infos
+---------
+
+_GGF_'s developpers have created a XML file containing informations for
+each Rom (description, manufacturer, year, etc.).
+This is the perfect addition to preview images and it's fully supported
+by XGngeo!
 
 Keys configuration
 ==================
 
-XGngeo got a Key Configurator which is in a seperate window than the
+XGngeo got a Keys configurator which is in a seperate window than the
 main configuration window. It works for the 2 players, but only with
 keyboard.  To modify a key, click on the corresponding button then push
 your new key.
@@ -147,8 +191,11 @@ XGngeo is multilingual! Translations are available in these languages:
 
    * spanish
 
-   If you want to make a translation of XGngeo in your language, follow
-these steps:
+New translation
+---------------
+
+If you want to make a translation of XGngeo in your language, follow
+these generic instructions:
 
   1. Get the lastest CVS version by doing the following:
         * `cvs
