@@ -554,6 +554,11 @@ class XGngeo:
 			self.aboutDialog.show_all()
 	
 	def config(self,widget=None,section=0,firstrun=0):
+		def exists(path,dir=0):
+			if dir and os.path.isdir(path): return 1
+			elif os.path.isfile(path): return 1
+			else: return 0
+
 		if self.busyState!=1:
 			self.busy(1)
 
@@ -572,20 +577,29 @@ class XGngeo:
 
 			frame = gtk.Frame(_("Roms & Bios directory:"))
 			box2 = gtk.HBox()
+
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			if exists(self.param["rompath"],1): stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
+
 			self.rompath = gtk.Entry()
 			self.rompath.set_text(self.param["rompath"])
 			box2.pack_start(self.rompath)
 			frame.add(box2)
 			box.pack_start(frame)
 
+
 			frame = gtk.Frame(_("Path to romrc:"))
 			box2 = gtk.HBox()
+
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			if exists(self.param["romrc"]): stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
+
 			self.romrc = gtk.Entry()
 			self.romrc.set_text(self.param["romrc"])
 			box2.pack_start(self.romrc)
@@ -598,11 +612,16 @@ class XGngeo:
 			frame.add(box2)
 			box.pack_start(frame)
 
+
 			frame = gtk.Frame(_("Path to libGL.so (optional):"))
 			box2 = gtk.HBox()
+
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			if exists(self.param["libglpath"]): stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
+
 			self.libglpath = gtk.Entry()
 			self.libglpath.set_text(self.param["libglpath"])
 			box2.pack_start(self.libglpath)
@@ -614,6 +633,7 @@ class XGngeo:
 			box2.pack_end(button,gtk.FALSE)
 			frame.add(box2)
 			box.pack_end(frame)
+
 
 			#
 			# GRAPHIC section
@@ -803,9 +823,13 @@ class XGngeo:
 
 			frame = gtk.Frame(_("Preview images directory (optional):"))
 			box2 = gtk.HBox()
+
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			if exists(self.paramXGngeo["previewimagesdir"],1): stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
+
 			self.previewimagesdir = gtk.Entry()
 			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
 			box2.pack_end(self.previewimagesdir)
@@ -815,9 +839,13 @@ class XGngeo:
 			#Path to rom infos XML file
 			frame = gtk.Frame(_("XML file containing Rom infos (optional):"))
 			box2 = gtk.HBox()
+
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			if exists(self.paramXGngeo["rominfosxml"],1): stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
+
 			self.rominfosxml = gtk.Entry()
 			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
 			box2.pack_start(self.rominfosxml)
