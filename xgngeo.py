@@ -144,12 +144,10 @@ class XGngeo:
 
 			self.keysDialog.vbox.pack_start(table,padding=5)
 
-			#"Save" Button
+			#Buttons on bottom.
 			button = gtk.Button(stock=gtk.STOCK_SAVE)
 			button.connect("clicked",self.configWrite,"keysConfig")
 			self.keysDialog.action_area.pack_start(button)
-
-			#"Cancel" Button
 			button = gtk.Button(stock=gtk.STOCK_CANCEL)
 			button.connect("clicked",self.destroy,[self.keysDialog,5])
 			self.keysDialog.action_area.pack_end(button)
@@ -248,7 +246,7 @@ class XGngeo:
 
 	def romList(self,widget):
 		self.rominfos = rominfos.Rominfos(path=self.paramXGngeo["rominfosxml"])
-		
+
 		def setRomTemp(widget,data):
 			#If the selected rom is available
 			if data[0]==1:
@@ -260,7 +258,7 @@ class XGngeo:
 			#Update preview image
 			if os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png"))
 			elif os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png"))
-				
+
 			#Update rom infos
 			if os.path.isfile(self.paramXGngeo["rominfosxml"]):
 				#Check for game informations
@@ -551,10 +549,17 @@ class XGngeo:
 			self.aboutDialog.show_all()
 	
 	def config(self,widget=None,section=0,firstrun=0):
-		def exists(path,dir=0):
-			if dir and os.path.isdir(path): return 1
-			elif os.path.isfile(path): return 1
-			else: return 0
+		def setPathIcon(widget,image,dir=0):
+			"""We check whether the path written in the text entry
+			is an existing file or directory and change the icon
+			in consequence."""
+
+			path = widget.get_text()
+			if (dir and os.path.isdir(path)) or os.path.isfile(path): 
+				stock = gtk.STOCK_YES
+			else: stock = gtk.STOCK_NO
+
+			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 
 		if self.busyState!=1:
 			self.busy(1)
@@ -576,28 +581,21 @@ class XGngeo:
 			box2 = gtk.HBox()
 
 			image = gtk.Image()
-			if exists(self.param["rompath"],1): stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
-
 			self.rompath = gtk.Entry()
+			self.rompath.connect("changed",setPathIcon,image,1)
 			self.rompath.set_text(self.param["rompath"])
-			box2.pack_start(self.rompath)
+			box2.pack_end(self.rompath)
 			frame.add(box2)
 			box.pack_start(frame)
-
 
 			frame = gtk.Frame(_("Path to romrc:"))
 			box2 = gtk.HBox()
 
 			image = gtk.Image()
-			if exists(self.param["romrc"]): stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
-
 			self.romrc = gtk.Entry()
+			self.romrc.connect("changed",setPathIcon,image)
 			self.romrc.set_text(self.param["romrc"])
 			box2.pack_start(self.romrc)
 			button = gtk.Button()
@@ -609,19 +607,16 @@ class XGngeo:
 			frame.add(box2)
 			box.pack_start(frame)
 
-
 			frame = gtk.Frame(_("Path to libGL.so (optional):"))
 			box2 = gtk.HBox()
 
 			image = gtk.Image()
-			if exists(self.param["libglpath"]): stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
-
 			self.libglpath = gtk.Entry()
+			self.libglpath.connect("changed",setPathIcon,image)
 			self.libglpath.set_text(self.param["libglpath"])
 			box2.pack_start(self.libglpath)
+			setPathIcon(self.libglpath,image)
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
@@ -822,28 +817,21 @@ class XGngeo:
 			box2 = gtk.HBox()
 
 			image = gtk.Image()
-			if exists(self.paramXGngeo["previewimagesdir"],1): stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
-
 			self.previewimagesdir = gtk.Entry()
+			self.previewimagesdir.connect("changed",setPathIcon,image,1)
 			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
 			box2.pack_end(self.previewimagesdir)
 			frame.add(box2)
 			box.pack_start(frame)
 
-			#Path to rom infos XML file
 			frame = gtk.Frame(_("XML file containing Rom infos (optional):"))
 			box2 = gtk.HBox()
 
 			image = gtk.Image()
-			if exists(self.paramXGngeo["rominfosxml"],1): stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 			box2.pack_start(image,gtk.FALSE,padding=3)
-
 			self.rominfosxml = gtk.Entry()
+			self.rominfosxml.connect("changed",setPathIcon,image)
 			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
 			box2.pack_start(self.rominfosxml)
 			button = gtk.Button()
