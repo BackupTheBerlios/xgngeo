@@ -34,11 +34,11 @@ __  __  ____  _   _   ____  ____   __
 @contents
 
 @chapter Introduction
-@strong{XGngeo} is a frontend (@acronym{GUI}) for the Neo Geo emulator @strong{Gngeo}, both are free softwares released under the @emph{GNU GPL license}.
-XGngeo is written in Python and uses the PyGTK library to provide an user-friendly interface!@*
-XGngeo is developed by the @strong{Choplair-network}, last version/informations should be available on our website: @uref{http://choplair.tuxfamily.org/}.
+@strong{XGngeo} is a frontend (@acronym{GUI}) for the Neo Geo emulator @strong{Gngeo}, both are free software released under the @emph{GNU GPL license}.
+XGngeo is written in Python and uses the PyGTK library to provide a user-friendly interface!@*
+XGngeo is developed by the @strong{Choplair-network}, lastest version/information should be available on our website: @uref{http://choplair.tuxfamily.org/}.
 @sp 1
-This documentation provides up to date informations and a @emph{Newbies Guide} about get started with XGngeo. It will grow (I hope...) with each new version.
+This documentation provides up to date informations and a @emph{Newbies Guide} about how to get started with XGngeo. It will grow (I hope...) with each new version.
 
 @chapter Get started
 This is the complete procedure about how to get XGngeo fully functional from scratch!
@@ -49,7 +49,7 @@ Download the last stable Gngeo package from @uref{http://m.peponas.free.fr/gngeo
 Unpack it, configure, then start compilation... If the compilation fails, take a look at the "Help" chapter. Otherwise, you may now install it... 
 
 @section Other requirements
-In order to get XGngeo running, you need the following softwares installed on your computer:
+In order to get XGngeo running, you need the following software installed on your computer:
 
 @itemize @bullet
 @item The @strong{Python} programming language (version 2.2 or more) - @uref{http://www.python.org/};
@@ -68,36 +68,36 @@ If you get an error doing that, please see the "Help" chapter.
 
 @section Configuration
 Because it's the first time you are using Gngeo, XGngeo invites you to set up the configuration.
-Press @sc{Ok} then the configuration window appears... You can let defaut values if you are hurry, the only params that you must define are @sc{Path to romrc} and @sc{Roms and bios directory}. Once you have finished, press @sc{Save}.@*
+Press @sc{Ok} then the configuration window appears... You can let default values if you are in a rush, the only params that you must define are @sc{Path to romrc} and @sc{Roms and bios directory}. Once you have finished, press @sc{Save}.@*
 Of course the configuration can be modified at any time using the same configuration window.
 
 @chapter Focus on...
 
 @section Configuration files
-XGngeo's configuration interface actualy manages options of 2 configuration files in the same time. Both uses the same syntax to set values at variables.
+XGngeo's configuration interface actually manages options of 2 configuration files in the same time. Both use the same syntax to set values at variables.
 
 @subsection @file{gngeorc}
-That is the Gngeo's configuration file, situated in the @file{~/gngeo/} directory. That one let customize many params of the emulator (graphic, sound, etc.), some are very important (path to the @file{romrc} file, etc.).@*
-If at startup XGngeo doesn't find the @file{gngeorc} file, it invites you to create that one through its main configuration window.
+This is the Gngeo's configuration file, situated in the @file{~/gngeo/} directory. It lets you customize many params of the emulator (graphic, sound, etc.), some are very important (path to the @file{romrc} file, etc.).@*
+If at startup XGngeo doesn't find the @file{gngeorc} file, it invites you to create it through its main configuration window.
 
 @subsection @file{xgngeo.conf}
-That is the XGngeo's own configuration file, situated in the @file{data/} directory which is in the XGngeo's. This second file is less important, there are only options related to XGngeo (size of history, preview images' directory, etc.).
+This is the XGngeo's own configuration file, situated in the @file{data/} directory which is in the XGngeo's. This second file is less important, there are only options related to XGngeo (size of history, preview images' directory, etc.).
 That's why most of these options are in the @sc{Other} section of the main configuration window. 
 
 @section Rom list add-ons
-These are optional features which give you a confortable selection while selecting any game in the Rom list. They can be configured in the @sc{Other} section of the main configuration window.
+These are optional features which give you a comfortable selection while selecting any game in the Rom list. They can be configured in the @sc{Other} section of the main configuration window.
 
 @subsection Preview images
-XGngeo is able to display preview image of any of the games selected in the list.@*
+XGngeo is able to display a preview image of any of the games selected in the list.@*
 It is fully compatible with the preview images used by other frontends such @emph{GGF}.@*
-A preview images pack archive, which have to be unpacked somewhere, can be easily get from Gngeo's or Choplair-network's homepage...
+A preview images pack archive, which will have to be unpacked somewhere, can be easily obtained from Gngeo's or Choplair-network's homepage...
 
 @subsection Rom infos
-@emph{GGF}'s developpers have created a @acronym{XML} file containing informations for each Rom (description, manufacturer, year, etc.).@*
+@emph{GGF}'s developpers have created an XML file containing information for each Rom (description, manufacturer, year, etc.).@*
 This is the perfect addition to preview images and it's fully supported by XGngeo! 
 
 @section Keys configuration
-XGngeo got a Keys configurator which is in a seperate window than the main configuration window. It works for the 2 players, but only with keyboard.
+XGngeo has a Keys configurator which is in a seperate window than the main configuration window. It works for the 2 players, but only with keyboard.
 To modify a key, click on the corresponding button then push your new key.
 @sp 1
 @strong{Warning:} Because Gngeo (@emph{SDL}'s) and XGngeo (@emph{GTK}'s) keymaps are different, some special keys might be not recognized by XGngeo. If it occurs, please tell us (see the "Help" chapter)!
@@ -119,7 +119,7 @@ If you want to make a translation of XGngeo in your language, follow these gener
 @enumerate
 @item Get the lastest CVS version by doing the following:
 @itemize
-@item @command{cvs -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo login} (press @key{RET})
+@item @command{cvs -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo login} (press @sc{Return})
 @item @command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo xgngeo}
 @end itemize
 @item Go to the @file{data/lang/} directory.
@@ -143,7 +143,7 @@ If you get any problems using XGngeo or Gngeo, the best way is to ask for help i
 @end itemize
 
 @chapter Credit
-XGngeo is developped by the Choplair-network, here comes the staff:
+XGngeo is developed by the Choplair-network, here comes the staff:
 
 @itemize 
 @item @strong{Programming:}
@@ -166,7 +166,7 @@ XGngeo is developped by the Choplair-network, here comes the staff:
 
 @itemize
 @item Draft: @strong{Pachilor}
-@item Correction: @strong{Hori} @email{x_psyence[AT]hotmail.com}
+@item Correction: @strong{Hori} (the wonderful!) @email{x_psyence[AT]hotmail.com}
 @end itemize
 @end itemize
 
