@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 import gtk, os, string, gettext, gobject
 from sys import path as syspath
 from re import match
+from thread import start_new_thread
 
 #Change working directory to XGngeo's
 os.chdir(os.path.abspath(syspath[0]))
@@ -97,24 +98,20 @@ class XGngeo:
 			self.licenseDialog.show_all()
 
 	def gngeoExec(self,widget=None):
-		self.cmd = command.Command("%s '%s'" % (self.paramXGngeo['gngeopath'],self.romPath))
+		self.statusbar.push(self.context_id,_("Starting Rom..."))
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
-		self.cmd.start() #Let's start!
-		
-		# Check if the thread still alive every time `File' menu is opened :p
-		self.checkexechandler = self.file_menu_item.connect("activate",self.gngeoCheckExec)
 
-	def gngeoCheckExec(self,widget):
-		if self.cmd.isAlive(): pass
-		else: 
-			self.gngeoStop(kill=0) #Do as `Stop' has been clicked...
-			self.file_menu_item.disconnect(self.checkexechandler) #Stop checking
+		#Start the thread.
+		self.cmd = command.Command("%s '%s'" % (self.paramXGngeo['gngeopath'],self.romPath),
+			self.gngeoStop,self.statusbar,self.context_id,self.loadrom_menu_item,
+			self.history_menu_item,self.stopMenu_item,self.execMenu_item)
+		self.cmd.start()
 
 	def gngeoStop(self,widget=None,kill=1):
-		if kill: command.Command("killall -9 gngeo").start()
+		if kill: start_new_thread(os.system,(("killall -9 '%s'" % self.paramXGngeo['gngeopath'],)))
 		self.loadrom_menu_item.set_sensitive(True)
 		self.history_menu_item.set_sensitive(True)
 		self.stopMenu_item.set_sensitive(False)
@@ -152,7 +149,7 @@ class XGngeo:
 					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)") % (self.romFromListName,self.romFromList)) #Update Status message
 					if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 					else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
-					self.historyAdd(self.romFromListName,self.romFromList) #Put in the history menu
+					self.historyAdd(self.romFromListName,self.romPath) #Put in the history menu
 
 				self.listDialog.destroy()
 				self.busyStatus = "off"
@@ -336,7 +333,7 @@ class XGngeo:
 
 	def setPath(self,dialog,response,data):
 		"""Get and set path of various things from
-		the file chooser."""
+		the path of the file chooser."""
 		if response==gtk.RESPONSE_OK:
 			if data=="rom":
 				path = dialog.get_filename()
@@ -369,13 +366,13 @@ class XGngeo:
 
 		dialog.destroy()
 
-	def historyAdd(self,name,location):
+	def historyAdd(self,fullname,path):
 		#Update history file...
-		self.history.add(name,location,size=self.paramXGngeo["historysize"])
+		self.history.add(fullname,path,size=self.paramXGngeo["historysize"])
 
 		#Add entry to history menu
-		menu_item = gtk.MenuItem(name)
-		menu_item.connect("activate",self.setPathFromRecent,[name,location])
+		menu_item = gtk.MenuItem(fullname)
+		menu_item.connect("activate",self.setPathFromRecent,[fullname,path])
 		self.historyMenu.prepend(menu_item)
 		
 		#Remove the oldest entries if too much...
@@ -973,8 +970,8 @@ class XGngeo:
 			if len(error)>0: #Display the warning dialog...
 				self.configDialog.set_sensitive(False) #Busying Configuration window
 
-				self.warningDialog = gtk.Dialog(_("Configuration error!"))
-				self.warningDialog.connect("destroy",self.destroy,[self.warningDialog,4])
+				dialog = gtk.Dialog(_("Configuration error!"))
+				dialog.connect("destroy",self.destroy,[dialog,4])
 
 				box = gtk.HBox()
 				image = gtk.Image()
@@ -990,14 +987,14 @@ class XGngeo:
 				label = gtk.Label(_("Please check it up then save again... ^^;"))
 				box2.pack_end(label)
 				box.pack_end(box2,padding=5)
-				self.warningDialog.vbox.pack_end(box)
+				dialog.vbox.pack_end(box)
 
 				#Ok button
 				button = gtk.Button(stock=gtk.STOCK_OK)
-				button.connect("clicked",self.destroy,[self.warningDialog,4])
-				self.warningDialog.action_area.pack_start(button)
+				button.connect("clicked",self.destroy,[dialog,4])
+				dialog.action_area.pack_start(button)
 
-				self.warningDialog.show_all()
+				dialog.show_all()
 
 			else: letsWrite = 1 #Let's write!
 
@@ -1277,8 +1274,7 @@ class XGngeo:
 		else: self.welcome()
 
 if __name__ == "__main__":
-	gtk.threads_init()
 	XGngeo().check()
-	gtk.threads_enter()
+	gtk.threads_init()
 	gtk.main()
-	gtk.threads_leave()
+	
