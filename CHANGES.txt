@@ -2,7 +2,7 @@
  XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
-* Changes in version 14 (2003.12.XX):
+* Changes in version 14 (2003.12.31):
 
 - Many new configurable things: auto start roms, preview
 images directory, history, etc. ^_^
