@@ -27,7 +27,7 @@ os.chdir(os.path.abspath(syspath[0]))
 syspath.append("data/py/")
 import command, configfile, history, rominfos
 
-VERSION = 14
+VERSION = 15
 gngeoPath = os.path.expanduser("~/.gngeo")
 
 #Internationalization
@@ -57,11 +57,9 @@ class XGngeo:
 					value = gtk.gdk.keyval_to_lower(event.keyval) #Get the get (lower only)
 
 					# GTK's keys are not same as SDL's used by Gngeo. T_T
-					# So, a Gngeo's compatible key-value is given according to its GTK's name.
+					# So, a Gngeo compatible key-value is given according to its GTK's name.
 					key_name = gtk.gdk.keyval_name(value).lower()
 					key = None
-
-					#~ print key_name
 
 					if key_name in conpliant_KeyMap.keys():
 						key = conpliant_KeyMap[key_name]
@@ -85,7 +83,6 @@ class XGngeo:
 						x.show()
 					for x in self.p2keysButt.values():
 						x.hide()
-					
 
 			self.keysDialog = gtk.Dialog(_("Keys configuration"))
 			self.keysDialog.connect("destroy",self.destroy,[self.keysDialog,1])	
@@ -188,7 +185,7 @@ class XGngeo:
 			self.licenseDialog = gtk.Dialog(_("License"),flags=gtk.DIALOG_NO_SEPARATOR)
 			self.licenseDialog.connect("destroy",self.destroy,[self.licenseDialog,1])
 
-			label = gtk.Label(_("XGngeo is released under the GNU GPL:"))
+			label = gtk.Label(_("XGngeo is released under the GNU GPL licence:"))
 			label.set_padding(10,4)
 			self.licenseDialog.vbox.pack_start(label,gtk.FALSE)
 
@@ -290,7 +287,7 @@ class XGngeo:
 			self.listDialog = gtk.Dialog(_("List of Roms from your \"romrc\" file"))
 			self.listDialog.connect("destroy",self.destroy,[self.listDialog,1])
 
-			label = gtk.Label(_("Please select the Rom you want to load from this list ^^\nAvailable Roms are showed in blue..."))
+			label = gtk.Label(_("Please select the Rom you want to load from this list ^^\nAvailable Roms are displayed in blue..."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			self.listDialog.vbox.pack_start(label,gtk.FALSE,gtk.FALSE,2)
 
@@ -527,7 +524,7 @@ class XGngeo:
 			if line:	gngeoversion = line.group(1)
 			else:	gngeoversion = "&lt;=0.5.9a"
 
-			label = gtk.Label(_("<span color='#008'><b>XGngeo: a frontend for Gngeo :p</b>\nVersion %i.\nRunning Gngeo version %s.\nXGngeo's license is the GNU GPL.</span>") % (VERSION,gngeoversion))
+			label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s\n</span>%s\nCopyleft 2003, 2004 Choplair-network." % (_("XGngeo: a frontend for Gngeo :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % gngeoversion, _("This program is released under the GNU GPL license.")))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_use_markup(gtk.TRUE)
 			self.aboutDialog.vbox.pack_start(label)
