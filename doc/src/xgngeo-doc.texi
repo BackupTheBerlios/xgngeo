@@ -11,8 +11,8 @@ notice and this notice are preserved.
 @end quotation
 @end copying
 
-@set doc-version 14a
-@set doc-date 2004.01.25
+@set doc-version 15
+@set doc-date 2004-04-05
 
 @titlepage
 @title XGngeo's documentation
@@ -64,8 +64,8 @@ To be able to launch roms, Gngeo needs a Neo Geo bios which have to be put (as u
 
 @section Run XGngeo
 It's time! Your are now ready to taste XGngeo. ^^@*
-Download the last XGngeo package from the Choplair-network homepage: @uref{http://choplair.tuxfamily.org/}.@*
-Unpack it then enter in the @file{xgngeo-@emph{XX}} directory (where @emph{XX} is XGngeo's version number).
+Download the last XGngeo package from the Choplair-network homepage: @uref{http://www.choplair.org/}.@*
+Unpack it then enter in the @file{xgngeo-@emph{XX}} directory (where @emph{XX} is the XGngeo version number).
 XGngeo doesn't need any compilation phase. To launch it, simply type: @command{python xgngeo.py}.
 If you get an error doing that, please see the @sc{Help} chapter.
 

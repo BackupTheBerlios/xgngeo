@@ -14,8 +14,8 @@ notice and this notice are preserved.
 @end quotation
 @end copying
 
-@set doc-version 14a
-@set doc-date 2004.01.25
+@set doc-version 15
+@set doc-date 2004-04-05
 
 @titlepage
 @title Documentation de XGngeo
@@ -42,12 +42,12 @@ __  __  ____  _   _   ____  ____   __
 @chapter Introduction
 @strong{XGngeo} est un frontend (interface) pour @strong{Gngeo} qui est un @'emulateur Neo Geo emulator pour GNU/Linux. Tout deux sont des logiciels libres distribu@'es sous la @emph{licence GNU GPL}.
 XGngeo est @'ecrit en Python et utilise la biblioth@`eque PyGTK pour fournir une interface agr@'eable!@*
-XGngeo est d@'evelopp@'e par le @strong{Choplair-network}, les derni@`re versions/informations devraient @^etre disponible sur notre site oueb: @uref{http://choplair.tuxfamily.org/}.
+XGngeo est d@'evelopp@'e par le @strong{Choplair-network}, les derni@`re versions/informations devraient @^etre disponible sur notre site oueb: @uref{http://www.choplair.org/}.
 @sp 1
 Cette documentation fournit des informations @`a  jour ainsi qu'un guide pour d@'ebutants expliquant comment bien d@'emarer avec XGngeo. Elle devrait s'enrichir (je l'@`espere...) @`a  chaque nouvelles versions.
 
 @chapter D@'emarage
-Voici la proc@'edure compl@`ete pour faire pleinement fonctionner XGngeo @`a partir de z@'ero!
+Voici la proc@'edure compl@`ete pour faire pleinement fonctionner XGngeo @`a partir de z@'ero !
 
 @section Gngeo
 XGngeo est un frontend pour Gngeo, vous avez donc besoin de celui-ci!@*
@@ -70,7 +70,7 @@ C'est l'heure! Vous @^etes maintenant pr@^et @`a gouter @`a XGngeo. ^^@*
 T@'el@'echargez la derni@`ere version d'XGngeo depuis le site oueb du Choplair-network: @uref{http://choplair.tuxfamily.org/}.@*
 D@'ecompressez-la puis entrez de le r@'epertoire @file{xgngeo-@emph{XX}} (o@`u @emph{XX} correspond au num@'ero de version d'XGngeo). 
 XGngeo ne requiert aucune phase de compilation. Pour le d@'emarrer, entrez simplement: @command{python xgngeo.py}.
-Si vous obtenez une erreur en faisant @,{c}a, merci de consulter le chapitre @sc{Au secours!}.
+Si vous obtenez une erreur en faisant @,{c}a, merci de consulter le chapitre @sc{Au secours !}.
 
 @section Configuration
 Comme c'est la premi@`ere fois que vous utilisez Gngeo, XGngeo vous invite @`a configuration le programme.
@@ -98,8 +98,8 @@ C'est entierement compatible avec les images de pr@'evisualisation utilis@'ees p
 Une archive d'un pack d'images de pr@'evisualisation, qui devra @^etre d@'epaquett@'ee quelque part, peut @^etre facilement obtained depuis le site de Gngeo ou celui du Choplair-network...
 
 @subsection Infos sur les Roms
-Les d@'eveloppeurs de @acronym{GFF} ont cr@'e@'es un fichier @acronym{XML} contiennant des informations pour chaque Roms (description, manufactureur, ann@'ee, etc.).@*
-C'est l'addition parfaite aux images de pr@'evisualisation et elle est entierement support@'ee par XGngeo!
+Les d@'eveloppeurs de @acronym{GFF} ont cr@'e@'es un fichier @acronym{XML} contennant des informations pour chaque Roms (description, manufactureur, ann@'ee, etc.).@*
+C'est l'addition parfaite aux images de pr@'evisualisation et elle est entierement support@'ee par XGngeo !
 
 @section Configuration des touches
 XGngeo poss@`ede un outil de configuration des touche, s@'epar@'e de la fen@^etre de configuration principale. Il fonctionne pour les 2 joueurs, mais ne g@`ere que le clavier.
@@ -108,7 +108,7 @@ Pour modifier une touche, cliquez sur le bouton correspondant puis appuyez sur l
 @sc{Avertissement:} du fait que les @emph{keymaps} de Gngeo (celles de @acronym{SDL}) et de XGngeo (celles de @acronym{GTK}) sont differentes, quelques touches sp@'eciales pourraient ne pas @^etre reconnues par XGngeo. Si cela se produit, merci de nous contacter (voir le chapitre @sc{Au secours!})!
 
 @section Internationalisation
-XGngeo est multilingue! Des traductions sont disponibles dans les langues suivantes:
+XGngeo est multilingue ! Des traductions sont disponibles dans les langues suivantes :
 @c ### Please keep an alphabetical order. ###
 @itemize @minus
 @item english (par d@'efault)
@@ -119,7 +119,7 @@ XGngeo est multilingue! Des traductions sont disponibles dans les langues suivan
 @end itemize
 
 @subsection Nouvelle traduction
-Si vous voulez faire une traduction d'XGngeo dans votre langue, suivez ces instructions g@'eneriques:
+Si vous voulez faire une traduction d'XGngeo dans votre langue, suivez ces instructions g@'eneriques :
 
 @enumerate
 @item R@'ecuper la dern@`ere version CVS en effectuant la commande suivante: @* @w{@command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo checkout xgngeo}}
@@ -134,7 +134,7 @@ Si vous voulez faire une traduction d'XGngeo dans votre langue, suivez ces instr
 
 @`A chaque fois que vous mettez @`a jour votre traduction, n'oubliez pas de r@'epetez l'@'etape num@'ero 7. Quand c'est bon, envoyez votre fichier `.po' @`a: @email{choplair[AT]fr.st}.
 
-@chapter Au secours!
+@chapter Au secours !
 
 Si vous rencontrez le moindre probl@`eme en utilisant XGngeo ou Gngeo, la meilleure solution est de demander de l'aide sur la liste de diffusion de Gngeo
 
@@ -144,7 +144,7 @@ Si vous rencontrez le moindre probl@`eme en utilisant XGngeo ou Gngeo, la meille
 @end itemize
 
 @chapter Cr@'edit
-XGngeo est un projet du Choplair-network. N'h@'esitez pas @`a y contribuer!
+XGngeo est un projet du Choplair-network. N'h@'esitez pas @`a y contribuer !
 
 @itemize @minus
 @item @sc{Programmation}
