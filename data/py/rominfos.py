@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 import xml.sax
  
-class xmlHandler(xml.sax.handler.ContentHandler):
+class XmlHandler(xml.sax.handler.ContentHandler):
 	def __init__(self):
 		self.newromset = 0
 		self.currentromset = ""
@@ -51,7 +51,7 @@ class Rominfos:
 
 	def getDict(self):
 		parser = xml.sax.make_parser()
-		handler = rominfoHandler(  )
+		handler = XmlHandler()
 		parser.setContentHandler(handler)
-		parser.parse(path)
+		parser.parse(self.path)
 		return handler.mapping

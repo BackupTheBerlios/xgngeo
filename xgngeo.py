@@ -205,10 +205,10 @@ class XGngeo:
 				licenceText = licenceFile.read()
 				licenceFile.close()
 				textbuffer.set_text(licenceText)
+				del licenceText
 			else:
 				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\nYou can read the GNU CPL license at:\nhttp://www.gnu.org/licenses/gpl.html") % licensePath)
-			del licensePath
-
+			
 			textview = gtk.TextView(textbuffer)
 			textview.set_editable(gtk.FALSE)
 	
@@ -261,9 +261,21 @@ class XGngeo:
 					self.listButton[self.romFromList].set_active(gtk.FALSE) #Desactivate last selected Rom's button.
 				if widget.get_active():	self.romFromList,self.romFromListName = data[1],data[2]
 				else: self.romFromList,self.romFromListName = None,None
+
 			#Update preview image
 			if os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],data[1]+".png"))
 			elif os.path.isfile(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png"))
+				
+			#Update rom infos
+			if os.path.isfile(self.paramXGngeo["rominfosxml"]):
+				#Check for game informations
+				if self.romInfos.has_key(data[1]):
+					for x in ("desc","manufacturer","year","genre","players","rating","size"):
+						if self.romInfos[data[1]].has_key(x): self.romInfosWidget[x].set_text(self.romInfos[data[1]][x])
+						else: self.romInfosWidget[x].set_text("--")
+				else:
+					for x in ("desc","manufacturer","year","genre","players","rating","size"):
+						self.romInfosWidget[x].set_text("--")
 
 		def showAvailable(widget):
 			if widget.get_active():
@@ -322,16 +334,92 @@ class XGngeo:
 					box.pack_start(self.listButtonOther[gamelist[name]])
 			del gamelist, gamelistNames
 
+			scrolled_window.set_size_request(-1,180) #Set scrolled window's height.
 			scrolled_window.add_with_viewport(box)
 
-			#Rom preview images
+			#
+			# Preview image/info's
+			#
+			notebook = gtk.Notebook()
+			
+			#Preview images
 			if(os.path.isdir(self.paramXGngeo["previewimagesdir"])):
 				self.previewImage = gtk.Image()
-				imgpath = os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")
-				if os.path.isfile(imgpath): self.previewImage.set_from_file(imgpath) #Display the ``unavailable" image by default.
-				table.attach(self.previewImage,1,2,0,2,gtk.SHRINK)
-			scrolled_window.set_size_request(-1,180) #Set bigger window's height.
-	
+				path = os.path.join(self.paramXGngeo["previewimagesdir"],"unavailable.png")
+				if os.path.isfile(path): self.previewImage.set_from_file(path) #Display the ``unavailable" image by default.
+				notebook.append_page(self.previewImage,gtk.Label(_("Preview image")))
+
+			#Rom infos
+			if(os.path.isfile(self.paramXGngeo["rominfosxml"])):
+				self.romInfos = rominfos.Rominfos(path=self.paramXGngeo["rominfosxml"]).getDict()
+				self.romInfosWidget = {}
+
+				box = gtk.VBox()
+
+				#Description
+				self.romInfosWidget["desc"] = gtk.TextBuffer()
+				self.romInfosWidget["desc"].set_text("--")
+				textview = gtk.TextView(self.romInfosWidget["desc"])
+				textview.set_editable(0)
+				textview.set_wrap_mode(gtk.WRAP_WORD)
+				scrolled_window = gtk.ScrolledWindow()
+				scrolled_window.set_policy(gtk.POLICY_NEVER,gtk.POLICY_ALWAYS)
+				box.set_size_request(220,-1) #Set width
+				scrolled_window.add(textview)
+				frame = gtk.Frame(_("Description:"))
+				frame.add(scrolled_window)
+				box.pack_start(frame)
+
+				#Other infos
+				table2 = gtk.Table(3,2,gtk.TRUE)
+
+				frame = gtk.Frame(_("Manufacturer:"))
+				self.romInfosWidget["manufacturer"] = gtk.Entry()
+				self.romInfosWidget["manufacturer"].set_text("--")
+				self.romInfosWidget["manufacturer"].set_editable(0)
+				frame.add(self.romInfosWidget["manufacturer"])
+				table2.attach(frame,0,1,0,1)
+
+				frame = gtk.Frame(_("Year:"))
+				self.romInfosWidget["year"] = gtk.Entry()
+				self.romInfosWidget["year"].set_text("--")
+				self.romInfosWidget["year"].set_editable(0)
+				frame.add(self.romInfosWidget["year"])
+				table2.attach(frame,0,1,1,2)
+
+				frame = gtk.Frame(_("Genre:"))
+				self.romInfosWidget["genre"] = gtk.Entry()
+				self.romInfosWidget["genre"].set_text("--")
+				self.romInfosWidget["genre"].set_editable(0)
+				frame.add(self.romInfosWidget["genre"])
+				table2.attach(frame,0,1,2,3)
+
+				frame = gtk.Frame(_("Players:"))
+				self.romInfosWidget["players"] = gtk.Entry()
+				self.romInfosWidget["players"].set_text("--")
+				self.romInfosWidget["players"].set_editable(0)
+				frame.add(self.romInfosWidget["players"])
+				table2.attach(frame,1,2,0,1)
+
+				frame = gtk.Frame(_("Rating:"))
+				self.romInfosWidget["rating"] = gtk.Entry()
+				self.romInfosWidget["rating"].set_text("--")
+				self.romInfosWidget["rating"].set_editable(0)
+				frame.add(self.romInfosWidget["rating"])
+				table2.attach(frame,1,2,1,2)
+
+				frame = gtk.Frame(_("Size:"))
+				self.romInfosWidget["size"] = gtk.Entry()
+				self.romInfosWidget["size"].set_text("--")
+				self.romInfosWidget["size"].set_editable(0)
+				frame.add(self.romInfosWidget["size"])
+				table2.attach(frame,1,2,2,3)
+
+				box.pack_start(table2,gtk.FALSE)
+
+				notebook.append_page(box,gtk.Label(_("Rom infos")))
+
+			table.attach(notebook,1,2,0,2,gtk.SHRINK)
 			self.listDialog.vbox.pack_start(table)
 
 			#Buttons at bottom
@@ -480,19 +568,16 @@ class XGngeo:
 			#
 			# PATH section
 			#
-			frame = gtk.Frame() #The Frame which will contain the Box :p
-			notebook.append_page(frame,gtk.Label(_("Path")))
-			frame.set_shadow_type(gtk.SHADOW_NONE)
-			box = gtk.VBox(spacing=4) #The Box
-			frame.add(box)
+			box = gtk.VBox(spacing=4) #The box :p
+			notebook.append_page(box,gtk.Label(_("Path")))
 
-			frame2 = gtk.Frame(_("Roms & Bios directory:"))
+			frame = gtk.Frame(_("Roms & Bios directory:"))
 			self.rompath = gtk.Entry()
 			self.rompath.set_text(self.param["rompath"])
-			frame2.add(self.rompath)
-			box.pack_start(frame2)
+			frame.add(self.rompath)
+			box.pack_start(frame)
 
-			frame2 = gtk.Frame(_("Path to romrc:"))
+			frame = gtk.Frame(_("Path to romrc:"))
 			box2 = gtk.HBox(spacing=5)
 			self.romrc = gtk.Entry()
 			self.romrc.set_text(self.param["romrc"])
@@ -500,10 +585,10 @@ class XGngeo:
 			button = gtk.Button(stock=gtk.STOCK_OPEN)
 			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "romrc",self.romrc.get_text()],[self.setPath,"romrc"]])
 			box2.pack_end(button,gtk.FALSE)
-			frame2.add(box2)
-			box.pack_start(frame2)
+			frame.add(box2)
+			box.pack_start(frame)
 
-			frame2 = gtk.Frame(_("Path to libGL.so (optional):"))
+			frame = gtk.Frame(_("Path to libGL.so (optional):"))
 			box2 = gtk.HBox(spacing=5)	
 			self.libglpath = gtk.Entry()
 			self.libglpath.set_text(self.param["libglpath"])
@@ -511,17 +596,14 @@ class XGngeo:
 			button = gtk.Button(stock=gtk.STOCK_OPEN)
 			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "libGL.so",self.libglpath.get_text()],[self.setPath,"libglpath"]])
 			box2.pack_end(button,gtk.FALSE)
-			frame2.add(box2)
-			box.pack_end(frame2)
+			frame.add(box2)
+			box.pack_end(frame)
 
 			#
 			# GRAPHIC section
 			#
-			frame = gtk.Frame() #The Frame which will contain the Box :p
-			notebook.append_page(frame,gtk.Label(_("Graphic")))
-			frame.set_shadow_type(gtk.SHADOW_NONE)
-			box = gtk.VBox(spacing=4) #The Box
-			frame.add(box)
+			box = gtk.VBox(spacing=4) #The box :p
+			notebook.append_page(box,gtk.Label(_("Graphic")))
 
 			table = gtk.Table(3,3)
 
@@ -610,11 +692,8 @@ class XGngeo:
 			#
 			# AUDIO section
 			#
-			frame = gtk.Frame() #The Frame which will contain the Box :p
-			notebook.append_page(frame,gtk.Label(_("Audio")))
-			frame.set_shadow_type(gtk.SHADOW_NONE)
 			box = gtk.VBox(spacing=4) #The Box
-			frame.add(box)
+			notebook.append_page(box,gtk.Label(_("Audio")))
 
 			self.sound = gtk.CheckButton(_("Enable sound"))
 			if self.param["sound"]=="true": self.sound.set_active(1)
@@ -644,11 +723,8 @@ class XGngeo:
 			#
 			# SYSTEM section
 			#
-			frame = gtk.Frame() #The Frame which will contain the Box :p
-			notebook.append_page(frame,gtk.Label(_("System")))
-			frame.set_shadow_type(gtk.SHADOW_NONE)
-			box = gtk.VBox(spacing=4) #The Box
-			frame.add(box)
+			box = gtk.VBox(spacing=4) #The box :p
+			notebook.append_page(box,gtk.Label(_("System")))
 
 			#Type
 			frame2 = gtk.Frame(_("Neo Geo type:"))
@@ -692,19 +768,15 @@ class XGngeo:
 			#
 			# OTHER Section
 			#
-			box = gtk.VBox(spacing=4) #The Box
-			frame = gtk.Frame() #The Frame which will contain the Box :p
-			frame.set_shadow_type(gtk.SHADOW_NONE)
-			frame.add(box)
-
-			notebook.append_page(frame,gtk.Label(_("Other")))
+			box = gtk.VBox(spacing=4) #The box :p
+			notebook.append_page(box,gtk.Label(_("Other")))
 
 			box2 = gtk.HBox()
 			self.autoexecrom = gtk.CheckButton(_("Auto execute Rom"))
 			if self.paramXGngeo["autoexecrom"]=="true": self.autoexecrom.set_active(1)
 			box2.pack_start(self.autoexecrom)
 
-			#History
+			#History size
 			label = gtk.Label("History size:")
 			box2.pack_start(label)
 
@@ -714,16 +786,16 @@ class XGngeo:
 			box2.pack_start(self.historysize,gtk.FALSE)
 			box.pack_start(box2)
 
-			frame2 = gtk.Frame("XML file containing Rom infos (optional):")
-			self.rominfosxml = gtk.Entry()
-			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
-			frame2.add(self.rominfosxml)
-			box.pack_start(frame2)
-
 			frame2 = gtk.Frame("Preview images directory (optional):")
 			self.previewimagesdir = gtk.Entry()
 			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
 			frame2.add(self.previewimagesdir)
+			box.pack_start(frame2)
+
+			frame2 = gtk.Frame("XML file containing Rom infos (optional):")
+			self.rominfosxml = gtk.Entry()
+			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
+			frame2.add(self.rominfosxml)
 			box.pack_start(frame2)
 
 			self.configDialog.vbox.pack_start(notebook) #Packing the Notebook
@@ -824,12 +896,12 @@ class XGngeo:
 				if self.country_japan.get_active(): self.param["country"] = "japan" #country
 				elif self.country_usa.get_active(): self.param["country"] = "usa"
 				else: self.param["country"] = "europe"
-				
+
 				#XGngeo's own params
 				self.paramXGngeo["autoexecrom"] = ("false","true")[self.autoexecrom.get_active()] #autoexecrom
 				self.paramXGngeo["historysize"] = int(self.historysize.get_value()) #historysize
-				self.paramXGngeo["rominfosxml"] = self.rominfosxml.get_text() #rominfosxml
 				self.paramXGngeo["previewimagesdir"] = self.previewimagesdir.get_text() #previewimagesdir
+				self.paramXGngeo["rominfosxml"] = self.rominfosxml.get_text() #rominfosxml
 
 				letsWrite = 1 #Let's write!
 
@@ -889,8 +961,8 @@ class XGngeo:
 		self.paramXGngeo = {
 			"autoexecrom":"false",
 			"historysize":5,
-			"rominfosxml":"data/rominfos.xml",
 			"previewimagesdir":"data/previewimages/",
+			"rominfosxml":"data/rominfos.xml",
 			"showavailableromsonly":"true"
 			}
 		self.romPath = None
@@ -920,6 +992,9 @@ class XGngeo:
 		# FILE Menu
 		#
 		menu = gtk.Menu()
+		self.file_menu_item = gtk.MenuItem(_("_File"))
+		self.file_menu_item.set_submenu(menu)
+		menu_bar.append(self.file_menu_item )
 
 		self.loadfromfile_menu_item = gtk.MenuItem(_("Load from _File"))
 		self.loadfromfile_menu_item.connect("activate",self.fileSelect,[[_("Select a Rom"),self.param["rompath"]],[self.setPath,"rom"]])
@@ -959,14 +1034,13 @@ class XGngeo:
 		menu_item.connect("activate",self.quit)		
 		menu.append(menu_item)
 
-		self.file_menu_item = gtk.MenuItem(_("_File"))
-		self.file_menu_item.set_submenu(menu)
-		menu_bar.append(self.file_menu_item )
-
 		#
 		# CONFIG Menu
 		#
 		menu = gtk.Menu()
+		menu_item = gtk.MenuItem(_("_Config"))
+		menu_item.set_submenu(menu)
+		menu_bar.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Path"))
 		menu_item.connect("activate",self.config,0)
@@ -994,14 +1068,14 @@ class XGngeo:
 		menu_item.connect("activate",self.keysConfig)
 		menu.append(menu_item)
 
-		menu_item = gtk.MenuItem(_("_Config"))
-		menu_item.set_submenu(menu)
-		menu_bar.append(menu_item)
-
 		#
 		# INFO Menu
 		#
 		menu = gtk.Menu()
+		menu_item = gtk.MenuItem(_("_Info"))
+		menu_item.set_right_justified(gtk.TRUE) #At right
+		menu_item.set_submenu(menu)
+		menu_bar.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_About"))
 		menu_item.connect("activate",self.about)
@@ -1010,11 +1084,6 @@ class XGngeo:
 		menu_item = gtk.MenuItem(_("_License"))
 		menu_item.connect("activate",self.license)
 		menu.append(menu_item)
-
-		menu_item = gtk.MenuItem(_("_Info"))
-		menu_item.set_right_justified(gtk.TRUE) #At right
-		menu_item.set_submenu(menu)
-		menu_bar.append(menu_item)
 
 		# Pack MemuBar into the Box
 		box.pack_start(menu_bar,gtk.FALSE)
