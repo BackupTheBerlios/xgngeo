@@ -49,7 +49,7 @@ class XGngeo:
 		self.introDialog.vbox.pack_end(label)
 
 		button = gtk.Button(stock=gtk.STOCK_OK)
-		button.connect("clicked",self.destroy,[self.introDialog,2])
+		button.connect("clicked",self.destroy,self.introDialog,2)
 		self.introDialog.action_area.pack_end(button)
 
 		self.introDialog.show_all()
@@ -60,7 +60,7 @@ class XGngeo:
 			self.busy(1)
 
 			self.licenseDialog = gtk.Dialog(_("License"),flags=gtk.DIALOG_NO_SEPARATOR)
-			self.licenseDialog.connect("destroy",self.destroy,[self.licenseDialog,1])
+			self.licenseDialog.connect("destroy",self.destroy,self.licenseDialog,1)
 
 			label = gtk.Label(_("XGngeo is released under the GNU GPL license:"))
 			label.set_padding(10,4)
@@ -83,7 +83,7 @@ class XGngeo:
 			
 			textview = gtk.TextView(textbuffer)
 			textview.set_editable(False)
-	
+
 			scrolled_window = gtk.ScrolledWindow()
 			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 			scrolled_window.add(textview)
@@ -92,7 +92,7 @@ class XGngeo:
 
 			#Button at bottom..
 			button = gtk.Button(stock=gtk.STOCK_CLOSE)
-			button.connect("clicked",self.destroy,[self.licenseDialog,1])
+			button.connect("clicked",self.destroy,self.licenseDialog,1)
 			self.licenseDialog.action_area.pack_end(button)
 
 			self.licenseDialog.show_all()
@@ -101,42 +101,45 @@ class XGngeo:
 		"""This function is embeded in a thread and perform
 		some Gngeo post-execution instructions after it
 		terminates."""
-		print "debug 5"
 		#Waiting for Gngeo to hang up...
 		self.cmd.join()
-		print "debug 6"
+
+		gtk.threads_enter() #Without this, it often bugs. :p
 		output = self.cmd.getOutput()
-		#~ if output!="":
-			#~ #Check if there was a f*ck then display the default message if none.
-			#~ if not match(".{12} [[][\-]{62}[]]",output):
-				#~ self.statusbar.push(self.context_id,string.replace(output,"\n"," "))
-			#~ else:
-				#~ #The Rom was successfully exectuted, so we can append it to the ``History" menu.
-				#~ self.historyAdd(self.romFullName,self.romPath)
-				#~ self.statusbar.push(self.context_id,_("Rom stopped."))
-		print "debug 7"
+		#Check if there was a f*ck then display a warning message if it's the case.
+		if not match(".{12} [[][\-]{62}[]]",output):
+			if output[-1:]=="\n": output=output[:-1] #Remove last line break if any.
+			def callback(widget,*args): widget.destroy()
+			dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
+			dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),output))
+			dialog.connect_object("response",callback,dialog)
+			dialog.show_all()
+
+		#The Rom was successfully exectuted, so we can append it to the ``History" menu.
+		self.historyAdd(self.romFullName,self.romPath)
+		self.statusbar.push(self.context_id,_("Rom stopped."))
+
 		#Perform some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(True)
 		self.history_menu_item.set_sensitive(True)
 		self.stopMenu_item.set_sensitive(False)
 		self.execMenu_item.set_sensitive(True)
-		print "debug 8\n"
+		gtk.threads_leave()
 
 	def gngeoExec(self,widget=None):
-		print "debut 1"
+
 		self.statusbar.push(self.context_id,_("Starting Rom..."))
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
-		print "debug 2"
+
 		#Starting the thread.
 		self.cmd = command.Command("%s '%s'" % (self.paramXGngeo['gngeopath'],self.romPath))
 		self.cmd.start()
-		print "debug 3"
+
 		#Starting another thread which watch out the last one!
 		Timer(0,self.gngeoGetOutput).start()
-		print "debug 4"
 
 	def gngeoStop(self,widget=None):
 		#Kill Gngeo if it is still running.
@@ -196,7 +199,7 @@ class XGngeo:
 			self.romFromList = None #Selected Rom
 
 			self.listDialog = gtk.Dialog(_("List of Roms from your \"romrc\" file"))
-			self.listDialog.connect("destroy",self.destroy,[self.listDialog,1])
+			self.listDialog.connect("destroy",self.destroy,self.listDialog,1)
 
 			label = gtk.Label(_("Please select the Rom you want to load from this list ^^\nAvailable Roms are displayed in blue..."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
@@ -327,7 +330,7 @@ class XGngeo:
 			self.listDialog.action_area.pack_start(button)
 
 			button = gtk.Button(stock=gtk.STOCK_CANCEL)
-			button.connect("clicked",self.destroy,[self.listDialog,1])
+			button.connect("clicked",self.destroy,self.listDialog,1)
 			self.listDialog.action_area.pack_start(button)
 
 			self.listDialog.show_all()
@@ -424,7 +427,7 @@ class XGngeo:
 			self.busy(1)
 
 			self.aboutDialog = gtk.Dialog(_("About XGngeo"),flags=gtk.DIALOG_NO_SEPARATOR)
-			self.aboutDialog.connect("destroy",self.destroy,[self.aboutDialog,1])
+			self.aboutDialog.connect("destroy",self.destroy,self.aboutDialog,1)
 
 			pipe = os.popen("%s --version" % self.paramXGngeo['gngeopath'])
 			line = match("Gngeo (\S*)",pipe.readline())
@@ -453,11 +456,11 @@ class XGngeo:
 
 			#Button at bottom..
 			button = gtk.Button(stock=gtk.STOCK_CLOSE)
-			button.connect("clicked",self.destroy,[self.aboutDialog,1])
+			button.connect("clicked",self.destroy,self.aboutDialog,1)
 			self.aboutDialog.action_area.pack_end(button)
 
 			self.aboutDialog.show_all()
-	
+
 	def config(self,widget=None,type=0,firstrun=0):
 		if self.busyState!=1:
 			def setPathIcon(widget,image,dir=0):
@@ -477,7 +480,7 @@ class XGngeo:
 			if type in (0,5): self.configDialog.set_geometry_hints(min_width=350)
 
 			if firstrun==1: self.configDialog.connect("delete_event",self.quit)
-			else: self.configDialog.connect("destroy",self.destroy,[self.configDialog,1])
+			else: self.configDialog.connect("destroy",self.destroy,self.configDialog,1)
 
 			if type==0:
 				#
@@ -485,10 +488,10 @@ class XGngeo:
 				#
 				self.configDialog.set_title(_("Important path configuration"))
 				box = gtk.VBox(spacing=5) #The box :p
-	
+
 				frame = gtk.Frame(_("Roms & Bios directory:"))
 				box2 = gtk.HBox()
-	
+
 				image = gtk.Image()
 				box2.pack_start(image,False,padding=3)
 				self.configwidgets['rompath'] = gtk.Entry()
@@ -503,10 +506,10 @@ class XGngeo:
 				box2.pack_end(button,False)
 				frame.add(box2)
 				box.pack_start(frame)
-	
+
 				frame = gtk.Frame(_("Path to romrc:"))
 				box2 = gtk.HBox()
-	
+
 				image = gtk.Image()
 				box2.pack_start(image,False,padding=3)
 				self.configwidgets['romrc'] = gtk.Entry()
@@ -524,7 +527,7 @@ class XGngeo:
 
 				frame = gtk.Frame(_("Path to gngeo executable:"))
 				box2 = gtk.HBox()
-	
+
 				image = gtk.Image()
 				box2.pack_start(image,False,padding=3)
 				self.configwidgets['gngeopath'] = gtk.Entry()
@@ -583,7 +586,7 @@ class XGngeo:
 				self.configwidgets['scale'].set_digits(0)
 				frame.add(self.configwidgets['scale'])
 				table.attach(frame,2,3,0,2)
-	
+
 				box.pack_start(table)
 
 				#320x224 screen output.
@@ -676,7 +679,7 @@ class XGngeo:
 
 				frame = gtk.Frame(_("Audio"))
 				table = gtk.Table(2,2)
-		
+
 				self.configwidgets['sound'] = gtk.CheckButton(_("Enable sound"))
 				if self.param["sound"]=="true": self.configwidgets['sound'].set_active(1)
 				table.attach(self.configwidgets['sound'],0,2,0,1)
@@ -977,7 +980,7 @@ class XGngeo:
 				#"Cancel" Button (except at the first time configuration).
 				button = gtk.Button(stock=gtk.STOCK_CANCEL)
 				if firstrun==1:	button.connect("clicked",self.quit)
-				else: button.connect("clicked",self.destroy,[self.configDialog,5])
+				else: button.connect("clicked",self.destroy,self.configDialog,5)
 				self.configDialog.action_area.pack_end(button)
 
 			self.configDialog.show_all()
@@ -990,11 +993,7 @@ class XGngeo:
 	def configWrite(self,widget,type,firstrun=0):
 		letsWrite = 0
 
-		if type==0:
-			#Update important path configuration params.
-			self.param["rompath"] = self.configwidgets['rompath'].get_text() #rompath
-			self.param["romrc"] = self.configwidgets['romrc'].get_text() #romrc
-			
+		if type==0:			
 			error = ""
 			#Looking for errors :p
 			if not os.path.exists(self.configwidgets['rompath'].get_text()): error += _("Roms & Bios directory doesn't exist.")+"\n" #rompath
@@ -1005,35 +1004,46 @@ class XGngeo:
 			elif not os.path.isfile(self.configwidgets['gngeopath'].get_text()): error += _("Path to gngeo executable is not a file!")+"\n"
 
 			if len(error)>0: #Display the warning dialog...
-				self.configDialog.set_sensitive(False) #Busying Configuration window
-
-				dialog = gtk.Dialog(_("Configuration error!"))
-				dialog.connect("destroy",self.destroy,[dialog,4])
-
-				box = gtk.HBox()
-				image = gtk.Image()
-				image.set_from_stock(gtk.STOCK_DIALOG_WARNING,gtk.ICON_SIZE_DIALOG)
-				image.set_padding(5,5)
-				box.pack_start(image)
-				box2 = gtk.VBox(spacing=0)
-				label = gtk.Label(_("Sorry, I can't save the configuration because:")+"\n")
-				box2.pack_start(label)
-				label = gtk.Label(error)
-				label.modify_fg(gtk.STATE_NORMAL,label.get_colormap().alloc_color("#b00"))
-				box2.pack_start(label)
-				label = gtk.Label(_("Please check it up then save again... ^^;"))
-				box2.pack_end(label)
-				box.pack_end(box2,padding=5)
-				dialog.vbox.pack_end(box)
-
-				#Ok button
-				button = gtk.Button(stock=gtk.STOCK_OK)
-				button.connect("clicked",self.destroy,[dialog,4])
-				dialog.action_area.pack_start(button)
-
+				def callback(widget,*args): widget.destroy()
+				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
+				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>\n%s" % (_("Sorry, I can't save the configuration because:"),error,_("Please check it up then try to save again... ^^;")))
+				dialog.connect_object("response",callback,dialog)
 				dialog.show_all()
+				
+				#~ self.configDialog.set_sensitive(False) #Busying Configuration window
 
-			else: letsWrite = 1 #Let's write!
+				#~ dialog = gtk.Dialog(_("Configuration error!"))
+				#~ dialog.connect("destroy",self.destroy,dialog,4)
+
+				#~ box = gtk.HBox()
+				#~ image = gtk.Image()
+				#~ image.set_from_stock(gtk.STOCK_DIALOG_WARNING,gtk.ICON_SIZE_DIALOG)
+				#~ image.set_padding(5,5)
+				#~ box.pack_start(image)
+				#~ box2 = gtk.VBox(spacing=0)
+				#~ label = gtk.Label(_("Sorry, I can't save the configuration because:")+"\n")
+				#~ box2.pack_start(label)
+				#~ label = gtk.Label(error)
+				#~ label.modify_fg(gtk.STATE_NORMAL,label.get_colormap().alloc_color("#b00"))
+				#~ box2.pack_start(label)
+				#~ label = gtk.Label(_("Please check it up then save again... ^^;"))
+				#~ box2.pack_end(label)
+				#~ box.pack_end(box2,padding=5)
+				#~ dialog.vbox.pack_end(box)
+
+				#~ #Ok button
+				#~ button = gtk.Button(stock=gtk.STOCK_OK)
+				#~ button.connect("clicked",self.destroy,dialog,4)
+				#~ dialog.action_area.pack_start(button)
+
+				#~ dialog.show_all()
+
+			else:
+				#Update important path configuration params.
+				self.param["rompath"] = self.configwidgets['rompath'].get_text() #rompath
+				self.param["romrc"] = self.configwidgets['romrc'].get_text() #romrc
+
+				letsWrite = 1 #Let's write!
 
 		elif type in (1,2,3,4):
 			#Update global emulation configuration params.
@@ -1092,13 +1102,16 @@ class XGngeo:
 		if state==1: self.window.set_state(gtk.STATE_INSENSITIVE); self.busyState=1
 		else: self.window.set_sensitive(True); self.busyState=0
 
-	def destroy(self,widget,data):
-		data[0].destroy()
-		if data[1]==1: self.busy(0) #Unbusy the main window
-		elif data[1]==2: self.config(firstrun=1) #Configure Gngeo for the first time
-		elif data[1]==3: self.main() #Display the main window
-		elif data[1]==5: self.busy(0); self.statusbar.push(self.context_id,_("Configuration was not saved.")) #If Configuration cancelled
-	
+	def destroy(self,widget,condamned_widget,post_action=0):
+		#Destroying the widget.
+		condamned_widget.destroy()
+
+		#Doing post actions.
+		if post_action==1: self.busy(0) #Unbusy the main window
+		elif post_action==2: self.config(firstrun=1) #Configure Gngeo for the first time
+		elif post_action==3: self.main() #Display the main window
+		elif post_action==5: self.busy(0); self.statusbar.push(self.context_id,_("Configuration was not saved.")) #If Configuration cancelled
+
 	def quit(self,*args):
 		if self.cmd and self.cmd.isAlive(): self.gngeoStop() #Stop any running Gngeo.
 		gtk.main_quit() #Stop waiting for event...

@@ -39,8 +39,6 @@ class History:
 		already = False
 		i,j = 0,0
 
-		print self.list
-
 		#Check if the game is already on the list.
 		for x in self.list[:size]:
 			if x[0]==name: already=True; j=i; break
@@ -60,7 +58,6 @@ class History:
 			self.list.insert(0,(name,location))
 
 		#Remove any extra item.
-		print self.list
 		self.list = self.list[:size]
 
 		#Updating file.
