@@ -44,10 +44,10 @@ Credit
 Introduction
 ************
 
-*XGngeo* is a frontend (GUI) for the Neo Geo emulator *Gngeo*, both are
-free software released under the _GNU GPL license_.  XGngeo is written
-in Python and uses the PyGTK library to provide a user-friendly
-interface!
+*XGngeo* is a frontend (GUI) for *Gngeo* which is a Neo Geo emulator
+for GNU/Linux. Both are free software released under the _GNU GPL
+license_.  XGngeo is written in Python and uses the PyGTK library to
+provide a user-friendly interface!
 XGngeo is developed by the *Choplair-network*, lastest
 version/information should be available on our website:
 `http://choplair.tuxfamily.org/'.
@@ -205,7 +205,7 @@ these generic instructions:
 
         * `cvs -z3
           -d:pserver:anonymous@cvs.xgngeo.berlios.de:/cvsroot/xgngeo
-          xgngeo'
+          checkout xgngeo'
 
   2. Go to the `data/lang/' directory.
 
@@ -229,7 +229,7 @@ these generic instructions:
   8. Launch XGngeo which is now translated in your language!
 
    Every time you update your translation, don't forget to repeat step
-7. When it's Ok, send your ".po" file to: <choplair(AT)fr.st>.
+7. When it's Ok, send your ".po" file to: <choplair[AT]fr.st>.
 
 Help
 ****
@@ -237,10 +237,10 @@ Help
 If you get any problems using XGngeo or Gngeo, the best way is to ask
 for help in the Gngeo's mailling list:
 
-   * *Suscribtion:* send a blank email to <gngeo-request(AT)ml.free.fr>
+   * *Suscribtion:* send a blank email to <gngeo-request[AT]ml.free.fr>
      with the subject *subscribe*.
 
-   * *Posting:* send your messages to <gngeo(AT)ml.free.fr>.
+   * *Posting:* send your messages to <gngeo[AT]ml.free.fr>.
 
 Credit
 ******
@@ -249,25 +249,25 @@ XGngeo is developed by the Choplair-network, here comes the staff:
 
    * *Programming:*
 
-        * Main coder: *Choplair* <choplair(AT)fr.st>
+        * Main coder: *Choplair* <choplair[AT]fr.st>
 
-        * Assisted by: *Pachilor* <pachilor(AT)yahoo.co.jp>
+        * Assisted by: *Pachilor* <pachilor[AT]yahoo.co.jp>
 
    * *Translation:*
 
         * French: *Choplair*
 
-        * Polish: *Matma* <matmaw(AT)poczta.onet.pl>
+        * Polish: *Matma* <matmaw[AT]poczta.onet.pl>
 
-        * Portuguese: *Paulo Eduardo Chiva* <paulo.chiva(AT)ig.com.br>
+        * Portuguese: *Paulo Eduardo Chiva* <paulo.chiva[AT]ig.com.br>
 
-        * Spanish: *Shilon* <slg(AT)bajoo.net>
+        * Spanish: *Shilon* <slg[AT]bajoo.net>
 
    * *Documentation:*
 
         * Draft: *Pachilor*
 
-        * Correction: *Hori* (the wonderful!) <x_psyence(AT)hotmail.com>
+        * Correction: *Hori* (the wonderful!) <x_psyence[AT]hotmail.com>
 
    Special thanks to the Gngeo author: *Mathieu Peponas*. ^_~
 

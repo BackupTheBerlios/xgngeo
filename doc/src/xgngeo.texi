@@ -34,7 +34,7 @@ __  __  ____  _   _   ____  ____   __
 @contents
 
 @chapter Introduction
-@strong{XGngeo} is a frontend (@acronym{GUI}) for the Neo Geo emulator @strong{Gngeo}, both are free software released under the @emph{GNU GPL license}.
+@strong{XGngeo} is a frontend (@acronym{GUI}) for @strong{Gngeo} which is a Neo Geo emulator for @acronym{GNU}/Linux. Both are free software released under the @emph{GNU GPL license}.
 XGngeo is written in Python and uses the PyGTK library to provide a user-friendly interface!@*
 XGngeo is developed by the @strong{Choplair-network}, lastest version/information should be available on our website: @uref{http://choplair.tuxfamily.org/}.
 @sp 1
@@ -120,7 +120,7 @@ If you want to make a translation of XGngeo in your language, follow these gener
 @item Get the lastest CVS version by doing the following:
 @itemize
 @item @command{cvs -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo login} (press @sc{Return})
-@item @command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo xgngeo}
+@item @command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo checkout xgngeo}
 @end itemize
 @item Go to the @file{data/lang/} directory.
 @item Create a directory named as your language's code (returned with: @command{echo $LANG}). See @uref{http://www.gnu.org/software/gettext/manual/html_chapter/gettext_15.html#SEC221} for a exhaustive list.
