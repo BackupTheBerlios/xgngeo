@@ -1,0 +1,164 @@
+\input texinfo
+@setfilename xgngeo.texi
+@settitle XGngeo Documentation
+
+@copying
+Copyleft 2003 Choplair-network.
+@quotation
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyleft
+notice and this notice are preserved.
+@end quotation
+@end copying
+
+@titlepage
+@title XGngeo's Documentation
+@subtitle XGngeo version 13 - 2003.11.15
+@author The Choplair-network
+@insertcopying
+@end titlepage
+
+@ifplaintext
+@example
+__  __  ____  _   _   ____  ____   __
+\ \/ / / ___|| \ | | / ___||  __| /  \
+ \\// / / ___|  \| |/ / ___| |_  | /\ |
+ //\\ \ \_\ /| |\  |\ \_\ /| |__ | \/ |
+/_/\_\ \___/ |_| \_| \___/ |____| \__/
+@end example
+@* XGngeo - DOCUMENTATION @*
+@insertcopying
+@end ifplaintext
+
+@contents
+
+@chapter Introduction
+@strong{XGngeo} is a frontend (@acronym{GUI}) for the Neo Geo emulator @strong{Gngeo}, both are free softwares released under the @emph{GNU GPL license}.
+XGngeo is written in Python and uses the PyGTK library for its interface.@*
+XGngeo is developed by the @strong{Choplair-network}, latest version is available on its website: @uref{http://choplair.tuxfamily.org/}.
+@* @*
+This documentation provides some information and a @emph{Newbies Guide} about get started with XGngeo. It will grow (I hope...) with each new version.
+
+@chapter Get started
+This is the complete and detailed procedure about how to get XGngeo fully functional!
+
+@section Gngeo
+XGngeo is a frontend for Gngeo, so you need this one!@*
+Download the last Gngeo package from @uref{http://m.peponas.free.fr/gngeo/}.
+Unpack it, configure, then start compilation... If the compilation fails, take a look at the "Help" chapter. Otherwise, you may now install it... 
+
+@section Other requirements
+In order to get XGngeo running, you need the following software installed on your computer:
+
+@itemize @bullet
+@item The @strong{Python} programming language (version 2.2 or more) - @uref{http://www.python.org/};
+@item The @strong{PyGTK} library (version 1.99 or more) - @uref{http://www.daa.com.au/~james/software/pygtk/}.
+@end itemize
+
+@section Neo Geo bios
+To be able to launch roms, Gngeo needs a Neo Geo bios.
+
+@section Run XGngeo
+It's time! Your are now ready to taste XGngeo. ^^@*
+Download the last XGngeo package from the Choplair-network homepage: @uref{http://choplair.tuxfamily.org/}.@*
+Unpack it then enter in the @file{xgngeo-@emph{XX}} directory (where @emph{XX} is XGngeo's version number).
+XGngeo doesn't need any compilation phase. To launch it, simply type: @command{python xgngeo.py}.
+If you get an error doing that, please see the "Help" chapter.
+
+@section Configuration (@file{gngeorc})
+Because it's the first time you'll use Gngeo, you will need to create the Gngeo configuration file (@file{~/.gngeo/gngeorc}).@*
+With XGngeo, it's quite easy: you are invited to configure Gngeo, press @sc{Ok} then the configuration window will appear...
+You must set paths:
+
+@itemize @bullet
+@item The @emph{Roms & Bios directory} is where both your Roms and the Neo Geo bios are.
+@item The @file{romrc} file is a list of data required by Gngeo to play Roms. Its default location is @file{/usr/local/share/gngeo/romrc}.
+@item The @file{libGL.so} file is required for OpenGL. Its location changes depending of the distribution; but it's usually @file{/usr/lib/libGL.so} or @file{/usr/local/lib/libGL.so}.
+@end itemize
+
+Once you have finished, press @sc{Save}. @*
+Of course the configuration can be modified at any time using the same configuration window...
+
+@chapter Features
+
+@section Preview images (optional)
+Since version 9, XGngeo is able to display preview images while selecting any of the games in the list.@*
+It is fully compatible with the preview images used by other Gngeo's frontends such @emph{GGF}.@*
+To enable the preview images, simply unpack the images pack archive (that you may get from Gngeo's homepage or somewhere in the Choplair-network...) into the XGngeo's directory.
+
+@section Keys configuration
+Since version 12, XGngeo got a Key Configurator. It works for the 2 players, but only with keyboard.
+To modify a key, click on the corresponding button then push your new key. @*
+@strong{Warning:} Because Gngeo (@emph{SDL}'s) and XGngeo (@emph{GTK}'s) keymaps are different, some special keys might be not recognized by XGngeo. If it occurs, please tell us (see the "Help" chapter)!
+
+@section Internationalization
+XGngeo, since version 10, is multilingual! At this time, translations are available in these languages:
+
+@itemize @bullet
+@item english (default)
+@item french
+@item polish
+@item portuguese
+@item spanish
+@end itemize
+
+If you want to make a translation of XGngeo in your language, follow these steps:
+
+@enumerate
+@item Go to the @file{data/lang/} directory.
+@item Create a directory named as your language's code (returned with: @command{echo $LANG}). See @uref{http://www.gnu.org/software/gettext/manual/html_chapter/gettext_15.html#SEC221} for an exhaustive list.
+@item Into the last one, create a new directory named @file{LC_MESSAGES}.
+@item Go back to @file{data/lang/} then open the translation template @file{xgngeo.pot} with your favorite translation tool (KBabel, GTranslator, etc.).
+@item Once you've finished translating. Save it as @file{@emph{XX}/LC_MESSAGES/xgngeo.po} (where @emph{XX} is your language's code).
+@item Go to @file{@emph{XX}/LC_MESSAGES/} then do: @command{msgfmt xgngeo.po -o xgngeo.mo}. This will create a ".mo" file readable by the program.
+@item Launch XGngeo which is now translated in your language!
+@end enumerate
+
+Every time you update your translation, don't forget to repeat step 6. When it's Ok, send your ".po" file to: @email{choplair@@fr.st}.
+
+@chapter Help
+@itemize @bullet
+
+@item If you get any problems using XGngeo (the problem may come from Gngeo), the best way is to ask for help in the Gngeo's mailling list:
+
+@itemize
+@item @sc{Suscribe:} send a blank email to @email{gngeo-request@@ml.free.fr} with the subject @w{@strong{subscribe}}.
+@item @sc{Posting:} send your messages to @email{gngeo@@ml.free.fr}.
+@end itemize
+
+Please give any details about the error that you can (version of Gngeo & XGngeo used, etc.).
+
+@item Ortherwise, if you are sure that the problem is related to XGngeo, or you simply want to contact us, you should post a message on the Choplair-network's @acronym{BBS}: @uref{http://choplair.tuxfamily.org/bbs/}.
+@end itemize
+
+@chapter Credit
+XGngeo's staff:
+
+@itemize 
+@item @sc{Programming:}
+
+@itemize
+@item Main coder: @strong{Choplair} @email{choplair@@fr.st}
+@item Assisted by: @strong{Pachilor} @email{pachilor@@yahoo.co.jp}
+@end itemize
+
+@item @sc{Translation:}
+
+@itemize
+@item French: @strong{Choplair}
+@item Polish: @strong{Matma} @email{matmaw@@poczta.onet.pl}
+@item Portuguese: @strong{Paulo Eduardo Chiva} @email{paulo.chiva@@ig.com.br}
+@item Spanish: @strong{Shilon} @email{slg@@bajoo.net}
+@end itemize
+
+@item  @sc{Documentation:}
+
+@itemize
+@item Draft: @strong{Pachilor}
+@item Correction: @strong{Hori} @email{x_psyence@@hotmail.com}
+@end itemize
+@end itemize
+
+Special thanks to the Gngeo author: @strong{Mathieu Peponas}. ^_~
+
+@bye

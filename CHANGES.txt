@@ -1,0 +1,88 @@
+
+ XGngeo - Changelog
+~~~~~~~~~~~~~~~~~~~~
+
+* Changes in version 14 (2003.12.XX):
+
+- Many new configurable things: auto start roms, preview
+images directory, history, etc. 
+- XGngeo still usable while running Gngeo (game may be
+stopped from interface)
+- Some interface improvement.
+- XGngeo can now be run from any location without problem
+(images not loaded, etc.) :D
+- Added support of GGF's XML file to get rom informations.
+- Each rom's properties may be modified using the new
+"Properties" window.
+- Every options has its own tooltip description.
+- Deutsh translation.
+
+* Changes in version 13 (2003.11.23):
+
+- New configurable options: Neo Geo type (arcade or home),
+country and interpolation.
+- Display of the Gngeo version used, in the "about" window.
+- Now, in the Roms list, only available roms are shown by
+default.
+- New Portuguese translation by Paulo Eduardo Chiva.
+- Updated documentation.
+
+
+* Changes in version 12 (2003.10.25):
+
+- Added a (amazing ^o^) keys configurator!
+- Added an Audio section to the configuration... ^_^
+- Move of the "lang/" directory into the brand new "data/" 
+directory ^^
+- Move of images into "data/img/".
+
+
+* Changes in version 11 (2003.09.25):
+
+- New "History" menu which allow you to load one of last 
+5 roms loaded. ^^
+- A "Configuration error!" dialog appear if some parameters
+looks strange :p
+- Bigger (+10px!) main window's width.
+- New Polish translation of XGngeo by Matma.
+- New configurable option: Auto Frameskip.
+- Added a documentation in pdf format (into "doc/").
+- New localized README files: README-fr.txt; README-es.txt and
+README-pl.txt.
+- The "fronted" word that reapered from the hell ought to be
+corrected now!
+
+
+* Changes in version 10 (2003.09.06):
+
+- Ability to browse to set romrc and libGL.so paths easyly.
+- Now the file selector open into the last specified
+directory :p
+- Added support for Internationalization! Yeah!
+XGngeo is now aviable in English, French and Spanish. ^^
+- New configurable option: Show FPS.
+
+
+* Changes in version 9 (2003.08.25):
+
+- New Graphic's configurable option: Scale (1 to 5).
+- Now XGngeo remember the last Blitter or Effect selected
+when re-configuration.
+- Added: Rom can be loaded from List, with preview image!
+XGngeo is fully compatible with preview images used in the
+other Gngeo frontend: GGF.
+
+
+* Changes in version 8 (2003.08.22):
+
+- Bug with rom's filename that containing spaces fixed.
+- Including the Brand New configuration file write method
+called WAGLAMOT ("Write A Gngeorc Like A Maman Ours Technology").
+This one is able to preserve options that aren't interpreted by
+XGngeo yet. WAGLAMOT is the Future! O_o;;
+- New Graphic's configurable options: Blitter & Effect.
+- Creation of a CHANGES.txt file :p
+
+
+
+"I'm a rose blooming in the desert." - Endless rain, X Japan -

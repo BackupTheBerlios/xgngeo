@@ -1,0 +1,315 @@
+# translation of xgngeo.po to Português do Brasil
+# XGngeo: a frontend for Gngeo :p
+# Copyright (C) 2003 Choplair-network.
+# This file is distributed under the same license as the XGngeo package.
+# Choplair <choplair@fr.st>, 2003.
+# Paulo Eduardo Chiva <paulo.chiva@ig.com.br>, 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xgngeo\n"
+"POT-Creation-Date: 2003-11-14 21:29+0100\n"
+"PO-Revision-Date: 2003-11-15 16:03-0200\n"
+"Last-Translator: Paulo Eduardo Chiva <paulo.chiva@ig.com.br>\n"
+"Language-Team: Português do Brasil <pt@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0\n"
+
+#: ../../xgngeo.py:87
+msgid "Keys configuration"
+msgstr "Configuração das teclas"
+
+#: ../../xgngeo.py:90
+msgid ""
+"To modify a key, click the button then push your new key.\n"
+"This configuration is only for keyboard."
+msgstr ""
+"Para modificar uma tecla, clique no botão e então pressione a nova tecla.\n"
+"Esta configuração é somente para o teclado."
+
+#: ../../xgngeo.py:97
+msgid "Player 1"
+msgstr "Jogador 1"
+
+#: ../../xgngeo.py:100
+msgid "Player 2"
+msgstr "Jogador 2"
+
+#: ../../xgngeo.py:218
+msgid "Welcome! ^_^"
+msgstr "Bem-vindo! ^_^"
+
+#: ../../xgngeo.py:221
+#, python-format
+msgid ""
+"The file \"%s\" was not found!\n"
+"We need to configure Gngeo. Press OK to continue..."
+msgstr ""
+"O arquivo \"%s\" não foi encontrado!\n"
+"Ele é necessário para configurar o Gngeo. Tecle OK paar continuar..."
+
+#: ../../xgngeo.py:236 ../../xgngeo.py:964
+msgid "License"
+msgstr "Licença"
+
+#: ../../xgngeo.py:239
+msgid "XGngeo is released under the GNU GPL:"
+msgstr "XGngeo é distribuido sob a licença GNU-GPL:"
+
+#: ../../xgngeo.py:255
+#, python-format
+msgid ""
+"Error: Unable to open the file \"%s\"!\n"
+"You can read the GNU CPL license at:\n"
+"http://www.gnu.org/licenses/gpl.html"
+msgstr ""
+"Erro: Não foi possível abrir o arquivo \"%s\"!\n"
+"Você pode ler a licença GNU-GPL em:\n"
+"http://www.gnu.org/licences/gpl.html"
+
+#: ../../xgngeo.py:300
+msgid "List of Roms from your \"romrc\" file"
+msgstr "Lista de Roms de seu arquivo \"romrc\""
+
+#: ../../xgngeo.py:303
+msgid ""
+"Please select the Rom you want to load from this list ^^\n"
+"Available Roms are showed in blue..."
+msgstr ""
+"Por favor escolha a ROM que deseja carregar desta lista ^^\n"
+"Roms disponíveis são mostradas em azul... "
+
+#: ../../xgngeo.py:307
+msgid "Show only available Roms."
+msgstr "Mostrar somente Roms disponíveis."
+
+#: ../../xgngeo.py:395 ../../xgngeo.py:406 ../../xgngeo.py:423
+msgid "Selected:"
+msgstr "Selecionada:"
+
+#: ../../xgngeo.py:435
+msgid "About XGngeo"
+msgstr "Sobre o XGngeo"
+
+#: ../../xgngeo.py:444
+#, python-format
+msgid ""
+"<span color='#008'><b>XGngeo: a frontend for Gngeo :p</b>\n"
+"Version %i.\n"
+"Running Gngeo version %s.\n"
+"XGngeo's license is the GNU GPL.</span>"
+msgstr ""
+"<span color='#008'><b>XGngeo: um frontend para o Gngeo :p</b>\n"
+"Versão %i.\n"
+"Rodando a versão %s do Gngeo.\n"
+"A licença do XGngeo é a GNU GPL.</span>"
+
+#: ../../xgngeo.py:449
+msgid "Credits"
+msgstr "Créditos"
+
+#: ../../xgngeo.py:457
+msgid ""
+"Main coder: Choplair.\n"
+"Assisted by: Pachilor."
+msgstr ""
+"Código principal: Choplair.\n"
+"Ajudado por: Pachilor."
+
+#: ../../xgngeo.py:474
+msgid "Configuration"
+msgstr "Configuração"
+
+#: ../../xgngeo.py:489
+msgid "Path to Roms & Bios:"
+msgstr "Caminho para as Roms & Bios:"
+
+#: ../../xgngeo.py:495
+msgid "Path to romrc:"
+msgstr "Caminho para o romrc:"
+
+#: ../../xgngeo.py:502 ../../xgngeo.py:513
+#, python-format
+msgid "Select the \"%s\" file"
+msgstr "Selecione o arquivo \"%s\""
+
+#: ../../xgngeo.py:506
+msgid "Path to libGL.so:"
+msgstr "Caminho para o libGL.so:"
+
+#: ../../xgngeo.py:517 ../../xgngeo.py:929
+msgid "Path"
+msgstr "Caminho"
+
+#: ../../xgngeo.py:530
+msgid "Fullscreen"
+msgstr "Tela cheia"
+
+#: ../../xgngeo.py:534
+msgid "Interpolation"
+msgstr "Interpolação"
+
+#: ../../xgngeo.py:539
+msgid "Show FPS"
+msgstr "Mostrar FPS"
+
+#: ../../xgngeo.py:543
+msgid "Auto Frameskip"
+msgstr "Pulo de frames automático"
+
+#: ../../xgngeo.py:550
+msgid "Scale:"
+msgstr "Escala:"
+
+#: ../../xgngeo.py:565
+msgid "Blitter:"
+msgstr "Blitter:"
+
+#: ../../xgngeo.py:590
+msgid "Effect:"
+msgstr "Efeito:"
+
+#: ../../xgngeo.py:614 ../../xgngeo.py:933
+msgid "Graphic"
+msgstr "Gráficos"
+
+#: ../../xgngeo.py:624
+msgid "Enable sound"
+msgstr "Ativar o som"
+
+#: ../../xgngeo.py:632
+msgid "Sample rate:"
+msgstr "Frequência:"
+
+#: ../../xgngeo.py:649 ../../xgngeo.py:937
+msgid "Audio"
+msgstr "Áudio"
+
+#: ../../xgngeo.py:660
+msgid "Neo Geo type:"
+msgstr "Tipo do Neo Geo:"
+
+#: ../../xgngeo.py:663
+msgid "Arcade"
+msgstr "Arcade"
+
+#: ../../xgngeo.py:666
+msgid "Home"
+msgstr "Console"
+
+#: ../../xgngeo.py:672
+msgid "Country:"
+msgstr "País:"
+
+#: ../../xgngeo.py:676
+msgid "Japan"
+msgstr "Japão"
+
+#: ../../xgngeo.py:683
+msgid "USA"
+msgstr "EUA"
+
+#: ../../xgngeo.py:690
+msgid "Europe"
+msgstr "Europa"
+
+#: ../../xgngeo.py:698 ../../xgngeo.py:941
+msgid "System"
+msgstr "Sistema"
+
+#: ../../xgngeo.py:741
+msgid "Roms & Bios directory doesn't exist."
+msgstr "O diretório das Roms & Bios não existe."
+
+#: ../../xgngeo.py:743
+msgid "Roms & Bios directory is not a directory! O_o;"
+msgstr "O diretório das Roms & Bios não é um diretório! O_o;"
+
+#: ../../xgngeo.py:744
+msgid "Path to \"romrc\" doesn't exist."
+msgstr "O Caminho para o \"romrc\" não existe."
+
+#: ../../xgngeo.py:746
+msgid "Path to \"romrc\" is not a file!"
+msgstr "O caminho para o \"romrc\" não é um arquivo!"
+
+#: ../../xgngeo.py:747
+msgid "Path to \"LibGL.so\" doesn't exist."
+msgstr "O caminho para o \"LibGL.so\" não existe."
+
+#: ../../xgngeo.py:749
+msgid "Path to \"libGL.so\" is not a file!"
+msgstr "O caminho para o \"LibGL.so\" não é um arquivo!"
+
+#: ../../xgngeo.py:754
+msgid "Configuration error!"
+msgstr "Erro de configuração!"
+
+#: ../../xgngeo.py:763
+msgid "Sorry, I'm unable to save the configuration because:"
+msgstr "Desculpe. Não foi possível salvar a configuração porque:"
+
+#: ../../xgngeo.py:768
+msgid "Please check it up then save again... ^^;"
+msgstr "Por favor cheque tudo e salve novamente...^^;"
+
+#: ../../xgngeo.py:819
+msgid "Configuration has been saved."
+msgstr "A configuração foi salva."
+
+#: ../../xgngeo.py:831
+msgid "Configuration was not saved."
+msgstr "A configuração não foi salva."
+
+#: ../../xgngeo.py:879
+#, python-format
+msgid "Welcome to XGngeo version %i."
+msgstr "Bem-vindo ao XGngeo versão %i."
+
+#: ../../xgngeo.py:894
+msgid "Load from File"
+msgstr "Carregar do arquivo"
+
+#: ../../xgngeo.py:895
+msgid "Select a Rom"
+msgstr "Selecione uma Rom"
+
+#: ../../xgngeo.py:898
+msgid "Load from List"
+msgstr "Carregar da Lista"
+
+#: ../../xgngeo.py:902
+msgid "History"
+msgstr "Histórico"
+
+#: ../../xgngeo.py:909
+msgid "Run..."
+msgstr "Executar..."
+
+#: ../../xgngeo.py:916
+msgid "Quit"
+msgstr "Sair"
+
+#: ../../xgngeo.py:920
+msgid "File"
+msgstr "Arquivo"
+
+#: ../../xgngeo.py:947
+msgid "Keys"
+msgstr "Teclas"
+
+#: ../../xgngeo.py:951
+msgid "Config"
+msgstr "Configurar"
+
+#: ../../xgngeo.py:960
+msgid "About"
+msgstr "Sobre"
+
+#: ../../xgngeo.py:968
+msgid "Info"
+msgstr "Info"
+
+
