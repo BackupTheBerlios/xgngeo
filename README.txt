@@ -19,6 +19,6 @@ directory. With that one, you should get XGngeo running without
 any problem.
 
   For lastest updates and informations about XGngeo, please visit
-our homepage: http://www.choplair.org/
+the Choplair-network homepage: `http://www.choplair.org/'
 
 #$Id$

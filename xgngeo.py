@@ -717,21 +717,23 @@ class XGngeo:
 			box.pack_start(frame)
 
 			#
-			# AUDIO section
+			# AUDIO / JOYSTICK section
 			#
 			box = gtk.VBox(spacing=4) #The Box
-			notebook.append_page(box,gtk.Label(_("Audio")))
+			notebook.append_page(box,gtk.Label(_("Audio / Joystick")))
+
+			frame = gtk.Frame(_("Audio"))
+			table = gtk.Table(2,2)
 
 			self.sound = gtk.CheckButton(_("Enable sound"))
 			if self.param["sound"]=="true": self.sound.set_active(1)
-			box.pack_start(self.sound)
+			table.attach(self.sound,0,2,0,1)
 
 			#Sample rate
 			self.samplerate = self.param["samplerate"]
-			box2 = gtk.HBox(spacing=5)
-
+			
 			label = gtk.Label(_("Sample rate:"))
-			box2.pack_start(label)
+			table.attach(label,0,1,1,2)
 
 			opt = gtk.OptionMenu()
 			menu = gtk.Menu() 
@@ -744,8 +746,34 @@ class XGngeo:
 				if val==self.param["samplerate"]: menu.set_active(i)
 				i+=1
 			opt.set_menu(menu)
-			box2.pack_start(opt)
-			box.pack_start(box2)
+			table.attach(opt,1,2,1,2)
+
+			frame.add(table)
+			box.pack_start(frame)
+
+			frame = gtk.Frame(_("Joystick"))
+			table = gtk.Table(2,2)
+
+			label = gtk.Label(_("Player 1 device:"))
+			table.attach(label,0,1,0,1)
+			self.p1joydev = gtk.OptionMenu()
+			menu = gtk.Menu()
+			for x in range(4): menu.append(gtk.MenuItem("/dev/js%s" % x))
+			self.p1joydev.set_menu(menu)
+			self.p1joydev.set_history(int(self.param["p1joydev"]))
+			table.attach(self.p1joydev,1,2,0,1)
+
+			label = gtk.Label(_("Player 2 device:"))
+			table.attach(label,0,1,1,2)
+			self.p2joydev = gtk.OptionMenu()
+			menu = gtk.Menu()
+			for x in range(4): menu.append(gtk.MenuItem("/dev/js%s" % x))
+			self.p2joydev.set_menu(menu)
+			self.p2joydev.set_history(int(self.param["p2joydev"]))
+			table.attach(self.p2joydev,1,2,1,2)
+
+			frame.add(table)
+			box.pack_start(frame)
 
 			#
 			# SYSTEM section
@@ -929,10 +957,11 @@ class XGngeo:
 				self.param["scale"] = int(self.scale.get_value()) #scale
 				self.param["blitter"] = self.blitter #blitter
 				self.param["effect"] = self.effect #effect
+				self.param["sound"] = ("false","true")[self.sound.get_active()] #sound
 				self.param["samplerate"] = self.samplerate #sample rate
-				self.param["sound"] = ("false","true")[self.sound.get_active()] #fullscreen
-				if self.type_arcade.get_active(): self.param["system"] = "arcade" #system
-				else: self.param["system"] = "home"
+				self.param["p1joydev"] = self.p1joydev.get_history() #p1joydev
+				self.param["p2joydev"] = self.p2joydev.get_history() #p2joydev
+				self.param["system"] = ("home","arcade")[self.type_arcade.get_active()] #system
 				if self.country_japan.get_active(): self.param["country"] = "japan" #country
 				elif self.country_usa.get_active(): self.param["country"] = "usa"
 				else: self.param["country"] = "europe"
@@ -977,7 +1006,7 @@ class XGngeo:
 		self.busyStatus = "off"
 		self.param = {
 			#PATH
-			"libglpath":"/path/to/libGL.so",
+			"libglpath":"/usr/lib/libGL.so",
 			"rompath":"/path/to/roms_and_bios/",
 			"romrc":"/path/to/romrc",
 			#GRAPHIC
@@ -988,9 +1017,11 @@ class XGngeo:
 			"showfps":"false",
 			"autoframeskip":"true",
 			"scale":1,
-			#AUDIO
+			#AUDIO / JOYSTICK
 			"sound":"true",
 			"samplerate":22050,
+			"p1joydev":0,
+			"p2joydev":1,
 			#SYSTEM
 			"system":"arcade",
 			"country":"europe",
@@ -1090,7 +1121,7 @@ class XGngeo:
 		menu_item.connect("activate",self.config,1)
 		menu.append(menu_item)
 
-		menu_item = gtk.MenuItem(_("_Audio"))
+		menu_item = gtk.MenuItem(_("_Audio / Joystick"))
 		menu_item.connect("activate",self.config,2)
 		menu.append(menu_item)
 

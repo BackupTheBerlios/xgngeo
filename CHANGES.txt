@@ -2,6 +2,14 @@
  XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
+* Changes in version 15 (2004-08-XX):
+
+- New ``Joystick" section, merged with the ``Audio", where
+you can modify the devices used by the two players.
+- Paths in the Option panel now come along with little icons 
+which indicate whether the path is valid or not. (yeah that's
+a killer feature :p)
+
 * Changes in version 14 (2003.12.31):
 
 - Many new configurable things: auto start roms, preview
@@ -83,5 +91,6 @@ XGngeo yet. WAGLAMOT is the Future! O_o;;
 - Creation of a CHANGES.txt file :p
 
 
-
-"I'm a rose blooming in the desert." - Endless rain, X Japan -
+"You're just an illusion.
+I'm a rose blooming in the desert."
+(Endless rain, X Japan)
