@@ -5,7 +5,7 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 14 - 2003.12.29
+Version 14 - 2003.12.31
 Copyleft 2003 Choplair-network.
 
      Copying and distribution of this file, with or without

@@ -11,9 +11,12 @@ notice and this notice are preserved.
 @end quotation
 @end copying
 
+@set doc-version 14
+@set doc-date 2003.12.31
+
 @titlepage
 @title XGngeo's documentation
-@subtitle Version 14 - 2003.12.31
+@subtitle Version @value{doc-version} - @value{doc-date} 
 @author The Choplair-network
 @insertcopying
 @end titlepage
@@ -27,7 +30,7 @@ __  __  ____  _   _   ____  ____   __
 /_/\_\ \___/ |_| \_| \___/ |____| \__/
 @end example
 @* XGngeo - DOCUMENTATION @*
-@* Version 14 - 2003.12.29 @*
+@* Version @value{doc-version} - @value{doc-date} @*
 @insertcopying
 @end ifplaintext
 
