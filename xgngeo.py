@@ -170,7 +170,7 @@ class XGngeo:
 		self.introDialog = gtk.Dialog(_("Welcome! ^_^"))
 		self.introDialog.connect("delete_event",self.quit)
 
-		label = gtk.Label(_("The configuration file of Gngeo was not found!\nWe have to create one. Press OK to continue...") % self.configfile.get_path()[0])
+		label = gtk.Label(_("The configuration file of Gngeo was not found!\nWe have to create one. Press OK to continue..."))
 		label.set_padding(5,10)
 		self.introDialog.vbox.pack_end(label)
 
