@@ -17,13 +17,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
-import gtk, os, string, re, gettext, gobject, sys
+import gtk, os, string, re, gettext, gobject
+from sys import path as syspath
 
 #Change working directory to XGngeo's
-os.chdir(sys.path[0])
+if syspath[0]: os.chdir(syspath[0])
+print syspath[0]
 
 #Add `data/py/' to PATH, then import internal modules
-sys.path.append("data/py/")
+syspath.append("data/py/")
 import command, configfile, history, rominfos
 
 VERSION = 14
