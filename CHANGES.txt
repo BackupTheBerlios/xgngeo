@@ -15,6 +15,8 @@ one, where you can, among others, modify the joystick devices
 used by the two players.
 - Use of the new GTK+ file chooser for selecting files and
 directories.
+- If already on the ``History" menu, Rom name isn't repeated
+any more but moved to the first place.
 - Paths in the Option panel now come along with little icons 
 which indicate whether the path is valid or not (yeah that's
 a killer feature :p).

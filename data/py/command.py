@@ -21,36 +21,16 @@ from re import match
 import os, gtk
 
 class Command(Thread):
-	def __init__(self,cmd,*arg):
+	def __init__(self,cmd):
 		Thread.__init__(self)
 
 		self.command = cmd
-		self.gngeoStop = arg[0]
-
-		#Widgets.
-		self.statusbar = arg[1]
-		self.context_id = arg[2]
-		self.loadrom_menu_item = arg[3]
-		self.history_menu_item = arg[4]
-		self.stopMenu_item = arg[5]
-		self.execMenu_item = arg[6]
+		self.output = "RAS"
 
 	def run(self):
-		"""This function is embeded in a thread and perform
-		some Gngeo post-execution instructions after, of
-		course, lauching the emulator."""
-
-		#Lauching Gngeo...
 		gtk.threads_enter()
 		pipe = os.popen(self.command)
 		gtk.threads_leave()
-		#End.
-		
-		output = pipe.read()
-		#Check if there was a f*ck then display the default message if none.
-		if not match(".{12} [[][\-]{62}[]]",output):
-			self.statusbar.push(self.context_id,output)
-		else: self.statusbar.push(self.context_id,_("Rom stopped."))
-
-		#Do as the `Stop' button has been clicked...
-		self.gngeoStop(kill=0)
+		self.output = pipe.read()
+	
+	def getOutput(self): return self.output

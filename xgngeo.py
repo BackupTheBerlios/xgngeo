@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 import gtk, os, string, gettext, gobject
 from sys import path as syspath
 from re import match
-from thread import start_new_thread
+from threading import Timer
 
 #Change working directory to XGngeo's
 os.chdir(os.path.abspath(syspath[0]))
@@ -97,25 +97,51 @@ class XGngeo:
 
 			self.licenseDialog.show_all()
 
+	def gngeoGetOutput(self):
+		"""This function is embeded in a thread and perform
+		some Gngeo post-execution instructions after it
+		terminates."""
+		print "debug 5"
+		#Waiting for Gngeo to hang up...
+		self.cmd.join()
+		print "debug 6"
+		output = self.cmd.getOutput()
+		#~ if output!="":
+			#~ #Check if there was a f*ck then display the default message if none.
+			#~ if not match(".{12} [[][\-]{62}[]]",output):
+				#~ self.statusbar.push(self.context_id,string.replace(output,"\n"," "))
+			#~ else:
+				#~ #The Rom was successfully exectuted, so we can append it to the ``History" menu.
+				#~ self.historyAdd(self.romFullName,self.romPath)
+				#~ self.statusbar.push(self.context_id,_("Rom stopped."))
+		print "debug 7"
+		#Perform some modifications on the menu.
+		self.loadrom_menu_item.set_sensitive(True)
+		self.history_menu_item.set_sensitive(True)
+		self.stopMenu_item.set_sensitive(False)
+		self.execMenu_item.set_sensitive(True)
+		print "debug 8\n"
+
 	def gngeoExec(self,widget=None):
+		print "debut 1"
 		self.statusbar.push(self.context_id,_("Starting Rom..."))
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
-
-		#Start the thread.
-		self.cmd = command.Command("%s '%s'" % (self.paramXGngeo['gngeopath'],self.romPath),
-			self.gngeoStop,self.statusbar,self.context_id,self.loadrom_menu_item,
-			self.history_menu_item,self.stopMenu_item,self.execMenu_item)
+		print "debug 2"
+		#Starting the thread.
+		self.cmd = command.Command("%s '%s'" % (self.paramXGngeo['gngeopath'],self.romPath))
 		self.cmd.start()
+		print "debug 3"
+		#Starting another thread which watch out the last one!
+		Timer(0,self.gngeoGetOutput).start()
+		print "debug 4"
 
-	def gngeoStop(self,widget=None,kill=1):
-		if kill: start_new_thread(os.system,(("killall -9 '%s'" % self.paramXGngeo['gngeopath'],)))
-		self.loadrom_menu_item.set_sensitive(True)
-		self.history_menu_item.set_sensitive(True)
-		self.stopMenu_item.set_sensitive(False)
-		self.execMenu_item.set_sensitive(True)
+	def gngeoStop(self,widget=None):
+		#Kill Gngeo if it is still running.
+		if self.cmd.isAlive():
+			Timer(0,os.system,("killall -9 '%s'" % self.paramXGngeo['gngeopath'],)).start()
 
 	def romList(self,widget):
 		if self.busyState!=1:
@@ -145,11 +171,15 @@ class XGngeo:
 			def setRomFromList(widget):
 				#Something selected?
 				if self.romFromList:
+					#Setting important variables.
 					self.romPath = os.path.join(self.param['rompath'],"%s.zip" % self.romFromList) #Note that, because of a Gngeo disfuntionment, we indicate the full rom path rather than simply its Mame name. 
+					self.romFullName = self.romFromListName
+
+					#Doing post-selection actions.
+					self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
 					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)") % (self.romFromListName,self.romFromList)) #Update Status message
 					if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 					else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
-					self.historyAdd(self.romFromListName,self.romPath) #Put in the history menu
 
 				self.listDialog.destroy()
 				self.busyStatus = "off"
@@ -324,10 +354,18 @@ class XGngeo:
 
 		dialog.run()
 
-	def setPathFromRecent(self,widget,data):
-		formatedPath = os.path.basename(data[1])
-		self.romPath = data[1]
-		self.statusbar.push(self.context_id,(_("Rom: \"%s\" (%s)") % (data[0],formatedPath))) #Update Status message
+	def setPathFromRecent(self,widget,fullname,path):
+		#Getting a hypothetic Mame name.
+		if path[-4:]==".zip": mamename = os.path.basename(path)[:-4]
+		else: mamename = os.path.basename(path)
+	
+		#Setting important variables.
+		self.romPath = path
+		self.romFullName = fullname
+		
+		#Doing post-selection actions.
+		self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
+		self.statusbar.push(self.context_id,(_("Rom: \"%s\" (%s)") % (fullname,mamename))) #Update Status message
 		if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 		else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
 
@@ -339,8 +377,6 @@ class XGngeo:
 				path = dialog.get_filename()
 				#Does it exist?
 				if os.path.isfile(path):
-					self.romPath = path
-
 					#Getting a hypothetic Mame name.
 					if path[-4:]==".zip": mamename = os.path.basename(path)[:-4]
 					else: mamename = os.path.basename(path)
@@ -352,12 +388,15 @@ class XGngeo:
 					if mamename in dict.keys(): fullname = dict[mamename]
 					else: fullname = "Unknow \"%s\" Rom" % mamename
 
-					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)" % (fullname,mamename))) #Update Status message
+					#Setting important variables.
+					self.romPath = path
+					self.romFullName = fullname
 
 					#Doing post-selection actions.
+					self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
+					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)" % (fullname,mamename))) #Update Status message
 					if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 					else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
-					self.historyAdd(fullname,path) #Put in the history menu.
 
 				else: self.statusbar.push(self.context_id,"Error: file doesn't exist!")
 			else:
@@ -367,17 +406,15 @@ class XGngeo:
 		dialog.destroy()
 
 	def historyAdd(self,fullname,path):
-		#Update history file...
-		self.history.add(fullname,path,size=self.paramXGngeo["historysize"])
+		#Update history file and get new list...
+		list = self.history.add(fullname,path,size=int(self.paramXGngeo["historysize"]))
 
-		#Add entry to history menu
-		menu_item = gtk.MenuItem(fullname)
-		menu_item.connect("activate",self.setPathFromRecent,[fullname,path])
-		self.historyMenu.prepend(menu_item)
-		
-		#Remove the oldest entries if too much...
-		for menu_item in self.historyMenu.get_children()[int(self.paramXGngeo["historysize"]):]:
-			self.historyMenu.remove(menu_item)
+		#Recreate the history menu.
+		for x in self.historyMenu.get_children(): self.historyMenu.remove(x) #Remove old entries.
+		for x in list: #Put the new ones.
+			menu_item = gtk.MenuItem(x[0])
+			menu_item.connect("activate",self.setPathFromRecent,x[0],x[1])
+			self.historyMenu.append(menu_item)
 
 		self.historyMenu.show_all()
 
@@ -1031,7 +1068,7 @@ class XGngeo:
 			self.param["p2key"] = self.param["p2key"][:-1] #Remove the last ",".
 
 			letsWrite = 1 #Let's write!
-				
+
 		elif type==5:
 			#Update other thing configuration params.
 			self.paramXGngeo["autoexecrom"] = ("false","true")[self.configwidgets['autoexecrom'].get_active()] #autoexecrom
@@ -1063,8 +1100,7 @@ class XGngeo:
 		elif data[1]==5: self.busy(0); self.statusbar.push(self.context_id,_("Configuration was not saved.")) #If Configuration cancelled
 	
 	def quit(self,*args):
-		#Kill Gngeo if it is still running.
-		if self.cmd and self.cmd.isAlive(): self.gngeoStop(kill=1)
+		if self.cmd and self.cmd.isAlive(): self.gngeoStop() #Stop any running Gngeo.
 		gtk.main_quit() #Stop waiting for event...
 		return False
 
@@ -1157,9 +1193,9 @@ class XGngeo:
 		self.historyMenu = gtk.Menu()
 		self.history_menu_item.set_submenu(self.historyMenu)
 		#Generate history menu from history file
-		for x in self.history.getList(size=self.paramXGngeo["historysize"]):
+		for x in self.history.getList(size=int(self.paramXGngeo["historysize"])):
 			menu_item2 = gtk.MenuItem(x[0])
-			menu_item2.connect("activate",self.setPathFromRecent,(x[0],x[1]))
+			menu_item2.connect("activate",self.setPathFromRecent,x[0],x[1])
 			self.historyMenu.append(menu_item2)
 		menu.append(self.history_menu_item)
 
@@ -1274,7 +1310,6 @@ class XGngeo:
 		else: self.welcome()
 
 if __name__ == "__main__":
-	XGngeo().check()
 	gtk.threads_init()
+	XGngeo().check()
 	gtk.main()
-	
