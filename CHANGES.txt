@@ -5,17 +5,17 @@
 * Changes in version 14 (2003.12.XX):
 
 - Many new configurable things: auto start roms, preview
-images directory, history, etc. 
+images directory, history, etc. ^_^
 - XGngeo still usable while running Gngeo (game may be
-stopped from interface)
+stopped from interface).
 - Some interface improvement.
 - XGngeo can now be run from any location without problem
-(images not loaded, etc.) :D
-- Added support of GGF's XML file to get rom informations.
-- Each rom's properties may be modified using the new
-"Properties" window.
-- Every options has its own tooltip description.
+(images not loaded, etc.). ^^
+- Full support of GGF's xml file to get rom informations.
 - Deutsh translation.
+- Updated documentation.
+- A small source code clean-up. :p
+
 
 * Changes in version 13 (2003.11.23):
 

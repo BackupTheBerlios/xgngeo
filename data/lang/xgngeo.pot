@@ -1,58 +1,57 @@
-# XGngeo: a fronted for Gngeo :p
-# Copyleft 2003 Choplair-network
+# XGngeo: a frontend for Gngeo :p
+# Copyleft (C) 2003 Choplair-network
 # This file is distributed under the same license as the XGngeo package.
 # Choplair <choplair@fr.st>, 2003.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: XGngeo 13\n"
-"POT-Creation-Date: 2003-11-14 21:29+0100\n"
+"Project-Id-Version: XGngeo 14\n"
+"POT-Creation-Date: 2003-12-28 15:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../../xgngeo.py:87
+#: ../../xgngeo.py:92
 msgid "Keys configuration"
 msgstr ""
 
-#: ../../xgngeo.py:90
+#: ../../xgngeo.py:95
 msgid ""
 "To modify a key, click the button then push your new key.\n"
 "This configuration is only for keyboard."
 msgstr ""
 
-#: ../../xgngeo.py:97
+#: ../../xgngeo.py:102
 msgid "Player 1"
 msgstr ""
 
-#: ../../xgngeo.py:100
+#: ../../xgngeo.py:105
 msgid "Player 2"
 msgstr ""
 
-#: ../../xgngeo.py:218
+#: ../../xgngeo.py:172
 msgid "Welcome! ^_^"
 msgstr ""
 
-#: ../../xgngeo.py:221
-#, python-format
+#: ../../xgngeo.py:175
 msgid ""
-"The file \"%s\" was not found!\n"
-"We need to configure Gngeo. Press OK to continue..."
+"The configuration file of Gngeo was not found!\n"
+"We have to create one. Press OK to continue..."
 msgstr ""
 
-#: ../../xgngeo.py:236 ../../xgngeo.py:964
+#: ../../xgngeo.py:190
 msgid "License"
 msgstr ""
 
-#: ../../xgngeo.py:239
+#: ../../xgngeo.py:193
 msgid "XGngeo is released under the GNU GPL:"
 msgstr ""
 
-#: ../../xgngeo.py:255
+#: ../../xgngeo.py:210
 #, python-format
 msgid ""
 "Error: Unable to open the file \"%s\"!\n"
@@ -60,33 +59,66 @@ msgid ""
 "http://www.gnu.org/licenses/gpl.html"
 msgstr ""
 
-#: ../../xgngeo.py:300
+#: ../../xgngeo.py:292
 msgid "List of Roms from your \"romrc\" file"
 msgstr ""
 
-#: ../../xgngeo.py:303
+#: ../../xgngeo.py:295
 msgid ""
 "Please select the Rom you want to load from this list ^^\n"
 "Available Roms are showed in blue..."
 msgstr ""
 
-#: ../../xgngeo.py:307
-msgid "Show only available Roms."
+#: ../../xgngeo.py:301
+msgid "Show available Roms only."
 msgstr ""
 
-#: ../../xgngeo.py:395 ../../xgngeo.py:406 ../../xgngeo.py:423
-msgid "Selected:"
+#: ../../xgngeo.py:350
+msgid "Preview image"
 msgstr ""
 
-#: ../../xgngeo.py:435
+#: ../../xgngeo.py:369
+msgid "Description:"
+msgstr ""
+
+#: ../../xgngeo.py:376
+msgid "Manufacturer:"
+msgstr ""
+
+#: ../../xgngeo.py:383
+msgid "Year:"
+msgstr ""
+
+#: ../../xgngeo.py:390
+msgid "Genre:"
+msgstr ""
+
+#: ../../xgngeo.py:397
+msgid "Players:"
+msgstr ""
+
+#: ../../xgngeo.py:404
+msgid "Rating:"
+msgstr ""
+
+#: ../../xgngeo.py:411
+msgid "Size:"
+msgstr ""
+
+#: ../../xgngeo.py:420
+msgid "Rom infos"
+msgstr ""
+
+#: ../../xgngeo.py:464 ../../xgngeo.py:476 ../../xgngeo.py:495
+msgid "Rom:"
+msgstr ""
+
+#: ../../xgngeo.py:523
 msgid "About XGngeo"
 msgstr ""
 
-#: ../../xgngeo.py:444
+#: ../../xgngeo.py:532
 #, python-format
-#
-# Please note that a new line has been added! :p
-#
 msgid ""
 "<span color='#008'><b>XGngeo: a frontend for Gngeo :p</b>\n"
 "Version %i.\n"
@@ -94,206 +126,238 @@ msgid ""
 "XGngeo's license is the GNU GPL.</span>"
 msgstr ""
 
-#: ../../xgngeo.py:449
+#: ../../xgngeo.py:537
 msgid "Credits"
 msgstr ""
 
-#: ../../xgngeo.py:457
+#: ../../xgngeo.py:545
 msgid ""
 "Main coder: Choplair.\n"
 "Assisted by: Pachilor."
 msgstr ""
 
-#: ../../xgngeo.py:474
+#: ../../xgngeo.py:562
 msgid "Configuration"
 msgstr ""
 
-#: ../../xgngeo.py:489
-msgid "Path to Roms & Bios:"
-msgstr ""
-
-#: ../../xgngeo.py:495
-msgid "Path to romrc:"
-msgstr ""
-
-#: ../../xgngeo.py:502 ../../xgngeo.py:513
-#, python-format
-msgid "Select the \"%s\" file"
-msgstr ""
-
-#: ../../xgngeo.py:506
-msgid "Path to libGL.so:"
-msgstr ""
-
-#: ../../xgngeo.py:517 ../../xgngeo.py:929
+#: ../../xgngeo.py:573
 msgid "Path"
 msgstr ""
 
-#: ../../xgngeo.py:530
-msgid "Fullscreen"
+#: ../../xgngeo.py:575
+msgid "Roms & Bios directory:"
 msgstr ""
 
-#: ../../xgngeo.py:534
-msgid "Interpolation"
+#: ../../xgngeo.py:581
+msgid "Path to romrc:"
 msgstr ""
 
-#: ../../xgngeo.py:539
-msgid "Show FPS"
+#: ../../xgngeo.py:587 ../../xgngeo.py:598
+#, python-format
+msgid "Select the \"%s\" file."
 msgstr ""
 
-#: ../../xgngeo.py:543
-msgid "Auto Frameskip"
+#: ../../xgngeo.py:592
+msgid "Path to libGL.so (optional):"
 msgstr ""
 
-#: ../../xgngeo.py:550
-msgid "Scale:"
-msgstr ""
-
-#: ../../xgngeo.py:565
-msgid "Blitter:"
-msgstr ""
-
-#: ../../xgngeo.py:590
-msgid "Effect:"
-msgstr ""
-
-#: ../../xgngeo.py:614 ../../xgngeo.py:933
+#: ../../xgngeo.py:607
 msgid "Graphic"
 msgstr ""
 
+#: ../../xgngeo.py:612
+msgid "Fullscreen"
+msgstr ""
+
+#: ../../xgngeo.py:616
+msgid "Interpolation"
+msgstr ""
+
+#: ../../xgngeo.py:620
+msgid "Show FPS"
+msgstr ""
+
 #: ../../xgngeo.py:624
-msgid "Enable sound"
+msgid "Auto Frameskip"
 msgstr ""
 
-#: ../../xgngeo.py:632
-msgid "Sample rate:"
+#: ../../xgngeo.py:631
+msgid "Scale:"
 msgstr ""
 
-#: ../../xgngeo.py:649 ../../xgngeo.py:937
+#: ../../xgngeo.py:642
+msgid "Blitter:"
+msgstr ""
+
+#: ../../xgngeo.py:668
+msgid "Effect:"
+msgstr ""
+
+#: ../../xgngeo.py:696
 msgid "Audio"
 msgstr ""
 
-#: ../../xgngeo.py:660
-msgid "Neo Geo type:"
+#: ../../xgngeo.py:698
+msgid "Enable sound"
 msgstr ""
 
-#: ../../xgngeo.py:663
-msgid "Arcade"
+#: ../../xgngeo.py:706
+msgid "Sample rate:"
 msgstr ""
 
-#: ../../xgngeo.py:666
-msgid "Home"
-msgstr ""
-
-#: ../../xgngeo.py:672
-msgid "Country:"
-msgstr ""
-
-#: ../../xgngeo.py:676
-msgid "Japan"
-msgstr ""
-
-#: ../../xgngeo.py:683
-msgid "USA"
-msgstr ""
-
-#: ../../xgngeo.py:690
-msgid "Europe"
-msgstr ""
-
-#: ../../xgngeo.py:698 ../../xgngeo.py:941
+#: ../../xgngeo.py:727
 msgid "System"
 msgstr ""
 
-#: ../../xgngeo.py:741
+#: ../../xgngeo.py:730
+msgid "Neo Geo type:"
+msgstr ""
+
+#: ../../xgngeo.py:732
+msgid "Arcade"
+msgstr ""
+
+#: ../../xgngeo.py:735
+msgid "Home"
+msgstr ""
+
+#: ../../xgngeo.py:742
+msgid "Country:"
+msgstr ""
+
+#: ../../xgngeo.py:745
+msgid "Japan"
+msgstr ""
+
+#: ../../xgngeo.py:752
+msgid "USA"
+msgstr ""
+
+#: ../../xgngeo.py:759
+msgid "Europe"
+msgstr ""
+
+#: ../../xgngeo.py:772
+msgid "Other"
+msgstr ""
+
+#: ../../xgngeo.py:775
+msgid "Auto execute Roms"
+msgstr ""
+
+#: ../../xgngeo.py:780
+msgid "History size:"
+msgstr ""
+
+#: ../../xgngeo.py:789
+msgid "Preview images directory (optional):"
+msgstr ""
+
+#: ../../xgngeo.py:795
+msgid "XML file containing Rom infos (optional):"
+msgstr ""
+
+#: ../../xgngeo.py:801
+msgid "Select the XML file containing Rom infos."
+msgstr ""
+
+#: ../../xgngeo.py:847
 msgid "Roms & Bios directory doesn't exist."
 msgstr ""
 
-#: ../../xgngeo.py:743
+#: ../../xgngeo.py:848
 msgid "Roms & Bios directory is not a directory! O_o;"
 msgstr ""
 
-#: ../../xgngeo.py:744
+#: ../../xgngeo.py:849
 msgid "Path to \"romrc\" doesn't exist."
 msgstr ""
 
-#: ../../xgngeo.py:746
+#: ../../xgngeo.py:850
 msgid "Path to \"romrc\" is not a file!"
 msgstr ""
 
-#: ../../xgngeo.py:747
-msgid "Path to \"LibGL.so\" doesn't exist."
-msgstr ""
-
-#: ../../xgngeo.py:749
-msgid "Path to \"libGL.so\" is not a file!"
-msgstr ""
-
-#: ../../xgngeo.py:754
+#: ../../xgngeo.py:855
 msgid "Configuration error!"
 msgstr ""
 
-#: ../../xgngeo.py:763
+#: ../../xgngeo.py:864
 msgid "Sorry, I'm unable to save the configuration because:"
 msgstr ""
 
-#: ../../xgngeo.py:768
+#: ../../xgngeo.py:869
 msgid "Please check it up then save again... ^^;"
 msgstr ""
 
-#: ../../xgngeo.py:819
+#: ../../xgngeo.py:916
 msgid "Configuration has been saved."
 msgstr ""
 
-#: ../../xgngeo.py:831
+#: ../../xgngeo.py:928
 msgid "Configuration was not saved."
 msgstr ""
 
-#: ../../xgngeo.py:879
+#: ../../xgngeo.py:981
 #, python-format
 msgid "Welcome to XGngeo version %i."
 msgstr ""
 
-#: ../../xgngeo.py:894
-msgid "Load from File"
+#: ../../xgngeo.py:995
+msgid "_File"
 msgstr ""
 
-#: ../../xgngeo.py:895
+#: ../../xgngeo.py:999
+msgid "Load from _File"
+msgstr ""
+
+#: ../../xgngeo.py:1000
 msgid "Select a Rom"
 msgstr ""
 
-#: ../../xgngeo.py:898
-msgid "Load from List"
+#: ../../xgngeo.py:1003
+msgid "Load from _List"
 msgstr ""
 
-#: ../../xgngeo.py:902
-msgid "History"
+#: ../../xgngeo.py:1021
+msgid "_History"
 msgstr ""
 
-#: ../../xgngeo.py:909
-msgid "Run..."
+#: ../../xgngeo.py:1041
+msgid "_Config"
 msgstr ""
 
-#: ../../xgngeo.py:916
-msgid "Quit"
+#: ../../xgngeo.py:1045
+msgid "_Path"
 msgstr ""
 
-#: ../../xgngeo.py:920
-msgid "File"
+#: ../../xgngeo.py:1049
+msgid "_Graphic"
 msgstr ""
 
-#: ../../xgngeo.py:947
-msgid "Keys"
+#: ../../xgngeo.py:1053
+msgid "_Audio"
 msgstr ""
 
-#: ../../xgngeo.py:951
-msgid "Config"
+#: ../../xgngeo.py:1057
+msgid "_System"
 msgstr ""
 
-#: ../../xgngeo.py:960
-msgid "About"
+#: ../../xgngeo.py:1061
+msgid "_Other"
 msgstr ""
 
-#: ../../xgngeo.py:968
-msgid "Info"
+#: ../../xgngeo.py:1067
+msgid "_Keys"
+msgstr ""
+
+#: ../../xgngeo.py:1075
+msgid "_Info"
+msgstr ""
+
+#: ../../xgngeo.py:1080
+msgid "_About"
+msgstr ""
+
+#: ../../xgngeo.py:1084
+msgid "_License"
 msgstr ""

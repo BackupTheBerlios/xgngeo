@@ -446,8 +446,8 @@ class XGngeo:
 		if self.busyState!=1: self.busy(1) #Busy the main window if not yet
 		destroyInt = 1 #Value for the destroy command...
 
-		if data[1][1]=="romrc" or data[1][1]=="libglpath": #Busy the Configuration window
-			self.configDialog.set_sensitive(gtk.FALSE)
+		if data[1][1] in ("romrc","libglpath","rominfosxml"):
+			self.configDialog.set_sensitive(gtk.FALSE) #Busy the Configuration window
 			destroyInt = 4
 
 		self.fileSel = gtk.FileSelection(data[0][0])
@@ -461,7 +461,7 @@ class XGngeo:
 	def setPathFromRecent(self,widget,data):
 		formatedPath = os.path.basename(data[1])
 		self.romPath = data[1]
-		self.statusbar.push(self.context_id,_("Selected:")+(" \"%s\" (%s)") % (data[0],formatedPath)) #Update Status message
+		self.statusbar.push(self.context_id,_("Rom:")+" \"%s\" (%s)" % (data[0],formatedPath)) #Update Status message
 		if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 		else: self.execMenu_item.set_sensitive(gtk.TRUE) #Activate the "Execute" button
 
@@ -473,15 +473,16 @@ class XGngeo:
 				#Does it exist?
 				if os.path.isfile(self.fileSel.get_filename()):
 					self.romPath = self.fileSel.get_filename()
-					self.statusbar.push(self.context_id,_("Selected:")+(" %s") % formatedPath) #Update Status message
+					self.statusbar.push(self.context_id,_("Rom:")+" %s" % formatedPath) #Update Status message
 					if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 					else: self.execMenu_item.set_sensitive(gtk.TRUE) #Activate the "Execute" button
 					self.historyAdd(formatedPath,self.fileSel.get_filename()) #Put in the history menu
 				else: self.statusbar.push(self.context_id,"Error: File doesn't exist!")
-		elif data=="romrc" or data=="libglpath":
+		elif data in ("romrc","libglpath","rominfosxml"):
 			path = self.fileSel.get_filename() #Get the path
 			if data=="romrc": self.romrc.set_text(path)
 			elif data=="libglpath": self.libglpath.set_text(path)
+			elif data=="rominfosxml": self.rominfosxml.set_text(path)
 			self.configDialog.set_sensitive(gtk.TRUE) #Unbusy the Configuration window
 
 		self.fileSel.destroy()
@@ -491,7 +492,7 @@ class XGngeo:
 		#Something selected?
 		if self.romFromList!=None:
 			self.romPath = self.romFromList
-			self.statusbar.push(self.context_id,_("Selected:")+" \"%s\" (%s)" % (self.romFromListName,self.romFromList)) #Update Status message
+			self.statusbar.push(self.context_id,_("Rom:")+" \"%s\" (%s)" % (self.romFromListName,self.romFromList)) #Update Status message
 			if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 			else: self.execMenu_item.set_sensitive(gtk.TRUE) #Activate the "Execute" button
 			self.historyAdd(self.romFromListName,self.romFromList) #Put in the history menu
@@ -615,7 +616,6 @@ class XGngeo:
 			self.interpolation = gtk.CheckButton(_("Interpolation"))
 			if self.param["interpolation"]=="true": self.interpolation.set_active(1)
 			table.attach(self.interpolation,0,1,1,2)
-
 			#Show FPS
 			self.showfps = gtk.CheckButton(_("Show FPS"))
 			if self.param["showfps"]=="true": self.showfps.set_active(1)
@@ -772,12 +772,12 @@ class XGngeo:
 			notebook.append_page(box,gtk.Label(_("Other")))
 
 			box2 = gtk.HBox()
-			self.autoexecrom = gtk.CheckButton(_("Auto execute Rom"))
+			self.autoexecrom = gtk.CheckButton(_("Auto execute Roms"))
 			if self.paramXGngeo["autoexecrom"]=="true": self.autoexecrom.set_active(1)
 			box2.pack_start(self.autoexecrom)
 
 			#History size
-			label = gtk.Label("History size:")
+			label = gtk.Label(_("History size:"))
 			box2.pack_start(label)
 
 			adjustment = gtk.Adjustment(float(self.paramXGngeo["historysize"]),1,10,1)
@@ -786,17 +786,22 @@ class XGngeo:
 			box2.pack_start(self.historysize,gtk.FALSE)
 			box.pack_start(box2)
 
-			frame2 = gtk.Frame("Preview images directory (optional):")
+			frame = gtk.Frame(_("Preview images directory (optional):"))
 			self.previewimagesdir = gtk.Entry()
 			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
-			frame2.add(self.previewimagesdir)
-			box.pack_start(frame2)
+			frame.add(self.previewimagesdir)
+			box.pack_start(frame)
 
-			frame2 = gtk.Frame("XML file containing Rom infos (optional):")
+			frame = gtk.Frame(_("XML file containing Rom infos (optional):"))
+			box2 = gtk.HBox()
 			self.rominfosxml = gtk.Entry()
 			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
-			frame2.add(self.rominfosxml)
-			box.pack_start(frame2)
+			box2.pack_start(self.rominfosxml)
+			button = gtk.Button(stock=gtk.STOCK_OPEN)
+			button.connect("clicked",self.fileSelect,[[_('Select the XML file containing Rom infos.'),self.paramXGngeo["rominfosxml"]],[self.setPath,"rominfosxml"]])
+			box2.pack_end(button,gtk.FALSE)
+			frame.add(box2)
+			box.pack_start(frame)
 
 			self.configDialog.vbox.pack_start(notebook) #Packing the Notebook
 
@@ -840,14 +845,9 @@ class XGngeo:
 			error = ""
 			#Looking for errors :p
 			if not os.path.exists(self.rompath.get_text()): error += _("Roms & Bios directory doesn't exist.")+"\n" #rompath
-			else:
-				if not os.path.isdir(self.rompath.get_text()): error += _("Roms & Bios directory is not a directory! O_o;")+"\n"
+			elif not os.path.isdir(self.rompath.get_text()): error += _("Roms & Bios directory is not a directory! O_o;")+"\n"
 			if not os.path.exists(self.romrc.get_text()): error += _("Path to \"romrc\" doesn't exist.")+"\n" #romrc
-			else:
-				if not os.path.isfile(self.romrc.get_text()): error += _("Path to \"romrc\" is not a file!")+"\n"
-			if not os.path.exists(self.libglpath.get_text()): error += _("Path to \"LibGL.so\" doesn't exist.")+"\n" #libglpath
-			else:
-				if not os.path.isfile(self.libglpath.get_text()): error += _("Path to \"libGL.so\" is not a file!")+"\n"
+			elif not os.path.isfile(self.romrc.get_text()): error += _("Path to \"romrc\" is not a file!")+"\n"
 
 			if len(error)>0: #Display the warning dialog...
 				self.configDialog.set_sensitive(gtk.FALSE) #Busying Configuration window

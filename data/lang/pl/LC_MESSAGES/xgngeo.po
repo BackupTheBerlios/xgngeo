@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: xgngeo\n"
-"POT-Creation-Date: 2003-11-14 21:29+0100\n"
+"POT-Creation-Date: 2003-12-28 15:06+0100\n"
 "PO-Revision-Date: 2003-11-16 16:15+0100\n"
 "Last-Translator: Mateusz Wolsza <matma@irc.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -15,11 +15,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.0.2\n"
 
-#: ../../xgngeo.py:87
+#: ../../xgngeo.py:92
 msgid "Keys configuration"
 msgstr "Konfiguracja klawiszy"
 
-#: ../../xgngeo.py:90
+#: ../../xgngeo.py:95
 msgid ""
 "To modify a key, click the button then push your new key.\n"
 "This configuration is only for keyboard."
@@ -27,36 +27,36 @@ msgstr ""
 "Aby zmodyfikować klawisz, wciśnij przycisk, i naciśnij nowy klawisz.\n"
 "Konfiguracja jest tylko dla klawiatury."
 
-#: ../../xgngeo.py:97
+#: ../../xgngeo.py:102
 msgid "Player 1"
 msgstr "Gracz 1"
 
-#: ../../xgngeo.py:100
+#: ../../xgngeo.py:105
 msgid "Player 2"
 msgstr "Gracz 2"
 
-#: ../../xgngeo.py:218
+#: ../../xgngeo.py:172
 msgid "Welcome! ^_^"
 msgstr "Witamy! ^-^"
 
-#: ../../xgngeo.py:221
-#, python-format
+#: ../../xgngeo.py:175
+#, fuzzy
 msgid ""
-"The file \"%s\" was not found!\n"
-"We need to configure Gngeo. Press OK to continue..."
+"The configuration file of Gngeo was not found!\n"
+"We have to create one. Press OK to continue..."
 msgstr ""
 "Nie można znaleźć pliku: \"%s\"!\n"
 "Trzeba skonfigurować Gngeo. Naciśnij OK, aby kontynuowac..."
 
-#: ../../xgngeo.py:236 ../../xgngeo.py:964
+#: ../../xgngeo.py:190
 msgid "License"
 msgstr "Licencja"
 
-#: ../../xgngeo.py:239
+#: ../../xgngeo.py:193
 msgid "XGngeo is released under the GNU GPL:"
 msgstr "XGngeo jest dystrybuowany z warunkami licencji GPL v2."
 
-#: ../../xgngeo.py:255
+#: ../../xgngeo.py:210
 #, python-format
 msgid ""
 "Error: Unable to open the file \"%s\"!\n"
@@ -68,11 +68,11 @@ msgstr ""
 "http://www.gnu.org/licenses/gpl.html - orginał\n"
 "http://www.gnu.org.pl/text/licencja-gnu.html - tłumaczenie"
 
-#: ../../xgngeo.py:300
+#: ../../xgngeo.py:292
 msgid "List of Roms from your \"romrc\" file"
 msgstr "Lista romów z pliku \"romrc\""
 
-#: ../../xgngeo.py:303
+#: ../../xgngeo.py:295
 msgid ""
 "Please select the Rom you want to load from this list ^^\n"
 "Available Roms are showed in blue..."
@@ -80,19 +80,57 @@ msgstr ""
 "Proszę zaznaczyć rom, który chcesz załadować\n"
 "Dostępne romy zaznaczone są na niebiesko..."
 
-#: ../../xgngeo.py:307
-msgid "Show only available Roms."
+#: ../../xgngeo.py:301
+#, fuzzy
+msgid "Show available Roms only."
 msgstr "Pokazuj tylko dostępne romy"
 
-#: ../../xgngeo.py:395 ../../xgngeo.py:406 ../../xgngeo.py:423
-msgid "Selected:"
-msgstr "Rom:"
+#: ../../xgngeo.py:350
+msgid "Preview image"
+msgstr ""
 
-#: ../../xgngeo.py:435
+#: ../../xgngeo.py:369
+msgid "Description:"
+msgstr ""
+
+#: ../../xgngeo.py:376
+msgid "Manufacturer:"
+msgstr ""
+
+#: ../../xgngeo.py:383
+msgid "Year:"
+msgstr ""
+
+#: ../../xgngeo.py:390
+msgid "Genre:"
+msgstr ""
+
+#: ../../xgngeo.py:397
+#, fuzzy
+msgid "Players:"
+msgstr "Gracz 1"
+
+#: ../../xgngeo.py:404
+msgid "Rating:"
+msgstr ""
+
+#: ../../xgngeo.py:411
+msgid "Size:"
+msgstr ""
+
+#: ../../xgngeo.py:420
+msgid "Rom infos"
+msgstr ""
+
+#: ../../xgngeo.py:464 ../../xgngeo.py:476 ../../xgngeo.py:495
+msgid "Rom:"
+msgstr ""
+
+#: ../../xgngeo.py:523
 msgid "About XGngeo"
 msgstr "O programie XGngeo"
 
-#: ../../xgngeo.py:444
+#: ../../xgngeo.py:532
 #, python-format
 msgid ""
 "<span color='#008'><b>XGngeo: a frontend for Gngeo :p</b>\n"
@@ -105,12 +143,12 @@ msgstr ""
 "Używasz Gngeo wersja %s.\n"
 "XGngeo jest dystrybuowany z warunkami licencji GPL v2</span>"
 
-#: ../../xgngeo.py:449
+#: ../../xgngeo.py:537
 msgid "Credits"
 msgstr "Zasługi"
 
 # HERE YOU CAN ADD THAT YOU'VE MADE THE TRANSLATION
-#: ../../xgngeo.py:457
+#: ../../xgngeo.py:545
 msgid ""
 "Main coder: Choplair.\n"
 "Assisted by: Pachilor."
@@ -119,200 +157,264 @@ msgstr ""
 "Asystent: Pachilor.\n"
 "Tłumaczenie: matma <matma@irc.pl>."
 
-#: ../../xgngeo.py:474
+#: ../../xgngeo.py:562
 msgid "Configuration"
 msgstr "Konfiguracja"
 
-#: ../../xgngeo.py:489
-msgid "Path to Roms & Bios:"
-msgstr "Ścieżka do romów i BIOSU:"
-
-#: ../../xgngeo.py:495
-msgid "Path to romrc:"
-msgstr "Ścieżka do romrc:"
-
-#: ../../xgngeo.py:502 ../../xgngeo.py:513
-#, python-format
-msgid "Select the \"%s\" file"
-msgstr "Wybierz plik \"%s\""
-
-#: ../../xgngeo.py:506
-msgid "Path to libGL.so:"
-msgstr "Ścieżka do libGL.so:"
-
-#: ../../xgngeo.py:517 ../../xgngeo.py:929
+#: ../../xgngeo.py:573
 msgid "Path"
 msgstr "Katalogi"
 
-#: ../../xgngeo.py:530
+#: ../../xgngeo.py:575
+#, fuzzy
+msgid "Roms & Bios directory:"
+msgstr "Katalog nie istnieje."
+
+#: ../../xgngeo.py:581
+msgid "Path to romrc:"
+msgstr "Ścieżka do romrc:"
+
+#: ../../xgngeo.py:587 ../../xgngeo.py:598
+#, fuzzy, python-format
+msgid "Select the \"%s\" file."
+msgstr "Wybierz plik \"%s\""
+
+#: ../../xgngeo.py:592
+#, fuzzy
+msgid "Path to libGL.so (optional):"
+msgstr "Ścieżka do libGL.so:"
+
+#: ../../xgngeo.py:607
+msgid "Graphic"
+msgstr "Grafika"
+
+#: ../../xgngeo.py:612
 msgid "Fullscreen"
 msgstr "Pełny ekran"
 
-#: ../../xgngeo.py:534
+#: ../../xgngeo.py:616
 msgid "Interpolation"
 msgstr "Interpolacja"
 
-#: ../../xgngeo.py:539
+#: ../../xgngeo.py:620
 msgid "Show FPS"
 msgstr "Pokaż FPS"
 
-#: ../../xgngeo.py:543
+#: ../../xgngeo.py:624
 msgid "Auto Frameskip"
 msgstr ""
 "Automatyczne opuszczanie\n"
 "klatek"
 
-#: ../../xgngeo.py:550
+#: ../../xgngeo.py:631
 msgid "Scale:"
 msgstr "Jakość:"
 
-#: ../../xgngeo.py:565
+#: ../../xgngeo.py:642
 msgid "Blitter:"
 msgstr "Blitter:"
 
-#: ../../xgngeo.py:590
+#: ../../xgngeo.py:668
 msgid "Effect:"
 msgstr "Efekty:"
 
-#: ../../xgngeo.py:614 ../../xgngeo.py:933
-msgid "Graphic"
-msgstr "Grafika"
-
-#: ../../xgngeo.py:624
-msgid "Enable sound"
-msgstr "Włącz dźwięk"
-
-#: ../../xgngeo.py:632
-msgid "Sample rate:"
-msgstr "Częstotliwość próbkowania:"
-
-#: ../../xgngeo.py:649 ../../xgngeo.py:937
+#: ../../xgngeo.py:696
 msgid "Audio"
 msgstr "Dźwięk"
 
-#: ../../xgngeo.py:660
-msgid "Neo Geo type:"
-msgstr "Typ gry:"
+#: ../../xgngeo.py:698
+msgid "Enable sound"
+msgstr "Włącz dźwięk"
 
-#: ../../xgngeo.py:663
-msgid "Arcade"
-msgstr "Arcade"
+#: ../../xgngeo.py:706
+msgid "Sample rate:"
+msgstr "Częstotliwość próbkowania:"
 
-#: ../../xgngeo.py:666
-msgid "Home"
-msgstr "Home"
-
-#: ../../xgngeo.py:672
-msgid "Country:"
-msgstr "Kraj:"
-
-#: ../../xgngeo.py:676
-msgid "Japan"
-msgstr "Japonia"
-
-#: ../../xgngeo.py:683
-msgid "USA"
-msgstr "USA"
-
-#: ../../xgngeo.py:690
-msgid "Europe"
-msgstr "Europa"
-
-#: ../../xgngeo.py:698 ../../xgngeo.py:941
+#: ../../xgngeo.py:727
 msgid "System"
 msgstr "System"
 
-#: ../../xgngeo.py:741
+#: ../../xgngeo.py:730
+msgid "Neo Geo type:"
+msgstr "Typ gry:"
+
+#: ../../xgngeo.py:732
+msgid "Arcade"
+msgstr "Arcade"
+
+#: ../../xgngeo.py:735
+msgid "Home"
+msgstr "Home"
+
+#: ../../xgngeo.py:742
+msgid "Country:"
+msgstr "Kraj:"
+
+#: ../../xgngeo.py:745
+msgid "Japan"
+msgstr "Japonia"
+
+#: ../../xgngeo.py:752
+msgid "USA"
+msgstr "USA"
+
+#: ../../xgngeo.py:759
+msgid "Europe"
+msgstr "Europa"
+
+#: ../../xgngeo.py:772
+msgid "Other"
+msgstr ""
+
+#: ../../xgngeo.py:775
+msgid "Auto execute Roms"
+msgstr ""
+
+#: ../../xgngeo.py:780
+#, fuzzy
+msgid "History size:"
+msgstr "Historia"
+
+#: ../../xgngeo.py:789
+msgid "Preview images directory (optional):"
+msgstr ""
+
+#: ../../xgngeo.py:795
+msgid "XML file containing Rom infos (optional):"
+msgstr ""
+
+#: ../../xgngeo.py:801
+msgid "Select the XML file containing Rom infos."
+msgstr ""
+
+#: ../../xgngeo.py:847
 msgid "Roms & Bios directory doesn't exist."
 msgstr "Katalog nie istnieje."
 
-#: ../../xgngeo.py:743
+#: ../../xgngeo.py:848
 msgid "Roms & Bios directory is not a directory! O_o;"
 msgstr "To nie jest katalog! O_o;"
 
-#: ../../xgngeo.py:744
+#: ../../xgngeo.py:849
 msgid "Path to \"romrc\" doesn't exist."
 msgstr "Ścieżka do \"romrc\" nie istnieje."
 
-#: ../../xgngeo.py:746
+#: ../../xgngeo.py:850
 msgid "Path to \"romrc\" is not a file!"
 msgstr "Ścieżka do \"romrc\" nie prowadzi do pliku!"
 
-#: ../../xgngeo.py:747
-msgid "Path to \"LibGL.so\" doesn't exist."
-msgstr "Ścieżka do \"libGL.so\" nie istnieje."
-
-#: ../../xgngeo.py:749
-msgid "Path to \"libGL.so\" is not a file!"
-msgstr "Ścieżka do \"libGL.so\" nie prowadzi do pliku!"
-
-#: ../../xgngeo.py:754
+#: ../../xgngeo.py:855
 msgid "Configuration error!"
 msgstr "Błąd konfiguracji!"
 
-#: ../../xgngeo.py:763
+#: ../../xgngeo.py:864
 msgid "Sorry, I'm unable to save the configuration because:"
 msgstr "Nie można zapisać konfiguracji, ponieważ:"
 
-#: ../../xgngeo.py:768
+#: ../../xgngeo.py:869
 msgid "Please check it up then save again... ^^;"
 msgstr "Proszę sprawdzić jeszcze raz, a potem zapisać... ^^;"
 
-#: ../../xgngeo.py:819
+#: ../../xgngeo.py:916
 msgid "Configuration has been saved."
 msgstr "Konfiguracja została zapisana."
 
-#: ../../xgngeo.py:831
+#: ../../xgngeo.py:928
 msgid "Configuration was not saved."
 msgstr "Konfiguracja nie została zapisana."
 
-#: ../../xgngeo.py:879
+#: ../../xgngeo.py:981
 #, python-format
 msgid "Welcome to XGngeo version %i."
 msgstr "Witamy w XGngeo wersja: %i."
 
-#: ../../xgngeo.py:894
-msgid "Load from File"
+#: ../../xgngeo.py:995
+#, fuzzy
+msgid "_File"
+msgstr "Plik"
+
+#: ../../xgngeo.py:999
+#, fuzzy
+msgid "Load from _File"
 msgstr "Wczytaj z pliku"
 
-#: ../../xgngeo.py:895
+#: ../../xgngeo.py:1000
 msgid "Select a Rom"
 msgstr "Wybierz plik"
 
-#: ../../xgngeo.py:898
-msgid "Load from List"
+#: ../../xgngeo.py:1003
+#, fuzzy
+msgid "Load from _List"
 msgstr "Wczytaj z listy"
 
-#: ../../xgngeo.py:902
-msgid "History"
+#: ../../xgngeo.py:1021
+#, fuzzy
+msgid "_History"
 msgstr "Historia"
 
-#: ../../xgngeo.py:909
-msgid "Run..."
-msgstr "Uruchom..."
-
-#: ../../xgngeo.py:916
-msgid "Quit"
-msgstr "Zakończ"
-
-#: ../../xgngeo.py:920
-msgid "File"
-msgstr "Plik"
-
-#: ../../xgngeo.py:947
-msgid "Keys"
-msgstr "Klawisze"
-
-#: ../../xgngeo.py:951
-msgid "Config"
+#: ../../xgngeo.py:1041
+#, fuzzy
+msgid "_Config"
 msgstr "Konfiguracja"
 
-#: ../../xgngeo.py:960
-msgid "About"
-msgstr "O Programie"
+#: ../../xgngeo.py:1045
+#, fuzzy
+msgid "_Path"
+msgstr "Katalogi"
 
-#: ../../xgngeo.py:968
-msgid "Info"
+#: ../../xgngeo.py:1049
+#, fuzzy
+msgid "_Graphic"
+msgstr "Grafika"
+
+#: ../../xgngeo.py:1053
+#, fuzzy
+msgid "_Audio"
+msgstr "Dźwięk"
+
+#: ../../xgngeo.py:1057
+#, fuzzy
+msgid "_System"
+msgstr "System"
+
+#: ../../xgngeo.py:1061
+msgid "_Other"
+msgstr ""
+
+#: ../../xgngeo.py:1067
+#, fuzzy
+msgid "_Keys"
+msgstr "Klawisze"
+
+#: ../../xgngeo.py:1075
+#, fuzzy
+msgid "_Info"
 msgstr "Info"
 
+#: ../../xgngeo.py:1080
+#, fuzzy
+msgid "_About"
+msgstr "O Programie"
 
+#: ../../xgngeo.py:1084
+#, fuzzy
+msgid "_License"
+msgstr "Licencja"
+
+#~ msgid "Selected:"
+#~ msgstr "Rom:"
+
+#~ msgid "Path to Roms & Bios:"
+#~ msgstr "Ścieżka do romów i BIOSU:"
+
+#~ msgid "Path to \"LibGL.so\" doesn't exist."
+#~ msgstr "Ścieżka do \"libGL.so\" nie istnieje."
+
+#~ msgid "Path to \"libGL.so\" is not a file!"
+#~ msgstr "Ścieżka do \"libGL.so\" nie prowadzi do pliku!"
+
+#~ msgid "Run..."
+#~ msgstr "Uruchom..."
+
+#~ msgid "Quit"
+#~ msgstr "Zakończ"
