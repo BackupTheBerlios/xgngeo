@@ -2,6 +2,7 @@
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
 Copyleft 2003, 2004, 2005 Choplair-network
+$id: $
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -35,130 +36,6 @@ gngeoPath = os.path.expanduser("~/.gngeo")
 gettext.install("xgngeo","data/lang")
 
 class XGngeo:
-	def keysConfig(self,widget):
-		if self.busyState!=1:
-			self.busy(1)
-			self.toggled = None
-
-			# Keyboard - Order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT
-			keys_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT"]
-
-			# The Gngeo's compliant keymap!
-			conpliant_KeyMap = {
-			"backspace":8, "tab":9, "return":13, "pause":19, "space":32, "exclam":33, "quotedbl":34, "dollar":36, "ampersand":38, "apostrophe":39, "parenleft":40, "parenright":41, "comma":44, "minus":45,
-			"colon":58, "semicolon":59,"less":60, "equal":61, "asciicircum":94, "underscore":95, "a":97, "b":98, "c":99, "d":100, "e":101, "f":102, "g":103, "h":104, "i":105, "j":106, "k":107, "l":108,
-			"m":109, "n":110, "o":111, "p":112, "q":113, "r":114, "s":115, "t":116, "u":117, "v":118, "w":119, "x":120, "y":121, "z":122, "delete":127, "twosuperio":178, "agrave":224, "ccedilla":231,
-			"egrave":232, "eacute":233, "ugrave":249, "kp_0":256, "kp_1":257, "kp_2":258, "kp_3":259, "kp_4":260, "kp_5":261, "kp_6":262, "kp_home":263, "kp_7":263, "kp_up":264, "kp_8":264, "kp_9":265,
-			"kp_decimal":266, "kp_divide":267, "kp_multiply":268, "kp_subtract":269, "kp_add":270, "kp_enter":271, "up":273, "down":274, "right":275, "left":276, "insert":277, "home":278, "end":279,
-			"page_up":280, "page_down":281, "num_lock":300, "caps_lock":301, "scroll_lock":302, "shift_r":303, "shift_l":304, "control_r":305, "control_l":306, "super_l":311, "super_r":312, "print":316
-			}
-	
-			def getPressed(widget,event):
-				if widget.get_active() and event.keyval: #Only when widget is active
-					value = gtk.gdk.keyval_to_lower(event.keyval) #Get the get (lower only)
-
-					# GTK's keys are not same as SDL's used by Gngeo. T_T
-					# So, a Gngeo compatible key-value is given according to its GTK's name.
-					key_name = gtk.gdk.keyval_name(value).lower()
-					key = None
-
-					if key_name in conpliant_KeyMap.keys():
-						key = conpliant_KeyMap[key_name]
-						widget.set_label("%s" % (key))
-						widget.clicked()
-
-			def toggled(widget):
-				if self.toggled and self.toggled!=widget:
-					if self.toggled.get_active(): self.toggled.set_active(False)
-				self.toggled = widget
-
-			def radioToggled(widget,data):
-				i=0
-				if data: #Show P2 key and hide P1's
-					for x in self.p2keysButt.values():
-						x.show()
-					for x in self.p1keysButt.values():
-						x.hide()
-				else: #Show P1 key and hide P2's
-					for x in self.p1keysButt.values():
-						x.show()
-					for x in self.p2keysButt.values():
-						x.hide()
-
-			self.keysDialog = gtk.Dialog(_("Keys configuration"))
-			self.keysDialog.connect("destroy",self.destroy,[self.keysDialog,1])	
-
-			label = gtk.Label(_("To modify a key, click the button then push your new key.\nThis configuration is only for keyboard."))
-			label.set_justify(gtk.JUSTIFY_CENTER)
-			label.set_padding(5,5)
-			self.keysDialog.vbox.pack_start(label)
-
-			#Player's keyboard selection
-			box = gtk.HBox()
-			radio = gtk.RadioButton(None,_("Player 1"))
-			radio.connect("toggled",radioToggled,0)
-			box.pack_start(radio)
-			radio = gtk.RadioButton(radio,_("Player 2"))
-			radio.connect("toggled",radioToggled,1)
-			box.pack_start(radio)
-			self.keysDialog.vbox.pack_start(box,padding=2)
-
-			table = gtk.Table(4,6,True) #The sweet table O_o;;
-
-			self.p1keysButt = {}; image = {}; i=0
-			split = string.split(self.param["p1key"],",")
-			for x in keys_list:
-				#Generate key's image
-				image[x] = gtk.Image()
-				image[x].set_from_file("data/img/key_%s.png" % x)
-
-				#Generate P1key's button
-				self.p1keysButt[x] = gtk.ToggleButton(split[i])
-				self.p1keysButt[x].connect("toggled",toggled)
-				self.p1keysButt[x].connect("key_press_event",getPressed)
-				self.p1keysButt[x].set_use_underline(False)
-				
-				i+=1 
-
-			self.p2keysButt = {}; i=0
-			split = string.split(self.param["p2key"],",")
-			for x in keys_list:
-				#Generate P2key's button
-				self.p2keysButt[x] = gtk.ToggleButton(split[i])
-				self.p2keysButt[x].connect("toggled",toggled)
-				self.p2keysButt[x].connect("key_press_event",getPressed)
-				self.p2keysButt[x].set_use_underline(False)
-
-				box = gtk.HBox() #A box...
-				box.pack_start(self.p1keysButt[x]) #with P1 key...
-				box.pack_start(self.p2keysButt[x]) #and P2 key :p
-
-				#Put them in table
-				if i<6:
-					table.attach(image[x],i,i+1,0,1)
-					table.attach(box,i,i+1,1,2)
-				else:
-					table.attach(image[x],i-5,i-4,2,3)
-					table.attach(box,i-5,i-4,3,4)
-	
-				i+=1
-
-			self.keysDialog.vbox.pack_start(table,padding=5)
-
-			#Buttons on bottom.
-			button = gtk.Button(stock=gtk.STOCK_SAVE)
-			button.connect("clicked",self.configWrite,"keysConfig")
-			self.keysDialog.action_area.pack_start(button)
-			button = gtk.Button(stock=gtk.STOCK_CANCEL)
-			button.connect("clicked",self.destroy,[self.keysDialog,5])
-			self.keysDialog.action_area.pack_end(button)
-
-			self.keysDialog.show_all()
-
-			#Hide the P2keys
-			for x in self.p2keysButt.values():
-				x.hide()
-
 	def welcome(self):
 		#Check for Gngeo's home directory
 		if not os.path.isdir(gngeoPath): os.mkdir(gngeoPath)
@@ -548,23 +425,22 @@ class XGngeo:
 			self.aboutDialog.show_all()
 	
 	def config(self,widget=None,type=0,firstrun=0):
-		def setPathIcon(widget,image,dir=0):
-			"""We check whether the path written in the text entry
-			is an existing file or directory and change the icon
-			in consequence."""
-
-			path = widget.get_text()
-			if (dir and os.path.isdir(path)) or os.path.isfile(path): 
-				stock = gtk.STOCK_YES
-			else: stock = gtk.STOCK_NO
-
-			image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
-
 		if self.busyState!=1:
-			self.busy(1)
+			def setPathIcon(widget,image,dir=0):
+				"""We check whether the path written in the text entry
+				is an existing file or directory and change the icon
+				in consequence."""
 
+				path = widget.get_text()
+				if (dir and os.path.isdir(path)) or os.path.isfile(path): 
+					stock = gtk.STOCK_YES
+				else: stock = gtk.STOCK_NO
+
+				image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
+
+			self.busy(1)
 			self.configDialog = gtk.Dialog()
-			self.configDialog.set_size_request(350,-1)
+			if type in (0,5): self.configDialog.set_geometry_hints(min_width=350)
 
 			if firstrun==1: self.configDialog.connect("delete_event",self.quit)
 			else: self.configDialog.connect("destroy",self.destroy,[self.configDialog,1])
@@ -841,6 +717,115 @@ class XGngeo:
 				frame2.add(table)
 				box.pack_start(frame2)
 
+				#
+				# Keyboard configuration.
+				#
+				toggled = None
+
+				# Key order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT
+				keys_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT"]
+
+				# The Gngeo compliant keymap!
+				conpliant_KeyMap = {
+				"backspace":8, "tab":9, "return":13, "pause":19, "space":32, "exclam":33, "quotedbl":34, "dollar":36, "ampersand":38, "apostrophe":39, "parenleft":40, "parenright":41, "comma":44, "minus":45,
+				"colon":58, "semicolon":59,"less":60, "equal":61, "asciicircum":94, "underscore":95, "a":97, "b":98, "c":99, "d":100, "e":101, "f":102, "g":103, "h":104, "i":105, "j":106, "k":107, "l":108,
+				"m":109, "n":110, "o":111, "p":112, "q":113, "r":114, "s":115, "t":116, "u":117, "v":118, "w":119, "x":120, "y":121, "z":122, "delete":127, "twosuperio":178, "agrave":224, "ccedilla":231,
+				"egrave":232, "eacute":233, "ugrave":249, "kp_0":256, "kp_1":257, "kp_2":258, "kp_3":259, "kp_4":260, "kp_5":261, "kp_6":262, "kp_home":263, "kp_7":263, "kp_up":264, "kp_8":264, "kp_9":265,
+				"kp_decimal":266, "kp_divide":267, "kp_multiply":268, "kp_subtract":269, "kp_add":270, "kp_enter":271, "up":273, "down":274, "right":275, "left":276, "insert":277, "home":278, "end":279,
+				"page_up":280, "page_down":281, "num_lock":300, "caps_lock":301, "scroll_lock":302, "shift_r":303, "shift_l":304, "control_r":305, "control_l":306, "super_l":311, "super_r":312, "print":316
+				}
+
+				def getPressed(widget,event):
+					if widget.get_active() and event.keyval: #Only when widget is active
+						value = gtk.gdk.keyval_to_lower(event.keyval) #Get the get (lower only)
+
+						# GTK's keys are not same as SDL's used by Gngeo. T_T
+						# So, a Gngeo compatible key-value is given according to its GTK's name.
+						key_name = gtk.gdk.keyval_name(value).lower()
+						key = None
+
+						if key_name in conpliant_KeyMap.keys():
+							key = conpliant_KeyMap[key_name]
+							widget.set_label("%s" % (key))
+							widget.clicked()
+
+				def toggled(widget):
+					if toggled and toggled!=widget:
+						if toggled.get_active(): toggled.set_active(False)
+					toggled = widget
+
+				def radioToggled(widget,data):
+					if data: #Show P2 key and hide P1's
+						for x in self.configwidgets['p2key'].values():
+							x.show()
+						for x in self.configwidgets['p1key'].values():
+							x.hide()
+					else: #Show P1 key and hide P2's
+						for x in self.configwidgets['p1key'].values():
+							x.show()
+						for x in self.configwidgets['p2key'].values():
+							x.hide()
+
+				box = gtk.VBox()
+				notebook.append_page(box,gtk.Label(_("Keyboard")))
+
+				label = gtk.Label(_("To modify a key, click the button then push your new key.\nThis configuration is only for keyboard."))
+				label.set_justify(gtk.JUSTIFY_CENTER)
+				label.set_padding(5,5)
+				box.pack_start(label)
+
+				table = gtk.Table(4,6,True) #The sweet table O_o;;
+
+				#Player's keyboard selection
+				box2 = gtk.VBox()
+				radio = gtk.RadioButton(None,_("Player 1"))
+				radio.connect("toggled",radioToggled,0)
+				box2.pack_start(radio)
+				radio = gtk.RadioButton(radio,_("Player 2"))
+				radio.connect("toggled",radioToggled,1)
+				box2.pack_start(radio)
+				table.attach(box2,0,2,2,4)
+
+				self.configwidgets['p1key'] = {}; image = {}; i=0
+				split = string.split(self.param["p1key"],",")
+				for x in keys_list:
+					#Generate key's image
+					image[x] = gtk.Image()
+					image[x].set_from_file("data/img/key_%s.png" % x)
+
+					#Generate P1key's button
+					self.configwidgets['p1key'][x] = gtk.ToggleButton(split[i])
+					self.configwidgets['p1key'][x].connect("toggled",toggled)
+					self.configwidgets['p1key'][x].connect("key_press_event",getPressed)
+					self.configwidgets['p1key'][x].set_use_underline(False)
+
+					i+=1 
+
+				self.configwidgets['p2key'] = {}; i=0
+				split = string.split(self.param["p2key"],",")
+				for x in keys_list:
+					#Generate P2key's button
+					self.configwidgets['p2key'][x] = gtk.ToggleButton(split[i])
+					self.configwidgets['p2key'][x].connect("toggled",toggled)
+					self.configwidgets['p2key'][x].connect("key_press_event",getPressed)
+					self.configwidgets['p2key'][x].set_use_underline(False)
+
+					box2 = gtk.HBox() #A box...
+					box2.pack_start(self.configwidgets['p1key'][x]) #with P1 key...
+					box2.pack_start(self.configwidgets['p2key'][x]) #and P2 key :p
+
+					#Put them in table
+					if i<6:
+						table.attach(image[x],i,i+1,0,1)
+						table.attach(box2,i,i+1,1,2)
+					else:
+						table.attach(image[x],i-4,i-3,2,3)
+						table.attach(box2,i-4,i-3,3,4)
+	
+					i+=1
+
+				box.pack_start(table)
+
 				self.configDialog.vbox.pack_start(notebook) #Packing the Notebook
 
 			elif type==5:
@@ -936,7 +921,10 @@ class XGngeo:
 
 			self.configDialog.show_all()
 			#Display the right section in global emulation configuration.
-			if type in (1,2,3,4): notebook.set_current_page(type-1)
+			if type in (1,2,3,4):
+				notebook.set_current_page(type-1)
+				#Hide the keyboard P2 keys.
+				for x in self.configwidgets['p2key'].values(): x.hide();
 
 	def configWrite(self,widget,type,firstrun=0):
 		letsWrite = 0
@@ -1005,6 +993,19 @@ class XGngeo:
 			if self.configwidgets['country_japan'].get_active(): self.param["country"] = "japan" #country
 			elif self.configwidgets['country_usa'].get_active(): self.param["country"] = "usa"
 			else: self.param["country"] = "europe"
+
+			# Keyboard.
+			# This following list is important! Without it, keys-values are wrongly arranged!
+			keys_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT"]
+			#P1KEY
+			self.param["p1key"] = "" #Empty the variable
+			for x in keys_list: self.param["p1key"] += self.configwidgets['p1key'][x].get_label()+","
+			self.param["p1key"] = self.param["p1key"][:-1] #Remove the last ",".
+			#P2KEY
+			self.param["p2key"] = "" #Empty the variable
+			for x in keys_list: self.param["p2key"] += self.configwidgets['p2key'][x].get_label()+","
+			self.param["p2key"] = self.param["p2key"][:-1] #Remove the last ",".
+
 			letsWrite = 1 #Let's write!
 				
 		elif type==5:
@@ -1014,27 +1015,8 @@ class XGngeo:
 			self.param["libglpath"] = self.configwidgets['libglpath'].get_text() #libglpath
 			self.paramXGngeo["previewimagedir"] = self.configwidgets['previewimagedir'].get_text() #previewimagedir
 			self.paramXGngeo["rominfoxml"] = self.configwidgets['rominfoxml'].get_text() #rominfoxml
+
 			letsWrite = 1 #Let's write!
-
-
-		#~ if special=="keysConfig":
-			#~ # Keyboard - order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT
-			#~ # This is important! Without it, keys-values are arranged wrongly!
-			#~ keys_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT"]
-
-			#~ #P1KEY
-			#~ self.param["p1key"] = "" #Empty the variable
-			#~ for x in keys_list:
-				#~ self.param["p1key"] += ","+self.p1keysButt[x].get_label()
-			#~ self.param["p1key"] = self.param["p1key"][1:] #Remove the first ","
-
-			#~ #P2KEY
-			#~ self.param["p2key"] = "" #Empty the variable
-			#~ for x in keys_list:
-				#~ self.param["p2key"] += ","+self.p2keysButt[x].get_label()
-			#~ self.param["p2key"] = self.param["p2key"][1:] #Remove the first ","
-
-			#~ letsWrite = 1 #Let's write!
 
 		if letsWrite: #We are now Ok to write configuration files...
 
@@ -1204,8 +1186,8 @@ class XGngeo:
 		menu_item.connect("activate",self.config,3)
 		menu2.append(menu_item)
 
-		menu_item = gtk.MenuItem(_("_Keys"))
-		menu_item.connect("activate",self.keysConfig)
+		menu_item = gtk.MenuItem(_("_Keyboard"))
+		menu_item.connect("activate",self.config,4)
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Other"))
