@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
-Copyleft 2003 Choplair-network
+Copyleft 2003, 2004 Choplair-network
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -540,7 +540,7 @@ class XGngeo:
 			logo.set_from_file("data/img/chprod.png")
 			box.pack_start(logo,gtk.FALSE)
 
-			label = gtk.Label(_("Main coder: Choplair.\nAssisted by: Pachilor.")+"\n\nhttp://choplair.tuxfamily.org/")
+			label = gtk.Label(_("Main coder: Choplair.\nAssisted by: Pachilor.")+"\n\nhttp://www.choplair.org/")
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			box.pack_start(label)
 
@@ -567,32 +567,49 @@ class XGngeo:
 			#
 			# PATH section
 			#
-			box = gtk.VBox(spacing=4) #The box :p
+			box = gtk.VBox(spacing=5) #The box :p
 			notebook.append_page(box,gtk.Label(_("Path")))
 
 			frame = gtk.Frame(_("Roms & Bios directory:"))
+			box2 = gtk.HBox()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			box2.pack_start(image,gtk.FALSE,padding=3)
 			self.rompath = gtk.Entry()
 			self.rompath.set_text(self.param["rompath"])
-			frame.add(self.rompath)
+			box2.pack_start(self.rompath)
+			frame.add(box2)
 			box.pack_start(frame)
 
 			frame = gtk.Frame(_("Path to romrc:"))
-			box2 = gtk.HBox(spacing=5)
+			box2 = gtk.HBox()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			box2.pack_start(image,gtk.FALSE,padding=3)
 			self.romrc = gtk.Entry()
 			self.romrc.set_text(self.param["romrc"])
 			box2.pack_start(self.romrc)
-			button = gtk.Button(stock=gtk.STOCK_OPEN)
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			button.add(image)
 			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "romrc",self.romrc.get_text()],[self.setPath,"romrc"]])
 			box2.pack_end(button,gtk.FALSE)
 			frame.add(box2)
 			box.pack_start(frame)
 
 			frame = gtk.Frame(_("Path to libGL.so (optional):"))
-			box2 = gtk.HBox(spacing=5)	
+			box2 = gtk.HBox()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			box2.pack_start(image,gtk.FALSE,padding=3)
 			self.libglpath = gtk.Entry()
 			self.libglpath.set_text(self.param["libglpath"])
 			box2.pack_start(self.libglpath)
-			button = gtk.Button(stock=gtk.STOCK_OPEN)
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			button.add(image)
 			button.connect("clicked",self.fileSelect,[[_('Select the "%s" file.') % "libGL.so",self.libglpath.get_text()],[self.setPath,"libglpath"]])
 			box2.pack_end(button,gtk.FALSE)
 			frame.add(box2)
@@ -785,17 +802,29 @@ class XGngeo:
 			box.pack_start(box2)
 
 			frame = gtk.Frame(_("Preview images directory (optional):"))
+			box2 = gtk.HBox()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			box2.pack_start(image,gtk.FALSE,padding=3)
 			self.previewimagesdir = gtk.Entry()
 			self.previewimagesdir.set_text(self.paramXGngeo["previewimagesdir"])
-			frame.add(self.previewimagesdir)
+			box2.pack_end(self.previewimagesdir)
+			frame.add(box2)
 			box.pack_start(frame)
 
+			#Path to rom infos XML file
 			frame = gtk.Frame(_("XML file containing Rom infos (optional):"))
 			box2 = gtk.HBox()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_YES,gtk.ICON_SIZE_MENU)
+			box2.pack_start(image,gtk.FALSE,padding=3)
 			self.rominfosxml = gtk.Entry()
 			self.rominfosxml.set_text(self.paramXGngeo["rominfosxml"])
 			box2.pack_start(self.rominfosxml)
-			button = gtk.Button(stock=gtk.STOCK_OPEN)
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			button.add(image)
 			button.connect("clicked",self.fileSelect,[[_('Select the XML file containing Rom infos.'),self.paramXGngeo["rominfosxml"]],[self.setPath,"rominfosxml"]])
 			box2.pack_end(button,gtk.FALSE)
 			frame.add(box2)
@@ -903,14 +932,14 @@ class XGngeo:
 
 				letsWrite = 1 #Let's write!
 
-		if letsWrite==1: #Save configuration
+		if letsWrite==1: #We are now Ok to write configuration files...
 
 			self.configfile.write(self.param,self.paramXGngeo,VERSION)
 
 			if special=="keysConfig": self.keysDialog.destroy()
 			else: self.configDialog.destroy()
 			self.busy(0)
-			if special=="firstrun": self.main() #Program has been configured, then now we can use it!
+			if special=="firstrun": self.main() #Program has been configured, so now we can use it!
 			else: self.statusbar.push(self.context_id,_("Configuration has been saved.")) #Update Status message
 
 	def busy(self,state=0):
