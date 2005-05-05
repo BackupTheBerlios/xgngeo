@@ -148,13 +148,30 @@ class XGngeo:
 
 	def romList(self,widget):
 		if self.busyState!=1:
-			def setRomTemp(widget,data):
+			self.openbutt = gtk.Button(stock=gtk.STOCK_OPEN)
+			self.openbutt.set_sensitive(False)
+
+			def setRomTemp(widget,*data):
+				if self.romFromList: self.listButton[self.romFromList].set_active(False)
+		
 				#If the selected rom is available
 				if data[0]==1:
+					#Desactivate last selected Rom button.
 					if self.romFromList and self.romFromList!=data[1]:
-						self.listButton[self.romFromList].set_active(False) #Desactivate last selected Rom button.
-					if widget.get_active():	self.romFromList,self.romFromListName = data[1],data[2]
-					else: self.romFromList,self.romFromListName = None,None
+						self.listButton[self.romFromList].set_active(False)
+
+					if widget.get_active():
+						self.romFromList,self.romFromListName = data[1],data[2]
+						self.openbutt.set_sensitive(True)						
+					else:
+						self.romFromList,self.romFromListName = None,None
+						self.openbutt.set_sensitive(False)
+
+				else:	self.openbutt.set_sensitive(False)
+
+				#Update mame name.
+				self.mamename.set_text(_("<b>%s</b>") % data[1])
+				self.mamename.set_use_markup(True)
 
 				#Update preview image
 				if os.path.isfile(os.path.join(self.paramXGngeo["previewimagedir"],data[1]+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagedir"],data[1]+".png"))
@@ -201,19 +218,19 @@ class XGngeo:
 			self.listDialog = gtk.Dialog(_("List of Roms from your \"romrc\" file"))
 			self.listDialog.connect("destroy",self.destroy,self.listDialog,1)
 
+			table = gtk.Table(2,3)
+			
 			label = gtk.Label(_("Please select the Rom you want to load from this list ^^\nAvailable Roms are displayed in blue..."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
-			self.listDialog.vbox.pack_start(label,False,False,2)
-
-			table = gtk.Table(2,2)
+			table.attach(label,0,1,0,1,yoptions=gtk.SHRINK)
 
 			buttonShowAvailable = gtk.CheckButton(_("Show available Roms only."))
 			buttonShowAvailable.connect("toggled",showAvailable)
-			table.attach(buttonShowAvailable,0,1,0,1,yoptions=gtk.SHRINK)
+			table.attach(buttonShowAvailable,0,1,1,2,yoptions=gtk.SHRINK)
 
 			scrolled_window = gtk.ScrolledWindow()
 			scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
-			table.attach(scrolled_window,0,1,1,2)
+			table.attach(scrolled_window,0,1,2,3)
 
 			#Graphical rom list generation.
 			romrc = romrcfile.Romrc()
@@ -227,12 +244,12 @@ class XGngeo:
 				if os.path.isfile(os.path.join(self.param["rompath"],"%s.zip" % gamelist[name])):
 					self.listButton[gamelist[name]] = gtk.ToggleButton(name)
 					self.listButton[gamelist[name]].modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#69F"))
-					self.listButton[gamelist[name]].connect("clicked",setRomTemp,[1,gamelist[name],name])
+					self.listButton[gamelist[name]].connect("clicked",setRomTemp,1,gamelist[name],name)
 					box.pack_start(self.listButton[gamelist[name]])
 				else:
 					self.listButtonOther[gamelist[name]] = gtk.ToggleButton(name)
 					self.listButtonOther[gamelist[name]].set_inconsistent(True)
-					self.listButtonOther[gamelist[name]].connect("clicked",setRomTemp,[0,gamelist[name]])
+					self.listButtonOther[gamelist[name]].connect("clicked",setRomTemp,0,gamelist[name])
 					box.pack_start(self.listButtonOther[gamelist[name]])
 			del gamelist, gamelistNames
 
@@ -240,23 +257,26 @@ class XGngeo:
 			scrolled_window.add_with_viewport(box)
 
 			#
-			# Preview image/info's
+			# Mame name/preview image/info's/specific configuration. :P
 			#
+			box = gtk.VBox(spacing=4)
+			self.mamename = gtk.Label()
+			box.pack_start(self.mamename,False)
 			notebook = gtk.Notebook()
 			
-			#Preview images
+			#Preview images.
 			if(os.path.isdir(self.paramXGngeo["previewimagedir"])):
 				self.previewImage = gtk.Image()
 				path = os.path.join(self.paramXGngeo["previewimagedir"],"unavailable.png")
 				if os.path.isfile(path): self.previewImage.set_from_file(path) #Display the ``unavailable" image by default.
 				notebook.append_page(self.previewImage,gtk.Label(_("Preview image")))
 
-			#Rom infos
+			#Rom infos.
 			if(os.path.isfile(self.paramXGngeo["rominfoxml"])):
 				self.romInfos = rominfos.Rominfos(path=self.paramXGngeo["rominfoxml"]).getDict()
 				self.romInfosWidget = {}
 
-				box = gtk.VBox()
+				box2 = gtk.VBox()
 
 				#Description
 				self.romInfosWidget["desc"] = gtk.TextBuffer()
@@ -266,11 +286,11 @@ class XGngeo:
 				textview.set_wrap_mode(gtk.WRAP_WORD)
 				scrolled_window = gtk.ScrolledWindow()
 				scrolled_window.set_policy(gtk.POLICY_NEVER,gtk.POLICY_ALWAYS)
-				box.set_size_request(220,-1) #Set width
+				box2.set_size_request(220,-1) #Set width
 				scrolled_window.add(textview)
 				frame = gtk.Frame(_("Description:"))
 				frame.add(scrolled_window)
-				box.pack_start(frame)
+				box2.pack_start(frame)
 
 				#Other infos
 				table2 = gtk.Table(3,2,True)
@@ -317,17 +337,31 @@ class XGngeo:
 				frame.add(self.romInfosWidget["size"])
 				table2.attach(frame,1,2,2,3)
 
-				box.pack_start(table2,False)
+				box2.pack_start(table2,False)
 
-				notebook.append_page(box,gtk.Label(_("Rom infos")))
+				notebook.append_page(box2,gtk.Label(_("Informations")))
 
-			table.attach(notebook,1,2,0,2,gtk.SHRINK)
+			box.pack_start(notebook)
+
+			#Specific configuration.
+			frame = gtk.Frame("Specific configuration:")
+			frame.set_label_align(0.5,0.5) #Center is better. :p
+			box2 = gtk.HBox()
+			button = gtk.Button(stock=gtk.STOCK_NEW)
+			box2.pack_start(button)
+			button = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+			box2.pack_start(button)
+			button = gtk.Button(stock=gtk.STOCK_CLEAR)
+			box2.pack_start(button)
+			frame.add(box2)
+			box.pack_end(frame,False)
+
+			table.attach(box,1,2,0,3,gtk.SHRINK)
 			self.listDialog.vbox.pack_start(table)
 
 			#Buttons at bottom
-			button = gtk.Button(stock=gtk.STOCK_OK)
-			button.connect("clicked",setRomFromList)
-			self.listDialog.action_area.pack_start(button)
+			self.openbutt.connect("clicked",setRomFromList)
+			self.listDialog.action_area.pack_start(self.openbutt)
 
 			button = gtk.Button(stock=gtk.STOCK_CANCEL)
 			button.connect("clicked",self.destroy,self.listDialog,1)

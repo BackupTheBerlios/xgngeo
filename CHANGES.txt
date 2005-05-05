@@ -116,6 +116,8 @@ XGngeo yet. WAGLAMOT is the Future! O_o;;
 - Creation of a CHANGES.txt file :p
 
 
-"You're just an illusion.
-I'm a rose blooming in the desert."
+``You're just an illusion...
+When I'm awaken, my tears have dried in the sand of sleep
+I'm a rose blooming in the desert"
 (Endless rain, X Japan)
+
