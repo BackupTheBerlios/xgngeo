@@ -80,7 +80,7 @@ class XGngeo:
 				del licenseText
 			else:
 				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\nYou can read the GNU CPL license at:\nhttp://www.gnu.org/licenses/gpl.html") % licensePath)
-			
+
 			textview = gtk.TextView(textbuffer)
 			textview.set_editable(False)
 
@@ -152,8 +152,11 @@ class XGngeo:
 			self.openbutt.set_sensitive(False)
 
 			def setRomTemp(widget,*data):
+				#Cancel rigth side unsensitivity. :p
+				self.rightside.set_sensitive(True)
+
 				if self.romFromList: self.listButton[self.romFromList].set_active(False)
-		
+
 				#If the selected rom is available
 				if data[0]==1:
 					#Desactivate last selected Rom button.
@@ -188,6 +191,9 @@ class XGngeo:
 						for x in ("desc","manufacturer","year","genre","players","rating","size"):
 							self.romInfosWidget[x].set_text("--")
 
+				#Update specific configuration.
+				romPath = os.path.expanduser("~/.gngeo")
+
 			def setRomFromList(widget):
 				#Something selected?
 				if self.romFromList:
@@ -219,7 +225,7 @@ class XGngeo:
 			self.listDialog.connect("destroy",self.destroy,self.listDialog,1)
 
 			table = gtk.Table(2,3)
-			
+
 			label = gtk.Label(_("Please select the Rom you want to load from this list ^^\nAvailable Roms are displayed in blue..."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			table.attach(label,0,1,0,1,yoptions=gtk.SHRINK)
@@ -259,11 +265,11 @@ class XGngeo:
 			#
 			# Mame name/preview image/info's/specific configuration. :P
 			#
-			box = gtk.VBox(spacing=4)
+			self.rightside = gtk.VBox(spacing=4)
 			self.mamename = gtk.Label()
-			box.pack_start(self.mamename,False)
+			self.rightside.pack_start(self.mamename,False)
 			notebook = gtk.Notebook()
-			
+
 			#Preview images.
 			if(os.path.isdir(self.paramXGngeo["previewimagedir"])):
 				self.previewImage = gtk.Image()
@@ -341,23 +347,25 @@ class XGngeo:
 
 				notebook.append_page(box2,gtk.Label(_("Informations")))
 
-			box.pack_start(notebook)
+			self.rightside.pack_start(notebook)
 
 			#Specific configuration.
+			self.specconf = {}
 			frame = gtk.Frame("Specific configuration:")
 			frame.set_label_align(0.5,0.5) #Center is better. :p
 			box2 = gtk.HBox()
-			button = gtk.Button(stock=gtk.STOCK_NEW)
-			box2.pack_start(button)
-			button = gtk.Button(stock=gtk.STOCK_PROPERTIES)
-			box2.pack_start(button)
-			button = gtk.Button(stock=gtk.STOCK_CLEAR)
-			box2.pack_start(button)
+			self.specconf['new'] = gtk.Button(stock=gtk.STOCK_NEW)
+			box2.pack_start(self.specconf['new'])
+			self.specconf['properties'] = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+			box2.pack_start(self.specconf['properties'])
+			self.specconf['clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
+			box2.pack_start(self.specconf['clear'])
 			frame.add(box2)
-			box.pack_end(frame,False)
+			self.rightside.pack_end(frame,False)
 
-			table.attach(box,1,2,0,3,gtk.SHRINK)
+			table.attach(self.rightside,1,2,0,3,gtk.SHRINK)
 			self.listDialog.vbox.pack_start(table)
+			self.rightside.set_sensitive(False)
 
 			#Buttons at bottom
 			self.openbutt.connect("clicked",setRomFromList)
@@ -369,14 +377,6 @@ class XGngeo:
 
 			self.listDialog.show_all()
 			if self.paramXGngeo["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
-
-	def optParam(self,widget,data):
-		if data[0]=="blitter":
-			self.tempparam['blitter'] = data[1] #Updating param
-		elif data[0]=="effect":
-			self.tempparam['effect'] = data[1]
-		elif data[0]=="samplerate":
-			self.tempparam['samplerate'] = data[1]
 
 	def fileSelect(self,widget,title,folder,arg,dirselect=0):
 		dialog = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
@@ -395,11 +395,11 @@ class XGngeo:
 		#Getting a hypothetic Mame name.
 		if path[-4:]==".zip": mamename = os.path.basename(path)[:-4]
 		else: mamename = os.path.basename(path)
-	
+
 		#Setting important variables.
 		self.romPath = path
 		self.romFullName = fullname
-		
+
 		#Doing post-selection actions.
 		self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
 		self.statusbar.push(self.context_id,(_("Rom: \"%s\" (%s)") % (fullname,mamename))) #Update Status message
@@ -629,7 +629,6 @@ class XGngeo:
 				box.pack_start(self.configwidgets['screen320'])
 
 				# BLITTER
-				self.tempparam['blitter'] = self.param["blitter"]
 				frame = gtk.Frame(_("Blitter:"))
 
 				#Translation of know blitter fullname.
@@ -642,26 +641,25 @@ class XGngeo:
 				lines = blitter.readlines() #Get Gngeo's available blitter
 				blitter.close()
 
-				opt = gtk.OptionMenu()
-				menu = gtk.Menu()
-				i=0
+				self.combo_params = {}
+
+				self.configwidgets['blitter'] = gtk.combo_box_new_text()
+				i=0; list = []
 				for line in lines:
 					if string.find(line,":")>0:
 						splited = string.split(line,":") #Syntax is "REF : FULLNAME"
 						ref,fullname = splited[0].strip(),splited[1].strip()
 
-						menu_item = gtk.MenuItem((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
-						menu_item.connect("activate",self.optParam,["blitter",ref])
-						menu.append(menu_item)
-						#Set active the last selection
-						if ref==self.param["blitter"]: menu.set_active(i)
+						self.configwidgets['blitter'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
+						list.append(ref)
+						#Set active the last selection.
+						if ref==self.param["blitter"]: self.configwidgets['blitter'].set_active(i)
 						i+=1
-				opt.set_menu(menu)
-				frame.add(opt)
+				self.combo_params['blitter'] = list
+				frame.add(self.configwidgets['blitter'])
 				box.pack_start(frame)
 
 				# EFFECT
-				self.tempparam['effect'] = self.param["effect"]
 				frame = gtk.Frame(_("Effect:"))
 
 				#Translation of know effect fullname.
@@ -687,22 +685,21 @@ class XGngeo:
 				lines = effect.readlines() #Get Gngeo's available blitter
 				effect.close()
 
-				opt = gtk.OptionMenu()
-				menu = gtk.Menu()
-				i=0
+				self.configwidgets['effect'] = gtk.combo_box_new_text()
+				self.configwidgets['effect'].set_wrap_width(2)
+				i=0; list = []
 				for line in lines:
 					if string.find(line,":")>0:
 						splited = string.split(line,":") #Syntax is "REF : FULLNAME"
 						ref,fullname = splited[0].strip(),splited[1].strip()
 
-						menu_item = gtk.MenuItem((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
-						menu_item.connect("activate",self.optParam,["effect",ref])
-						menu.append(menu_item)
-						#Set active the last selection
-						if ref==self.param["effect"]: menu.set_active(i)
+						self.configwidgets['effect'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
+						list.append(ref)
+						#Set active the last selection.
+						if ref==self.param["effect"]: self.configwidgets['effect'].set_active(i)
 						i+=1
-				opt.set_menu(menu)
-				frame.add(opt)
+				self.combo_params['effect'] = list
+				frame.add(self.configwidgets['effect'])
 				box.pack_start(frame)
 
 				#
@@ -712,60 +709,69 @@ class XGngeo:
 				notebook.append_page(box,gtk.Label(_("Audio / Joystick")))
 
 				frame = gtk.Frame(_("Audio"))
-				table = gtk.Table(2,2)
+				box2 = gtk.VBox()
+
+				def bouyaka(widget,target):
+					"""Set widget sensitive state according to another
+					widget activation state."""
+					target.set_sensitive(widget.get_active())
 
 				self.configwidgets['sound'] = gtk.CheckButton(_("Enable sound"))
-				if self.param["sound"]=="true": self.configwidgets['sound'].set_active(1)
-				table.attach(self.configwidgets['sound'],0,2,0,1)
+				box2.pack_start(self.configwidgets['sound'])
 
 				#Sample rate
-				self.tempparam['samplerate'] = self.param["samplerate"]
-				
+				box3 = gtk.HBox()
+				box2.pack_end(box3)
 				label = gtk.Label(_("Sample rate:"))
-				table.attach(label,0,1,1,2)
+				box3.pack_start(label)
 
-				opt = gtk.OptionMenu()
-				menu = gtk.Menu() 
+				self.configwidgets['samplerate'] = gtk.combo_box_new_text()
 				i=0
-				for val in ["8192","11025","22050","32000","44100","48000"]:
-					menu_item = gtk.MenuItem(val)
-					menu_item.connect("activate",self.optParam,["samplerate",val])
-					menu.append(menu_item)
+				self.combo_params['samplerate'] = ["8192","11025","22050","32000","44100","48000"]
+				for val in self.combo_params['samplerate']:
+					self.configwidgets['samplerate'].append_text(val)
 					#Set active the last selection
-					if val==self.param["samplerate"]: menu.set_active(i)
+					if val==self.param["samplerate"]: self.configwidgets['samplerate'].set_active(i)
 					i+=1
-				opt.set_menu(menu)
-				table.attach(opt,1,2,1,2)
+				box3.pack_start(self.configwidgets['samplerate'])
 
-				frame.add(table)
+				#Bouyaka!
+				self.configwidgets['sound'].connect("toggled",bouyaka,box3)
+				if self.param['sound']=='true': self.configwidgets['sound'].set_active(1)
+				else: bouyaka(self.configwidgets['sound'],box3)
+
+				frame.add(box2)
 				box.pack_start(frame)
-		
+
 				frame = gtk.Frame(_("Joystick"))
-				table = gtk.Table(2,3)
-				
+				box2 = gtk.VBox()
+
 				self.configwidgets['joystick'] = gtk.CheckButton("Enable joystick support")
-				if self.param['joystick']=="true": self.configwidgets['joystick'].set_active(True)
-				table.attach(self.configwidgets['joystick'],0,2,0,1)
+				box2.pack_start(self.configwidgets['joystick'])
+
+				table = gtk.Table(2,2)
+				box2.pack_end(table)
 
 				label = gtk.Label(_("Player 1 device:"))
-				table.attach(label,0,1,1,2)
-				self.configwidgets['p1joydev'] = gtk.OptionMenu()
-				menu = gtk.Menu()
-				for x in range(4): menu.append(gtk.MenuItem("/dev/js%s" % x))
-				self.configwidgets['p1joydev'].set_menu(menu)
-				self.configwidgets['p1joydev'].set_history(int(self.param["p1joydev"]))
-				table.attach(self.configwidgets['p1joydev'],1,2,1,2)
+				table.attach(label,0,1,0,1)
+				self.configwidgets['p1joydev'] = gtk.combo_box_new_text()
+				for x in range(4): self.configwidgets['p1joydev'].append_text("/dev/js%s" % x)
+				self.configwidgets['p1joydev'].set_active(int(self.param["p1joydev"])) #Set active the last selection
+				table.attach(self.configwidgets['p1joydev'],1,2,0,1)
 
 				label = gtk.Label(_("Player 2 device:"))
-				table.attach(label,0,1,2,3)
-				self.configwidgets['p2joydev'] = gtk.OptionMenu()
-				menu = gtk.Menu()
-				for x in range(4): menu.append(gtk.MenuItem("/dev/js%s" % x))
-				self.configwidgets['p2joydev'].set_menu(menu)
-				self.configwidgets['p2joydev'].set_history(int(self.param["p2joydev"]))
-				table.attach(self.configwidgets['p2joydev'],1,2,2,3)
+				table.attach(label,0,1,1,2)
+				self.configwidgets['p2joydev'] = gtk.combo_box_new_text()
+				for x in range(4): self.configwidgets['p2joydev'].append_text("/dev/js%s" % x)
+				self.configwidgets['p2joydev'].set_active(int(self.param["p2joydev"])) #Set active the last selection
+				table.attach(self.configwidgets['p2joydev'],1,2,1,2)
 
-				frame.add(table)
+				#Bouyaka!
+				self.configwidgets['joystick'].connect("toggled",bouyaka,table)
+				if self.param['joystick']=='true': self.configwidgets['joystick'].set_active(1)
+				else: bouyaka(self.configwidgets['joystick'],table)
+
+				frame.add(box2)
 				box.pack_start(frame)
 
 				#
@@ -1043,34 +1049,6 @@ class XGngeo:
 				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>\n%s" % (_("Sorry, I can't save the configuration because:"),error,_("Please check it up then try to save again... ^^;")))
 				dialog.connect_object("response",callback,dialog)
 				dialog.show_all()
-				
-				#~ self.configDialog.set_sensitive(False) #Busying Configuration window
-
-				#~ dialog = gtk.Dialog(_("Configuration error!"))
-				#~ dialog.connect("destroy",self.destroy,dialog,4)
-
-				#~ box = gtk.HBox()
-				#~ image = gtk.Image()
-				#~ image.set_from_stock(gtk.STOCK_DIALOG_WARNING,gtk.ICON_SIZE_DIALOG)
-				#~ image.set_padding(5,5)
-				#~ box.pack_start(image)
-				#~ box2 = gtk.VBox(spacing=0)
-				#~ label = gtk.Label(_("Sorry, I can't save the configuration because:")+"\n")
-				#~ box2.pack_start(label)
-				#~ label = gtk.Label(error)
-				#~ label.modify_fg(gtk.STATE_NORMAL,label.get_colormap().alloc_color("#b00"))
-				#~ box2.pack_start(label)
-				#~ label = gtk.Label(_("Please check it up then save again... ^^;"))
-				#~ box2.pack_end(label)
-				#~ box.pack_end(box2,padding=5)
-				#~ dialog.vbox.pack_end(box)
-
-				#~ #Ok button
-				#~ button = gtk.Button(stock=gtk.STOCK_OK)
-				#~ button.connect("clicked",self.destroy,dialog,4)
-				#~ dialog.action_area.pack_start(button)
-
-				#~ dialog.show_all()
 
 			else:
 				#Update important path configuration params.
@@ -1087,13 +1065,13 @@ class XGngeo:
 			self.param["showfps"] = ("false","true")[self.configwidgets['showfps'].get_active()] #autoframeskip
 			self.param["scale"] = int(self.configwidgets['scale'].get_value()) #scale
 			self.param["screen320"] = ("false","true")[self.configwidgets['screen320'].get_active()] #screen320
-			self.param["blitter"] = self.tempparam['blitter'] #blitter
-			self.param["effect"] = self.tempparam['effect'] #effect
+			self.param["blitter"] = self.combo_params['blitter'][self.configwidgets['blitter'].get_active()] #blitter
+			self.param["effect"] = self.combo_params['effect'][self.configwidgets['effect'].get_active()] #effect
 			self.param["sound"] = ("false","true")[self.configwidgets['sound'].get_active()] #sound
-			self.param["samplerate"] = self.tempparam['samplerate'] #sample rate
+			self.param["samplerate"] = self.combo_params['samplerate'][self.configwidgets['samplerate'].get_active()] #sample rate
 			self.param["joystick"] = ("false","true")[self.configwidgets['joystick'].get_active()] #joystick
-			self.param["p1joydev"] = self.configwidgets['p1joydev'].get_history() #p1joydev
-			self.param["p2joydev"] = self.configwidgets['p2joydev'].get_history() #p2joydev
+			self.param["p1joydev"] = self.configwidgets['p1joydev'].get_active() #p1joydev
+			self.param["p2joydev"] = self.configwidgets['p2joydev'].get_active() #p2joydev
 			self.param["system"] = ("home","arcade")[self.configwidgets['type_arcade'].get_active()] #system
 			if self.configwidgets['country_japan'].get_active(): self.param["country"] = "japan" #country
 			elif self.configwidgets['country_usa'].get_active(): self.param["country"] = "usa"
