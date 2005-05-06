@@ -17,11 +17,13 @@ used by the two players.
 directories.
 - Displaying of message returned by Gngeo if there was a
 problem starting the Rom.
-- If already on the ``History" menu, Rom name isn't repeated
-any more but moved to the first place.
+- If already on the ``History" menu, loaded Rom name isn't
+repeated any more but moved to the first place.
 - Paths in the Option panel now come along with little icons 
 which indicate whether the path is valid or not (yeah that's
 a killer feature :p).
+- Many other GUI enhancements and replacement of the depractated
+widgets.
 - Added the possibility to set the absolute path of the Gngeo
 executable. It may be interesting if the `gngeo' command
 isn't in your PATH or if you have several versions of Gngeo

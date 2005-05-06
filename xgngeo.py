@@ -127,7 +127,6 @@ class XGngeo:
 		gtk.threads_leave()
 
 	def gngeoExec(self,widget=None):
-
 		self.statusbar.push(self.context_id,_("Starting Rom..."))
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
@@ -148,23 +147,23 @@ class XGngeo:
 
 	def romList(self,widget):
 		if self.busyState!=1:
+			self.busy(1)
 			self.openbutt = gtk.Button(stock=gtk.STOCK_OPEN)
 			self.openbutt.set_sensitive(False)
 
-			def setRomTemp(widget,*data):
-				#Cancel rigth side unsensitivity. :p
+			def setRomTemp(widget,availability,mamename,fullname=None):
+				#Cancel the rigth side unsensitivity. :p
 				self.rightside.set_sensitive(True)
-
 				if self.romFromList: self.listButton[self.romFromList].set_active(False)
 
 				#If the selected rom is available
-				if data[0]==1:
+				if availability==1:
 					#Desactivate last selected Rom button.
-					if self.romFromList and self.romFromList!=data[1]:
+					if self.romFromList and self.romFromList!=mamename:
 						self.listButton[self.romFromList].set_active(False)
 
 					if widget.get_active():
-						self.romFromList,self.romFromListName = data[1],data[2]
+						self.romFromList,self.romFromListName = mamename,fullname
 						self.openbutt.set_sensitive(True)						
 					else:
 						self.romFromList,self.romFromListName = None,None
@@ -172,27 +171,37 @@ class XGngeo:
 
 				else:	self.openbutt.set_sensitive(False)
 
-				#Update mame name.
-				self.mamename.set_text(_("<b>%s</b>") % data[1])
-				self.mamename.set_use_markup(True)
+				#Update mame name and availability icon.
+				self.mamename = mamename #The current selected mamename is exported.
+				self.widgets['mamename'].set_text(_("<b>%s</b>") % mamename)
+				self.widgets['mamename'].set_use_markup(True)
+				self.avail_image.set_from_stock((gtk.STOCK_NO,gtk.STOCK_YES)[availability],gtk.ICON_SIZE_MENU)
 
 				#Update preview image
-				if os.path.isfile(os.path.join(self.paramXGngeo["previewimagedir"],data[1]+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagedir"],data[1]+".png"))
+				if os.path.isfile(os.path.join(self.paramXGngeo["previewimagedir"],mamename+".png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagedir"],mamename+".png"))
 				elif os.path.isfile(os.path.join(self.paramXGngeo["previewimagedir"],"unavailable.png")): self.previewImage.set_from_file(os.path.join(self.paramXGngeo["previewimagedir"],"unavailable.png"))
 
 				#Update rom infos
 				if os.path.isfile(self.paramXGngeo["rominfoxml"]):
 					#Check for game informations
-					if self.romInfos.has_key(data[1]):
+					if self.romInfos.has_key(mamename):
 						for x in ("desc","manufacturer","year","genre","players","rating","size"):
-							if self.romInfos[data[1]].has_key(x): self.romInfosWidget[x].set_text(self.romInfos[data[1]][x])
+							if self.romInfos[mamename].has_key(x): self.romInfosWidget[x].set_text(self.romInfos[mamename][x])
 							else: self.romInfosWidget[x].set_text("--")
 					else:
 						for x in ("desc","manufacturer","year","genre","players","rating","size"):
 							self.romInfosWidget[x].set_text("--")
 
 				#Update specific configuration.
-				romPath = os.path.expanduser("~/.gngeo")
+				romSpecificConfFilePath = os.path.join(gngeoPath,"%s.cf" % mamename)
+				if os.path.isfile(romSpecificConfFilePath):
+					self.specconf['new'].hide()
+					self.specconf['properties'].show()
+					self.specconf['clear'].show()
+				else:
+					self.specconf['new'].show()
+					self.specconf['properties'].hide()
+					self.specconf['clear'].hide()
 
 			def setRomFromList(widget):
 				#Something selected?
@@ -208,7 +217,7 @@ class XGngeo:
 					else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
 
 				self.listDialog.destroy()
-				self.busyStatus = "off"
+				self.busyState = 0
 
 			def showAvailable(widget):
 				if widget.get_active():
@@ -238,7 +247,7 @@ class XGngeo:
 			scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
 			table.attach(scrolled_window,0,1,2,3)
 
-			#Graphical rom list generation.
+			#DA Rom list!
 			romrc = romrcfile.Romrc()
 			romrc.parsing(self.param['romrc'])
 			gamelist = romrc.getRomFullToMame()
@@ -266,9 +275,20 @@ class XGngeo:
 			# Mame name/preview image/info's/specific configuration. :P
 			#
 			self.rightside = gtk.VBox(spacing=4)
-			self.mamename = gtk.Label()
-			self.rightside.pack_start(self.mamename,False)
-			notebook = gtk.Notebook()
+			box2 = gtk.HBox()
+			self.widgets['mamename'] = gtk.Label("<b>-----</b>")
+			self.widgets['mamename'].set_use_markup(True)
+			box2.pack_start(self.widgets['mamename'])
+			self.avail_image = gtk.Image()
+			self.avail_image.set_from_stock(gtk.STOCK_NO,gtk.ICON_SIZE_MENU)
+			box2.pack_end(self.avail_image,False)
+			self.rightside.pack_start(box2)
+
+			noteisthere = 0
+			if(os.path.isdir(self.paramXGngeo["previewimagedir"]) or os.path.isfile(self.paramXGngeo["rominfoxml"])):
+				notebook = gtk.Notebook()
+				self.rightside.pack_start(notebook)
+				noteisthere = 1
 
 			#Preview images.
 			if(os.path.isdir(self.paramXGngeo["previewimagedir"])):
@@ -347,21 +367,21 @@ class XGngeo:
 
 				notebook.append_page(box2,gtk.Label(_("Informations")))
 
-			self.rightside.pack_start(notebook)
-
 			#Specific configuration.
 			self.specconf = {}
 			frame = gtk.Frame("Specific configuration:")
 			frame.set_label_align(0.5,0.5) #Center is better. :p
-			box2 = gtk.HBox()
+			box2 = (gtk.VBox(),gtk.HBox())[noteisthere]
 			self.specconf['new'] = gtk.Button(stock=gtk.STOCK_NEW)
+			self.specconf['new'].connect("clicked",self.config,1,0,1)
 			box2.pack_start(self.specconf['new'])
 			self.specconf['properties'] = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+			self.specconf['properties'].connect("clicked",self.config,1,0,1)
 			box2.pack_start(self.specconf['properties'])
 			self.specconf['clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
 			box2.pack_start(self.specconf['clear'])
 			frame.add(box2)
-			self.rightside.pack_end(frame,False)
+			self.rightside.pack_end(frame)
 
 			table.attach(self.rightside,1,2,0,3,gtk.SHRINK)
 			self.listDialog.vbox.pack_start(table)
@@ -376,6 +396,9 @@ class XGngeo:
 			self.listDialog.action_area.pack_start(button)
 
 			self.listDialog.show_all()
+			#Let's hide ourselves!
+			self.specconf['properties'].hide()
+			self.specconf['clear'].hide()
 			if self.paramXGngeo["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
 
 	def fileSelect(self,widget,title,folder,arg,dirselect=0):
@@ -495,8 +518,14 @@ class XGngeo:
 
 			self.aboutDialog.show_all()
 
-	def config(self,widget=None,type=0,firstrun=0):
-		if self.busyState!=1:
+	def config(self,widget=None,type=0,firstrun=0,romspecific=0):
+		if self.busyState!=1 or romspecific:
+			self.busy(1)
+			if romspecific:
+				if self.mamename not in self.configmamenames:
+					self.configmamenames.append(self.mamename)
+				else:	return None
+			
 			def setPathIcon(widget,image,dir=0):
 				"""We check whether the path written in the text entry
 				is an existing file or directory and change the icon
@@ -509,12 +538,12 @@ class XGngeo:
 
 				image.set_from_stock(stock,gtk.ICON_SIZE_MENU)
 
-			self.busy(1)
 			self.configDialog = gtk.Dialog()
 			if type in (0,5): self.configDialog.set_geometry_hints(min_width=350)
 
 			if firstrun==1: self.configDialog.connect("delete_event",self.quit)
-			else: self.configDialog.connect("destroy",self.destroy,self.configDialog,1)
+			elif romspecific: self.configDialog.connect("destroy",self.destroy,self.configDialog,4,self.mamename)
+			else: self.configDialog.connect("destroy",self.destroy,self.configDialog,5)
 
 			if type==0:
 				#
@@ -583,7 +612,8 @@ class XGngeo:
 				#
 				# Global emulation configuration.
 				#
-				self.configDialog.set_title(_("Global emulation configuration"))
+				if romspecific==0: self.configDialog.set_title(_("Global emulation configuration"))
+				else: self.configDialog.set_title(_("Specific emulation options for \"%s\"") % self.mamename)
 				notebook = gtk.Notebook()
 
 				#
@@ -1019,8 +1049,7 @@ class XGngeo:
 			if not firstrun:
 				#"Cancel" Button (except at the first time configuration).
 				button = gtk.Button(stock=gtk.STOCK_CANCEL)
-				if firstrun==1:	button.connect("clicked",self.quit)
-				else: button.connect("clicked",self.destroy,self.configDialog,5)
+				button.connect("clicked",self.destroy,self.configDialog)
 				self.configDialog.action_area.pack_end(button)
 
 			self.configDialog.show_all()
@@ -1114,7 +1143,7 @@ class XGngeo:
 		if state==1: self.window.set_state(gtk.STATE_INSENSITIVE); self.busyState=1
 		else: self.window.set_sensitive(True); self.busyState=0
 
-	def destroy(self,widget,condamned_widget,post_action=0):
+	def destroy(self,widget,condamned_widget,post_action=0,*args):
 		#Destroying the widget.
 		condamned_widget.destroy()
 
@@ -1122,7 +1151,8 @@ class XGngeo:
 		if post_action==1: self.busy(0) #Unbusy the main window
 		elif post_action==2: self.config(firstrun=1) #Configure Gngeo for the first time
 		elif post_action==3: self.main() #Display the main window
-		elif post_action==5: self.busy(0); self.statusbar.push(self.context_id,_("Configuration was not saved.")) #If Configuration cancelled
+		elif post_action==4: self.configmamenames.remove(args[0]) #Allow a specific Rom configuration window of being opened again. 
+		elif post_action==5: self.busy(0); self.statusbar.push(self.context_id,_("Configuration was not saved.")) #When configuration was cancelled.
 
 	def quit(self,*args):
 		if self.cmd and self.cmd.isAlive(): self.gngeoStop() #Stop any running Gngeo.
@@ -1132,7 +1162,6 @@ class XGngeo:
 	def __init__(self):
 		#Default values...
 		self.busyState=0
-		self.busyStatus = "off"
 		self.param = {
 			#PATH
 			"libglpath":"/usr/lib/libGL.so",
@@ -1170,6 +1199,8 @@ class XGngeo:
 			}
 		self.tempparam = {}
 		self.configwidgets = {}
+		self.widgets = {}
+		self.configmamenames = []
 		self.romPath = None
 		self.configfile = configfile.Configfile(gngeo=os.path.join(gngeoPath,"gngeorc"),xgngeo="data/xgngeo.conf")
 		self.history = history.History(path=os.path.join(gngeoPath,"history"))
