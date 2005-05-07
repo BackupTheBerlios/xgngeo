@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
 Copyleft 2003, 2004, 2005 Choplair-network
