@@ -102,19 +102,39 @@ class XGngeo:
 		self.cmd.join()
 
 		gtk.threads_enter() #Without this, it often bugs. :p
-		output = self.cmd.getOutput()
-		#Check if there was a f*ck then display a warning message if it's the case.
-		if not match(".{12} [[][\-]{62}[]]",output):
-			if output[-1:]=="\n": output=output[:-1] #Remove last line break if any.
+		
+		#Simple post-execution instruction.
+		self.historyAdd(self.romFullName,self.romPath) #Append Rom too history.
+		self.statusbar.push(self.context_id,_("Rom stopped (%s).") % self.romMameName) #Update status bar.
+
+		#-------------------------------------------------------------------------
+		# Introducing our exclusive and innovative system
+		# to catch and display error returned by Gngeo, aka :
+		#         `` DA XGNGEO CRAP DETECTOR " !
+		# Covererd by patents 2173965, 1004076, 5867297, etc.
+		#-------------------------------------------------------------------------
+		
+		# We'll check whether there was a f*ck then try to display
+		# the warning message returned by Gngeo if it's the case.
+		output = self.cmd.getOutput() #Raw ouput of Gngeo.
+		warning = "" #No warning for start!
+		#Parsing the output, looking for error...
+		if not match("\A(.{12} [[][\-]{62}[]])",output):
+			#It seems there was a problem to load the Rom (file not found, unknow Rom...).
+			warning = output #The warning message will be the full output.
+		elif string.find(output,"WARNING")>=0:
+			#Gngeo returned an explicit ``WARNING" label.
+			warning = output[string.find(output,"WARNING"):] #The warning message will start at the label position.
+		
+		if warning!="": #Oh dear! There was a f*ck! Let's display the warning dialog.
+			if warning[-1:]=="\n": warning=warning[:-1] #Remove last line break if any
+		
 			def callback(widget,*args): widget.destroy()
 			dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
-			dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),output))
+			dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),warning))
 			dialog.connect_object("response",callback,dialog)
 			dialog.show_all()
-
-		#The Rom was successfully exectuted, so we can append it to the ``History" menu.
-		self.historyAdd(self.romFullName,self.romPath)
-		self.statusbar.push(self.context_id,_("Rom stopped."))
+		#-------------------------------------------------------------------------
 
 		#Perform some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(True)
@@ -122,9 +142,24 @@ class XGngeo:
 		self.stopMenu_item.set_sensitive(False)
 		self.execMenu_item.set_sensitive(True)
 		gtk.threads_leave()
+	
+	def romLoadingInProgress(self):
+		"""Graphicaly indicate the user that, although he
+		see nothing, the program is actually working, trying
+		to load the Rom."""
+		import time
+		message = _("Starting Rom (%s)") % self.romMameName
+		for x in range(42):
+			if not self.cmd.isAlive(): break
+			gtk.threads_enter()
+			self.statusbar.push(self.context_id,("%s%s" % (message,("."*x))))
+			gtk.threads_leave()
+			time.sleep(0.5)
 
 	def gngeoExec(self,widget=None):
-		self.statusbar.push(self.context_id,_("Starting Rom..."))
+		Timer(0,self.romLoadingInProgress).start()
+				
+		#Perform some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
@@ -138,7 +173,8 @@ class XGngeo:
 		Timer(0,self.gngeoGetOutput).start()
 
 	def gngeoStop(self,widget=None):
-		#Kill Gngeo if it is still running.
+		"""``Close you eyes and prey, Gngeo!"
+		This function kills gngeo if it is alive."""
 		if self.cmd.isAlive():
 			Timer(0,os.system,("killall -9 '%s'" % self.paramXGngeo['gngeopath'],)).start()
 
@@ -206,6 +242,7 @@ class XGngeo:
 					#Setting important variables.
 					self.romPath = os.path.join(self.param['rompath'],"%s.zip" % self.romFromList) #Note that, because of a Gngeo disfuntionment, we indicate the full rom path rather than simply its Mame name. 
 					self.romFullName = self.romFromListName
+					self.romMameName = self.romFromList
 
 					#Doing post-selection actions.
 					self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
@@ -424,17 +461,15 @@ class XGngeo:
 		dialog.run()
 
 	def setPathFromRecent(self,widget,fullname,path):
-		#Getting a hypothetic Mame name.
-		if path[-4:]==".zip": mamename = os.path.basename(path)[:-4]
-		else: mamename = os.path.basename(path)
-
 		#Setting important variables.
 		self.romPath = path
 		self.romFullName = fullname
+		if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
+		else: self.romMameName = os.path.basename(path)
 
 		#Doing post-selection actions.
 		self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
-		self.statusbar.push(self.context_id,(_("Rom: \"%s\" (%s)") % (fullname,mamename))) #Update Status message
+		self.statusbar.push(self.context_id,(_("Rom: \"%s\" (%s)") % (self.romFullName,self.romMameName))) #Update Status message
 		if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 		else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
 
@@ -446,11 +481,7 @@ class XGngeo:
 				path = dialog.get_filename()
 				#Does it exist?
 				if os.path.isfile(path):
-					#Getting a hypothetic Mame name.
-					if path[-4:]==".zip": mamename = os.path.basename(path)[:-4]
-					else: mamename = os.path.basename(path)
-
-					#Tring to resolve Rom full name.
+					#Trying to resolve Rom full name.
 					romrc = romrcfile.Romrc()
 					romrc.parsing(self.param['romrc'])
 					dict = romrc.getRomMameToFull()
@@ -460,6 +491,8 @@ class XGngeo:
 					#Setting important variables.
 					self.romPath = path
 					self.romFullName = fullname
+					if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
+					else: self.romMameName = os.path.basename(path)
 
 					#Doing post-selection actions.
 					self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
@@ -619,7 +652,8 @@ class XGngeo:
 
 			elif type in (1,2,3,4):
 				#By default the parameters of these sections will be set with the values of the previously saved global emulation options.
-				temp_param = self.configfile.getParams()[0]
+				temp_param = {}
+				for key,val in self.param.items(): temp_param[key] = val
 				if romspecific:
 					#Replace global params by (hypotheticaly) previously saved specific rom ones.
 					for key,val in self.configfile.getParams(self.mamename).items():
@@ -667,12 +701,17 @@ class XGngeo:
 				frame.add(self.configwidgets['scale'])
 				table.attach(frame,2,3,0,2)
 
-				box.pack_start(table)
-
-				#320x224 screen output.
-				self.configwidgets['screen320'] = gtk.CheckButton(_("Use a 320x224 screen (instead of 304x224)"))
+				#320x224 window size.
+				self.configwidgets['screen320'] = gtk.CheckButton(_("Larger screen (windowed mode)"))
 				if temp_param["screen320"]=="true": self.configwidgets['screen320'].set_active(True)
-				box.pack_start(self.configwidgets['screen320'])
+				table.attach(self.configwidgets['screen320'],0,2,2,3)
+
+				#Raster effect.
+				self.configwidgets['raster'] = gtk.CheckButton(_("Raster effect"))
+				if temp_param["raster"]=="true": self.configwidgets['raster'].set_active(True)
+				table.attach(self.configwidgets['raster'],2,3,2,3)
+
+				box.pack_start(table)
 
 				# BLITTER
 				frame = gtk.Frame(_("Blitter:"))
@@ -1117,6 +1156,7 @@ class XGngeo:
 			temp_param["showfps"] = ("false","true")[self.configwidgets['showfps'].get_active()] #autoframeskip
 			temp_param["scale"] = int(self.configwidgets['scale'].get_value()) #scale
 			temp_param["screen320"] = ("false","true")[self.configwidgets['screen320'].get_active()] #screen320
+			temp_param["raster"] = ("false","true")[self.configwidgets['raster'].get_active()] #raster
 			temp_param["blitter"] = self.combo_params['blitter'][self.configwidgets['blitter'].get_active()] #blitter
 			temp_param["effect"] = self.combo_params['effect'][self.configwidgets['effect'].get_active()] #effect
 			temp_param["sound"] = ("false","true")[self.configwidgets['sound'].get_active()] #sound
@@ -1141,7 +1181,6 @@ class XGngeo:
 			for x in keys_list: temp_param["p2key"] += self.configwidgets['p2key'][x].get_label()+","
 			temp_param["p2key"] = temp_param["p2key"][:-1] #Remove the last ",".
 
-			print temp_param
 			letsWrite = 1 #Let's write!
 
 		elif type==5:
@@ -1213,6 +1252,7 @@ class XGngeo:
 			"autoframeskip":"true",
 			"scale":1,
 			"screen320":"true",
+			"raster":"false",
 			#AUDIO / JOYSTICK
 			"sound":"true",
 			"samplerate":"22050",
