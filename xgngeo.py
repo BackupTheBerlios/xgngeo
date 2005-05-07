@@ -534,7 +534,7 @@ class XGngeo:
 			if line:	gngeoversion = line.group(1)
 			else:	gngeoversion = "&lt;=0.5.9a"
 
-			label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s\n</span>%s\nCopyleft 2003, 2004, 2005 Choplair-network." % (_("XGngeo: a frontend for Gngeo :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % gngeoversion, _("This program is released under the GNU GPL license.")))
+			label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s\n</span>%s\nCopyleft 2003, 2004, 2005 Choplair-network." % (_("XGngeo: a frontend for Gngeo. :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % gngeoversion, _("This program is released under the GNU GPL license.")))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_use_markup(True)
 			self.aboutDialog.vbox.pack_start(label)
