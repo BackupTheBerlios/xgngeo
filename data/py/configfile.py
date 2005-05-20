@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 from string import split
+from re import match
 import os.path
 
 class Configfile:
@@ -44,10 +45,9 @@ XGngeo's configuration file uses the same syntax than Gngeo's."""
 					content = file.readlines() #Read
 					file.close() #And close :p
 					for line in content:
-						line.strip()
-						if line[0]!="#" and line!="\n":
-							key,val = split(line)
-							dict[i][key.strip()] = val.strip()
+						plop = match("(\S*) (.*)",line)
+						if plop: #Append Rom information to the dicts.
+							dict[i][plop.group(1)] = plop.group(2)
 				i+=1
 		else:
 			#Parsing specific rom configuration file.
@@ -58,10 +58,9 @@ XGngeo's configuration file uses the same syntax than Gngeo's."""
 				content = file.readlines() #Read
 				file.close() #And close :p
 				for line in content:
-					line.strip()
-					if line[0]!="#" and line!="\n":
-						key,val = split(line)
-						dict[key.strip()] = val.strip()
+					plop = match("(\S*) (.*)",line)
+					if plop: #Append Rom information to the dicts.
+						dict[plop.group(1)] = plop.group(2)
 
 		return dict
 
