@@ -230,7 +230,7 @@ Here comes the people involved in the making of this program since the beginning
 @item @strong{Pachilor} (@email{pachilor[AT]choplair.org}): assistant programmer.
 @item @strong{Shilon} (@email{sheng.long.gradilla[AT]gmail.com}): Spanish translator.
 @item @strong{Matma} (@email{matma[AT]irc.pl}): Polish translator.
-@item @strong{Matheus Villela} (@email{matheusvillela[AT]list.ru}): Brazilian translator.
+@item @strong{Matheus Villela} (@email{villela[AT]inf.ufsc.br}): Brazilian translator.
 @item @strong{Paulo Eduardo Chiva} (@email{paulo.chiva[AT]ig.com.br}): previous Brazilian translator.
 @item @strong{Ms. Marie-Claire} (@email{marie-claire[AT]choplair.org}): documentation editor.
 @item @strong{Hori} (@email{marie-claire[AT]choplair.org}): English spelling corrector.

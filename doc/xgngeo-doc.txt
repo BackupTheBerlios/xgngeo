@@ -435,8 +435,7 @@ involved in the making of this program since the beginning:
 
    - *Matma* (<matma[AT]irc.pl>): Polish translator.
 
-   - *Matheus Villela* (<matheusvillela[AT]list.ru>): Brazilian
-     translator.
+   - *Matheus Villela* (<villela[AT]inf.ufsc.br>): Brazilian translator.
 
    - *Paulo Eduardo Chiva* (<paulo.chiva[AT]ig.com.br>): previous
      Brazilian translator.
