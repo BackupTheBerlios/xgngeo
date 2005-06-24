@@ -6,10 +6,10 @@ __  __  ____  _   _   ____  ____   __
 
 XGngeo - README
 
-  ``XGngeo" is a GTK2 frontend written in Python for ``Gngeo", 
+  ``XGngeo" is a GTK2 frontend written in Python for ``Gngeo",
 a Neo Geo emulator for Unix. XGngeo is free software released
-under the GNU GPL license. Please see `LICENSE.txt' for more
-information.
+under the terms of the GNU GPL license. Please see the file
+`LICENSE.txt' for more information.
 
   To launch the program, simply type: `python xgngeo.py' in
 the XGngeo directory.

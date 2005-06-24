@@ -1,6 +1,7 @@
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
 Copyleft 2003, 2004, 2005 Choplair-network
+$id: $
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,11 +17,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
-import os, re
+import os
+from re import match
 
 class History:
-	def __init__(self,path):
-		self.path = path
+	def __init__(self):
+		self.path = os.path.expanduser("~/.gngeo/history")
 		self.list = []
 
 	def getList(self,size):
@@ -30,8 +32,8 @@ class History:
 			file.close() #And close
 
 			for line in content[:size]:
-				match = re.match('"(.*)" (.*)',line)
-				if match: self.list.append((match.group(1),match.group(2)))
+				plop = match('"(.*)" (.*)',line)
+				if plop: self.list.append((plop.group(1),plop.group(2)))
 
 		return self.list
 

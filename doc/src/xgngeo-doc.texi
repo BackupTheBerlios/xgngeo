@@ -1,9 +1,8 @@
 \input texinfo
-@setfilename xgngeo.texi
 @settitle XGngeo Documentation
 
 @copying
-Copyleft 2003,2004 Choplair-network.
+Copyleft 2003,2004,2005 Choplair-network.
 @quotation
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyleft
@@ -11,18 +10,19 @@ notice and this notice are preserved.
 @end quotation
 @end copying
 
-@set doc-version 15
-@set doc-date 2004-04-05
+@set xgngeo-version 15
+@set subtitle Version @value{xgngeo-version}, released on 2005-06-XX.
 
 @titlepage
-@title XGngeo's documentation
-@subtitle Version @value{doc-version} - @value{doc-date} 
+@title XGngeo documentation
+@subtitle @value{subtitle}
 @author The Choplair-network
 @insertcopying
 @end titlepage
 
 @ifplaintext
 @example
+GNU/Linux Neo Geo emulation made easy!
 __  __  ____  _   _   ____  ____   __
 \ \/ / / ___|| \ | | / ___||  __| /  \
  \\// / / ___|  \| |/ / ___| |_  | /\ |
@@ -30,147 +30,212 @@ __  __  ____  _   _   ____  ____   __
 /_/\_\ \___/ |_| \_| \___/ |____| \__/
 @end example
 @* XGngeo - DOCUMENTATION @*
-@* Version @value{doc-version} - @value{doc-date} @*
+@* @value{subtitle} @*
 @insertcopying
 @end ifplaintext
 
 @contents
 
 @chapter Introduction
-@strong{XGngeo} is a frontend (@acronym{GUI}) for @strong{Gngeo} which is a Neo Geo emulator for GNU/Linux. Both are free software released under the @emph{GNU GPL license}.
-XGngeo is written in Python and uses the PyGTK library to provide a user-friendly interface!@*
-XGngeo is developed by the @strong{Choplair-network}, lastest version/information should be available on our website: @uref{http://choplair.tuxfamily.org/}.
+This is the official documentation for @strong{XGngeo}, a frontend (graphical user interface) for @w{@strong{Gngeo}}, a command line @strong{Neo Geo} (arcade game playing system made by @acronym{SNK}) emulator for the @emph{GNU/Linux} operating system (and may be some other Unices) with high speed performance and many configurable options. On top of all, both are free/libre softwares released under the terms of the @emph{GNU General Public License}.
 @sp 1
-This documentation provides up to date informations and a @emph{Newbies Guide} about how to get started with XGngeo. It will grow (I hope...) with each new version.
+Gngeo is written in @emph{Python} and uses the @emph{PyGTK} library to provide a practical and user-friendly @emph{GTK+} interface! This program development is conducted by the @strong{Choplair-network} crew, the lastest version and informations about XGngeo are available from our website (see chapter 4 section 1).
+@sp 1
+Though we are not directly taking part in the Gngeo development (and are not the official frontend too), we follow it closely and try to implement all its functionalities in the most correct way possible, in accordance with the author (Mathieu Peponas) who gently encourages interactions between frontends and its emulator.
+@sp 1
+This paper, which is supposed to grow up with each new XGngeo release, provides a sort of @emph{Newbie Guide} to get started with easy Neo Geo emulation combining these two programs, and also some details about this frontend's features and its functioning.
 
-@chapter Get started
-This is the complete procedure about how to get XGngeo fully functional from scratch!
+@chapter Getting started
+This is the complete procedure about how to get the dynamic combination of Gngeo and XGngeo fully functional from scratch, step by step!
 
-@section Gngeo
-XGngeo is a frontend for Gngeo, so you need this one!@*
-Download the last stable Gngeo package from @uref{http://m.peponas.free.fr/gngeo/}.
-Unpack it, configure, then start compilation... If the compilation fails, take a look at the @sc{Help} chapter. Otherwise, you may now install it... 
+@section Prerequisites
 
-@section Other requirements
-In order to get XGngeo running, you need the following software installed on your computer:
+@subsection Emulator and Bios
+XGngeo is a frontend for Gngeo, so this one must be installed somewhere on your computer! You can download the last version from its home page (see chapter 4 section 1). Although the emulator is available in various binary formats (deb, @acronym{RPM}...), keep in mind that these packages may be older than the classic source code archive. Anyway, consider that any 0.6.x version or more of Gngeo is fine for being used under XGngeo.
+@sp 1
+Before installing Gngeo, you have to check for the some dependencies: Gngeo graphical rendering is based over the @strong{@acronym{SDL}} (@cite{Simple Directmedia Layer}) library (version 1.2 or more), which is thus required, with @strong{OpenGL} headers for its OpenGL blitter. It also needs @strong{zlib} to extract Rom zip archives. Optionaly, you may install the @strong{@acronym{NASM}} package (version 0.98 or more) in order to provide assembler optimisations. Their home page adress, for information purpose, are given on chapter 4 section 1.
+@sp 1
+Once this is okay, you can perform the installation of Gngeo, in the way corresponding to the format it was grabed into. If, for some reasons, the installation would not succed, you may ask for help to the Gngeo mailling list (chapter 4 section 2).
+@sp 1
+To be able to launch Roms, Gngeo will need a Neo Geo Bios. It is an archive which consists of the following files: @file{neo-geo.rom}, @file{ng-sfix.rom} and @file{ng-lo.rom}. They have to be put into the same directory as your Roms (the so called @cite{Rom and Bios directory}!).
+
+@subsection Other requirements
+Especially for XGngeo, you also need the following softwares to be installed:
 
 @itemize @minus
-@item The @strong{Python} programming language (version 2.2 or more) - @uref{http://www.python.org/};
-@item The @strong{PyGTK} library (version 1.99 or more) - @uref{http://www.pygtk.org/}.
+@item The @strong{Python} programming language: version 2.2 or more.
+@item The @strong{Gimp Tool Kit} aka @acronym{GTK+}: version 2.6 or more.
+@item The @strong{PyGTK} library: version 2.6 or more.
 @end itemize
 
-@section Neo Geo bios
-To be able to launch roms, Gngeo needs a Neo Geo bios which have to be put (as unpackted format) in your Rom's directory.
+That's perhaps already the case. Otherwise, you'll find the links to their home page on chapter 4 section 1.
 
-@section Run XGngeo
-It's time! Your are now ready to taste XGngeo. ^^@*
-Download the last XGngeo package from the Choplair-network homepage: @uref{http://www.choplair.org/}.@*
-Unpack it then enter in the @file{xgngeo-@emph{XX}} directory (where @emph{XX} is the XGngeo version number).
-XGngeo doesn't need any compilation phase. To launch it, simply type: @command{python xgngeo.py}.
-If you get an error doing that, please see the @sc{Help} chapter.
-
-@section Configuration
-Because it's the first time you are using Gngeo, XGngeo invites you to set up the configuration.
-Press @sc{Ok} then the configuration window appears... You can let default values if you are in a rush, the only params that you must define are @sc{Path to romrc} and @sc{Roms and bios directory}. Once you have finished, press @sc{Save}.@*
-Of course the configuration can be modified at any time using the same configuration window.
-
-@chapter Focus on...
-
-@section Configuration files
-XGngeo's configuration interface actually manages options of 2 configuration files in the same time. Both use the same syntax to set values at variables.
-
-@subsection @file{gngeorc}
-This is the Gngeo's configuration file, situated in the @file{~/gngeo/} directory. It lets you customize many params of the emulator (graphic, sound, etc.), some are very important (path to the @file{romrc} file, etc.).@*
-If at startup XGngeo doesn't find the @file{gngeorc} file, it invites you to create it through its main configuration window.
-
-@subsection @file{xgngeo.conf}
-This is the XGngeo's own configuration file, situated in the @file{data/} directory which is in the XGngeo's. This second file is less important, there are only options related to XGngeo (size of history, preview images' directory, etc.).
-That's why most of these options are in the @sc{Other} section of the main configuration window. 
-
-@section Rom list add-ons
-These are optional features which give you a comfortable selection while selecting any game in the Rom list. They can be configured in the @sc{Other} section of the main configuration window.
-
-@subsection Preview images
-XGngeo is able to display a preview image of any of the games selected in the list.@*
-It is fully compatible with the preview images used by other frontends such @acronym{GGF}.@*
-A preview images pack archive, which will have to be unpacked somewhere, can be easily obtained from Gngeo's or Choplair-network's homepage...
-
-@subsection Rom infos
-@acronym{GGF}'s developpers have created an @acronym{XML} file containing information for each Rom (description, manufacturer, year, etc.).@*
-This is the perfect addition to preview images and it's fully supported by XGngeo! 
-
-@section Keys configuration
-XGngeo has a Keys configurator which is in a seperate window than the main configuration window. It works for the 2 players, but manages only keyboard.
-To modify a key, click on the corresponding button then push your new key.
+@section Getting and launching XGngeo
+It's show time! Your are now ready to taste the power of XGngeo. ^^
 @sp 1
-@sc{Warning:} because Gngeo (@acronym{SDL}'s) and XGngeo (@acronym{GTK}'s) keymaps are different, some special keys might be not recognized by XGngeo. If it occurs, please tell us (see the @sc{Help} chapter)!
+If you didn't obtain this documentation as a part of a XGngeo package, you have to get one! You'll find download links for the last version on the Choplair-network homepage (see chapter 4 section 1). Thereafter, unpack the archive, then move to the directory which have just been created (something like @file{xgngeo-@emph{XX}} where @emph{XX} is the version number).
+@sp 1
+@strong{At this time, we @emph{do} assume that you have installed everything indicated above.} Since Python code is interpreted, XGngeo doesn't require any compilation phase. To launch it, simply enter: @command{python xgngeo.py}. If you get an error doing so, please refer to the chapter 4 section 2.
+
+@section First time important path configuration
+At the beggining, XGngeo should invite you to set up some important parameters that are required to build up basic configuration files with two important options required for a working emulation. The first one, the path to your @file{romrc}, is set with the default value. Actually, you would have just to tell the directory where are located your Neo Geo Roms and Bios.
+@sp 1
+Once you have finished, press @sc{Save}. Of course, these parameters can be modified at any time thereafter, using the same configuration window.
+@sp 1
+If for some reason you want to pass out this important path check at boot time, it is possible by just giving @command{--nobootcheck} as a command line parameter. But this is definitively @strong{not} recommanded!
+
+@section Main window
+Unless you obtained a warning dialog because some parameters looked invalid, the XGngeo main window should appear. At that time, you may fall in love with the marvellous logo, but, actually, your attention should go to the menu bar, on the upper part, which you'll be able to master everything with!
+
+@subsection Menu bar
+It is formerly composed of the @sc{File} menu, which permit you do simple operations such as loading Rom (from the Rom list, a file chooser, or a recent Rom history), starting or stopping it, and exiting the program.
+@sp 1
+Next to that is, comes the @sc{Configuration} menu, from where you can modify the paramaters which you entered at the XGngeo first load and also some other little options, mostly related to XGngeo's own behaviour. But the most interesting here is the @sc{Global emulation} sub-menu which allow you to set the default Gngeo emulation configuration (graphic, audio, keys, etc.) for every game (you can also set specific game configuration). These emulation configuration panels are detailled in the section 2 of the next chapter.
+@sp 1
+At last, on the very right-hand, from the @sc{Info} menu you can look at the credits or read again an again the holy GNU General Public Licence which XGngeo is released under!
+
+@chapter Details
+
+@section Used configuration files
+
+@subsection Main configuration files
+XGngeo's configuration interface actually manages options of 2 main configuration files at the same time. Both using the same syntax, which is just lines of a variable name followed after a space by its corresponding value. :p
+
+@subsubsection @file{gngeorc}
+This is the Gngeo's global configuration file, situated in the @file{~/gngeo/} directory. It lets you customize many params of the emulator, whom some are highly important (path to the @file{romrc} file, etc.), which will be the default for any Rom.
+@sp 1
+If at startup XGngeo doesn't find the @file{gngeorc} file, it invites you to create it by asking you some required parameters (see above).
+
+@subsubsection @file{xgngeo.conf}
+This is the XGngeo's own configuration file, situated in the @file{data/} directory which is in the XGngeo's. This second file is less important, there are only options related to XGngeo (size of history, preview images' directory, etc.).
+That's why most of these options are modifiable in the @sc{Other thing} section.
+
+@subsection Rom-specific configuration files
+Since its version 0.6, Gngeo is able to perform emulation in a specific way for each Rom.
+@sp 1
+That's quite simple: before loading the Rom, the emulator looks for a file, in the @file{~/gngeo/} directory, which is named in the form of @file{@emph{mame_name}.cf} (where @emph{mame_name} is the Mame name of the game). If it does exist, the emulation parameters from are taken from, without taking care of the ones set in the @file{gngeorc}, which is used otherwise. The syntax for these files is still the same.
+@sp 1
+Rom-specific configuration files can be easily handled through XGngeo, as detailed in the next section...
+
+@subsection Rom driver file
+
+@subsection History file
+
+@section Particular windows
+
+@subsection Rom list
+
+There are also optional features (add-on) which bring you a more comfortable game selection in that Rom list window.
+
+@subsubsection Preview images (add-on)
+XGngeo is able to display a preview image of any of the games selected in the list.
+It is fully compatible with the preview images used by other frontends such as @strong{@acronym{GGF}} (@cite{GnGeo Frontend}), which implemented it formerly.
+@sp 1
+Thus, a preview image pack archive can be easily obtained from the Gngeo, @acronym{GGF} or Choplair-network home page.
+You will need to unpack them somewhere, then to indicate the directory where they are located in the @sc{Other thing configuration} window, in order to get it working instantly!
+
+@subsubsection Rom informations (add-on)
+@acronym{GGF}'s developpers created an @acronym{XML} file containing informations for each Rom (description, manufacturer, year, etc.).
+This is the perfect addition to preview images and it's fully supported by XGngeo!
+Moreover, because of the small size of that file, it is already included in our packages and this option is activated by default.
+
+@subsection Global/Rom-specific emulation configuration panels
+
+The options which can be set in global or rom-specific emulation configuration window are exactly the same. As XGngeo provides graphical management for a lot of Gngeo parameters, they have been divided in serveral panel according to which emulation domain they are dealing with, for the sake of clarity.
+
+@subsubsection Keyboard panel
+XGngeo has a keyboard configurator which permits you to easily customize the 2 player controls. To modify a key, just click on the corresponding button then push your new key.
+@sp 1
+@strong{Warning:} since Gngeo (@acronym{SDL}'s) and XGngeo (@acronym{GTK}'s) keymaps are different, some special keys might be not recognized by XGngeo. If it occurs, please tell us (refer to the chapter 2 section 2)!
 
 @section Internationalization
-XGngeo is multilingual! Translations are available in these languages:
+XGngeo is multilingual! Translations are currently available in the following languages:
 
 @c ### Please keep an alphabetical order. ###
 @itemize @minus
 @item English (default)
 @item French
-@item Polish
-@item Portuguese (of Brazil)
+@item Polish*
+@item Portuguese of Brazil*
 @item Spanish
 @end itemize
 
-@subsection New translation
-If you want to make a translation of XGngeo in your language, follow these generic instructions:
+@strong{Note:} the translations of a language followed by an asterisk, are, unfortunately, not up-to-date with the current release original strings. Don't hesitate to update them! You can even make new translation, just look bellow...
+
+@subsection Making new translation
+If you want to perform a new translation of XGngeo into your language, follow these generic instructions:
 
 @enumerate
-@item Get the lastest CVS version by doing the following command: @* @w{@command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo checkout xgngeo}}
+@item Get the current XGngeo developement version from its CVS by doing the following command (on a single line):@*
+@command{cvs -z3 -d:pserver:anonymous@@cvs.xgngeo.berlios.de:/cvsroot/xgngeo checkout xgngeo}
 @item Go to the @file{lang/} directory which is in @file{xgngeo/data/}.
-@item Create a directory named as your language's code (returned by @command{echo $LANG}). See @uref{http://www.gnu.org/software/gettext/manual/html_chapter/gettext_15.html#SEC221} for a exhaustive list.
+@item Create a directory named like your language code (usually the one returned by @command{echo $LANG}).
+See @uref{http://www.gnu.org/software/gettext/manual/html_chapter/@*gettext_15.html#SEC221} for an exhaustive list.
 @item Into this one, create a new directory named @file{LC_MESSAGES}.
-@item Go back to the @file{lang/} directory then open the translation template @file{xgngeo.pot} with your favorite translation tool (KBabel, GTranslator, etc.).
-@item Once you've finished translating. Save it as @file{@emph{XX}/LC_MESSAGES/xgngeo.po} (where @emph{XX} is your language's code).
+@item Go back to the @file{lang/} directory then open the translation template @file{xgngeo.pot} with your favorite translation tool (KBabel, GTranslator, Poedit, etc.).
+@item Once you've finished translating. Save it as @file{@emph{XX}/LC_MESSAGES/xgngeo.po} (where @emph{XX} is your language code).
 @item Go to @file{@emph{XX}/LC_MESSAGES/} then do: @command{msgfmt xgngeo.po -o xgngeo.mo}. This will create a binary file (@file{xgngeo.mo}) readable by the program.
-@item Launch XGngeo which is now translated in your language!
+@item Launch XGngeo, which is now translated in your language!
 @end enumerate
 
-Every time you update your translation, don't forget to repeat step number 7. When it's Ok, send your `.po' file to: @email{choplair[AT]fr.st}.
+Every time you update your translation, don't forget to repeat step number 7. When you feel it's perfect, you may send your @cite{po} file to @email{chopinou[AT]choplair.org}.
 
-@chapter Help!
+@chapter Web links and ML
 
-If you get any problems using XGngeo or Gngeo, the best way is to ask for help in the Gngeo's mailling list:
+@section Home pages
 
-@itemize @minus
-@item @sc{Suscribtion:} send a blank email with the subject @w{@strong{subscribe}} to @email{gngeo-request[AT]ml.free.fr}.
-@item @sc{Posting:} send your messages to @email{gngeo[AT]ml.free.fr}.
-@end itemize
-
-@chapter Credit
-XGngeo is a project of the Choplair-network. Feel free to contribute to it!
+@subsection The great duo
 
 @itemize @minus
-@item @sc{Programming}
-
-@itemize @bullet
-@item Main coder: @strong{Choplair} @email{choplair[AT]fr.st}
-@item Assisted by: @strong{Pachilor} @email{pachilor[AT]yahoo.co.jp}
+@item Gngeo homepage: @uref{http://m.peponas.free.fr/gngeo/}.
+@item Choplair-network home page (for XGngeo): @uref{http://www.choplair.org/}.
 @end itemize
 
-@item @sc{Internationalization}
+@subsection Their dependencies
 
-@c ### Please keep an alphabetical order. ###
-@itemize @bullet
-@item French: @strong{Choplair} and @strong{Fragnatik}
-@item Polish: @strong{Matma} @email{matmaw[AT]poczta.onet.pl}
-@item Portuguese (of Brazil): @strong{Matheus Villela} @email{matheusvillela[AT]list.ru}
-@item Spanish: @strong{Shilon} @email{slg[AT]bajoo.net}
+@itemize @minus
+@item @acronym{SDL}: @uref{http://www.libsdsl.org/}.
+@item Zlib: @uref{http://www.zlib.org/}.
+@item @acronym{NASM} (optional): @uref{http://nasm.2y.net/}.
+@item Python: @uref{http://www.python.org/}.
+@item @acronym{GTK+}: @uref{http://www.gtk.org/}.
+@item PyGTK: @uref{http://www.pygtk.org/}.
 @end itemize
 
-@item @sc{Documentation}
+@subsection Other
 
-@itemize @bullet
-@item Draft: @strong{Pachilor}
-@item Correction: @strong{Hori} (the wonderful!) @email{x_psyence[AT]hotmail.com}
-@end itemize
+@itemize @minus
+@item Gngeo Brazil (Brazilian website about Gngeo): @uref{http://www.gngeo.hpg.ig.com.br/}.
+@item GGF (previous frontend) homepage: @uref{http://gngeofrontend.sourceforge.net/}.
 @end itemize
 
-Special thanks to the Gngeo's author: @strong{Mathieu Peponas}. ^_~
+@section Gngeo mailling list
+
+If you get any problem using Gngeo, directly or through a frontend such as XGngeo, the best way is certainly to ask for help on the official Gngeo mailling list, where you should get quick and effective answers from its little community, including XGngeo developers.@*
+Here is how to:
+
+@itemize @minus
+@item @strong{Suscribe:} send a blank email, with the word @cite{subscribe} as a subject, to @email{gngeo-request[AT]ml.free.fr}. Note that prior subscribtion is mandatory to post any new message.
+@item @strong{Post:} send your messages to @email{gngeo[AT]ml.free.fr}.
+@end itemize
+
+By the way, list archives are available on the web at the following address: @uref{http://www.mail-archive.com/gngeo@@ml.free.fr/}. You would have better to check out that your problem hasn't been already discussed and solved before posting a new help message.
+
+@chapter Credits
+XGngeo forms a part of the projects conducted by the Choplair-network, an independant libre software development crew.
+Here comes the people involved in the making of this program since the beginning:
+
+@itemize @minus
+@item @strong{Choplair} (@email{chopinou[AT]choplair.org}): development director and main programmer, French translator.
+@item @strong{Pachilor} (@email{pachilor[AT]choplair.org}): assistant programmer.
+@item @strong{Shilon} (@email{sheng.long.gradilla[AT]gmail.com}): Spanish translator.
+@item @strong{Matma} (@email{matma[AT]irc.pl}): Polish translator.
+@item @strong{Matheus Villela} (@email{matheusvillela[AT]list.ru}): Brazilian translator.
+@item @strong{Paulo Eduardo Chiva} (@email{paulo.chiva[AT]ig.com.br}): previous Brazilian translator.
+@item @strong{Ms. Marie-Claire} (@email{marie-claire[AT]choplair.org}): documentation editor.
+@item @strong{Hori} (@email{marie-claire[AT]choplair.org}): English spelling corrector.
+@end itemize
+
+Special thanks to the Gngeo author, @strong{Mathieu Peponas}, for writing such a great emulator!
 
 @bye

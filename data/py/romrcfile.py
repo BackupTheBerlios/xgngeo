@@ -1,6 +1,7 @@
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
 Copyleft 2003, 2004, 2005 Choplair-network
+$id: $
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,15 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 from re import match
 
 class Romrc:
-	def parsing(self,romrc_path):
-		"""Parse the `romrc' file to generate a Rom dictionary
-		connecting the Rom MAME name to their full name and
-		another dictionary with the inverse."""
+	def parsing(self,path):
+		"""Parse the Rom driver file (`romrc') to generate a Rom
+		dictionary connecting the Rom MAME name to their full name
+		and a second dictionary doing the contrary."""
 
 		self.romFullToMame = {}
 		self.romMameToFull = {}
 
-		file = open(romrc_path,"r")
+		file = open(path,"r")
 		for line in file.readlines():
 			plop = match("game (\S*) \S* \"(.*)\"",line)
 			if plop:
@@ -35,7 +36,7 @@ class Romrc:
 				self.romMameToFull[plop.group(1)] = plop.group(2)
 				self.romFullToMame[plop.group(2)] = plop.group(1)
 		file.close()
-	
+
 	def getRomMameToFull(self): return self.romMameToFull
 
 	def getRomFullToMame(self): return self.romFullToMame

@@ -1,6 +1,7 @@
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
-Copyleft 2003 Choplair-network
+Copyleft 2003,2004,2005 Choplair-network
+$id: $
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,7 +27,7 @@ class XmlHandler(xml.sax.handler.ContentHandler):
 		self.record = 0
 
 	def startElement(self, name, attributes):
-		if name in [u"roms",u"info"]: self.record = 0 #Do nothing. :p
+		if name in [u"rows",u"info"]: self.record = 0 #Do nothing. :p
 		else:
 			if name=="set": self.newromset = 1 #Tell that we are running into a new rom set!
 			else: self.newromset = 0 #There is no new rom set...
