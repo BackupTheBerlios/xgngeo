@@ -68,8 +68,8 @@ as the `gngeorc'."""
 			"system":"arcade",
 			"country":"europe",
 			},{ #XGngeo default.
-			"autoexecrom":"false",
-			"gngeopath":"/usr/local/bin/gngeo",
+			"autoexecrom":"true",
+			"gngeopath":"gngeo",
 			"historysize":5,
 			"previewimagedir":"data/previewimages/",
 			"rominfoxml":"data/rominfos.xml",
