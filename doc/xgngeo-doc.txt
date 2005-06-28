@@ -1,4 +1,4 @@
-GNU/Linux Neo Geo emulation made easy!
+t GNU/Linux Neo Geo emulation made easy!
 __  __  ____  _   _   ____  ____   __
 \ \/ / / ___|| \ | | / ___||  __| /  \
  \\// / / ___|  \| |/ / ___| |_  | /\ |

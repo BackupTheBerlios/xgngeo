@@ -121,9 +121,10 @@ class XGngeo:
 			error = "" #At least, no error for start!
 			#Parsing the output, line per line, looking for error...
 			for line in split(output,"\n"):
-				if not match("\A(.{12} [[][\-]{62}[]{0,1}])",line):
+				if not match(".{12} [[][\-|\*]{62}[]]?",line) and not match("^(Update sai) .*",line):
 					#The line contains a unexpected message, certainly an error one, so we record it.
 					error += line
+					print line
 	
 			if error!="": #Oh dear! There was a f*ck! Let's display the error dialog.
 				def callback(widget,*args): widget.destroy()
@@ -177,8 +178,8 @@ class XGngeo:
 		self.execMenu_item.set_sensitive(False)
 		for x in self.configMenu.get_children(): x.set_sensitive(False)
 
-		#Starting the thread.
-		self.cmd = command.Command("'%s' '%s'" % (self.paramXGngeo['gngeopath'],self.romPath))
+		#Starting the Gngeo thread.
+		self.cmd = command.Command("'%s' -i '%s' -d '%s' '%s'" % (self.paramXGngeo['gngeopath'].replace("'","\'"),self.param['rompath'].replace("'","\'"),self.param['romrc'].replace("'","\'"),self.romPath))
 		self.cmd.start()
 
 		self.gngeokilledbyme = 0
@@ -516,6 +517,11 @@ class XGngeo:
 				path = dialog.get_filename()
 				#Does it exist?
 				if os.path.isfile(path):
+					#Setting important variables.
+					self.romPath = path
+					if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
+					else: self.romMameName = os.path.basename(path)
+
 					#Trying to resolve Rom full name.
 					romrc = romrcfile.Romrc()
 					romrc.parsing(self.param['romrc'])
@@ -523,15 +529,9 @@ class XGngeo:
 					if mamename in dict.keys(): fullname = dict[mamename]
 					else: fullname = "Unknow \"%s\" Rom" % mamename
 
-					#Setting important variables.
-					self.romPath = path
-					self.romFullName = fullname
-					if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
-					else: self.romMameName = os.path.basename(path)
-
 					#Doing post-selection actions.
 					self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
-					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)" % (fullname,mamename))) #Update Status message
+					self.statusbar.push(self.context_id,_("Rom: \"%s\" (%s)" % (self.romFullName,mamename))) #Update Status message
 					if self.paramXGngeo["autoexecrom"]=="true": self.gngeoExec() #Auto execute the Rom...
 					else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
 

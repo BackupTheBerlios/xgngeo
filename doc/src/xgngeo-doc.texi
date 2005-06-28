@@ -39,7 +39,7 @@ __  __  ____  _   _   ____  ____   __
 @chapter Introduction
 This is the official documentation for @strong{XGngeo}, a frontend (graphical user interface) for @w{@strong{Gngeo}}, a command line @strong{Neo Geo} (arcade game playing system made by @acronym{SNK}) emulator for the @emph{GNU/Linux} operating system (and may be some other Unices) with high speed performance and many configurable options. On top of all, both are free/libre softwares released under the terms of the @emph{GNU General Public License}.
 @sp 1
-Gngeo is written in @emph{Python} and uses the @emph{PyGTK} library to provide a practical and user-friendly @emph{GTK+} interface! This program development is conducted by the @strong{Choplair-network} crew, the lastest version and informations about XGngeo are available from our website (see chapter 4 section 1).
+XGngeo is written in @emph{Python} and uses the @emph{PyGTK} library to provide a practical and user-friendly @emph{GTK+} interface! This program development is conducted by the @strong{Choplair-network} crew, the lastest version and informations about XGngeo are available from our website (see chapter 4 section 1).
 @sp 1
 Though we are not directly taking part in the Gngeo development (and are not the official frontend too), we follow it closely and try to implement all its functionalities in the most correct way possible, in accordance with the author (Mathieu Peponas) who gently encourages interactions between frontends and its emulator.
 @sp 1

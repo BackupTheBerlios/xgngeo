@@ -43,7 +43,7 @@ class History:
 
 		#Check if the game is already on the list.
 		for x in self.list[:size]:
-			if x[0]==name: already=True; j=i; break
+			if x[1]==location: already=True; j=i; break
 			i+=1
 
 		if already:
