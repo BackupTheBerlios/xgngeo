@@ -8,18 +8,22 @@
 windows: ``Important paths" (which contains the required
 parameters that have to be valid for a correct emultation),
 ``Global emulation" (which contains Neo Geo default emulation
-options (Graphic, Audio, Keys...) and ``Other things" (which
-mostly contains XGngeo-specific parameters).
+options for all Roms) and ``Other things" (which mostly
+contains XGngeo-specific parameters).
 - Improvements on the Rom list window which now features, for
 the first time in a Gngeo frontend ever, possibility to set
 emulation options specific to a Rom ! ^___^";
 - Added a new ``Joystick" section, merged with the ``Audio"
 one, where you can, among others, modify the joystick devices
 used by the two players.
+- Improved key configurator which, among other, now displays
+the key names in place of their SDL values.
 - Use of the new GTK+ file chooser for selecting files and
 directories.
 - Added support for the bigger windowed screen size and the
 Raster effect options.
+- Now preventing effect in the list from being selected when
+the ``YUV" blitter (which does not support effect) is choosed.
 - Display of a sort of progress bar indicating that the Rom
 is being started, and of warning messages that may return
 Gngeo if it encounters a problem starting the game.
@@ -32,19 +36,22 @@ killer feature :p).
 tated widgets.
 - Added the possibility to set the absolute path of the Gngeo
 executable. It may be interesting if the `gngeo' command
-isn't in your $PATH or if you have several versions of Gngeo
+isn't in your `$PATH' or if you have several versions of Gngeo
 installed.
 - The fullname of a manually loaded Rom is now displayed in
 the status bar too (if its MAME name is recognized).
-- Bugfix: no more problem with paths containing space charac-
-ters.
+- Rom list add-ons (Rom preview image or informations) can be
+simply enabled/disabled using check boxes. :p
+- Bugfix: no more problem with paths containing space or quote
+characters.
 - Bugfix: Gngeo wasn't killed when you want to quit XGngeo
 while the emulator was running.
-- Bugfix: XGngeo crashed if it didn't find gngeo's configura-
-tion file.
-- Updated documentation, now quickly accessible through the
-``Infos" menu.
-- Addition of a marvellous program icon. ^^;
+- Bugfix: XGngeo crashed if it didn't find Gngeo's global
+configuration file.
+- Rom history maximum size raised to 20.
+- Widely enlarged documentation, now quickly accessible through
+the ``Infos" menu.
+- Addition of a marvellous XGngeo icon. ^^;
 
 
 * Changes in version 14 (2003-12-31):
@@ -56,7 +63,7 @@ stopped from interface).
 - Some interface improvement.
 - XGngeo can now be run from any location without problem
 (images not loaded, etc.). ^^
-- Full support of GGF's xml file to get rom informations.
+- Full support of GGF's xml file to get Rom informations.
 - Updated documentation.
 - A small source code cleaning. :p
 
@@ -65,7 +72,7 @@ stopped from interface).
 
 - New configurable options: Neo Geo type (arcade or home),
 country and interpolation.
-- Display of the Gngeo version used, in the "about" window.
+- Display of the Gngeo version used, in the ``About" window.
 - Now, in the Roms list, only available roms are shown by
 default.
 - New Portuguese translation by Paulo Eduardo Chiva.
@@ -76,9 +83,9 @@ default.
 
 - Added a (amazing ^o^) keys configurator!
 - Added an Audio section to the configuration... ^_^
-- Moving of the "lang/" directory into the brand new "data/" 
+- Moving of the `lang/' directory into the brand new `data/' 
 directory ^^
-- Move of images into "data/img/".
+- Move of images into `data/img/'.
 
 
 * Changes in version 11 (2003-09-25):
@@ -90,7 +97,7 @@ look strange. :p
 - Bigger (+10px!) main window's width.
 - New Polish translation of XGngeo by Matma.
 - New configurable option: Auto Frameskip.
-- Added a documentation in pdf format (into "doc/").
+- Added a documentation in PDF format (into `doc/').
 - New localized README files: README-fr.txt; README-es.txt and
 README-pl.txt.
 - The "fronted" word that reapered from the hell ought to be
@@ -131,5 +138,5 @@ XGngeo yet. WAGLAMOT is the Future! O_o;;
 ``You're just an illusion...
 When I'm awaken, my tears have dried in the sand of sleep
 I'm a rose blooming in the desert"
-(Endless rain, X Japan)
+ -- Endless rain, X Japan
 

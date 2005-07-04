@@ -71,7 +71,9 @@ as the `gngeorc'."""
 			"autoexecrom":"true",
 			"gngeopath":"gngeo",
 			"historysize":5,
+			"previewimages":"false",
 			"previewimagedir":"data/previewimages/",
+			"rominfos":"true",
 			"rominfoxml":"data/rominfos.xml",
 			"showavailableromsonly":"true"
 			}

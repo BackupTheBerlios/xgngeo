@@ -26,12 +26,12 @@ class Command(Thread):
 		Thread.__init__(self)
 
 		self.command = cmd
-		self.output = "RAS"
+		self.output = ""
 
 	def run(self):
 		gtk.threads_enter()
-		pipe = os.popen(self.command)
+		pipe = os.popen4(self.command)
 		gtk.threads_leave()
-		self.output = pipe.read()
+		self.output = pipe[1].read()
 	
 	def getOutput(self): return self.output
