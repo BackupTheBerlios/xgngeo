@@ -222,9 +222,11 @@ class XGngeo:
 				if self.paramXGngeo["rominfos"]=="true" and os.path.isfile(self.paramXGngeo["rominfoxml"]):
 					#Check for game informations.
 					if self.romInfos.has_key(mamename):
-						for x in ("desc","manufacturer","year","genre","players","rating","size"):
-							if self.romInfos[mamename].has_key(x): self.romInfosWidget[x].set_text(self.romInfos[mamename][x])
+						for x in ("desc","manufacturer","year","genre","players","rating"):
+							if self.romInfos[mamename].has_key(x): 
+								self.romInfosWidget[x].set_text(self.romInfos[mamename][x])
 							else: self.romInfosWidget[x].set_text("--")
+						if self.romInfos[mamename].has_key("size"): self.romInfosWidget["size"].set_text("%sMbit" % self.romInfos[mamename]["size"])
 					else:
 						for x in ("desc","manufacturer","year","genre","players","rating","size"):
 							self.romInfosWidget[x].set_text("--")
