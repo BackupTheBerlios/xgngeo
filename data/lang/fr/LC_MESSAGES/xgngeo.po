@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xgngeo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-24 23:44+0200\n"
-"PO-Revision-Date: 2005-06-20 14:28+0100\n"
+"POT-Creation-Date: 2005-07-03 17:02+0200\n"
+"PO-Revision-Date: 2005-07-03 17:08+0200\n"
 "Last-Translator: Choplair <chopinou[AT]choplair[DOT]org>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: xgngeo.py:50
 msgid ""
@@ -42,7 +42,7 @@ msgstr ""
 msgid "License"
 msgstr "Licence"
 
-#: xgngeo.py:76 xgngeo.py:579
+#: xgngeo.py:76 xgngeo.py:574
 msgid ""
 "This program is released under the terms of the GNU General Public License."
 msgstr ""
@@ -54,25 +54,25 @@ msgstr ""
 msgid "Rom stopped (%s)."
 msgstr "Rom arrêtée (%s)."
 
-#: xgngeo.py:131
+#: xgngeo.py:136
 msgid "Gngeo returned the following message:"
 msgstr "Gngeo a retourné le message suivant :"
 
-#: xgngeo.py:149 xgngeo.py:162
+#: xgngeo.py:154
 #, python-format
 msgid "Starting Rom (%s)"
 msgstr "Démarrage de la Rom (%s)"
 
-#: xgngeo.py:258 xgngeo.py:507 xgngeo.py:534
+#: xgngeo.py:251 xgngeo.py:503 xgngeo.py:529
 #, python-format
 msgid "Rom: \"%s\" (%s)"
 msgstr "Rom : « %s » (%s)"
 
-#: xgngeo.py:280
+#: xgngeo.py:274
 msgid "List of Roms from your driver file."
 msgstr "Liste de Roms de votre fichier pilote."
 
-#: xgngeo.py:285
+#: xgngeo.py:279
 msgid ""
 "Double-click on its name to select a Rom, then press Open to load it if "
 "available (blue background)."
@@ -80,83 +80,83 @@ msgstr ""
 "Double-cliquez sur son nom pour sélectionner une Rom, puis appuyez sur "
 "Ouvrir pour la charger si disponible (fond bleu)."
 
-#: xgngeo.py:328
+#: xgngeo.py:322
 #, python-format
 msgid "Driver file supporting <b>%s</b> Roms."
 msgstr "Fichier pilote supportant <b>%s</b> Roms."
 
-#: xgngeo.py:332
+#: xgngeo.py:326
 msgid "Show available Roms only."
 msgstr "N'afficher que les Roms disponibles."
 
-#: xgngeo.py:356
+#: xgngeo.py:352
 msgid "Preview image"
 msgstr "Image d'aperçu"
 
-#: xgngeo.py:375
+#: xgngeo.py:371
 msgid "Description:"
 msgstr "Description :"
 
-#: xgngeo.py:382
+#: xgngeo.py:378
 msgid "Manufacturer:"
 msgstr "Fabriquant :"
 
-#: xgngeo.py:389
+#: xgngeo.py:385
 msgid "Year:"
 msgstr "Année :"
 
-#: xgngeo.py:396
+#: xgngeo.py:392
 msgid "Genre:"
 msgstr "Genre :"
 
-#: xgngeo.py:403
+#: xgngeo.py:399
 msgid "Players:"
 msgstr "Joueurs :"
 
-#: xgngeo.py:410
+#: xgngeo.py:406
 msgid "Rating:"
 msgstr "Note :"
 
-#: xgngeo.py:417
+#: xgngeo.py:413
 msgid "Size:"
 msgstr "Taille :"
 
-#: xgngeo.py:426
+#: xgngeo.py:422
 msgid "Informations"
 msgstr "Informations"
 
-#: xgngeo.py:446
+#: xgngeo.py:442
 msgid "Specific configuration:"
 msgstr "Configuration spécifique"
 
-#: xgngeo.py:492
+#: xgngeo.py:488
 msgid "Rom archive"
 msgstr "Archive de Rom"
 
-#: xgngeo.py:563
+#: xgngeo.py:558
 msgid "About XGngeo"
 msgstr "À propos d'XGngeo"
 
-#: xgngeo.py:572
+#: xgngeo.py:567
 msgid "XGngeo: a frontend for Gngeo. :p"
 msgstr "XGngeo : un frontend pour Gngeo. :p"
 
-#: xgngeo.py:572
+#: xgngeo.py:567
 #, python-format
 msgid "Version %i."
 msgstr "Version %i."
 
-#: xgngeo.py:572
+#: xgngeo.py:567
 #, python-format
 msgid "Running Gngeo version %s."
 msgstr "Fonctionnant avec Gngeo version %s."
 
-#: xgngeo.py:583
+#: xgngeo.py:578
 msgid "Credits"
 msgstr "Crédits"
 
 # HERE YOU CAN ADD THAT YOU'VE MADE THE TRANSLATION
-#: xgngeo.py:593
+#: xgngeo.py:588
 msgid ""
 "Main coder: Choplair.\n"
 "Assisted by: Pachilor."
@@ -165,211 +165,211 @@ msgstr ""
 "Assisté par : Pachilor.\n"
 "Traduction française: Choplair."
 
-#: xgngeo.py:635
+#: xgngeo.py:632
 msgid "No Bios."
 msgstr "Pas de Bios."
 
-#: xgngeo.py:636
+#: xgngeo.py:633
 msgid "Bios OK."
 msgstr "Bios OK."
 
-#: xgngeo.py:666
+#: xgngeo.py:663
 msgid "Important path configuration"
 msgstr "Configuration de chemins importants"
 
-#: xgngeo.py:671
+#: xgngeo.py:668
 msgid "These paths must be valid for a working emulation."
 msgstr "Ces chémins doivent être valides pour que l'émulation fonctionne."
 
-#: xgngeo.py:673
+#: xgngeo.py:670
 msgid "Roms & Bios directory:"
 msgstr "Répertoire des Roms et du Bios :"
 
-#: xgngeo.py:688
+#: xgngeo.py:685
 msgid "Select the Roms & Bios directory."
 msgstr "Sélectionnez le répertoire des Roms et du Bios."
 
-#: xgngeo.py:693
+#: xgngeo.py:690
 msgid "Rom driver file (\"romrc\"):"
 msgstr "Fichier pilote des Roms (« romrc ») :"
 
-#: xgngeo.py:706
+#: xgngeo.py:703
 msgid "Select the Rom driver file."
 msgstr "Sélectionnez le fichier pilote des Roms."
 
-#: xgngeo.py:711
+#: xgngeo.py:708
 msgid "Gngeo executable:"
 msgstr "Exécutable de Gngeo :"
 
-#: xgngeo.py:726
+#: xgngeo.py:723
 msgid "Select the Gngeo executable."
 msgstr "Séléctionnez l'exécutable de Gngeo."
 
-#: xgngeo.py:745
+#: xgngeo.py:742
 msgid "Global emulation configuration."
 msgstr "Configuration de l'émulation globale."
 
-#: xgngeo.py:746
+#: xgngeo.py:743
 #, python-format
 msgid "Specific emulation options for \"%s\"."
 msgstr "Options d'émulation spécifiques pour « %s »."
 
-#: xgngeo.py:754
+#: xgngeo.py:751
 msgid "Graphic"
 msgstr "Graphisme"
 
-#: xgngeo.py:759
+#: xgngeo.py:756
 msgid "Fullscreen"
 msgstr "Plein écran"
 
-#: xgngeo.py:763
+#: xgngeo.py:760
 msgid "Interpolation"
 msgstr "Interpolation"
 
-#: xgngeo.py:767
+#: xgngeo.py:764
 msgid "Show FPS"
 msgstr "Afficher le FPS"
 
-#: xgngeo.py:771
+#: xgngeo.py:768
 msgid "Auto Frameskip"
 msgstr "Saut de frame auto"
 
-#: xgngeo.py:778
+#: xgngeo.py:775
 msgid "Scale:"
 msgstr "Échelle :"
 
-#: xgngeo.py:787
+#: xgngeo.py:784
 msgid "Larger screen (windowed mode)"
 msgstr "Écran plus grand (mode fenétré)"
 
-#: xgngeo.py:792
+#: xgngeo.py:789
 msgid "Raster effect"
 msgstr "Effet raster"
 
-#: xgngeo.py:799
+#: xgngeo.py:796
 msgid "Blitter:"
 msgstr "Blitteur :"
 
-#: xgngeo.py:803
+#: xgngeo.py:800
 msgid "Software blitter"
 msgstr "Blitteur logiciel"
 
-#: xgngeo.py:804
-msgid "Opengl blitter"
+#: xgngeo.py:801
+msgid "OpenGL blitter"
 msgstr "Blitteur OpenGL"
 
-#: xgngeo.py:805
+#: xgngeo.py:802
 msgid "YUV blitter (YV12)"
 msgstr "Blitteur YUV (YV12)"
 
-#: xgngeo.py:830
+#: xgngeo.py:836
 msgid "Effect:"
 msgstr "Effet :"
 
-#: xgngeo.py:834
+#: xgngeo.py:840
 msgid "No effect"
 msgstr "Aucun effet"
 
-#: xgngeo.py:835
+#: xgngeo.py:841
 msgid "Scanline effect"
 msgstr "Effet scanline"
 
-#: xgngeo.py:836
+#: xgngeo.py:842
 #, python-format
 msgid "Scanline 50% effect"
 msgstr "Effet scanline à 50%"
 
-#: xgngeo.py:837
+#: xgngeo.py:843
 msgid "Scale2x effect"
 msgstr "Effet échelle x2"
 
-#: xgngeo.py:838
+#: xgngeo.py:844
 msgid "Scale3x effect"
 msgstr "Effet échelle x3"
 
-#: xgngeo.py:839
+#: xgngeo.py:845
 msgid "Scale4x effect"
 msgstr "Effet échelle x4"
 
-#: xgngeo.py:840
+#: xgngeo.py:846
 #, python-format
 msgid "Scale2x effect with 50% scanline"
 msgstr "Effet échelle x2 avec scanline à 50%"
 
-#: xgngeo.py:841
+#: xgngeo.py:847
 #, python-format
 msgid "Scale2x effect with 75% scanline"
 msgstr "Effet échelle x2 avec scanline à 75%"
 
-#: xgngeo.py:842
+#: xgngeo.py:848
 msgid "HQ2X effect. High quality"
-msgstr "Effet HQ2X. Haute qualité."
+msgstr "Effet HQ2X. Haute qualité"
 
-#: xgngeo.py:843
+#: xgngeo.py:849
 msgid "HQ3X effect. High quality"
-msgstr "Effet HQ3X. Haute qualité."
+msgstr "Effet HQ3X. Haute qualité"
 
-#: xgngeo.py:844
+#: xgngeo.py:850
 msgid "LQ2X effect. Low quality"
-msgstr "Effet LQ2X. Basse qualité."
+msgstr "Effet LQ2X. Basse qualité"
 
-#: xgngeo.py:845
+#: xgngeo.py:851
 msgid "LQ3X effect. Low quality"
-msgstr "Effet LQ3X. Basse qualité."
+msgstr "Effet LQ3X. Basse qualité"
 
-#: xgngeo.py:846
+#: xgngeo.py:852
 msgid "Double the x resolution (soft blitter only)"
 msgstr "Double la résolution horizontale (blitteur logiciel seulement)"
 
-#: xgngeo.py:847
+#: xgngeo.py:853
 msgid "SAI effect"
 msgstr "Effet SAI"
 
-#: xgngeo.py:848
+#: xgngeo.py:854
 msgid "SuperSAI effect"
 msgstr "Effet SuperSAI"
 
-#: xgngeo.py:849
+#: xgngeo.py:855
 msgid "Eagle effect"
 msgstr "Effet Eagle"
 
-#: xgngeo.py:877
+#: xgngeo.py:887
 msgid "Audio / Joystick"
 msgstr "Audio / Joystick"
 
-#: xgngeo.py:879
+#: xgngeo.py:889
 msgid "Audio"
 msgstr "Audio"
 
-#: xgngeo.py:887
+#: xgngeo.py:897
 msgid "Enable sound"
 msgstr "Activer le son"
 
-#: xgngeo.py:893
+#: xgngeo.py:903
 msgid "Sample rate:"
 msgstr "Fréquence :"
 
-#: xgngeo.py:913
+#: xgngeo.py:923
 msgid "Joystick"
 msgstr "Joystick"
 
-#: xgngeo.py:916
+#: xgngeo.py:926
 msgid "Enable joystick support"
 msgstr "Activer le support du joystick"
 
-#: xgngeo.py:922
+#: xgngeo.py:932
 msgid "Player 1 device:"
 msgstr "Périphérique du joueur 1 :"
 
-#: xgngeo.py:929
+#: xgngeo.py:939
 msgid "Player 2 device:"
 msgstr "Périphérique du joueur 2 :"
 
-#: xgngeo.py:1001
+#: xgngeo.py:1010
 msgid "Keyboard"
 msgstr "Clavier"
 
-#: xgngeo.py:1003
+#: xgngeo.py:1012
 msgid ""
 "To modify a key, click the button then push your new key.\n"
 "This configuration is only for keyboard."
@@ -378,88 +378,88 @@ msgstr ""
 "nouvelle touche.\n"
 "Cette configuration est uniquement pour le clavier."
 
-#: xgngeo.py:1011
+#: xgngeo.py:1020
 msgid "Controller:"
 msgstr "Contrôle :"
 
-#: xgngeo.py:1015
+#: xgngeo.py:1024
 msgid "Player 1"
 msgstr "Joueur 1"
 
-#: xgngeo.py:1018
+#: xgngeo.py:1027
 msgid "Player 2"
 msgstr "Joueur 2"
 
-#: xgngeo.py:1090
+#: xgngeo.py:1101
 msgid "System"
 msgstr "Système"
 
-#: xgngeo.py:1093
+#: xgngeo.py:1104
 msgid "Neo Geo type:"
 msgstr "Type de Neo Geo :"
 
-#: xgngeo.py:1095
+#: xgngeo.py:1106
 msgid "Arcade"
-msgstr "Arcade"
+msgstr "Borne d'arcade"
 
-#: xgngeo.py:1098
+#: xgngeo.py:1109
 msgid "Home"
-msgstr "Home"
+msgstr "Console"
 
-#: xgngeo.py:1105
+#: xgngeo.py:1116
 msgid "Country:"
 msgstr "Région :"
 
-#: xgngeo.py:1108
+#: xgngeo.py:1119
 msgid "Japan"
 msgstr "Japon"
 
-#: xgngeo.py:1115
+#: xgngeo.py:1126
 msgid "USA"
-msgstr "États-unis"
+msgstr "États-Unis"
 
-#: xgngeo.py:1122
+#: xgngeo.py:1133
 msgid "Europe"
 msgstr "Europe"
 
-#: xgngeo.py:1137
+#: xgngeo.py:1148
 msgid "Other thing configuration"
 msgstr "Configuration des autres choses"
 
-#: xgngeo.py:1142
+#: xgngeo.py:1153
 msgid "Auto execute Roms."
 msgstr "Auto-exécuter les Roms."
 
-#: xgngeo.py:1147
+#: xgngeo.py:1158
 msgid "History size:"
 msgstr "Taille de l'historique :"
 
-#: xgngeo.py:1156
+#: xgngeo.py:1167
 msgid "Path to libGL.so (optional):"
 msgstr "Chemin vers libGL.so (optionnel) :"
 
-#: xgngeo.py:1170
+#: xgngeo.py:1181
 #, python-format
 msgid "Select the \"%s\" file."
 msgstr "Sélectionnez le fichier \"%s\"."
 
-#: xgngeo.py:1175
+#: xgngeo.py:1192
 msgid "Preview image directory (optional):"
 msgstr "Répertoire des images d'aperçu (optionnel) :"
 
-#: xgngeo.py:1188
+#: xgngeo.py:1206
 msgid "Select the preview image directory."
 msgstr "Sélectionnez le répertoire des images d'aperçu."
 
-#: xgngeo.py:1193
+#: xgngeo.py:1215
 msgid "XML file containing Rom infos (optional):"
 msgstr "Fichier XML contenant les infos sur les Roms (opt.) :"
 
-#: xgngeo.py:1206
+#: xgngeo.py:1229
 msgid "Select the XML file containing Rom infos."
 msgstr "Selectionnez le fichier XML contenant les infos sur les Roms."
 
-#: xgngeo.py:1252
+#: xgngeo.py:1279
 msgid ""
 "Sorry, this configuration cannot be saved because one or more parameters "
 "look not valid."
@@ -467,83 +467,84 @@ msgstr ""
 "Désolé, cette configuration ne peut pas être sauvegardée car un ou plusieurs "
 "paramètres ont l'air invalides."
 
-#: xgngeo.py:1252
+#: xgngeo.py:1279
 msgid "Please check it up then try to save again... ^^;"
 msgstr "Merci de verifier cela puis essayez de sauvegarder à nouveau... ^^;"
 
-#: xgngeo.py:1320
+#: xgngeo.py:1349
 msgid "Configuration has been saved."
 msgstr "La configuration a été sauvegardée."
 
-#: xgngeo.py:1344
+#: xgngeo.py:1373
 msgid "Configuration was not saved."
 msgstr "La configuration n'a pas été sauvegardée."
 
-#: xgngeo.py:1386
+#: xgngeo.py:1415
 msgid "_File"
 msgstr "_Fichier"
 
-#: xgngeo.py:1391
+#: xgngeo.py:1420
 msgid "_Load Rom"
 msgstr "_Charger une Rom"
 
-#: xgngeo.py:1395
+#: xgngeo.py:1424
 msgid "From _list"
 msgstr "Depuis la _liste"
 
-#: xgngeo.py:1399
+#: xgngeo.py:1428
 msgid "_Manually"
 msgstr "_Manuellement"
 
-#: xgngeo.py:1400
+#: xgngeo.py:1429
 msgid "Select a Rom"
 msgstr "Sélectionnez une Rom"
 
-#: xgngeo.py:1403
+#: xgngeo.py:1432
 msgid "_History"
 msgstr "_Historique"
 
-#: xgngeo.py:1435
+#: xgngeo.py:1464
 msgid "_Configuration"
 msgstr "_Configuration"
 
-#: xgngeo.py:1439
+#: xgngeo.py:1468
 msgid "_Important paths"
 msgstr "Répertoires _importants"
 
-#: xgngeo.py:1444
+#: xgngeo.py:1473
 msgid "_Global emulation"
 msgstr "Émulation _globale"
 
-#: xgngeo.py:1448
+#: xgngeo.py:1477
 msgid "_Graphic"
 msgstr "_Graphisme"
 
-#: xgngeo.py:1452
+#: xgngeo.py:1481
 msgid "_Audio / Joystick"
 msgstr "_Audio / Joystick"
 
-#: xgngeo.py:1456
+#: xgngeo.py:1485
 msgid "_Keyboard"
 msgstr "_Clavier"
 
-#: xgngeo.py:1460
+#: xgngeo.py:1489
 msgid "_System"
 msgstr "_Système"
 
-#: xgngeo.py:1464
+#: xgngeo.py:1493
 msgid "_Other"
 msgstr "A_utre"
 
-#: xgngeo.py:1472
+#: xgngeo.py:1501
 msgid "_Info"
 msgstr "_Info"
 
-#: xgngeo.py:1485
+#: xgngeo.py:1514
 msgid "_License"
 msgstr "_Licence"
 
-#: xgngeo.py:1506
+#: xgngeo.py:1535
 #, python-format
 msgid "Welcome to XGngeo version %i."
 msgstr "Bienvenue sur XGngeo version %i."
+
