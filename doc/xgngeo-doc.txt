@@ -24,7 +24,9 @@ Table of Contents
   2.2 Getting and launching XGngeo
   2.3 First time important path configuration
   2.4 Main window
-    2.4.1 Menu bar
+    2.4.1 Status bar
+    2.4.2 Menu bar
+  2.5 Playing a game
 3 Details
   3.1 Used files
     3.1.1 Main configuration files
@@ -34,9 +36,9 @@ Table of Contents
     3.1.3 Rom driver file
     3.1.4 History file
   3.2 Particular windows
-    3.2.1 Rom list
-      3.2.1.1 Preview images (add-on)
-      3.2.1.2 Rom informations (add-on)
+    3.2.1 Rom list add-ons
+      3.2.1.1 Preview images
+      3.2.1.2 Rom informations
     3.2.2 Emulation configuration panels
       3.2.2.1 Graphic panel
       3.2.2.2 Sound / Joystick panel
@@ -65,8 +67,8 @@ many configurable options. Both are free/libre softwares released under
 the terms of the _GNU General Public License_.
 
    XGngeo is written in _Python_ and uses the _PyGTK_ library to
-provide a practical and user-friendly _GTK+_ interface! With its
-multiple configuration panels, emulator behaviour can be parametred
+provide a complete, practical and user-friendly _GTK+_ interface! With
+its multiple configuration panels, emulator behaviour can be parametred
 precisely; while Rom selection got confortable thanks to a list coming
 along with preview image and various game informations...
 
@@ -178,17 +180,28 @@ line parameter. But this is definitively *not* recommanded!
 ===============
 
 Unless you obtained a warning dialog because some parameters looked
-invalid, the XGngeo main window should appear. At that time, you may
-fall in love with the marvellous logo, but, actually, your attention
-should go to the menu bar, on the upper part, which you'll be able to
-master everything with!
+invalid, the XGngeo main window should appear...
 
-2.4.1 Menu bar
+2.4.1 Status bar
+----------------
+
+First, you migth be pleased by the welcome message at bottom of the
+main window. But the message in this status bar may changes and
+provides some informations not so useless for the user. For example, it
+confirms you that configuration has been saved or not, or also indicate
+which Rom you have selected, and it's status (stopped/running). In one
+word: marvellous!
+
+2.4.2 Menu bar
 --------------
 
-It is formerly composed of the FILE menu, which permit you do simple
-operations such as loading Rom (from the Rom list, a file chooser, or a
-recent Rom history), starting or stopping it, and exiting the program.
+Of course, you may fall in love with the great logo, but actually your
+attention should go to the menu bar, on the upper part, which you'll be
+able to master everything with!
+
+   It is formerly composed of the FILE menu, which permit you do simple
+operations such as loading Rom, starting or stopping it, and exiting
+the program.
 
    Next to that is, comes the CONFIGURATION menu, from where you can
 modify the paramaters which you entered at the XGngeo first load and
@@ -202,6 +215,32 @@ configuration panels are detailled in the section 2 of the next chapter.
    At last, on the very right-hand, from the INFO menu you can look at
 the credits or read again an again the holy GNU General Public Licence
 whom XGngeo is released under!
+
+2.5 Playing a game
+==================
+
+Okay, you may set emulation option as you want, then, it's time to
+launch a game! There are 3 ways to select a Rom for playing : through
+the Rom list, a file chooser, or the recent Rom history. The file
+chooser is useful only if the Rom you want to load is located in
+another place than the `Rom and Bios directory', and the recent Rom
+history is just a menu providing quick selection for some Roms you
+previously choosed.
+
+   Actually, you would mostly use the Rom list window which allow you
+to see all the Roms available in your `Rom and Bios directory', in a
+clean way, and select one from those. From there, you can also set
+specific emulation configuration for any Rom, and even see game preview
+or informations (see chapter 3 section 2.1)
+
+   At once you have selected a Rom, it should be launched by Gngeo and
+playable some seconds later! Enjoy the Neo Geo! :D
+
+   While playing, you still can perform some special actions in the
+emulator, like toggling beetween fullscreen/windowed mode,
+saving/loading state, etc. (see chapter 3 section 3). By the way, you
+might also disable the auto Rom execution feature (if you prefer to do
+so manually) in the OTHER THINGS configuration window.
 
 3 Details
 *********
@@ -256,7 +295,7 @@ XGngeo, as detailed in the next section...
 The Rom driver file (named `romrc') is very important as it contains
 all the instruction for the emulator to correctly handle the Roms of
 which technical specifications are detailled as individual section in
-that (big!) Rom driver file.
+that (very big!) Rom driver file.
 
 3.1.4 History file
 ------------------
@@ -271,14 +310,14 @@ updated by the emulator but by the frontend.
 3.2 Particular windows
 ======================
 
-3.2.1 Rom list
---------------
+3.2.1 Rom list add-ons
+----------------------
 
 There are also optional features (add-on) which bring you a more
-comfortable game selection in that Rom list window.
+comfortable game selection in the Rom list window. Here they are...
 
-3.2.1.1 Preview images (add-on)
-...............................
+3.2.1.1 Preview images
+......................
 
 XGngeo is able to display a preview image of any of the games selected
 in the list.  It is fully compatible with the preview images used by
@@ -290,8 +329,8 @@ Gngeo, GGF or Choplair-network home page.  You will need to unpack them
 somewhere, then to indicate the directory where they are located in the
 OTHER THING CONFIGURATION window, in order to get it working instantly!
 
-3.2.1.2 Rom informations (add-on)
-.................................
+3.2.1.2 Rom informations
+........................
 
 GGF's developpers created an XML file containing informations for each
 Rom (description, manufacturer, year, etc.).  This is the perfect
@@ -314,7 +353,7 @@ with, for the sake of clarity.
 You may activate many options there: fullscreen mode, frame skipping
 (real-time speed), interpolation (smoother animation), etc.  Moreover,
 you may select your prefered blitter (software, OpenGL, YUV) and choose
-to apply an effect upon (scanline, SAI, HQX, etc.).
+to apply an effect upon (scanline, HQX, etc.).
 
    Please note that effects are currently not supported by the YUV
 blitter of Gngeo. Thus, effect list becomes disabled in XGngeo when you
@@ -354,6 +393,8 @@ Using function keys, you can perform some special actions while playing
 a Rom in Gngeo.  Here comes the list of what you can do pressing these
 keys:
 
+   - <Escape>: exit game.
+
    - <F1>: reset game.
 
    - <F2>: take a screeshot (BMP file saved in your home directory).
@@ -366,7 +407,8 @@ keys:
 
    - <F6>: enable/disable slow motion.
 
-   - <F8>: save current game state (to a slot you thereafter specify).
+   - <F8>: save current game state (to a slot you thereafter specify,
+     from the one hundred possible!).
 
    - <F9>: load a saved game state (from a slot you thereafter specify).
 
