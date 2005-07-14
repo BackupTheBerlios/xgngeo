@@ -68,9 +68,10 @@ the terms of the _GNU General Public License_.
 
    XGngeo is written in _Python_ and uses the _PyGTK_ library to
 provide a complete, practical and user-friendly _GTK+_ interface! With
-its multiple configuration panels, emulator behaviour can be parametred
-precisely; while Rom selection got confortable thanks to a list coming
-along with preview image and various game informations...
+its multiple configuration panels, designed in an intuitive way,
+emulator behaviour can be parametred both precisely and easily; while
+Rom selection is done cosily thanks to a full featured list with
+preview image and various game informations, etc.
 
    This program development is conducted by the *Choplair-network*
 crew, the lastest version and informations about XGngeo are available

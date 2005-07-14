@@ -2,7 +2,7 @@
  XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
-* Changes in version 15 (2005-07-XX):
+* Changes in version 15 (2005-07-14):
 
 - Big configuration panels reorganization with now 3 different
 windows: ``Important paths" (which contains the required
@@ -49,7 +49,8 @@ while the emulator was running.
 - Bugfix: XGngeo crashed if it didn't find Gngeo's global
 configuration file.
 - Rom history maximum size raised to 20.
-- Widely enlarged documentation, now quickly accessible through
+- Widely enlarged documentation (with spelling corrections
+powered by Hori the wonderul!), now quickly accessible through
 the ``Infos" menu.
 - Addition of a marvellous XGngeo icon. ^^;
 
