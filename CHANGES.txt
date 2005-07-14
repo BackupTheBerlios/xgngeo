@@ -16,7 +16,7 @@ Rom-specific emulation options! ^___^";
 - Added a new ``Joystick" section, merged with the ``Audio"
 one, where you can, among others, modify the joystick devices
 used by the two players.
-- Improved key configurator which, among other, now displays
+- Improved key configurator which, among others, now displays
 the key names in place of their SDL values.
 - Use of the new GTK+ file chooser for selecting files and
 directories.
@@ -34,8 +34,8 @@ this menu can now be torn off.
 which indicate whether the path is valid or not (yeah that's a
 killer feature :p).
 - Better handling of parameters in configurations files.
-- Many other GUI enhancements and replacement of the deprac-
-tated widgets.
+- Loads of GUI enhancements, and replacement of the GTK+
+deprecated widgets.
 - Added the possibility to set the absolute path of the Gngeo
 executable. It may be interesting if the `gngeo' command
 isn't in your `$PATH' or if you have several versions of Gngeo
