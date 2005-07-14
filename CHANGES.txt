@@ -11,8 +11,8 @@ parameters that have to be valid for a correct emultation),
 options for all Roms) and ``Other things" (which mostly
 contains XGngeo-specific parameters).
 - Improvements on the Rom list window which now features, for
-the first time in a Gngeo frontend ever, possibility to set
-emulation options specific to a Rom ! ^___^";
+the first time in a Gngeo frontend ever, the possibility to set
+Rom-specific emulation options! ^___^";
 - Added a new ``Joystick" section, merged with the ``Audio"
 one, where you can, among others, modify the joystick devices
 used by the two players.
@@ -28,10 +28,12 @@ the ``YUV" blitter (which does not support effect) is choosed.
 is being started, and of warning messages that may return
 Gngeo if it encounters a problem starting the game.
 - If already on the ``History" menu, loaded Rom name isn't
-repeated any more but moved to the first place.
+repeated any more but moved to the first place. By the way,
+this menu can now be torn off.
 - Some options involving path now come along with little icons
 which indicate whether the path is valid or not (yeah that's a
 killer feature :p).
+- Better handling of parameters in configurations files.
 - Many other GUI enhancements and replacement of the deprac-
 tated widgets.
 - Added the possibility to set the absolute path of the Gngeo

@@ -114,7 +114,7 @@ class XGngeo:
 		# Covererd by patents 2173965, 1004076, 5867297, etc.
 		#-------------------------------------------------------------------------
 		# We'll check whether there was a f*ck then try to display
-		# the error message returned by Gngeo if it's the case.
+		# the error/warning message returned by Gngeo if it's the case.
 		# We do not so when the game was stopped from XGngeo.
 		if not self.gngeokilledbyme:
 			output = self.cmd.getOutput() #Raw ouput of Gngeo.
@@ -122,18 +122,24 @@ class XGngeo:
 			#Parsing the output, line per line, looking for error...
 			for line in split(output,"\n"):
 				for line in split(line,"\r"):
-					#We ignore usual messages.
+					#We ignore usual messages:
+					#1: Rom loading progression.
+					#2 & 3: YUV driver output.
+					#4: Rom driver creation message (in Gngeo 0.6.5beta).
+					#5: Screenshot saving message.
 					if not line.strip()=="" \
-					and not match(".* [[][\-|\*]{62}[]]?",line) \
-					and not match("Update sai .*",line) \
-					and not match("deltaptr=(\S)* sai",line):
+					and not match(".* [[][\-|\*]{62}[]]?",line)\
+					and not match("Update sai .*",line)\
+					and not match("deltaptr=(\S)* sai",line)\
+					and not line[:4]=="Add "\
+					and not line[:8]=="save to ":
 						#The line contains a unexpected message, certainly an important, so we record it.
 						message += "%s\n" % line.strip()
 
 			if message!="": #Oh dear! There was a f*ck! Let's display the info dialog.
 				def callback(widget,*args): widget.destroy()
 				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),unicode(message[:-1],'iso-8859-1')))
+				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),unicode(message[:-1],'iso-8859-1').replace("&","&amp;")))
 				dialog.connect_object("response",callback,dialog)
 				dialog.show_all()
 		#-------------------------------------------------------------------------
