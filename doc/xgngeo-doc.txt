@@ -51,7 +51,7 @@ Table of Contents
   4.1 Home pages
     4.1.1 Websites of the great duo
     4.1.2 Their dependencies
-    4.1.3 Other
+    4.1.3 Miscellaneous
   4.2 Gngeo mailling list
 5 Credits
 
@@ -74,7 +74,7 @@ along with preview image and various game informations...
 
    This program development is conducted by the *Choplair-network*
 crew, the lastest version and informations about XGngeo are available
-from our website (see chapter 4 section 1). Although we are not
+from our website (see chapter 4 section 1.1). Although we are not
 directly taking part in the Gngeo development (and are not the official
 frontend too), we follow it closely and try to implement all its
 functionalities in the most correct way possible, in accordance with
@@ -100,7 +100,7 @@ of Gngeo and XGngeo fully functional from scratch, step by step!
 
 XGngeo is a frontend for Gngeo, so this one must be installed somewhere
 on your computer! You can download the last version from its home page
-(see chapter 4 section 1). Although the emulator is available in
+(see chapter 4 section 1.1). Although the emulator is available in
 various binary formats (deb, RPM...), keep in mind that these packages
 may be older than the classic source code archive. For this release, we
 do recommand the use of Gngeo version *0.6.4*. But consider that any
@@ -138,7 +138,7 @@ installed:
    - The *PyGTK* library: version 2.6 or more.
 
    That's perhaps already the case. Otherwise, you'll find the links to
-their home page on chapter 4 section 1.
+their home page on chapter 4 section 1.2.
 
 2.2 Getting and launching XGngeo
 ================================
@@ -147,7 +147,7 @@ It's show time! Your are now ready to taste the power of XGngeo. ^^
 
    If you didn't obtain this documentation as a part of an XGngeo
 package, you have to get one! You'll find download links for the last
-version on the Choplair-network homepage (see chapter 4 section 1).
+version on the Choplair-network homepage (see chapter 4 section 1.1).
 Thereafter, unpack the archive, then move to the directory which have
 just been created (something like `xgngeo-_XX_' where _XX_ is the
 version number).
@@ -234,7 +234,7 @@ specific emulation configuration for any Rom, and even see game preview
 or informations (see chapter 3 section 2.1)
 
    At once you have selected a Rom, it should be launched by Gngeo and
-playable some seconds later! Enjoy the Neo Geo! :D
+playable some seconds later! `The future is now', enjoy the Neo Geo! :-D
 
    While playing, you still can perform some special actions in the
 emulator, like toggling beetween fullscreen/windowed mode,
@@ -332,11 +332,17 @@ OTHER THING CONFIGURATION window, in order to get it working instantly!
 3.2.1.2 Rom informations
 ........................
 
-GGF's developpers created an XML file containing informations for each
-Rom (description, manufacturer, year, etc.).  This is the perfect
-addition to preview images and it's fully supported by XGngeo!
-Moreover, because of the small size of that file, it is already
-included in our packages and this option is activated by default.
+GGF's developpers created an XML file containing informations
+(description, manufacturer, year, etc.) about loads of Roms in order to
+be displayed by frontends. This is the perfect addition to preview
+images and it's fully supported by XGngeo!  Moreover, because of the
+small size of that file, it is already included in our packages and
+this add-on is activated by default.
+
+   *Note:* the game reviews are not ours, but have been performed by
+the _Ultimate Neo Gaming Ressource_ (UNGR). You can read them online
+and find other interesting things on their homepage (see chapter 4
+section 1.3).
 
 3.2.2 Emulation configuration panels
 ------------------------------------
@@ -505,13 +511,17 @@ number 7. When you feel it's perfect, you may send your `po' file to
 
    - PyGTK: `http://www.pygtk.org/'.
 
-4.1.3 Other
------------
+4.1.3 Miscellaneous
+-------------------
 
    - Gngeo Brazil (Brazilian website about Gngeo):
      `http://www.gngeo.hpg.ig.com.br/'.
 
-   - GGF (first frontend): `http://gngeofrontend.sourceforge.net/'.
+   - Ultimate Neo Gaming Ressource (Neo Geo fan site):
+     `http://ungr.emuunlim.com/'.
+
+   - GGF (first Gngeo frontend):
+     `http://gngeofrontend.sourceforge.net/'.
 
 4.2 Gngeo mailling list
 =======================
@@ -556,8 +566,6 @@ involved in the making of this program since the beginning:
 
    - *Ms. Marie-Claire* (<marie-claire[AT]choplair.org>): documentation
      editor.
-
-   - *Hori* (<x_psyence[AT]hotmail.com>): English spelling corrector.
 
    Special thanks to the Gngeo authors, *Mathieu Peponas* and others,
 for writing such a great emulator!
