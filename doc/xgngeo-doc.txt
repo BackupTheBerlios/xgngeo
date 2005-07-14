@@ -561,7 +561,7 @@ involved in the making of this program since the beginning:
    - *Ms. Marie-Claire* (<marie-claire[AT]choplair.org>): documentation
      editor.
 
-   - *Hori*(1) (<x_psyence[AT]hotmail.com>): English spelling corrector.
+   - *hori*(1) (<x_psyence[AT]hotmail.com>): English spelling corrector.
 
    - *Shilon* (<sheng.long.gradilla[AT]gmail.com>): Spanish translator.
 
