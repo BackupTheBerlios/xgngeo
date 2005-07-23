@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-XGngeo: a frontend for Gngeo in GTK ^^.
+XGngeo: a frontend for Gngeo in GTK. ^_^.
 Copyleft 2003, 2004, 2005 Choplair-network
 $id: $
 
@@ -19,10 +19,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 import gtk, os, gettext
+from sys import path as syspath, argv, exit
 from string import split, find, capwords
-from sys import path as syspath, argv
 from re import match
 from threading import Timer
+
+if gtk.pygtk_version[:2]<(2,6):
+	exit("PyGTK version 2.6 or more is required.")
 
 #Change working directory to XGngeo's.
 os.chdir(os.path.abspath(syspath[0]))
@@ -31,7 +34,7 @@ os.chdir(os.path.abspath(syspath[0]))
 syspath.append("data/py/")
 import command, configfile, history, rominfos, romrcfile
 
-VERSION = 15
+VERSION = 16
 gngeoDir = os.path.expanduser("~/.gngeo")
 
 #Internationalization.
@@ -289,7 +292,9 @@ class XGngeo:
 			label = gtk.Label(_("Double-click on its name to select a Rom, then press Open to load it if available (blue background)."))
 			label.set_line_wrap(True)
 			label.set_justify(gtk.JUSTIFY_CENTER)
-			table.attach(label,0,2,0,1,yoptions=gtk.SHRINK,ypadding=2)
+			#PyGTK bug on 2005-07-18, avoid by explicitly giving a ``xpadding" value...
+			#table.attach(label,0,2,0,1,yoptions=gtk.SHRINK,ypadding=2)
+			table.attach(label,0,2,0,1,yoptions=gtk.SHRINK,xpadding=0,ypadding=2)
 
 			#DA Rom list!
 			scrolled_window = gtk.ScrolledWindow()
@@ -1018,7 +1023,7 @@ class XGngeo:
 
 				box = gtk.VBox(spacing=4) #The box. :p
 				box.set_border_width(4)
-				notebook.append_page(box,gtk.Label(_("Keyboard")))
+				notebook.append_page(box,gtk.Label(_("Controls")))
 
 				label = gtk.Label(_("To modify a key, click the button then push your new key.\nThis configuration is only for keyboard."))
 				label.set_justify(gtk.JUSTIFY_CENTER)
@@ -1322,7 +1327,7 @@ class XGngeo:
 			elif self.configwidgets['country_usa'].get_active(): temp_param["country"] = "usa"
 			else: temp_param["country"] = "europe"
 
-			# Keyboard.
+			# Controls.
 			#p1key
 			temp_param["p1key"] = str()
 			for val in self.p1key_int_vals: temp_param["p1key"] += "%s," % val
@@ -1494,7 +1499,7 @@ class XGngeo:
 		menu_item.connect("activate",self.config,2)
 		menu2.append(menu_item)
 
-		menu_item = gtk.MenuItem(_("_Keyboard"))
+		menu_item = gtk.MenuItem(_("_Controls"))
 		menu_item.connect("activate",self.config,3)
 		menu2.append(menu_item)
 
