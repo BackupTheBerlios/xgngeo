@@ -1,0 +1,5 @@
+include *.txt
+include data/img *.png
+include data/ rominfos.*
+recursive-include data/locale *.pot *.po *.mo
+

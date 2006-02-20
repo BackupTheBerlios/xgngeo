@@ -1,7 +1,7 @@
 """
 XGngeo: a frontend for Gngeo in GTK ^^.
-Copyleft 2003, 2004, 2005 Choplair-network
-$id: $
+Copyleft 2003, 2004, 2005, 2006 Choplair-network
+$Id$
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -32,8 +32,10 @@ In the same time, this class allow creation of Rom-specific
 configuration files, which may define the same kind of option
 as the `gngeorc'."""
 
-	def __init__(self):
-		self.xgngeoconfPath = "data/xgngeo.conf" #Path to XGngeo config file.
+	def __init__(self,datarootpath):
+		self.datarootpath = datarootpath
+		self.xgngeoconf_dir = os.path.expanduser("~/.xgngeo") #XGngeo local configuration directory.
+		self.xgngeoconf_file = os.path.join(self.xgngeoconf_dir,"xgngeo.conf") #Path to XGngeo config file.
 		self.gngeoDir = os.path.expanduser("~/.gngeo") #Gngeo local configuration directory.
 		self.gngeorcPath = os.path.join(self.gngeoDir,"gngeorc") #Path to Gngeo config file.
 
@@ -43,7 +45,7 @@ as the `gngeorc'."""
 		return { #Gngeo default.
 			#Path
 			"libglpath":"/usr/lib/libGL.so",
-			"rompath": os.path.join(os.getenv("HOME"),"..."),
+			"rompath": os.path.expanduser("~/..."),
 			"romrc":"/usr/local/share/gngeo/romrc",
 			#Graphic
 			"blitter":"soft",
@@ -72,14 +74,14 @@ as the `gngeorc'."""
 			"gngeopath":"gngeo",
 			"historysize":5,
 			"previewimages":"false",
-			"previewimagedir":"data/previewimages/",
+			"previewimagedir": os.path.join(self.datarootpath,"img/rom_previews"),
 			"rominfos":"true",
-			"rominfoxml":"data/rominfos.xml",
+			"rominfoxml": os.path.join(self.datarootpath,"rominfos.xml"),
 			"showavailableromsonly":"true"
 			}
 
 	def exists(self):
-		return os.path.isfile(self.gngeorcPath),os.path.isfile(self.xgngeoconfPath)
+		return os.path.isfile(self.gngeorcPath),os.path.isfile(self.xgngeoconf_file)
 
 	def getParams(self,mamename=None):
 		"""Try to get the params of the global or a Rom-specific configuration file.
@@ -88,7 +90,7 @@ If the file doesn't exist, there is no error but the param dict stays empty."""
 			#Parsing default main configuration files.
 			dict = [{},{}]
 			i=0
-			for path in self.gngeorcPath,self.xgngeoconfPath:
+			for path in self.gngeorcPath,self.xgngeoconf_file:
 				if self.exists()[i]:
 					file = open(path,"r") #Open
 					content = file.readlines() #Read
@@ -137,7 +139,8 @@ If the file doesn't exist, there is no error but the param dict stays empty."""
 		file.write(gngeoContent) #Write
 		file.close() #And close
 
-		file = open(self.xgngeoconfPath,"w") #Open (create if doesn't exist)
+		if not os.path.isdir(self.xgngeoconf_dir): os.mkdir(self.xgngeoconf_dir)
+		file = open(self.xgngeoconf_file,"w") #Open (create if doesn't exist)
 		file.write(xgngeoContent) #Write
 		file.close() #And close
 

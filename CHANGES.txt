@@ -2,11 +2,11 @@
  XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
-* Changes in version 16 (2005-07-XX):
+* Changes in version 16 (2005-10-XX):
 
-- Added checking for the PyGTK version (must be 2.6 or more). 
 - Bugfix: no more problem in the Rom list with some PyGTK ins-
 tallations. 
+- Added checking for the PyGTK version (must be 2.6 or more). 
 
 
 * Changes in version 15 (2005-07-14):
@@ -142,7 +142,7 @@ called WAGLAMOT ("Write A Gngeorc Like A Maman Ours Technology").
 This one is able to preserve options that aren't interpreted by
 XGngeo yet. WAGLAMOT is the Future! O_o;;
 - New Graphic's configurable options: Blitter & Effect.
-- Creation of a CHANGES.txt file :p
+- Creation of a `CHANGES.txt' file :p
 
 
 ``You're just an illusion...

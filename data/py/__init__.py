@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
 XGngeo: a frontend for Gngeo in GTK. ^_^.
-Copyleft 2003, 2004, 2005 Choplair-network
-$id: $
+Copyleft 2003, 2004, 2005, 2006 Choplair-network
+$Id$
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,27 +18,21 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
-import gtk, os, gettext
-from sys import path as syspath, argv, exit
-from string import split, find, capwords
+import sys, gtk
+if gtk.pygtk_version[:2]<(2,6): sys.exit("PyGTK version 2.6 or more is required.")
+import os, gettext
+from string import capwords
 from re import match
 from threading import Timer
-
-if gtk.pygtk_version[:2]<(2,6):
-	exit("PyGTK version 2.6 or more is required.")
-
-#Change working directory to XGngeo's.
-os.chdir(os.path.abspath(syspath[0]))
-
-#Add `data/py/' to PATH, then import internal modules.
-syspath.append("data/py/")
+#Internal modules.
 import command, configfile, history, rominfos, romrcfile
 
 VERSION = 16
 gngeoDir = os.path.expanduser("~/.gngeo")
+datarootpath = os.path.join(sys.prefix,'share/xgngeo/')
 
 #Internationalization.
-gettext.install("xgngeo","data/lang")
+gettext.install("xgngeo",os.path.join(datarootpath,"locale/"))
 
 class XGngeo:
 	def checkError(self):
@@ -59,20 +53,21 @@ class XGngeo:
 		if self.busyState!=1:
 			display = 1
 			textbuffer = gtk.TextBuffer()
+			filename = os.path.join(datarootpath,filename)
 
 			if os.path.isfile(filename):
 				file = open(filename,"r")
 				textbuffer.set_text("%s" % file.read())
 				file.close()
 			else:
-				if filename=="LICENSE.txt":
+				if filename[-11:]=="LICENSE.txt":
 					textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\nYou can read the GNU GPL license at:\nhttp://www.gnu.org/licenses/gpl.html") % filename)
 				else: display = 0
 
 			if display:
 				self.busy(1)
 
-				dialog = gtk.Dialog((filename,_("License"))[filename=="LICENSE.txt"],flags=gtk.DIALOG_NO_SEPARATOR)
+				dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],flags=gtk.DIALOG_NO_SEPARATOR)
 				dialog.connect("destroy",self.destroy,dialog,1)
 
 				if filename=="LICENSE.txt":
@@ -123,8 +118,8 @@ class XGngeo:
 			output = self.cmd.getOutput() #Raw ouput of Gngeo.
 			message = "" #Nothing for start!
 			#Parsing the output, line per line, looking for error...
-			for line in split(output,"\n"):
-				for line in split(line,"\r"):
+			for line in output.split("\n"):
+				for line in line.split("\r"):
 					#We ignore usual messages:
 					#1: Rom loading progression.
 					#2 & 3: YUV driver output.
@@ -181,7 +176,7 @@ class XGngeo:
 		for x in self.configMenu.get_children(): x.set_sensitive(False)
 
 		#Starting the Gngeo (failsafe :p) thread.
-		self.cmd = command.Command("'%s' -i '%s' -d '%s' '%s'" % (self.paramXGngeo['gngeopath'].replace("'","\'"),self.param['rompath'].replace("'","\'"),self.param['romrc'].replace("'","\'"),self.romPath))
+		self.cmd = command.Command('"%s" -i "%s" -d "%s" "%s"' % (self.paramXGngeo['gngeopath'].replace('"','\"'),self.param['rompath'].replace('"','\"'),self.param['romrc'].replace('"','\"'),self.romPath))
 		self.cmd.start()
 
 		self.gngeokilledbyme = 0
@@ -192,7 +187,7 @@ class XGngeo:
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
 		if self.cmd.isAlive():
-			Timer(0,os.system,("killall -9 '%s'" % self.paramXGngeo['gngeopath'].replace("'","\'"),)).start()
+			Timer(0,os.system,('killall -9 %s"' % self.paramXGngeo['gngeopath'].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
 	def romList(self,widget):
@@ -576,7 +571,7 @@ class XGngeo:
 			dialog.set_border_width(5)
 			dialog.vbox.set_spacing(4)
 
-			pipe = os.popen4("'%s' --version" % self.paramXGngeo['gngeopath'].replace("'","\'"))
+			pipe = os.popen4('"%s" --version' % self.paramXGngeo['gngeopath'].replace('"','\"'))
 			plop = match("Gngeo (\S*)",pipe[1].readline())
 			for x in pipe: x.close()
 
@@ -596,7 +591,7 @@ class XGngeo:
 			frame.add(box)
 
 			logo = gtk.Image()
-			logo.set_from_file("data/img/chprod.png")
+			logo.set_from_file(os.path.join(datarootpath,"img/chprod.png"))
 			box.pack_start(logo,False)
 
 			box2 = gtk.VBox(spacing=4)
@@ -817,7 +812,7 @@ class XGngeo:
 					"opengl":_("OpenGL blitter"),
 					"yuv":_("YUV blitter (YV12)")}
 
-				pipe = os.popen("'%s' --blitter help" % self.paramXGngeo['gngeopath'].replace("'","\'"))
+				pipe = os.popen('"%s" --blitter help' % self.paramXGngeo['gngeopath'].replace('"','\"'))
 				lines = pipe.readlines() #Get Gngeo's available blitter.
 				pipe.close()
 
@@ -870,7 +865,7 @@ class XGngeo:
 					"supersai": _("SuperSAI effect"),
 					"eagle":_("Eagle effect")}
 
-				pipe = os.popen("'%s' --effect help" % self.paramXGngeo['gngeopath'].replace("'","\'"))
+				pipe = os.popen('"%s" --effect help' % self.paramXGngeo['gngeopath'].replace('"','\"'))
 				lines = pipe.readlines() #Get Gngeo's available blitters.
 				pipe.close()
 
@@ -1045,12 +1040,12 @@ class XGngeo:
 				box2.pack_start(radio)
 				table.attach(frame,0,2,2,4)
 
-				if len(split(temp_param["p1key"],","))==len(key_list):
+				if len(temp_param["p1key"].split(","))==len(key_list):
 					#Given values seems to be okay.
 					plop = temp_param["p1key"]
 				else:	#There's a crap, let's use default key values.
 					plop = self.configfile.getDefaultParams()[0]["p1key"]
-				self.p1key_int_vals = split(plop,",")
+				self.p1key_int_vals = plop.split(",")
 
 				p1key_names = []
 				#Display the names of known key values.
@@ -1068,12 +1063,12 @@ class XGngeo:
 					p1keywidgets[i].set_size_request(40,-1)
 					i+=1
 
-				if len(split(temp_param["p2key"],","))==len(key_list):
+				if len(temp_param["p2key"].split(","))==len(key_list):
 					#Given values seems to be okay.
 					plop = temp_param["p2key"]
 				else:	#There's a crap, let's use default key values.
 					plop = self.configfile.getDefaultParams()[0]["p2key"]
-				self.p2key_int_vals = split(plop,",")
+				self.p2key_int_vals = plop.split(",")
 
 				p2key_names = []
 				#Display the names of known key values.
@@ -1092,7 +1087,7 @@ class XGngeo:
 
 					#Generate key's image
 					image = gtk.Image()
-					image.set_from_file("data/img/key_%s.png" % key_list[i])
+					image.set_from_file(os.path.join(datarootpath,"img/key_%s.png" % key_list[i]))
 
 					box2 = gtk.HBox() #A box...
 					box2.pack_start(p1keywidgets[i]) #with P1 key...
@@ -1136,21 +1131,21 @@ class XGngeo:
 				if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
 				table.attach(self.configwidgets['country_japan'],0,1,0,1)
 				image = gtk.Image()
-				image.set_from_file("data/img/japan.png")
+				image.set_from_file(os.path.join(datarootpath,"img/japan.png"))
 				table.attach(image,0,1,1,2)
 
 				self.configwidgets['country_usa'] = gtk.RadioButton(self.configwidgets['country_japan'],_("USA"))
 				if temp_param["country"]=="usa": self.configwidgets['country_usa'].set_active(1)
 				table.attach(self.configwidgets['country_usa'],1,2,0,1)
 				image = gtk.Image()
-				image.set_from_file("data/img/usa.png")
+				image.set_from_file(os.path.join(datarootpath,"img/usa.png"))
 				table.attach(image,1,2,1,2)
 
 				radio = gtk.RadioButton(self.configwidgets['country_japan'],_("Europe"))
 				if temp_param["country"]=="europe": radio.set_active(1)
 				table.attach(radio,2,3,0,1)
 				image = gtk.Image()
-				image.set_from_file("data/img/europe.png")
+				image.set_from_file(os.path.join(datarootpath,"img/europe.png"))
 				table.attach(image,2,3,1,2)
 				frame2.add(table)
 				box.pack_start(frame2)
@@ -1402,7 +1397,7 @@ class XGngeo:
 		self.configmamenames = []
 		self.romPath = None
 
-		self.configfile = configfile.Configfile()
+		self.configfile = configfile.Configfile(datarootpath)
 		self.param, self.paramXGngeo = self.configfile.getDefaultParams()	
 		self.history = history.History()
 
@@ -1413,7 +1408,7 @@ class XGngeo:
 		self.context_id = self.statusbar.get_context_id("Info")
 
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		gtk.window_set_default_icon_from_file("data/img/icon.png")
+		gtk.window_set_default_icon_from_file(os.path.join(datarootpath,"img/icon.png"))
 
 	def main(self):
 		#Window attributes.
@@ -1541,7 +1536,7 @@ class XGngeo:
 		container = gtk.EventBox()
 		container.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("white"))
 		logo = gtk.Image()
-		logo.set_from_file("data/img/xgngeo.png")
+		logo.set_from_file(os.path.join(datarootpath,"img/xgngeo.png"))
 		logo.set_padding(25,2)
 		container.add(logo)
 		box.pack_start(container)
@@ -1561,7 +1556,7 @@ class XGngeo:
 		for key,val in params[0].items(): self.param[key] = val
 		for key,val in params[1].items(): self.paramXGngeo[key] = val
 
-		if "--nobootcheck" in argv: self.main() #Go directly to the main window (unsafe!).
+		if "--nobootcheck" in sys.argv: self.main() #Going directly to the main window (unsafe!).
 		else: #Perform boot-time important checks.
 			error = 0
 			#Are Bios files present?
@@ -1572,7 +1567,7 @@ class XGngeo:
 			#Is Rom driver file present?
 			if not (os.path.isfile(self.param["romrc"])): error = 1
 			#Is the Gngeo executable present and returning correct version informations?
-			pipe = os.popen4("'%s' --version" % self.paramXGngeo['gngeopath'].replace("'","\'"))
+			pipe = os.popen4('"%s" --version' % self.paramXGngeo['gngeopath'].replace('"','\"'))
 			plop = match("Gngeo \S*",pipe[1].readline())
 			for x in pipe: x.close()
 			if not plop: error = 1

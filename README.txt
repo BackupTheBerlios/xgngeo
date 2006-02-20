@@ -15,10 +15,11 @@ under the terms of the GNU GPL license. Please see the file
 the XGngeo directory.
 
   Full documentation is included in this package in the `doc/'
-directory. With that one, you should get XGngeo running without
-any problem.
+directory. With that one, you should get XGngeo running
+without any problem.
 
-  For lastest updates and informations about XGngeo, please visit
-the Choplair-network homepage: `http://www.choplair.org/'
+  XGngeo is a project conducted by the Choplair-network, you
+can get lastest information and update from our website:
+	`http://www.choplair.org/'
 
 #$Id$
