@@ -1,0 +1,408 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-03 17:02+0200\n"
+"PO-Revision-Date: 2006-03-11 17:38+0100\n"
+"Last-Translator: Peter Kainrad <peter.kainrad@inode.at>\n"
+"Language-Team: Project-Id-Version: gtranslator 1.1.5Report-Msgid-Bugs-To: "
+"POT-Creation-Date: 2005-02-06 13:07+0700PO-Revision-Date: 2004-08-31 20:58"
+"+0200Last-Translator: Hendrik Brandt <eru@gmx.li>Language-Team: German "
+"<gnome-de@gnome.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-"
+"8Content-Transfer-Encoding: 8bitPlural-Forms: nplurals=2; plural=(n != 1); "
+"<Project-Id-Version: gtranslator 1.1.5Report-Msgid-Bugs-To: POT-Creation-"
+"Date: 2005-02-06 13:07+0700PO-Revision-Date: 2004-08-31 20:58+0200Last-"
+"Translator: Hendrik Brandt <eru@gmx.li>Language-Team: German <gnome-de@gnome."
+"org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-"
+"Encoding: 8bitPlural-Forms: nplurals=2; plural=(n != 1);>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+msgid "About XGngeo"
+msgstr "Über XGngeo"
+
+msgid "Arcade"
+msgstr "Arcade"
+
+msgid "Audio"
+msgstr "Audio"
+
+msgid "Audio / Joystick"
+msgstr "Audio / Joystick"
+
+msgid "Auto Frameskip"
+msgstr "Auto Frameskip"
+
+msgid "Auto execute Roms."
+msgstr "Roms automatisch starten."
+
+msgid "Bios OK."
+msgstr "Bios OK."
+
+msgid "Blitter:"
+msgstr "Blitter:"
+
+msgid "Configuration has been saved."
+msgstr "Einstellung wurde gespeichert."
+
+msgid "Configuration was not saved."
+msgstr "Einstellung wurde nicht gespeichert."
+
+msgid "Controller:"
+msgstr "Controller:"
+
+msgid "Country:"
+msgstr "Land:"
+
+msgid "Credits"
+msgstr "Mitarbeiter"
+
+msgid "Description:"
+msgstr "Beschreibung:"
+
+msgid "Double the x resolution (soft blitter only)"
+msgstr "Verdoppelte X-Auflösung (nur Soft-Blitter)"
+
+msgid ""
+"Double-click on its name to select a Rom, then press Open to load it if "
+"available (blue background)."
+msgstr "Doppelklicken um eine Rom-Datei auszuwählen. \"Open\" klicken, um sie zu starten."
+
+msgid "Driver file supporting <b>%s</b> Roms."
+msgstr "Treiber-Datei unterstützt <b>%s</b> Roms."
+
+msgid "Eagle effect"
+msgstr "Eagle-Effekt"
+
+msgid "Effect:"
+msgstr "Effekt:"
+
+msgid "Enable joystick support"
+msgstr "Joystick-Unterstützung ein- / ausschalten"
+
+msgid "Enable sound"
+msgstr "Sound ein- / ausschalten"
+
+msgid ""
+"Error: Unable to open the file \"%s\"!\n"
+"You can read the GNU GPL license at:\n"
+"http://www.gnu.org/licenses/gpl.html"
+msgstr ""
+"Fehler: Konnte Datei \"%s\" nicht öffnen!\n"
+"Sie können die GNU GPL Lizenz hier nachlesen:\n"
+"http://www.gnu.org/licenses/gpl.html"
+
+msgid "Europe"
+msgstr "Europa"
+
+msgid "From _list"
+msgstr "_Liste"
+
+msgid "Fullscreen"
+msgstr "Vollbildschirm"
+
+msgid "Genre:"
+msgstr "Genre:"
+
+msgid "Global emulation configuration."
+msgstr "Globale Emulations-Einstellungen."
+
+msgid "Gngeo executable:"
+msgstr "Gngeo Startdatei:"
+
+msgid "Gngeo returned the following message:"
+msgstr "Gngeo gab folgende Nachricht aus:"
+
+msgid "Graphic"
+msgstr "Grafik"
+
+msgid "HQ2X effect. High quality"
+msgstr "HQ2X-Effekt - Hohe Qualität"
+
+msgid "HQ3X effect. High quality"
+msgstr "HQ3X-Effekt. - Hohe Qualität"
+
+msgid "History size:"
+msgstr "Verlaufs-Größe:"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Important path configuration"
+msgstr "Wichtige Pfad-Einstellungen"
+
+msgid "Informations"
+msgstr "Informationen"
+
+msgid "Interpolation"
+msgstr "Interpolation"
+
+msgid ""
+"It seems that the important path parameters are not all valid. That is "
+"normal if Gngeo configuration file hasn't been yet created. Anyway, correct "
+"values should be specified for the emulation to work. Press OK to do so..."
+msgstr "Es scheint, als wären die Pfad-Paramater nicht richtig. Falls die GNgeo-Konfigurations-Datei noch nicht erstellt wurde, ist das normal. Um die Emulation zu ermöglichen, sollten die Werte richtig gesetzt werden. Drücken Sie OK, um dies zu tun..."
+
+msgid "Japan"
+msgstr "Japan"
+
+msgid "Joystick"
+msgstr "Joystick"
+
+msgid "Keyboard"
+msgstr "Tastatur"
+
+msgid "LQ2X effect. Low quality"
+msgstr "LQ2X-Effekt. - Niedrige Qialität"
+
+msgid "LQ3X effect. Low quality"
+msgstr "LQ3X-Effekt. - Niedrige Qualität"
+
+msgid "Larger screen (windowed mode)"
+msgstr "Größerer Bildschirm (Fenster-Modus)"
+
+msgid "License"
+msgstr "Lizenz"
+
+msgid "List of Roms from your driver file."
+msgstr "Liste der Roms ihrer Treiber-Datei."
+
+msgid ""
+"Main coder: Choplair.\n"
+"Assisted by: Pachilor."
+msgstr ""
+"Programmierer: Choplair.\n"
+"Assistiert von: Pachilor."
+
+msgid "Manufacturer:"
+msgstr "Hersteller:"
+
+msgid "Neo Geo type:"
+msgstr "Neo Geo Typ:"
+
+msgid "No Bios."
+msgstr "Kein Bios."
+
+msgid "No effect"
+msgstr "Kein Effekt"
+
+msgid "OpenGL blitter"
+msgstr "OpenGL-Blitter"
+
+msgid "Other thing configuration"
+msgstr "Andere Einstellungen"
+
+msgid "Path to libGL.so (optional):"
+msgstr "Pfad zu libGL.so (optional):"
+
+msgid "Player 1"
+msgstr "Spieler 1"
+
+msgid "Player 1 device:"
+msgstr "Spieler 1 Device:"
+
+msgid "Player 2"
+msgstr "Spiler 2"
+
+msgid "Player 2 device:"
+msgstr "Spieler 2 Device:"
+
+msgid "Players:"
+msgstr "Spieler:"
+
+msgid "Please check it up then try to save again... ^^;"
+msgstr ""
+"Bitte kontrollieren Sie sie und versuchen Sie nochmals zu speichern... ^^;"
+
+msgid "Preview image"
+msgstr "Bildvorschau"
+
+msgid "Preview image directory (optional):"
+msgstr "Bild-Vorschau Verzeichnis (optional):"
+
+msgid "Raster effect"
+msgstr "Raster-Effekt"
+
+msgid "Rating:"
+msgstr "Bewertung:"
+
+msgid "Rom archive"
+msgstr "Rom-Archiv"
+
+msgid "Rom driver file (\"romrc\"):"
+msgstr "Rom-Treiber-Datei (\"romrc\"):"
+
+msgid "Rom stopped (%s)."
+msgstr "Rom gestoppt (%s)."
+
+msgid "Rom: \"%s\" (%s)"
+msgstr "Rom: \"%s\" (%s)"
+
+msgid "Roms & Bios directory:"
+msgstr "Roms & Bios Ordner:"
+
+msgid "Running Gngeo version %s."
+msgstr "Verwendete Gngeo-Version %s."
+
+msgid "SAI effect"
+msgstr "SAI-Effekt"
+
+msgid "Sample rate:"
+msgstr "Sample Rate:"
+
+msgid "Scale2x effect"
+msgstr "2x Skalierungs-Effekt"
+
+msgid "Scale2x effect with 50% scanline"
+msgstr "2x Skalierungs-Effekt mit 50% Scanlines"
+
+msgid "Scale2x effect with 75% scanline"
+msgstr "2x Skalierungs-Effekt mit 75% Scanlines"
+
+msgid "Scale3x effect"
+msgstr "3x Skalierungs-Effekt"
+
+msgid "Scale4x effect"
+msgstr "3x Skalierungs-Effekt"
+
+msgid "Scale:"
+msgstr "Skalierung:"
+
+msgid "Scanline 50% effect"
+msgstr "Scanline 50% Effekt"
+
+msgid "Scanline effect"
+msgstr "Scanline-Effekt"
+
+msgid "Select a Rom"
+msgstr "Wählen Sie eine Rom-Datei"
+
+msgid "Select the \"%s\" file."
+msgstr "Wählen Sie die \"%s\"-Datei."
+
+msgid "Select the Gngeo executable."
+msgstr "Wählen Sie die Gngeo Startdatei."
+
+msgid "Select the Rom driver file."
+msgstr "Wählen Sie die Rom-Treiber-Datei:"
+
+msgid "Select the Roms & Bios directory."
+msgstr "Wählen Sie das Roms & Bios Verzeichnis."
+
+msgid "Select the XML file containing Rom infos."
+msgstr "Wählen Sie die XML-Datei mit den Rom-Informationen."
+
+msgid "Select the preview image directory."
+msgstr "Wählen Sie das Bild-Vorschau-Verzeichnis."
+
+msgid "Show FPS"
+msgstr "Zeige FPS"
+
+msgid "Show available Roms only."
+msgstr "Zeige nur verfügbare Roms."
+
+msgid "Size:"
+msgstr "Größe:"
+
+msgid "Software blitter"
+msgstr "Software-Blitter"
+
+msgid ""
+"Sorry, this configuration cannot be saved because one or more parameters "
+"look not valid."
+msgstr ""
+"Leider kann diese Einstellung nicht gespeichert werden, da einige Parameter "
+"nicht richtig gesetzt sind."
+
+msgid "Specific configuration:"
+msgstr "Spezifische Einstellungen:"
+
+msgid "Specific emulation options for \"%s\"."
+msgstr "Spezifische Emulationseinstellungen für \"%s\"."
+
+msgid "Starting Rom (%s)"
+msgstr "Starte Rom (%s)"
+
+msgid "SuperSAI effect"
+msgstr "SuperSAI-Effekt"
+
+msgid "System"
+msgstr "System"
+
+msgid "These paths must be valid for a working emulation."
+msgstr "Für eine funktionierende Emulation müssen diese Pfäde richtig gesetzt sein."
+
+msgid ""
+"This program is released under the terms of the GNU General Public License."
+msgstr "Dieses Programm wurde unter der GNU General Public Lizenz veröffentlicht."
+
+msgid ""
+"To modify a key, click the button then push your new key.\n"
+"This configuration is only for keyboard."
+msgstr ""
+"Um eine Taste zu ändern, klicken Sie auf den Button, dann drücken Sie ihre gewünschte Taste.\n"
+"Diese Konfiguration ist nur für die Tastatür."
+
+msgid "USA"
+msgstr "USA"
+
+msgid "Version %i."
+msgstr "Version %i."
+
+msgid "Welcome to XGngeo version %i."
+msgstr "Willkommen zur XGngeo-Version %i."
+
+msgid "XGngeo: a frontend for Gngeo. :p"
+msgstr "XGngeo: Eine Oberfläche für Gngeo :p"
+
+msgid "XML file containing Rom infos (optional):"
+msgstr "XML-Datei mit Rom-Informationen (optional):"
+
+msgid "YUV blitter (YV12)"
+msgstr "YUV blitter (YV12)"
+
+msgid "Year:"
+msgstr "Jahr:"
+
+msgid "_Audio / Joystick"
+msgstr "_Audio / Joystick"
+
+msgid "_Configuration"
+msgstr "_Einstellungen"
+
+msgid "_File"
+msgstr "_Datei"
+
+msgid "_Global emulation"
+msgstr "_Emulation"
+
+msgid "_Graphic"
+msgstr "_Grafik"
+
+msgid "_History"
+msgstr "_Verlauf"
+
+msgid "_Important paths"
+msgstr "_Wichtige Pfäde"
+
+msgid "_Info"
+msgstr "_Info"
+
+msgid "_Keyboard"
+msgstr "_Tastatur"
+
+msgid "_License"
+msgstr "_Lizenz"
+
+msgid "_Load Rom"
+msgstr "Rom _laden"
+
+msgid "_Manually"
+msgstr "_Manuell"
+
+msgid "_Other"
+msgstr "_Andere"
+
+msgid "_System"
+msgstr "_System"
