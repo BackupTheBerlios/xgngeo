@@ -19,7 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 import sys, gtk
-if gtk.pygtk_version[:2]<(2,6): sys.exit("PyGTK version 2.6 or more is required.")
+if gtk.pygtk_version[:2]<(2,6): sys.exit("Error: PyGTK version 2.6 or more is required.")
 import os, gettext
 from string import capwords
 from re import match
@@ -29,10 +29,10 @@ import command, configfile, history, rominfos, romrcfile
 
 VERSION = 16
 gngeoDir = os.path.expanduser("~/.gngeo")
-datarootpath = os.path.join(sys.prefix,'share/xgngeo/')
+datarootpath = os.path.join(sys.prefix,'share','xgngeo')
 
 #Internationalization.
-gettext.install("xgngeo",os.path.join(datarootpath,"locale/"))
+gettext.install("xgngeo",os.path.join(datarootpath,"locale"))
 
 class XGngeo:
 	def checkError(self):
@@ -1556,7 +1556,9 @@ class XGngeo:
 		for key,val in params[0].items(): self.param[key] = val
 		for key,val in params[1].items(): self.paramXGngeo[key] = val
 
-		if "--nobootcheck" in sys.argv: self.main() #Going directly to the main window (unsafe!).
+		if "--nobootcheck" in sys.argv:
+                    print _("Warning: you choosed to launch XGngeo without checking some crucial parameters which, if incorret, could quickly make the frontend become unstable. You're doing it at your own risk!")
+                    self.main() #Going directly to the main window (unsafe!).
 		else: #Perform boot-time important checks.
 			error = 0
 			#Are Bios files present?
