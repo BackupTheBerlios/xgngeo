@@ -1,5 +1,6 @@
+#!/usr/bin/env python
 """
-XGngeo: a frontend for Gngeo in GTK ^^.
+XGngeo: a frontend for Gngeo in GTK. ^_^.
 Copyleft 2003, 2004, 2005, 2006 Choplair-network
 $Id$
 
@@ -17,21 +18,12 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
-from threading import Thread
-from gtk import threads_enter, threads_leave
-from os import popen
+import sys, os.path
 
-class ThreadedCmd(Thread):
-	def __init__(self,cmd):
-		Thread.__init__(self)
+package_dir = os.path.join(sys.prefix,"lib","python%s" % sys.version[:3],"site-packages","xgngeo")
 
-		self.command = cmd
-		self.output = ""
+#Append XGngeo's module directory to `sys.path'.
+sys.path.append(package_dir)
 
-	def run(self):
-		threads_enter()
-		pipe = popen(self.command,"r")
-		threads_leave()
-		self.output = pipe.read()
-	
-	def getOutput(self): return self.output
+#Launch the program!
+execfile(os.path.join(package_dir,"__init__.py"))

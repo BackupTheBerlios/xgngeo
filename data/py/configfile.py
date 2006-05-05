@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 from re import match
 import os.path
+from sys import prefix
 
 class Configfile:
 	"""XGngeo manages two main configuration files:
@@ -46,7 +47,7 @@ as the `gngeorc'."""
 			#Path
 			"libglpath":"/usr/lib/libGL.so",
 			"rompath": os.path.expanduser("~/..."),
-			"romrc":"/usr/local/share/gngeo/romrc",
+			"romrc":os.path.join(prefix,"share","gngeo","romrc"),
 			#Graphic
 			"blitter":"soft",
 			"effect":"none",
@@ -74,7 +75,7 @@ as the `gngeorc'."""
 			"gngeopath":"gngeo",
 			"historysize":5,
 			"previewimages":"false",
-			"previewimagedir": os.path.join(self.datarootpath,"img/rom_previews"),
+			"previewimagedir": os.path.join(self.datarootpath,"img","rom_previews"),
 			"rominfos":"true",
 			"rominfoxml": os.path.join(self.datarootpath,"rominfos.xml"),
 			"showavailableromsonly":"true"

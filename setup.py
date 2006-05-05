@@ -1,15 +1,25 @@
 #!/usr/bin/env python
-from distutils.core import setup
-import os
+"""
+XGngeo: a frontend for Gngeo in GTK. ^_^.
+Copyleft 2003, 2004, 2005, 2006 Choplair-network
+$Id$
 
-def filelist(dir):
-	"""Return (not recursively) the relative path of all *files* in a directory."""
-	list = []
-	for x in os.listdir(dir):
-		rel_path = os.path.join(dir,x)
-		if os.path.isfile(rel_path):
-			list.append(rel_path)
-	return list
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+"""
+from distutils.core import setup
+import os.path, glob, sys
 
 setup(
 	name='XGngeo',
@@ -24,15 +34,24 @@ setup(
 	package_dir={'xgngeo': 'data/py'},
 	data_files=[
 		#Images.
-		('share/xgngeo/img',filelist("data/img")),
+		(os.path.join("share","xgngeo","img"),glob.glob(os.path.join("data","img","*.png"))),
 		#Rom infos.
-		('share/xgngeo',['data/rominfos.dtd','data/rominfos.xml']),
+		(os.path.join("share","xgngeo"),glob.glob(os.path.join("data","rominfos.*"))),
 		#License text.
-		('share/xgngeo',['LICENSE.txt']),
+		(os.path.join("share","xgngeo"),['LICENSE.txt']),
 		#Localisation.
-		('share/xgngeo/locale/es/LC_MESSAGES',['data/locale/es/LC_MESSAGES/xgngeo.mo']), #Spanish
-		('share/xgngeo/locale/fr/LC_MESSAGES',['data/locale/fr/LC_MESSAGES/xgngeo.mo']), #French
-		('share/xgngeo/locale/pl/LC_MESSAGES',['data/locale/pl/LC_MESSAGES/xgngeo.mo']), #Polish
-		('share/xgngeo/locale/pt_BR/LC_MESSAGES',['data/locale/pt_BR/LC_MESSAGES/xgngeo.mo']) #Portuguese of Brazil
+		(os.path.join("share","xgngeo","locale","es","LC_MESSAGES"),[os.path.join("data","locale","es","LC_MESSAGES","xgngeo.mo")]), #Spanish
+		(os.path.join("share","xgngeo","locale","de","LC_MESSAGES"),[os.path.join("data","locale","de","LC_MESSAGES","xgngeo.mo")]), #Spanish
+		(os.path.join("share","xgngeo","locale","fr","LC_MESSAGES"),[os.path.join("data","locale","fr","LC_MESSAGES","xgngeo.mo")]), #French
+		(os.path.join("share","xgngeo","locale","pl","LC_MESSAGES"),[os.path.join("data","locale","pl","LC_MESSAGES","xgngeo.mo")]), #Polish
+		(os.path.join("share","xgngeo","locale","pt_BR","LC_MESSAGES"),[os.path.join("data","locale","pt_BR","LC_MESSAGES","xgngeo.mo")]) #Portuguese of Brazil
 		]
 	)
+	
+if "install" in sys.argv:
+	#Post-install stuffs (Unix).
+	if os.name=="posix":
+		import shutil
+		startup_script = "/usr/local/bin/xgngeo"
+		shutil.copy("./data/script/xgngeo_startup.py",startup_script)
+		print "XGngeo start-up script put into `%s'." % os.path.dirname(startup_script)
