@@ -78,7 +78,8 @@ as the `gngeorc'."""
 			"previewimagedir": os.path.join(self.datarootpath,"img","rom_previews"),
 			"rominfos":"true",
 			"rominfoxml": os.path.join(self.datarootpath,"rominfos.xml"),
-			"showavailableromsonly":"true"
+			"showavailableromsonly":"true",
+			"centerwindow":"false"
 			}
 
 	def exists(self):
@@ -86,7 +87,7 @@ as the `gngeorc'."""
 
 	def getParams(self,mamename=None):
 		"""Try to get the params of the global or a Rom-specific configuration file.
-If the file doesn't exist, there is no error but the param dict stays empty."""
+		If the file doesn't exist, there is no error but the param dict stays empty."""
 		if not mamename:
 			#Parsing default main configuration files.
 			dict = [{},{}]

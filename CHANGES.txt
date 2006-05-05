@@ -4,9 +4,12 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- Added possibility to choose XGngeo window to be centered on
+the screen on start.
 - Bugfix: no more problem in the Rom list with some PyGTK ins-
 tallations. 
 - Added checking for the PyGTK version (must be 2.6 or more).
+- Minimum accepted Gngeo version setted to 0.6.11 (current :p).
 - System-wide installation (using distutil) & per-user XGngeo
 configuration.
 - New German translation by Peter Kainrad.

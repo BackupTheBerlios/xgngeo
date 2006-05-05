@@ -49,7 +49,7 @@ class XGngeo:
 		self.emulator = emulator.Emulator(self.xgngeoParams['gngeopath'],self.gngeoParams['romrc'])
 		self.history = history.History()
 
-		#Statusbar
+		#Statusbar.
 		self.statusbar = gtk.Statusbar()
 		self.context_id = self.statusbar.get_context_id("Info")
 
@@ -595,7 +595,7 @@ class XGngeo:
 			label.set_use_markup(True)
 			dialog.vbox.pack_start(label)
 
-			label = gtk.Label("Copyleft 2003, 2004, 2005 Choplair-network.")
+			label = gtk.Label("Copyleft 2003, 2004, 2005, 2006 Choplair-network.")
 			dialog.vbox.pack_start(label)
 			label = gtk.Label(_("This program is released under the terms of the GNU General Public License."))
 			label.set_line_wrap(True)
@@ -642,7 +642,7 @@ class XGngeo:
 				is an existing file or directory, and change the icon
 				in consequence.
 				Some other special conditions for the icon to change
-				exist. As other thing than the icon which migth be
+				exist. As Other things than the icon which migth be
 				also modified."""
 				path = widget.get_text()
 
@@ -1139,7 +1139,7 @@ class XGngeo:
 				frame2.add(box2)
 				box.pack_start(frame2)
 
-				#Contry
+				#Country
 				frame2 = gtk.Frame(_("Country:"))
 
 				table = gtk.Table(3,2)
@@ -1170,30 +1170,15 @@ class XGngeo:
 
 			elif type==5:
 				#
-				# Other thing configuration.
+				# Other things configuration.
 				#
-				self.configDialog.set_title(_("Other thing configuration"))
-				box = gtk.VBox(spacing=4) #The box :p
-				box.set_border_width(4)
-
-				box2 = gtk.HBox(spacing=4)
-				self.configwidgets['autoexecrom'] = gtk.CheckButton(_("Auto execute Roms."))
-				if self.xgngeoParams["autoexecrom"]=="true": self.configwidgets['autoexecrom'].set_active(1)
-				box2.pack_start(self.configwidgets['autoexecrom'])
-
-				#History size
-				label = gtk.Label(_("History size:"))
-				box2.pack_start(label)
-
-				adjustment = gtk.Adjustment(float(self.xgngeoParams["historysize"]),1,20,1)
-
-				self.configwidgets['historysize'] = gtk.SpinButton(adjustment)
-				box2.pack_start(self.configwidgets['historysize'],False)
-				box.pack_start(box2)
+				self.configDialog.set_title(_("Other things configuration"))
+				table = gtk.Table(4,2) #The box :p
+				table.set_col_spacings(6)
+				table.set_border_width(2)
 
 				frame = gtk.Frame(_("Path to libGL.so (optional):"))
 				box2 = gtk.HBox()
-
 				image = gtk.Image()
 				box2.pack_start(image,False,padding=3)
 				self.configwidgets['libglpath'] = gtk.Entry()
@@ -1208,7 +1193,7 @@ class XGngeo:
 				button.connect("clicked",self.fileSelect,_('Select the "%s" file.') % "libGL.so",self.configwidgets['libglpath'].get_text(),"libglpath")
 				box2.pack_end(button,False)
 				frame.add(box2)
-				box.pack_start(frame)
+				table.attach(frame,0,1,0,1)
 
 				#Bouyaka!
 				def bouyaka(widget,*targets):
@@ -1233,7 +1218,7 @@ class XGngeo:
 				button.connect('clicked',self.fileSelect,_('Select the preview image directory.'),self.configwidgets['previewimagedir'].get_text(),"previewimagedir",1)
 				box2.pack_end(button,False)
 				frame.add(box2)
-				box.pack_start(frame)
+				table.attach(frame,0,1,1,2)
 				#Bouyaka.
 				if self.xgngeoParams['previewimages']=="true": self.configwidgets['previewimages'].set_active(1)
 				else: bouyaka(self.configwidgets['previewimages'],image,self.configwidgets['previewimagedir'],button)
@@ -1256,13 +1241,31 @@ class XGngeo:
 				button.connect("clicked",self.fileSelect,_('Select the XML file containing Rom infos.'),self.xgngeoParams["rominfoxml"],"rominfoxml")
 				box2.pack_end(button,False)
 				frame.add(box2)
-				box.pack_start(frame)
+				table.attach(frame,0,1,2,3)
+				
 				#Bouyaka.
 				if self.xgngeoParams['rominfos']=="true": self.configwidgets['rominfos'].set_active(1)
 				else: bouyaka(self.configwidgets['rominfos'],image,self.configwidgets['rominfoxml'],button)
 				self.configwidgets['rominfos'].connect("toggled",bouyaka,image,self.configwidgets['rominfoxml'],button)
 
-				self.configDialog.vbox.pack_start(box)
+				self.configwidgets['autoexecrom'] = gtk.CheckButton(_("Auto execute Roms."))
+				if self.xgngeoParams["autoexecrom"]=="true": self.configwidgets['autoexecrom'].set_active(1)
+				table.attach(self.configwidgets['autoexecrom'],1,2,0,1)
+
+				self.configwidgets['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
+				if self.xgngeoParams["centerwindow"]=="true": self.configwidgets['centerwindow'].set_active(1)
+				table.attach(self.configwidgets['centerwindow'],1,2,2,3)
+				
+				#History size
+				box2 = gtk.HBox(spacing=4)
+				label = gtk.Label(_("History size:"))
+				box2.pack_start(label)
+				adjustment = gtk.Adjustment(float(self.xgngeoParams["historysize"]),1,20,1)
+				self.configwidgets['historysize'] = gtk.SpinButton(adjustment)
+				box2.pack_start(self.configwidgets['historysize'],False)
+				table.attach(box2,1,2,1,2)
+
+				self.configDialog.vbox.pack_start(table)
 
 			#``Save" Button
 			button = gtk.Button(stock=gtk.STOCK_SAVE)
@@ -1303,7 +1306,7 @@ class XGngeo:
 			if error:				
 				def callback(widget,*args): widget.destroy()
 				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be saved because one or more parameters look not valid."),_("Please check it up then try to save again... ^^;")))
+				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be saved because one or more parameters does not look valid."),_("Please check it up then try to save again... ^^;")))
 				dialog.connect_object("response",callback,dialog)
 				dialog.show_all()
 
@@ -1351,9 +1354,10 @@ class XGngeo:
 			letsWrite = 1 #Let's write!
 
 		elif type==5:
-			#Update other thing configuration params.
+			#Update Other things configuration params.
 			self.xgngeoParams["autoexecrom"] = ("false","true")[self.configwidgets['autoexecrom'].get_active()] #autoexecrom
 			self.xgngeoParams["historysize"] = int(self.configwidgets['historysize'].get_value()) #historysize
+			self.xgngeoParams["centerwindow"] = ("false","true")[self.configwidgets['centerwindow'].get_active()] #centerwindow_old
 			self.gngeoParams["libglpath"] = self.configwidgets['libglpath'].get_text() #libglpath
 			self.xgngeoParams["previewimages"] = ("false","true")[self.configwidgets['previewimages'].get_active()] #previewimage
 			self.xgngeoParams["previewimagedir"] = self.configwidgets['previewimagedir'].get_text() #previewimagedir
@@ -1367,17 +1371,20 @@ class XGngeo:
 
 			#Perform particular actions.
 			if special in (0,1): #Do the default or the sligtly different ``firstrun" job.
+			
 				#Put the options considered as temporary Rom-specific configuration parameters to the global parameter dictionnary.
 				if type in (1,2,3,4):
 					for key,val in temp_param.items(): self.gngeoParams[key] = val
 
-				self.configfile.writeGlobalConfig(self.gngeoParams,self.xgngeoParams,VERSION) #Write out! :p
+				self.configfile.writeGlobalConfig(self.gngeoParams,self.xgngeoParams,VERSION) #Writing out! :p
 				self.busy(0)
-				if not special: self.statusbar.push(self.context_id,_("Configuration has been saved.")) #Update Status message
+				
+				if not special: self.statusbar.push(self.context_id,_("Configuration has been saved.")) #Updating Status message
 				else: self.main() #The program has been configured, so now we can use it!
 
 			elif special==2: #Rom-specific configuration.
-				self.configfile.writeRomConfig(temp_param,mamename,VERSION)
+				self.configfile.writeRomConfig(temp_param,mamename,VERSION) #Writing out! :p
+				
 				if mamename==self.mamename:
 					#Update buttons.
 					self.specconf['new'].hide()
@@ -1408,6 +1415,9 @@ class XGngeo:
 		#Window attributes.
 		self.window.set_title("XGngeo")
 		self.window.connect("delete_event",self.quit)
+		
+		#Window centering.
+		if self.xgngeoParams["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 
 		box = gtk.VBox(False,0)
 		self.window.add(box)
