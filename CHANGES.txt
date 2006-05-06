@@ -4,6 +4,7 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- Better guessing of the default path to Gngeo's `romrc' file.
 - Added possibility to choose XGngeo window to be centered on
 the screen on start.
 - Bugfix: no more problem in the Rom list with some PyGTK ins-
