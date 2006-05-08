@@ -507,6 +507,10 @@ class XGngeo:
 			filter.set_name(_("ROM archive"))
 			filter.add_pattern("*.zip")
 			dialog.add_filter(filter)
+			filter = gtk.FileFilter()
+			filter.set_name(_("All files"))
+			filter.add_pattern("*")
+			dialog.add_filter(filter)
 
 		dialog.run()
 

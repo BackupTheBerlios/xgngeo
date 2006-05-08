@@ -47,6 +47,27 @@ class Emulator:
 
 		return tuple(list), version.group(1) #Returning as tuple and string.
 
+	def getAllSupportedRom(self):
+		"""Returning list of all the Rom supported by the driver file,
+		according to Gngeo output with the `--listgame' argument."""
+		pipe = popen("'%s' --listgame" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
+		for line in pipe.readlines():
+			plop = match("(\S*) : (.*)",line)
+			if plop:
+				pass
+		pipe.close()
+
+	def getAvailableRomInDirectory(self,dir):
+		"""Returning list of all the Rom available in a mentioned
+		directory, according to Gngeo output with the `--scandir=[dir]'
+		argument."""
+		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
+		for line in pipe.readlines():
+			plop = match("(\S*):(.*):(\S*)",line)
+			if plop:
+				pass
+		pipe.close()
+
 	def romLaunching(self,rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""
 		self.cmd = command.ThreadedCmd("'%s' -d '%s' '%s'" % (self.path['gngeo'],self.path['romrc'],rom_path))
