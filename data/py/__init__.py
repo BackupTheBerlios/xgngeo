@@ -136,7 +136,7 @@ class XGngeo:
 		# the error/warning message returned by Gngeo if it's the case.
 		# We do not so when the game was stopped from XGngeo.
 		if not self.gngeokilledbyme:
-			output = self.emulator.romGetGngeoOutput() #Raw ouput of Gngeo.
+			output = self.emulator.romGetProcessOutput() #Raw ouput of Gngeo.
 			message = "" #Nothing for start!
 			#Parsing the output, line per line, looking for error...
 			for line in output.split("\n"):
@@ -520,7 +520,7 @@ class XGngeo:
 
 		dialog.run()
 
-	def setPathFromRecent(self,widget,fullname,path):
+	def setRomFromHistory(self,widget,fullname,path):
 		#Setting important variables.
 		self.romPath = path
 		self.romFullName = fullname
@@ -534,10 +534,9 @@ class XGngeo:
 		else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
 
 	def setPath(self,dialog,response,data):
-		"""Get and set path of various things from
-		the path of the file chooser."""
+		"""Get/set path of various things from the path of the file chooser."""
 		if response==gtk.RESPONSE_OK:
-			if data=="rom":
+			if data=="rom": #Set Rom from the file chooser.
 				path = dialog.get_filename()
 				#Does it exist?
 				if os.path.isfile(path):
@@ -569,13 +568,13 @@ class XGngeo:
 
 	def historyAdd(self,fullname,path):
 		#Update history file and get new list...
-		list = self.history.add(fullname,path,size=int(self.xgngeoParams["historysize"]))
+		list = self.history.addRom(fullname,path,size=int(self.xgngeoParams["historysize"]))
 
 		#Recreate the history menu.
 		for x in self.historyMenu.get_children()[1:]: self.historyMenu.remove(x) #Remove old entries.
 		for x in list: #Put the new ones.
 			menu_item = gtk.MenuItem(x[0])
-			menu_item.connect("activate",self.setPathFromRecent,x[0],x[1])
+			menu_item.connect("activate",self.setRomFromHistory,x[0],x[1])
 			self.historyMenu.append(menu_item)
 
 		self.historyMenu.show_all()
@@ -1127,15 +1126,20 @@ class XGngeo:
 				box.set_border_width(4)
 				notebook.append_page(box,gtk.Label(_("System")))
 
-				#Type
-				frame2 = gtk.Frame(_("Neo Geo type:"))
+				#System
+				frame2 = gtk.Frame(_("Neo Geo BIOS type:"))
 				box2 = gtk.HBox()
-				self.configwidgets['type_arcade'] = gtk.RadioButton(None,_("Arcade"))
-				if temp_param["system"]=="arcade": self.configwidgets['type_arcade'].set_active(1)
-				box2.pack_start(self.configwidgets['type_arcade'])
-				radio = gtk.RadioButton(self.configwidgets['type_arcade'],_("Home"))
-				if temp_param["system"]=="home": radio.set_active(1)
+				self.configwidgets['system_arcade'] = gtk.RadioButton(None,_("Arcade"))
+				box2.pack_start(self.configwidgets['system_arcade'])
+				self.configwidgets['system_home'] = gtk.RadioButton(self.configwidgets['system_arcade'],_("Home"))
+				box2.pack_start(self.configwidgets['system_home'])
+				radio = gtk.RadioButton(self.configwidgets['system_arcade'],_("Universal"))
 				box2.pack_start(radio)
+				
+				if temp_param["system"]=="arcade": self.configwidgets['system_arcade'].set_active(1)
+				elif temp_param["system"]=="home": self.configwidgets['system_home'].set_active(1)
+				elif temp_param["system"]=="unibios": radio.set_active(1)
+				
 				frame2.add(box2)
 				box.pack_start(frame2)
 
@@ -1144,25 +1148,27 @@ class XGngeo:
 
 				table = gtk.Table(3,2)
 				self.configwidgets['country_japan'] = gtk.RadioButton(None,_("Japan"))
-				if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
 				table.attach(self.configwidgets['country_japan'],0,1,0,1)
 				image = gtk.Image()
 				image.set_from_file(os.path.join(datarootpath,"img/japan.png"))
 				table.attach(image,0,1,1,2)
 
 				self.configwidgets['country_usa'] = gtk.RadioButton(self.configwidgets['country_japan'],_("USA"))
-				if temp_param["country"]=="usa": self.configwidgets['country_usa'].set_active(1)
 				table.attach(self.configwidgets['country_usa'],1,2,0,1)
 				image = gtk.Image()
 				image.set_from_file(os.path.join(datarootpath,"img/usa.png"))
 				table.attach(image,1,2,1,2)
 
 				radio = gtk.RadioButton(self.configwidgets['country_japan'],_("Europe"))
-				if temp_param["country"]=="europe": radio.set_active(1)
 				table.attach(radio,2,3,0,1)
 				image = gtk.Image()
 				image.set_from_file(os.path.join(datarootpath,"img/europe.png"))
 				table.attach(image,2,3,1,2)
+				
+				if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
+				elif temp_param["country"]=="usa": self.configwidgets['country_usa'].set_active(1)
+				elif temp_param["country"]=="europe": radio.set_active(1)
+				
 				frame2.add(table)
 				box.pack_start(frame2)
 
@@ -1336,7 +1342,9 @@ class XGngeo:
 			temp_param["joystick"] = ("false","true")[self.configwidgets['joystick'].get_active()] #joystick
 			temp_param["p1joydev"] = self.configwidgets['p1joydev'].get_active() #p1joydev
 			temp_param["p2joydev"] = self.configwidgets['p2joydev'].get_active() #p2joydev
-			temp_param["system"] = ("home","arcade")[self.configwidgets['type_arcade'].get_active()] #system
+			if self.configwidgets['system_arcade'].get_active(): temp_param["system"] = "arcade" #system
+			elif self.configwidgets['system_home'].get_active(): temp_param["system"] = "home"
+			else: temp_param["system"] = "unibios"
 			if self.configwidgets['country_japan'].get_active(): temp_param["country"] = "japan" #country
 			elif self.configwidgets['country_usa'].get_active(): temp_param["country"] = "usa"
 			else: temp_param["country"] = "europe"
@@ -1416,9 +1424,6 @@ class XGngeo:
 		self.window.set_title("XGngeo")
 		self.window.connect("delete_event",self.quit)
 		
-		#Window centering.
-		if self.xgngeoParams["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-
 		box = gtk.VBox(False,0)
 		self.window.add(box)
 		menu_bar = gtk.MenuBar()
@@ -1451,7 +1456,7 @@ class XGngeo:
 		#Generate history menu from history file
 		for x in self.history.getList(size=int(self.xgngeoParams["historysize"])):
 			menu_item2 = gtk.MenuItem(x[0])
-			menu_item2.connect("activate",self.setPathFromRecent,x[0],x[1])
+			menu_item2.connect("activate",self.setRomFromHistory,x[0],x[1])
 			self.historyMenu.append(menu_item2)
 		menu.append(self.history_menu_item)
 
@@ -1551,6 +1556,8 @@ class XGngeo:
 		self.statusbar.push(self.context_id,_("Welcome to XGngeo version %i.") % VERSION)
 		box.pack_end(self.statusbar,False)
 
+		#Window positioning.
+		if self.xgngeoParams["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
 		#Show all.
 		self.window.show_all()
 
