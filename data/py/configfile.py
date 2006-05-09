@@ -35,10 +35,13 @@ as the `gngeorc'."""
 
 	def __init__(self,datarootpath):
 		self.datarootpath = datarootpath
-		self.xgngeoconf_dir = os.path.expanduser("~/.xgngeo") #XGngeo local configuration directory.
-		self.xgngeoconf_file = os.path.join(self.xgngeoconf_dir,"xgngeo.conf") #Path to XGngeo config file.
-		self.gngeoDir = os.path.expanduser("~/.gngeo") #Gngeo local configuration directory.
-		self.gngeorcPath = os.path.join(self.gngeoDir,"gngeorc") #Path to Gngeo config file.
+		self.xgngeoUserDir = os.path.expanduser("~/.xgngeo") #XGngeo local configuration directory.
+		self.xgngeoConfFile = os.path.join(self.xgngeoUserDir,"xgngeo.conf") #Path to XGngeo config file.
+		self.gngeoUserDir = os.path.expanduser("~/.gngeo") #Gngeo local configuration directory.
+		self.gngeorcPath = os.path.join(self.gngeoUserDir,"gngeorc") #Path to Gngeo config file.
+		
+		for dir in (self.xgngeoUserDir,self.gngeoUserDir):
+			if not os.path.isdir(dir): os.mkdir(dir)
 
 	def getDefaultParams(self):
 		"""Returns default options for the `gngeorc'/Rom-specific
@@ -83,7 +86,7 @@ as the `gngeorc'."""
 			}
 
 	def exists(self):
-		return os.path.isfile(self.gngeorcPath),os.path.isfile(self.xgngeoconf_file)
+		return os.path.isfile(self.gngeorcPath),os.path.isfile(self.xgngeoConfFile)
 
 	def getParams(self,mamename=None):
 		"""Try to get the params of the global or a Rom-specific configuration file.
@@ -92,7 +95,7 @@ as the `gngeorc'."""
 			#Parsing default main configuration files.
 			dict = [{},{}]
 			i=0
-			for path in self.gngeorcPath,self.xgngeoconf_file:
+			for path in self.gngeorcPath,self.xgngeoConfFile:
 				if self.exists()[i]:
 					file = open(path,"r") #Open
 					content = file.readlines() #Read
@@ -106,7 +109,7 @@ as the `gngeorc'."""
 		else:
 			#Parsing specific rom configuration file.
 			dict = {}
-			path = os.path.join(self.gngeoDir,"%s.cf" % mamename)
+			path = os.path.join(self.gngeoUserDir,"%s.cf" % mamename)
 			if os.path.isfile(path):
 				file = open(path,"r") #Open
 				content = file.readlines() #Read
@@ -141,13 +144,12 @@ as the `gngeorc'."""
 		file.write(gngeoContent) #Write
 		file.close() #And close
 
-		if not os.path.isdir(self.xgngeoconf_dir): os.mkdir(self.xgngeoconf_dir)
-		file = open(self.xgngeoconf_file,"w") #Open (create if doesn't exist)
+		file = open(self.xgngeoConfFile,"w") #Open (create if doesn't exist)
 		file.write(xgngeoContent) #Write
 		file.close() #And close
 
 	def writeRomConfig(self,dict,mamename,version):
-		path = os.path.join(self.gngeoDir,"%s.cf" % mamename)
+		path = os.path.join(self.gngeoUserDir,"%s.cf" % mamename)
 
 		#Top comment. :p
 		content = "# Specific configuration file for the \"%s\" Rom.\n\
