@@ -25,7 +25,7 @@ from string import capwords
 from re import match
 from threading import Timer
 #Internal modules.
-import configfile, emulator, history, rominfos, romrcfile
+import configfile, emulator, history, rominfos
 
 VERSION = 16
 gngeoDir = os.path.expanduser("~/.gngeo")
@@ -306,10 +306,9 @@ class XGngeo:
 		scrolled_window.set_size_request(500,250) #Set scrolled window's height.
 		table.attach(scrolled_window,0,2,1,2,xpadding=2,ypadding=5)
 
-		romrc = romrcfile.Romrc()
-		romrc.parsing(self.gngeoParams['romrc'])
-		gamelist = romrc.getRomFullToMame()
-		gamelistNames = romrc.getRomFullNames()
+		self.emulator.scanRomInDirectory(self.gngeoParams['rompath'])
+		gamelist = self.emulator.getRomFullToMame()
+		gamelistNames = self.emulator.getRomFullNames()
 
 		#The list will contain the ROM fullname and its availability.
 		liststore = gtk.ListStore(str,"gboolean")

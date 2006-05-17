@@ -57,16 +57,27 @@ class Emulator:
 				pass
 		pipe.close()
 
-	def getAvailableRomInDirectory(self,dir):
-		"""Returning list of all the Rom available in a mentioned
-		directory, according to Gngeo output with the `--scandir=[dir]'
-		argument."""
+	def scanRomInDirectory(self,dir):
+		"""Generating two ROM dictionaries connecting their MAME name to their full name
+		(the contrary for the second) for all the Rom available in a mentioned directory,
+		according to the scan result given by Gngeo with the `--scandir=[dir]' argument."""
+		self.romFullToMame = {}
+		self.romMameToFull = {}
 		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
-		for line in pipe.readlines():
-			plop = match("(\S*):(.*):(\S*)",line)
+		for line in pipe.readlines()[1:]:
+			print line
+			plop = match("(\S*):(.*):\S*",line)
 			if plop:
-				pass
+				#Append Rom information to the dicts.
+				self.romMameToFull[plop.group(1)] = plop.group(2)
+				self.romFullToMame[plop.group(2)] = plop.group(1)
 		pipe.close()
+
+	def getRomMameToFull(self):	return self.romMameToFull
+	def getRomFullToMame(self): return self.romFullToMame
+	def getRomFullNames(self):
+		self.romFullToMame.keys().sort()
+		return self.romFullToMame.keys()
 
 	def romLaunching(self,rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""
