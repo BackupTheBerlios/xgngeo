@@ -200,8 +200,8 @@ class XGngeo:
 	def gngeoStop(self,widget=None):
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
-		if  self.emulator.romRunningState().isAlive():
-			Timer(0,os.system,('killall -9 %s"' % self.xgngeoParams['gngeopath'].replace('"','\"'),)).start()
+		if  self.emulator.romRunningState():
+			Timer(0,os.system,('killall -9 "%s"x' % self.xgngeoParams['gngeopath'].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
 	def romList(self,widget):

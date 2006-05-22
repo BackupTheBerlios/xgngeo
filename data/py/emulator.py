@@ -66,7 +66,7 @@ class Emulator:
 		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
 		for line in pipe.readlines()[1:]:
 			print line
-			plop = match("(\S*):(.*):\S*",line)
+			plop = match("\s*(\S*):(.*):\S*",line)
 			if plop:
 				#Append Rom information to the dicts.
 				self.romMameToFull[plop.group(1)] = plop.group(2)
@@ -76,8 +76,9 @@ class Emulator:
 	def getRomMameToFull(self):	return self.romMameToFull
 	def getRomFullToMame(self): return self.romFullToMame
 	def getRomFullNames(self):
-		self.romFullToMame.keys().sort()
-		return self.romFullToMame.keys()
+		list = self.romFullToMame.keys()
+		list.sort(key=str.lower)
+		return list
 
 	def romLaunching(self,rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""
@@ -96,4 +97,3 @@ class Emulator:
 		"""Telling if Gngeo is either currently running a Rom, or not. :p"""
 		if self.cmd: return self.cmd.isAlive()
 		else: return False
-	
