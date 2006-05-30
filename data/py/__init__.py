@@ -306,12 +306,12 @@ class XGngeo:
 		scrolled_window.set_size_request(500,250) #Set scrolled window's height.
 		table.attach(scrolled_window,0,2,1,2,xpadding=2,ypadding=5)
 
-		self.emulator.scanRomInDirectory(self.gngeoParams['rompath'])
-		gamelist = self.emulator.getRomFullToMame()
-		gamelistNames = self.emulator.getRomFullNames()
+		self.emulator.getAllSupportedRom(self.gngeoParams['rompath'])
+		fullromlist = self.emulator.getRomFullToMame()
+		fullromlist_fullname = self.emulator.getRomFullNames()
 
 		#The list will contain the ROM fullname and its availability.
-		liststore = gtk.ListStore(str,"gboolean")
+		liststore = gtk.ListStore(str,"gboolean",str)
 		treeview = gtk.TreeView(liststore)
 		treeview.set_headers_visible(False)
 		treeview.connect("row-activated",setRomTemp)
@@ -337,7 +337,7 @@ class XGngeo:
 
 		scrolled_window.add_with_viewport(treeview)
 
-		label = gtk.Label(_("Driver file supporting <b>%s</b> ROMs.") % len(gamelistNames))
+		label = gtk.Label(_("Drivers for supporting <b>%s</b> ROMs.") % len(gamelistNames))
 		label.set_use_markup(True)
 		table.attach(label,0,1,2,3,yoptions=gtk.SHRINK)
 
@@ -1510,6 +1510,22 @@ class XGngeo:
 		menu_item = gtk.MenuItem(_("_Other"))
 		menu_item.connect("activate",self.config,5)
 		self.configMenu.append(menu_item)
+
+		#
+		# DRIVERS Menu
+		#
+		menu = gtk.Menu()
+		menu_item = gtk.MenuItem(_("_ROM drivers"))
+		menu_item.set_submenu(menu)
+		menu_bar.append(menu_item)
+
+		menu_item = gtk.MenuItem(_("_View/edit"))
+		#menu_item.connect("activate",)
+		menu.append(menu_item)
+
+		menu_item = gtk.MenuItem(_("_Add new"))
+		#menu_item.connect("activate",)
+		menu.append(menu_item)
 
 		#
 		# INFO Menu

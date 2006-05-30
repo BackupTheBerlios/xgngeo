@@ -48,27 +48,15 @@ class Emulator:
 		return tuple(list), version.group(1) #Returning as tuple and string.
 
 	def getAllSupportedRom(self):
-		"""Returning list of all the Rom supported by the driver file,
-		according to Gngeo output with the `--listgame' argument."""
+		"""Returning list of all the Rom supported by the driver file, according
+		to Gngeo output (launched with the `--listgame' argument)."""
+		self.romFullToMame = {}
+		self.romMameToFull = {}
 		pipe = popen("'%s' --listgame" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
 		for line in pipe.readlines():
 			plop = match("(\S*) : (.*)",line)
 			if plop:
-				pass
-		pipe.close()
-
-	def scanRomInDirectory(self,dir):
-		"""Generating two ROM dictionaries connecting their MAME name to their full name
-		(the contrary for the second) for all the Rom available in a mentioned directory,
-		according to the scan result given by Gngeo with the `--scandir=[dir]' argument."""
-		self.romFullToMame = {}
-		self.romMameToFull = {}
-		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
-		for line in pipe.readlines()[1:]:
-			print line
-			plop = match("\s*(\S*):(.*):\S*",line)
-			if plop:
-				#Append Rom information to the dicts.
+				#Append ROM information to the dicts.
 				self.romMameToFull[plop.group(1)] = plop.group(2)
 				self.romFullToMame[plop.group(2)] = plop.group(1)
 		pipe.close()
@@ -79,6 +67,22 @@ class Emulator:
 		list = self.romFullToMame.keys()
 		list.sort(key=str.lower)
 		return list
+
+	def scanRomInDirectory(self,dir):
+		"""Generating and returning a dictionary containing the MAME name and actual
+		file name of all the ROM available in a mentioned directory, according to the scan
+		results given by Gngeo (launched with the `--scandir=[dir]' argument)."""
+		dict = {}
+		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
+		for line in pipe.readlines()[1:]:
+			print line
+			plop = match("\s*(\S*):.*:(.*)\s*",line)
+			if plop:
+				#Append ROM information to the dict.
+				dict[plop.group(1)] = plop.group(2)
+		pipe.close()
+
+		return dict
 
 	def romLaunching(self,rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""

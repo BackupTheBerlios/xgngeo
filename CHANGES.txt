@@ -4,6 +4,7 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- New integrated ROM driver editor (IN PROGRESS).
 - Added possibility to select the new Universal BIOS.
 - Better guessing of the default path to Gngeo's `romrc' file.
 - Added possibility to choose XGngeo window to be centered on
