@@ -52,7 +52,7 @@ class Emulator:
 		to Gngeo output (launched with the `--listgame' argument)."""
 		self.romFullToMame = {}
 		self.romMameToFull = {}
-		pipe = popen("'%s' --listgame" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
+		pipe = popen("'%s' --listgame" % self.path['gngeo'])
 		for line in pipe.readlines():
 			plop = match("(\S*) : (.*)",line)
 			if plop:
@@ -75,8 +75,7 @@ class Emulator:
 		dict = {}
 		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
 		for line in pipe.readlines()[1:]:
-			print line
-			plop = match("\s*(\S*):.*:(.*)\s*",line)
+			plop = match("\s*(\S*):.*:(\S*)",line)
 			if plop:
 				#Append ROM information to the dict.
 				dict[plop.group(1)] = plop.group(2)

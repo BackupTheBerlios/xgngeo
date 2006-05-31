@@ -213,13 +213,14 @@ class XGngeo:
 			treeselection = treeview.get_selection()
 			liststore,iter = treeselection.get_selected()
 
-			availability = liststore.get_value(iter,1)
 			fullname = liststore.get_value(iter,0)
-			mamename = gamelist[fullname]
+			availability = liststore.get_value(iter,1)
+			filepath =  liststore.get_value(iter,2)
+			mamename = romlist[fullname]
 
 			#Temporary select the ROM for loading if available.
-			if availability: self.romFromList,self.romFromListName = mamename,fullname
-			else: self.romFromList,self.romFromListName = None,None
+			if availability: self.romFromList,self.romFromListName, self.romFromListPath = mamename,fullname, filepath
+			else: self.romFromList,self.romFromListName,self.romFromListPath = None,None, None
 			open_button.set_sensitive(availability)
 
 			#Update mame name and availability icon.
@@ -261,9 +262,9 @@ class XGngeo:
 			#Is something selected?
 			if self.romFromList:
 				#Setting important variables.
-				self.romPath = os.path.join(self.gngeoParams['rompath'],"%s.zip" % self.romFromList) 
 				self.romFullName = self.romFromListName
 				self.romMameName = self.romFromList
+				self.romPath = self.romFromListPath
 
 				#Doing post-selection actions.
 				self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
@@ -275,15 +276,13 @@ class XGngeo:
 
 		def showAvailable(widget):
 			liststore.clear()
-			for name in gamelistNames:
-				if os.path.isfile(os.path.join(self.gngeoParams["rompath"],"%s.zip" % gamelist[name])):
-					#Alway put available ROMs.
-					liststore.append([name,True])
-					self.xgngeoParams["showavailableromsonly"]="false"
+			for name in romlist_fullname:
+				if romlist[name] in available_rom:
+					#Alway putting available ROMs.
+					liststore.append([name,True,available_rom[romlist[name]]])
 				elif not widget.get_active():
-					#Put also unavailable ROMs if the box is unchecked.
-					liststore.append([name,False])
-			#Remember the preference.
+					#Also putting unavailable ROMs if the box is unchecked.
+					liststore.append([name,False,''])
 			self.xgngeoParams["showavailableromsonly"] = ("false","true")[widget.get_active()]
 
 		self.romFromList = None #Selected ROM.
@@ -306,10 +305,6 @@ class XGngeo:
 		scrolled_window.set_size_request(500,250) #Set scrolled window's height.
 		table.attach(scrolled_window,0,2,1,2,xpadding=2,ypadding=5)
 
-		self.emulator.getAllSupportedRom(self.gngeoParams['rompath'])
-		fullromlist = self.emulator.getRomFullToMame()
-		fullromlist_fullname = self.emulator.getRomFullNames()
-
 		#The list will contain the ROM fullname and its availability.
 		liststore = gtk.ListStore(str,"gboolean",str)
 		treeview = gtk.TreeView(liststore)
@@ -320,11 +315,22 @@ class XGngeo:
 		tvcolumn = gtk.TreeViewColumn("Fullname")
 		treeview.append_column(tvcolumn)
 
-		#Add rows.
-		for name in gamelistNames:
-			if os.path.isfile(os.path.join(self.gngeoParams["rompath"],"%s.zip" % gamelist[name])):
-				liststore.append([name,True])
-			else: liststore.append([name,False])
+		#Creating a list of of all availbable ROMs (by scanning all ROM directories).
+		romdir_list = [self.gngeoParams["rompath"],"/home/"] #Static ROM directory list -> TO BE CHANGED (making it user-defined).
+		available_rom = {}
+		for dir in romdir_list:
+			for name,file in  self.emulator.scanRomInDirectory(dir).items():
+				available_rom[name] = os.path.join(dir,file)
+
+		#Adding (ROM) rows.
+		self.emulator.getAllSupportedRom()
+		romlist = self.emulator.getRomFullToMame()
+		romlist_fullname = self.emulator.getRomFullNames()
+
+		for name in romlist_fullname:
+				if romlist[name] in available_rom:
+					liststore.append([name,True,available_rom[romlist[name]]])
+				else: liststore.append([name,False,''])
 
 		#Rendering data.
 		cell = gtk.CellRendererText()
@@ -337,7 +343,7 @@ class XGngeo:
 
 		scrolled_window.add_with_viewport(treeview)
 
-		label = gtk.Label(_("Drivers for supporting <b>%s</b> ROMs.") % len(gamelistNames))
+		label = gtk.Label(_("Driver supporting <b>%s</b> ROMs.") % len(romlist))
 		label.set_use_markup(True)
 		table.attach(label,0,1,2,3,yoptions=gtk.SHRINK)
 
