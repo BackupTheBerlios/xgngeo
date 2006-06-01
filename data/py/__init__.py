@@ -284,7 +284,20 @@ class XGngeo:
 			label = gtk.Label(_("Here you can add multiple directories to scan for ROMs, in addition to your main ROM and Bios directory."))
 			label.set_line_wrap(True)
 			label.set_justify(gtk.JUSTIFY_CENTER)
-			dialog.vbox.pack_start(label)
+			label.set_padding(2,2)
+			dialog.vbox.pack_start(label,False)
+
+			box = gtk.HBox()
+
+			box2 = gtk.VBox()
+			button = gtk.Button(stock=gtk.STOCK_REMOVE)
+			button.set_border_width(5)
+			box2.pack_start(button)
+			button = gtk.Button(stock=gtk.STOCK_ADD)
+			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),romdir_list[-1],"rompath",1)
+			button.set_border_width(5)
+			box2.pack_start(button)
+			box.pack_start(box2,False,padding=2)
 			
 			#Da ROM directory list!
 			liststore = gtk.ListStore(str)
@@ -297,9 +310,11 @@ class XGngeo:
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
 			tvcolumn.set_attributes(cell,text=0)
+			frame = gtk.Frame()
+			frame.add(treeview)
+			box.pack_start(frame,padding=2)
 
-			dialog.vbox.pack_start(treeview)
-
+			dialog.vbox.pack_start(box)
 			dialog.show_all()
 
 		self.romFromList = None #Selected ROM.
