@@ -39,7 +39,9 @@ setup(
 		(os.path.join("share","xgngeo"),glob.glob(os.path.join("data","rominfos.*"))),
 		#License text.
 		(os.path.join("share","xgngeo"),['LICENSE.txt']),
-		#Localisation.
+		#Plan text documentation.
+		(os.path.join("share","xgngeo","doc"),glob.glob(os.path.join("data","doc","xgngeo-doc.txt"))),
+		#Localization files.
 		(os.path.join("share","xgngeo","locale","es","LC_MESSAGES"),[os.path.join("data","locale","es","LC_MESSAGES","xgngeo.mo")]), #Spanish
 		(os.path.join("share","xgngeo","locale","de","LC_MESSAGES"),[os.path.join("data","locale","de","LC_MESSAGES","xgngeo.mo")]), #Spanish
 		(os.path.join("share","xgngeo","locale","fr","LC_MESSAGES"),[os.path.join("data","locale","fr","LC_MESSAGES","xgngeo.mo")]), #French

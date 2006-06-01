@@ -33,11 +33,11 @@ In the same time, this class allow creation of Rom-specific
 configuration files, which may define the same kind of option
 as the `gngeorc'."""
 
-	def __init__(self,datarootpath):
+	def __init__(self,datarootpath,xgngeoUserDir,gngeoUserDir):
 		self.datarootpath = datarootpath
-		self.xgngeoUserDir = os.path.expanduser("~/.xgngeo") #XGngeo local configuration directory.
+		self.xgngeoUserDir = xgngeoUserDir #XGngeo local configuration directory.
 		self.xgngeoConfFile = os.path.join(self.xgngeoUserDir,"xgngeo.conf") #Path to XGngeo config file.
-		self.gngeoUserDir = os.path.expanduser("~/.gngeo") #Gngeo local configuration directory.
+		self.gngeoUserDir = gngeoUserDir #Gngeo local configuration directory.
 		self.gngeorcPath = os.path.join(self.gngeoUserDir,"gngeorc") #Path to Gngeo config file.
 		
 		for dir in (self.xgngeoUserDir,self.gngeoUserDir):
