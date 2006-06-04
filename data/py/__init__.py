@@ -43,8 +43,14 @@ class XGngeo:
 		self.widgets = {}
 		self.romPath = None
 
+		#Loading emulator/frontend configuration.
 		self.configfile = configfile.Configfile(datarootpath,xgngeoUserDir,gngeoUserDir)
-		self.gngeoParams, self.xgngeoParams = self.configfile.getDefaultParams()	
+		self.gngeoParams, self.xgngeoParams = self.configfile.getDefaultParams()
+		#Overwriting default params by the ones in configuration files.
+		params = self.configfile.getParams()
+		for key,val in params[0].items(): self.gngeoParams[key] = val
+		for key,val in params[1].items(): self.xgngeoParams[key] = val
+
 		self.emulator = emulator.Emulator(self.xgngeoParams['gngeopath'],self.gngeoParams['romrc'])
 		self.history = history.History()
 
@@ -654,23 +660,35 @@ class XGngeo:
 		dialog.vbox.pack_start(label)
 
 		frame = gtk.Frame(_("Credits"))
-		box = gtk.HBox()
-		frame.add(box)
+		container = gtk.EventBox()
+		container.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#c9ddff"))
+		box = gtk.HBox(spacing=6)
+		box.set_border_width(3)
 
+		box2 = gtk.VBox()
 		logo = gtk.Image()
 		logo.set_from_file(os.path.join(datarootpath,"img/chprod.png"))
-		box.pack_start(logo,False)
-
-		box2 = gtk.VBox(spacing=4)
-		box2.set_border_width(4)
-		label = gtk.Label(_("Main coder: Choplair.\nAssisted by: Pachilor."))
-		label.set_justify(gtk.JUSTIFY_CENTER)
-		label.set_line_wrap(True)
-		box2.pack_start(label)
+		box2.pack_start(logo)
 		label = gtk.Label("<i>http://www.choplair.org/</i>")
+		label.set_selectable(True)
 		label.set_use_markup(True)
 		box2.pack_start(label)
-		box.pack_end(box2)
+		box.pack_start(box2,padding=10)
+
+		buffer = gtk.TextBuffer()
+		buffer.set_text("%s\n\n%s\n%s" % (_("Lead programmer: Choplair.\nAssisted by: Pachilor.\nDocumentation: Ms. Marie-Claire."),_("Translations"),_("""Brazilian: Matheus Villela.
+French: Choplair.
+German: Peter Kainrad.
+Polish: Mateusz Wolsza.
+Spanish: Sheng Long Gradilla.""")))
+		buffer.apply_tag(buffer.create_tag(justification=gtk.JUSTIFY_CENTER,editable=False),buffer.get_start_iter(),buffer.get_end_iter())
+		buffer.apply_tag(buffer.create_tag(weight=700),buffer.get_iter_at_line(4),buffer.get_iter_at_line(5))
+		textview = gtk.TextView(buffer)
+		textview.modify_base(gtk.STATE_NORMAL,gtk.gdk.color_parse("#c9ddff"))
+		box.pack_start(textview)
+
+		container.add(box)
+		frame.add(container)
 
 		dialog.vbox.pack_start(frame)
 		dialog.connect('response', lambda *args: dialog.destroy())
@@ -755,7 +773,7 @@ class XGngeo:
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
-			box2.pack_start(self.imppathicons[1],False,padding=3)
+			box2.ons.appert(self.imppathicons[1],False,padding=3)
 			self.configwidgets['romrc'] = gtk.Entry()
 			self.configwidgets['romrc'].connect("changed",setPathIcon,self.imppathicons[1])
 			self.configwidgets['romrc'].set_text(self.gngeoParams["romrc"])
@@ -1589,11 +1607,6 @@ class XGngeo:
 		self.window.show_all()
 
 	def boot(self):
-		#Overwrite default params by the ones in configuration files (works even if they don't exist :p).
-		params = self.configfile.getParams()
-		for key,val in params[0].items(): self.gngeoParams[key] = val
-		for key,val in params[1].items(): self.xgngeoParams[key] = val
-
 		if "--nobootcheck" in sys.argv:
 					print _("No boot check option enabled: going directly to the main window (unsafe!).")
 					self.main()

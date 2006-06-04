@@ -25,6 +25,8 @@ class ThreadedCmd(Thread):
 	def __init__(self,cmd):
 		Thread.__init__(self)
 
+		print cmd
+		
 		self.command = cmd
 		self.output = ""
 
