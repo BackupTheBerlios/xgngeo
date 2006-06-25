@@ -6,7 +6,7 @@
 
 - Improved ROM detection in the list (now directly based upon
 Gngeo's scaning results).
-- ROM list now supports multiple ROM directories (IN PROGRESS).
+- ROM list now supports multiple ROM directories.
 - New integrated ROM driver editor (IN PROGRESS).
 - Added possibility to select the new Universal BIOS.
 - Better guessing of the default path to Gngeo's `romrc' file.
@@ -14,6 +14,7 @@ Gngeo's scaning results).
 the screen on start.
 - Bugfix: no more problem in the Rom list with some PyGTK ins-
 tallations. 
+- Various GUI enhancements.
 - Added checking for the PyGTK version (must be 2.6 or more).
 - Minimum accepted Gngeo version setted to 0.6.11 (current :p).
 - System-wide installation (using distutil) & per-user XGngeo

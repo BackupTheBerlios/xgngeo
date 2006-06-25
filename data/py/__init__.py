@@ -273,20 +273,22 @@ class XGngeo:
 
 			dialog.destroy()
 
-		def showAvailable(widget):
+		def refreshingRomList(widget=None,setting_mode=0):
 			liststore.clear()
+			if setting_mode: self.xgngeoParams["showavailableromsonly"] = ("false","true")[widget.get_active()]
+
 			for name in romlist_fullname:
 				if romlist[name] in available_rom:
 					#Alway putting available ROMs.
 					liststore.append([name,True,available_rom[romlist[name]]])
-				elif not widget.get_active():
+				elif self.xgngeoParams["showavailableromsonly"]=="false":
 					#Also putting unavailable ROMs if the box is unchecked.
 					liststore.append([name,False,''])
-			self.xgngeoParams["showavailableromsonly"] = ("false","true")[widget.get_active()]
 
 		def romDirectories(widget,parent):
+			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
+
 			dialog = gtk.Dialog(_("Set ROM directories."),parent,gtk.DIALOG_MODAL,(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
-			
 			label = gtk.Label(_("Here you can add multiple directories to scan for ROMs, in addition to your main ROM and Bios directory."))
 			label.set_line_wrap(True)
 			label.set_justify(gtk.JUSTIFY_CENTER)
@@ -295,16 +297,59 @@ class XGngeo:
 
 			box = gtk.HBox()
 
+			def addDirectory(widget,response):
+				if response==gtk.RESPONSE_OK:
+					dir = self.widgets["fileselect_dialog"].get_filename()
+					if not dir in temp_romdir_list:
+						temp_romdir_list.append(dir)
+						liststore.append([dir])
+					else: #No need to put the same directory twice.
+						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+						dialog2.set_markup(_("This directory is already in the ROM directory list!"))
+						dialog2.connect("response",lambda *args: dialog2.destroy())
+						dialog2.show_all()
+
+			def remDirectory(*args):
+				model,iter = treeview.get_selection().get_selected()
+				if iter:
+					dir = model.get_value(iter,0)
+					if dir==_("Main ROM and BIOS directory."): #Main ROM and BIOS directory must be kept.
+						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+						dialog2.set_markup(_("You cannot remove the main ROM and BIOS directory since it's the default place to look for ROMs.\nIf you want to, you can modify its path in the important path configuration window."))
+						dialog2.connect("response",lambda *args: dialog2.destroy())
+						dialog2.show_all()
+					else:
+						temp_romdir_list.remove(dir)
+						liststore.remove(iter)
+
+			def callback(widget,response):
+				if response==gtk.RESPONSE_APPLY:
+					print "plip"
+					self.romdir_list = temp_romdir_list #Validating the ROM list.
+
+					#Saving it in the appropriate file.
+					content = ""
+					for dir in self.romdir_list: content += dir
+					file = open(os.path.join(xgngeoUserDir,"romdirs"),"w")
+					file.write(content)
+					file.close()
+					
+					#Refreshing ROM list (using the new ROM directories).
+					refreshingRomList()
+
+				dialog.destroy()
+
 			box2 = gtk.VBox()
 			button = gtk.Button(stock=gtk.STOCK_REMOVE)
 			button.set_border_width(5)
+			button.connect("clicked",remDirectory)
 			box2.pack_start(button)
 			button = gtk.Button(stock=gtk.STOCK_ADD)
-			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),romdir_list[-1],"rompath",1)
+			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),temp_romdir_list[-1],addDirectory,None,1)
 			button.set_border_width(5)
 			box2.pack_start(button)
 			box.pack_start(box2,False,padding=2)
-			
+
 			#Da ROM directory list!
 			liststore = gtk.ListStore(str)
 			treeview = gtk.TreeView(liststore)
@@ -312,16 +357,17 @@ class XGngeo:
 		#	treeview.connect("row-activated",setRomTemp)
 			tvcolumn = gtk.TreeViewColumn("Directory")
 			treeview.append_column(tvcolumn)
-			for dir in [_("Main ROM and BIOS directory.")]+romdir_list[1:]: liststore.append([dir])
+			for dir in ([_("Main ROM and BIOS directory.")]+temp_romdir_list[1:]): liststore.append([dir]) #Inserting content.
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
 			tvcolumn.set_attributes(cell,text=0)
 			frame = gtk.Frame()
 			frame.add(treeview)
 			box.pack_start(frame,padding=2)
-
+	
 			dialog.vbox.pack_start(box)
 			dialog.show_all()
+			dialog.connect("response",callback)
 
 		self.romFromList = None #Selected ROM.
 		dialog = gtk.Dialog(_("Your Neo Geo ROM list."),self.window,gtk.DIALOG_MODAL)
@@ -352,13 +398,13 @@ class XGngeo:
 		treeview.append_column(tvcolumn)
 
 		#Creating a list of of all availbable ROMs (after scanning all ROM directories).
-		romdir_list = [self.gngeoParams["rompath"]]
+		self.romdir_list = [self.gngeoParams["rompath"]]
 		if os.path.exists(os.path.join(xgngeoUserDir,"romdirs")):
-			file = os.open()
-			for line in file.readlines(): romdir_list.append(line)
+			file = open(os.path.join(xgngeoUserDir,"romdirs"),"r")
+			for line in file.readlines(): self.romdir_list.append(line)
 			file.close()
 		available_rom = {}
-		for dir in romdir_list:
+		for dir in self.romdir_list:
 			for name,file in  self.emulator.scanRomInDirectory(dir).items():
 				available_rom[name] = os.path.join(dir,file)
 
@@ -392,7 +438,7 @@ class XGngeo:
 		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK)
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
-		buttonShowAvailable.connect("toggled",showAvailable)
+		buttonShowAvailable.connect("toggled",refreshingRomList,1)
 		table.attach(buttonShowAvailable,2,3,2,3,yoptions=gtk.SHRINK)
 
 		#
@@ -546,22 +592,20 @@ class XGngeo:
 		self.specconf['clear'].hide()
 		if self.xgngeoParams["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
 
-	def fileSelect(self,widget,title,folder,arg,dirselect=0):
-		dialog = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
-		dialog.set_current_folder((os.path.dirname(folder),folder)[os.path.isdir(folder)])
-		dialog.connect("response",self.setPath,arg)
+	def fileSelect(self,widget,title,folder,callback,filter=None,dirselect=0):
+		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
+		self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(folder),folder)[os.path.isdir(folder)])
+		self.widgets["fileselect_dialog"].connect("response",callback)
+		self.widgets["fileselect_dialog"].connect('response', lambda *args: self.widgets["fileselect_dialog"].destroy())
 
-		if arg=="rom":
-			filter = gtk.FileFilter()
-			filter.set_name(_("ROM archive"))
-			filter.add_pattern("*.zip")
-			dialog.add_filter(filter)
-			filter = gtk.FileFilter()
-			filter.set_name(_("All files"))
-			filter.add_pattern("*")
-			dialog.add_filter(filter)
+		if filter: #Using file selection filter(s).
+			for name,patern in filter.items():
+				filter = gtk.FileFilter()
+				filter.set_name(name)
+				filter.add_pattern(patern)
+				self.widgets["filesel_dialog"].add_filter(filter)
 
-		dialog.run()
+		self.widgets["fileselect_dialog"].run()
 
 	def setRomFromHistory(self,widget,fullname,path):
 		if os.path.exists(path): #ROM exists on file system, continuing...
@@ -585,7 +629,7 @@ class XGngeo:
 			self.historyMenuGeneration()
 
 	def setPath(self,dialog,response,data):
-		"""Get/set path of various things from the path of the file chooser."""
+		"""Getting/setting path of various things from the path of the file chooser."""
 		if response==gtk.RESPONSE_OK:
 			if data=="rom": #Set ROM from the file chooser.
 				path = dialog.get_filename()
@@ -648,15 +692,21 @@ class XGngeo:
 		dialog.set_border_width(5)
 		dialog.vbox.set_spacing(4)
 
+		box = gtk.HBox()
+		image = gtk.Image()
+		image.set_from_file(os.path.join(datarootpath,"img","minilogo.png"))
+		box.pack_start(image)
 		label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s</span>" % (_("XGngeo: a frontend for Gngeo. :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % self.emulator.getGngeoVersion()[1]))
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		label.set_use_markup(True)
-		dialog.vbox.pack_start(label)
+		box.pack_start(label)
+		dialog.vbox.pack_start(box)
 
 		label = gtk.Label("Copyleft 2003, 2004, 2005, 2006 Choplair-network.")
 		dialog.vbox.pack_start(label)
 		label = gtk.Label(_("This program is released under the terms of the GNU General Public License."))
 		label.set_line_wrap(True)
+		label.set_justify(gtk.JUSTIFY_CENTER)
 		dialog.vbox.pack_start(label)
 
 		frame = gtk.Frame(_("Credits"))
@@ -667,7 +717,7 @@ class XGngeo:
 
 		box2 = gtk.VBox()
 		logo = gtk.Image()
-		logo.set_from_file(os.path.join(datarootpath,"img/chprod.png"))
+		logo.set_from_file(os.path.join(datarootpath,"img","chprod.png"))
 		box2.pack_start(logo)
 		label = gtk.Label("<i>http://www.choplair.org/</i>")
 		label.set_selectable(True)
@@ -773,7 +823,7 @@ Spanish: Sheng Long Gradilla.""")))
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
-			box2.ons.appert(self.imppathicons[1],False,padding=3)
+			box2.pack_start(self.imppathicons[1],False,padding=3)
 			self.configwidgets['romrc'] = gtk.Entry()
 			self.configwidgets['romrc'].connect("changed",setPathIcon,self.imppathicons[1])
 			self.configwidgets['romrc'].set_text(self.gngeoParams["romrc"])
@@ -897,7 +947,7 @@ Spanish: Sheng Long Gradilla.""")))
 					if ref==temp_param["blitter"]: self.configwidgets['blitter'].set_active(i)
 					i+=1
 			pipe.close()
-			
+
 			self.combo_params['blitter'] = list
 			frame.add(self.configwidgets['blitter'])
 			box.pack_start(frame)
@@ -973,7 +1023,7 @@ Spanish: Sheng Long Gradilla.""")))
 			self.configwidgets['sound'] = gtk.CheckButton(_("Enable sound"))
 			box2.pack_start(self.configwidgets['sound'])
 
-			#Sample rate
+			#Sample rate.
 			box3 = gtk.HBox()
 			box2.pack_end(box3)
 			label = gtk.Label(_("Sample rate:"))
@@ -1152,7 +1202,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 				#Generate key's image
 				image = gtk.Image()
-				image.set_from_file(os.path.join(datarootpath,"img/key_%s.png" % key_list[i]))
+				image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % key_list[i]))
 
 				box2 = gtk.HBox() #A box...
 				box2.pack_start(p1keywidgets[i]) #with P1 key...
@@ -1200,19 +1250,19 @@ Spanish: Sheng Long Gradilla.""")))
 			self.configwidgets['country_japan'] = gtk.RadioButton(None,_("Japan"))
 			table.attach(self.configwidgets['country_japan'],0,1,0,1)
 			image = gtk.Image()
-			image.set_from_file(os.path.join(datarootpath,"img/japan.png"))
+			image.set_from_file(os.path.join(datarootpath,"img","japan.png"))
 			table.attach(image,0,1,1,2)
 
 			self.configwidgets['country_usa'] = gtk.RadioButton(self.configwidgets['country_japan'],_("USA"))
 			table.attach(self.configwidgets['country_usa'],1,2,0,1)
 			image = gtk.Image()
-			image.set_from_file(os.path.join(datarootpath,"img/usa.png"))
+			image.set_from_file(os.path.join(datarootpath,"img","usa.png"))
 			table.attach(image,1,2,1,2)
 
 			radio = gtk.RadioButton(self.configwidgets['country_japan'],_("Europe"))
 			table.attach(radio,2,3,0,1)
 			image = gtk.Image()
-			image.set_from_file(os.path.join(datarootpath,"img/europe.png"))
+			image.set_from_file(os.path.join(datarootpath,"img","europe.png"))
 			table.attach(image,2,3,1,2)
 			
 			if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
@@ -1364,7 +1414,6 @@ Spanish: Sheng Long Gradilla.""")))
 				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be saved because one or more parameters does not look valid."),_("Please check it up then try to save again... ^^;")))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
-
 			else:
 				#Update important path configuration params.
 				self.gngeoParams["rompath"] = self.configwidgets['rompath'].get_text() #rompath
@@ -1479,7 +1528,7 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],"rom")
+		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],{_("ROM archive") : "*.zip", _("All files") : "*"})
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
