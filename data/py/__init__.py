@@ -202,7 +202,7 @@ class XGngeo:
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
 		if  self.emulator.romRunningState():
-			Timer(0,os.system,('killall -9 "%s"x' % self.xgngeoParams['gngeopath'].replace('"','\"'),)).start()
+			Timer(0,os.system,('killall -9 "%s"' % self.xgngeoParams['gngeopath'].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
 	def romList(self,widget):
@@ -324,7 +324,6 @@ class XGngeo:
 
 			def callback(widget,response):
 				if response==gtk.RESPONSE_APPLY:
-					print "plip"
 					self.romdir_list = temp_romdir_list #Validating the ROM list.
 
 					#Saving it in the appropriate file.
@@ -592,10 +591,21 @@ class XGngeo:
 		self.specconf['clear'].hide()
 		if self.xgngeoParams["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
 
-	def fileSelect(self,widget,title,folder,callback,filter=None,dirselect=0):
+	def fileSelect(self,widget,title,folder,callback=None,dirselect=0,filter=None):
 		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 		self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(folder),folder)[os.path.isdir(folder)])
-		self.widgets["fileselect_dialog"].connect("response",callback)
+
+		if callback:
+			if type(callback)==str:
+				#Ouputing the selected file or directory path to a particular text entry.
+				def outputEntry(widget,response):
+					if response==gtk.RESPONSE_OK:
+						self.configwidgets[callback].set_text(widget.get_filename())
+
+				self.widgets["fileselect_dialog"].connect("response",outputEntry)
+			else: self.widgets["fileselect_dialog"].connect("response",callback)
+	
+		#Close the file selection dialog anyway.
 		self.widgets["fileselect_dialog"].connect('response', lambda *args: self.widgets["fileselect_dialog"].destroy())
 
 		if filter: #Using file selection filter(s).
@@ -603,7 +613,7 @@ class XGngeo:
 				filter = gtk.FileFilter()
 				filter.set_name(name)
 				filter.add_pattern(patern)
-				self.widgets["filesel_dialog"].add_filter(filter)
+				self.widgets["fileselect_dialog"].add_filter(filter)
 
 		self.widgets["fileselect_dialog"].run()
 
@@ -628,38 +638,49 @@ class XGngeo:
 			dialog.show_all()
 			self.historyMenuGeneration()
 
-	def setPath(self,dialog,response,data):
-		"""Getting/setting path of various things from the path of the file chooser."""
+	def manualRomPathSetting(self,dialog,response):
+		"""Setting ROM path from the file chooser."""
 		if response==gtk.RESPONSE_OK:
-			if data=="rom": #Set ROM from the file chooser.
-				path = dialog.get_filename()
-				#Does it exist?
-				if os.path.isfile(path):
-					#Setting important variables.
-					self.romPath = path
-					if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
-					else: self.romMameName = os.path.basename(path)
+			path = dialog.get_filename()
+			#Does the file exist?
+			if os.path.isfile(path):
+				basename = os.path.basename(path)
+				dirname = os.path.dirname(path)
 
-					#Trying to resolve ROM full name.
-					romrc = romrcfile.Romrc()
-					romrc.parsing(self.gngeoParams['romrc'])
-					dict = romrc.getRomMameToFull()
-					if self.romMameName in dict.keys(): self.romFullName = dict[self.romMameName]
-					else: self.romFullName = _("Unknow ROM")
+				#Trying to resolve this ROM's MAME name which would corroborate its support under Gngeo.
+				mamename = None
+				for key,val in self.emulator.scanRomInDirectory(dirname).items():
+					if val==basename: mamename = key; break
+
+				if mamename: #Matching MAME name found: the ROM has been correctly indentificated and may thus be played.
+					self.romPath = path
+					self.romMameName = mamename
+					mame2full = self.emulator.getRomMameToFull()
+					if not mame2full.has_key(mamename):
+						#Refreshing supported ROM listing to get that ROM full name.
+						self.emulator.getAllSupportedRom()
+						mame2full = self.emulator.getRomMameToFull()
+					#print mame2full['miexchng']
+					self.romFullName = mame2full[mamename]
 
 					#Doing post-selection actions.
-					#Append the ROM to history list.
+					#Appending the ROM to history list.
 					self.historyAdd((self.romFullName,"%s (%s)" % (self.romFullName,self.romMameName))[self.romFullName==_("Unknow ROM")],self.romPath)
 					self.statusbar.push(self.context_id,_("ROM: \"%s\" (%s)" % (self.romFullName,self.romMameName))) #Update Status message
 					if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto execute the ROM...
 					else: self.execMenu_item.set_sensitive(True) #Activate the ``Execute" button.
 
-				else: self.statusbar.push(self.context_id,"Error: file doesn't exist!")
-			else:
-				path = dialog.get_filename() #Get the path.
-				self.configwidgets[data].set_text(path)
+				else: #No matching MAME name: unknow ROM that cannot be loaded.
+					dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+					dialog.set_markup(_("This ROM is unloadable because Gngeo could not find any suitable driver to handle it."))
+					dialog.connect("response",lambda *args: dialog.destroy())
+					dialog.show_all()
 
-		dialog.destroy()
+			else:
+				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+				dialog.set_markup(_("Error: file doesn't exist!"))
+				dialog.connect("response",lambda *args: dialog.destroy())
+				dialog.show_all()
 
 	def historyMenuGeneration(self):
 		"""(Re)Generating history menu from the recently loaded ROM history file."""
@@ -1344,7 +1365,7 @@ Spanish: Sheng Long Gradilla.""")))
 			image2 = gtk.Image()
 			image2.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image2)
-			button.connect("clicked",self.fileSelect,_('Select the XML file containing ROM infos.'),self.xgngeoParams["rominfoxml"],"rominfoxml")
+			button.connect("clicked",self.fileSelect,_('Select the XML file containing ROM infos.'),self.configwidgets['rominfoxml'].get_text(),"rominfoxml")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,2,3)
@@ -1505,7 +1526,7 @@ Spanish: Sheng Long Gradilla.""")))
 		#Window attributes.
 		self.window.set_title("XGngeo")
 		self.window.connect("delete_event",self.quit)
-		
+
 		box = gtk.VBox(False,0)
 		self.window.add(box)
 		menu_bar = gtk.MenuBar()
@@ -1528,7 +1549,7 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],{_("ROM archive") : "*.zip", _("All files") : "*"})
+		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],self.manualRomPathSetting,0,{_("ROM archive") : "*.zip", _("All files") : "*"})
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))

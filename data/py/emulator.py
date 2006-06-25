@@ -28,6 +28,8 @@ class Emulator:
 			"romrc" : paths[1].replace("'","\'")
 			}
 		self.cmd = None
+		self.romFullToMame = {}
+		self.romMameToFull = {}
 
 	def setPath(self,param,value):
 		"""Changing important path values."""
