@@ -18,12 +18,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 import command
-from os import popen
+import os
 from re import match
 
 class Emulator:
 	def __init__(self,*paths):
-		self.path = {
+		self.paths = {
 			"gngeo" : paths[0].replace("'","\'"),
 			"romrc" : paths[1].replace("'","\'")
 			}
@@ -33,53 +33,80 @@ class Emulator:
 
 	def setPath(self,param,value):
 		"""Changing important path values."""
-		self.path[param] = value
+		self.paths[param] = value
 
 	def getGngeoVersion(self,path=None):
 		"""Returning Gngeo version number as tuple and string (or None)."""
-		pipe = popen("'%s' --version" % (path or self.path['gngeo']),"r")
+		pipe = os.popen("'%s' --version" % (path or self.paths['gngeo']),"r")
 		version = match("Gngeo (\S*)",pipe.readline())
 		pipe.close()
-		if not version: return None #Returning nothing.
-		else:
-				list = []
-				for num in version.group(1).split("."):
-					try: list.append(int(num))
-					except: list.append(num)
+		if version:
+			list = []
+			for num in version.group(1).split("."):
+				try: list.append(int(num))
+				except: list.append(num)
+			return tuple(list), version.group(1) #Returning as tuple and string.
 
-		return tuple(list), version.group(1) #Returning as tuple and string.
+		return None #Returning nothing.
 
 	def getAllSupportedRom(self):
 		"""Returning list of all the Rom supported by the driver file, according
 		to Gngeo output (launched with the `--listgame' argument)."""
+		self.romMameNames = []
+		self.romFullNames = []
 		self.romFullToMame = {}
 		self.romMameToFull = {}
-		pipe = popen("'%s' --listgame" % self.path['gngeo'])
+
+		pipe = os.popen("'%s' --listgame" % self.paths['gngeo'])
 		for line in pipe.readlines():
 			plop = match("(\S*) : (.*)",line)
 			if plop:
-				#Append ROM information to the dicts.
+				#Appending ROM information to the lists & dicts.
+				self.romMameNames.append(plop.group(1))
+				self.romFullNames.append(plop.group(2))
 				self.romMameToFull[plop.group(1)] = plop.group(2)
 				self.romFullToMame[plop.group(2)] = plop.group(1)
 		pipe.close()
 
+		#Storing lists.
+		self.romMameNames.sort(key=str.lower)
+		self.romFullNames.sort(key=str.lower)
+
 	def getRomMameToFull(self):	return self.romMameToFull
 	def getRomFullToMame(self): return self.romFullToMame
-	def getRomFullNames(self):
-		list = self.romFullToMame.keys()
-		list.sort(key=str.lower)
-		return list
+	def getRomMameNames(self): return self.romMameNames
+	def getRomFullNames(self): return self.romFullNames
+
+	def archiveRecognition(self,archive_path):
+		"""Using Gngeo directory scanning to check whether a mentioned archive
+		is a supported ROM, and returning some infos (its MAME and full names)
+		if it's the case."""
+		dir = os.path.dirname(archive_path)
+		filename = os.path.basename(archive_path)
+
+		#Getting Gngeo directory scan results.
+		pipe = os.popen("'%s' --scandir=%s" % (self.paths['gngeo'],dir.replace(" ","\ ")),"r")
+		results = pipe.readlines()[1:]
+		pipe.close()
+
+		#Looking for potential details regarding the archive to check in the scan results...
+		for line in results:
+			plop = match("\s*(\S*):(.*):(\S*)",line)
+			if plop:
+				if plop.group(3)==filename: #Archive was effectively recognized as a ROM!
+					return plop.group(1),plop.group(2) #Returning the infos. :-)
+
+		return None #Arhive wasn't detected as a ROM, returning nothing... :-(
 
 	def scanRomInDirectory(self,dir):
 		"""Generating and returning a dictionary containing the MAME name and actual
 		file name of all the ROM available in a mentioned directory, according to the scan
 		results given by Gngeo (launched with the `--scandir=[dir]' argument)."""
 		dict = {}
-		pipe = popen("'%s' --scandir=%s" % (self.path['gngeo'],dir.replace(" ","\ ")),"r")
+		pipe = os.popen("'%s' --scandir=%s" % (self.paths['gngeo'],dir.replace(" ","\ ")),"r")
 		for line in pipe.readlines()[1:]:
 			plop = match("\s*(\S*):.*:(\S*)",line)
-			if plop:
-				#Append ROM information to the dict.
+			if plop:	#Append ROM information to the dict.
 				dict[plop.group(1)] = plop.group(2)
 		pipe.close()
 
@@ -87,7 +114,7 @@ class Emulator:
 
 	def romLaunching(self,rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""
-		self.cmd = command.ThreadedCmd("'%s' -d '%s' '%s'" % (self.path['gngeo'],self.path['romrc'],rom_path))
+		self.cmd = command.ThreadedCmd("'%s' -d '%s' '%s'" % (self.paths['gngeo'],self.paths['romrc'],rom_path))
 		self.cmd.start()
 
 	def romWaitingForHangingUp(self):

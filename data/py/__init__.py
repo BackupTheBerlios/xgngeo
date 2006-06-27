@@ -174,12 +174,12 @@ class XGngeo:
 		to load the ROM."""
 		import time
 		message = _("Starting ROM (%s)") % self.romMameName
-		for x in range(42):
+		for x in range(42): #Don't panic!
 			if not self.emulator.romRunningState(): break
 			gtk.threads_enter()
 			self.statusbar.push(self.context_id,("%s%s" % (message,("."*x))))
 			gtk.threads_leave()
-			time.sleep(0.4)
+			time.sleep(0.42)
 
 	def gngeoExec(self,widget=None):
 		Timer(0,self.romLoadingInProgress).start()
@@ -257,18 +257,8 @@ class XGngeo:
 				self.specconf['clear'].hide()
 
 		def setRomFromList(widget):
-			#Is something selected?
-			if self.romFromList:
-				#Setting important variables.
-				self.romFullName = self.romFromListName
-				self.romMameName = self.romFromList
-				self.romPath = self.romFromListPath
-
-				#Doing post-selection actions.
-				self.historyAdd(self.romFullName,self.romPath) #Append it to the list.
-				self.statusbar.push(self.context_id,_("ROM: \"%s\" (%s)") % (self.romFromListName,self.romFromList)) #Update Status message
-				if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto execute the ROM...
-				else: self.execMenu_item.set_sensitive(True) #Activate the "Execute" button
+			if self.romFromList: #Is something selected?
+				self.settingCurrentRom(self.romFromListPath,self.romFromList,self.romFromListName)
 
 			dialog.destroy()
 
@@ -286,7 +276,7 @@ class XGngeo:
 
 		def romDirectories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
-			dialog = gtk.Dialog(_("Set ROM directories."),parent,gtk.DIALOG_MODAL,(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
+			dialog = gtk.Dialog(_("Setting ROM directories."),parent,gtk.DIALOG_MODAL,(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 			label = gtk.Label(_("Here you can add multiple directories to scan for ROMs, in addition to your main ROM and Bios directory."))
 			label.set_line_wrap(True)
 			label.set_justify(gtk.JUSTIFY_CENTER)
@@ -342,7 +332,7 @@ class XGngeo:
 			button.connect("clicked",remDirectory)
 			box2.pack_start(button)
 			button = gtk.Button(stock=gtk.STOCK_ADD)
-			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),temp_romdir_list[-1],addDirectory,None,1)
+			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),temp_romdir_list[-1],addDirectory,1,None)
 			button.set_border_width(5)
 			box2.pack_start(button)
 			box.pack_start(box2,False,padding=2)
@@ -612,26 +602,24 @@ class XGngeo:
 				filter.set_name(name)
 				filter.add_pattern(patern)
 				self.widgets["fileselect_dialog"].add_filter(filter)
+			self.widgets["fileselect_dialog"].set_filter(filter) #Set filter to the last entry.
 
 		self.widgets["fileselect_dialog"].run()
 
-	def setRomFromHistory(self,fullname,path,availability):
+	def loadRomFromHistory(self,fullname,path,availability):
 		if os.path.exists(path): #ROM exists on file system, continuing...
-			#Setting important variables.
-			self.romPath = path
-			self.romFullName = fullname
-			if path[-4:]==".zip": self.romMameName = os.path.basename(path)[:-4]
-			else: self.romMameName = os.path.basename(path)
-	
-			#Doing post-selection actions.
-			self.historyAdd(self.romFullName,self.romPath) #Appending it to the ROM History list.
-			if not availability:
-				#Since a ROM marked as ``unavailable" loaded successfully, refreshing the entire ROM History list for the sake of accuracy.
-				self.history.refreshList(size=int(self.xgngeoParams["historysize"]))
-				self.historyMenuGeneration()
-			self.statusbar.push(self.context_id,(_("ROM: \"%s\" (%s)") % (self.romFullName,self.romMameName))) #Updating status message.
-			if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto-executing the ROM...
-			else: self.execMenu_item.set_sensitive(True) #Activating the "Execute" button
+			archive_infos = self.emulator.archiveRecognition(path)
+
+			if archive_infos:
+				#Okay. Loading ROM using the obtained infos.
+				self.settingCurrentRom(path,archive_infos[0],archive_infos[1])
+
+		#	else: #Unknow ROM that cannot be loaded.
+				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+				dialog.set_markup(_("Gngeo is not recognizing this ROM anymore!"))
+				dialog.format_secondary_text(_("Such an issue has two explanations: the ROM archive has been corrupted or the driver that used to handle this ROM has been altered/deleted (most probable)."))
+				dialog.connect("response",lambda *args: dialog.destroy())
+				dialog.show_all()
 
 		else: #ROM not found: no loading but display of warning message and rebuilding of the ROM History menu (with visual marks next to unavailable ROM).
 			message = _("Cannot continue: the ROM you wanted to load was not found on the file system!")
@@ -647,44 +635,26 @@ class XGngeo:
 			dialog.connect("response",lambda *args: dialog.destroy())
 			dialog.show_all()
 
-	def manualRomPathSetting(self,dialog,response):
-		"""Setting ROM path from the file chooser."""
+	def manualRomLoading(self,dialog,response):
+		"""Directly loading ROM from the file chooser."""
 		if response==gtk.RESPONSE_OK:
 			path = dialog.get_filename()
-			#Does the file exist?
-			if os.path.isfile(path):
-				basename = os.path.basename(path)
-				dirname = os.path.dirname(path)
 
-				#Trying to resolve this ROM's MAME name which would corroborate its support under Gngeo.
-				mamename = None
-				for key,val in self.emulator.scanRomInDirectory(dirname).items():
-					if val==basename: mamename = key; break
+			if os.path.isfile(path): #Does that file exist?
+				archive_infos = self.emulator.archiveRecognition(path)
 
-				if mamename: #Matching MAME name found: the ROM has been correctly indentificated and may thus be played.
-					self.romPath = path
-					self.romMameName = mamename
-					mame2full = self.emulator.getRomMameToFull()
-					if not mame2full.has_key(mamename):
-						#Refreshing supported ROM listing to get that ROM full name.
-						self.emulator.getAllSupportedRom()
-						mame2full = self.emulator.getRomMameToFull()
-					self.romFullName = mame2full[mamename]
+				#Is the archive recognized as a ROM?
+				if archive_infos:
+					#Okay. Loading ROM using the obtained infos.
+					self.settingCurrentRom(path,archive_infos[0],archive_infos[1])
 
-					#Doing post-selection actions.
-					#Appending the ROM to history list.
-					self.historyAdd((self.romFullName,"%s (%s)" % (self.romFullName,self.romMameName))[self.romFullName==_("Unknow ROM")],self.romPath)
-					self.statusbar.push(self.context_id,_("ROM: \"%s\" (%s)" % (self.romFullName,self.romMameName))) #Update Status message
-					if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto execute the ROM...
-					else: self.execMenu_item.set_sensitive(True) #Activate the ``Execute" button.
-
-				else: #No matching MAME name: unknow ROM that cannot be loaded.
+				else: #Unknow ROM that cannot be loaded.
 					dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
 					dialog.set_markup(_("This ROM is unloadable because Gngeo could not find any suitable driver to handle it."))
 					dialog.connect("response",lambda *args: dialog.destroy())
 					dialog.show_all()
 
-			else:
+			else: #Unexisting file!
 				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
 				dialog.set_markup(_("Error: file doesn't exist!"))
 				dialog.connect("response",lambda *args: dialog.destroy())
@@ -693,7 +663,7 @@ class XGngeo:
 	def 	historyItemClicked(self,widget, event,*args):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 1: #Left click: loading ROM.
-				self.setRomFromHistory(args[0],args[1],args[2])
+				self.loadRomFromHistory(args[0],args[1],args[2])
 			elif event.button == 3: #Right click: popping-up a menu.
 				menu = gtk.Menu()
 				item = gtk.ImageMenuItem(gtk.STOCK_REMOVE)
@@ -731,6 +701,18 @@ class XGngeo:
 	def historyRemove(self,widget,menu_item,position):
 		self.history.removeRom(position)
 		self.widgets["history_menu"].remove(menu_item)
+
+	def settingCurrentRom(self,path,mamename,fullname):
+			#Updating variables.
+			self.romPath = path
+			self.romMameName = mamename
+			self.romFullName = fullname
+
+			#Doing generic post-selection stuffs.
+			self.historyAdd(fullname,path) #Appending ROM to the History list.
+			self.statusbar.push(self.context_id,_("ROM: \"%s\" (%s)") % (fullname,mamename)) #Updating status message.
+			if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto-executing the ROM...
+			else: self.execMenu_item.set_sensitive(True) #Activating the ``Execute" button
 
 	def about(self,widget):
 		dialog = gtk.Dialog(_("About XGngeo"),self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,gtk.RESPONSE_CLOSE))
@@ -1045,6 +1027,7 @@ Spanish: Sheng Long Gradilla.""")))
 					temp_param['effect'] = "none" #Changing param.
 					self.configwidgets['effect'].set_active(0) #Changing widget.
 					self.configwidgets['effect'].set_sensitive(False) #Effect cannot be changed any more.
+				else: self.configwidgets['effect'].set_sensitive(True) #Resetting widget's sensibility.
 
 			#Tell to perform special actions over effect widget according to the selected blitter.
 			bouyaka()
@@ -1534,7 +1517,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 			elif special==2: #ROM-specific configuration.
 				self.configfile.writeRomConfig(temp_param,mamename,VERSION) #Writing out! :p
-				
+
 				if mamename==self.mamename:
 					#Update buttons.
 					self.specconf['new'].hide()
@@ -1573,7 +1556,7 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],self.manualRomPathSetting,0,{_("ROM archive") : "*.zip", _("All files") : "*"})
+		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.gngeoParams["rompath"],self.manualRomLoading,0,{ _("All files") : "*",_("ROM archive") : "*.zip"})
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
@@ -1648,11 +1631,11 @@ Spanish: Sheng Long Gradilla.""")))
 		menu_bar.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_View/edit"))
-		#menu_item.connect("activate",)
+	#	menu_item.connect("activate",self.driverList)
 		menu.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Add new"))
-		#menu_item.connect("activate",)
+	#	menu_item.connect("activate",self.driverAdd)
 		menu.append(menu_item)
 
 		#
