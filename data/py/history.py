@@ -25,11 +25,13 @@ class History:
 		self.path = os.path.expanduser("~/.xgngeo/history")
 		self.list = []
 
-	def getList(self,size):
-		"""Getting content of the Rom History file as a list
-		(which also indicates whether each Rom currenlty
-		exists on the file system)."""
-		
+	def refreshList(self,size):
+		"""Reading content of the ROM History file to build a list 
+		containing tuple with full name, path and file system
+		presence for each of the recently loaded ROMs."""	
+
+		self.list = [] #(Re)Create ROM History list from scratch.
+
 		if os.path.isfile(self.path):
 			file = open(self.path,"r") #Opening.
 			content = file.readlines() #Reading.
@@ -37,27 +39,16 @@ class History:
 
 			for line in content[:size]:
 				plop = match('"(.*)" (.*)',line)
-				location = plop.group(2)
-				if plop: self.list.append((plop.group(1),location,os.path.exists(location)))
+				if plop: 
+					path = plop.group(2)
+					self.list.append((plop.group(1),path,os.path.exists(path)))
 
+	def getList(self):
+		"""Returning current, up-to-date ROM History list."""
 		return self.list
 
-	def addRom(self,name,location,size):
-		"""Adding a new Rom to the list, with duplicate entries prevention."""
-		
-		#Popping the Rom out of the list if already mentioned (similar path).
-		i=0
-		for x in self.list[:size]:
-			if x[1]==location: self.list.pop(i)
-			i+=1
-
-		#Prepending it to the recent Rom list (indicating the file exists).
-		self.list.insert(0,(name,location,True))
-
-		#Removing any extra item.
-		self.list = self.list[:size]
-
-		#Updating Rom History file.
+	def updateFile(self):
+		"""Updating ROM History file."""
 		content = ""
 		for line in self.list:
 			content += '"%s" %s\n' % (line[0],line[1])
@@ -66,4 +57,20 @@ class History:
 		file.write(content) #Writing.
 		file.close() #And closing. :p
 
-		return self.list
+	def addRom(self,name,path,size):
+		"""Adding a new Rom to the list, with duplicate entries prevention."""
+
+		#Popping the ROM out of the list if already mentioned (similar path).
+		i=0
+		for x in self.list[:size]:
+			if x[1]==path: self.list.pop(i)
+			i+=1
+
+		self.list.insert(0,(name,path,True)) #Prepending it to the recent Rom list (indicating the file exists).
+		self.list = self.list[:size] #Removing any extra item.
+		self.updateFile() #Writing changes.
+
+	def removeRom(self,position):
+		"""Popping the ROM out of the list."""
+		self.list.pop(position)
+		self.updateFile() #Writing changes.

@@ -162,7 +162,7 @@ class XGngeo:
 		#Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(True)
 		self.history_menu_item.set_sensitive(True)
-		for x in self.historyMenu.get_children(): x.set_sensitive(True)
+		for x in self.widgets["history_menu"].get_children(): x.set_sensitive(True)
 		self.stopMenu_item.set_sensitive(False)
 		self.execMenu_item.set_sensitive(True)
 		for x in self.configMenu.get_children(): x.set_sensitive(True)
@@ -183,11 +183,11 @@ class XGngeo:
 
 	def gngeoExec(self,widget=None):
 		Timer(0,self.romLoadingInProgress).start()
-				
+
 		#Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
-		for x in self.historyMenu.get_children(): x.set_sensitive(False)
+		for x in self.widgets["history_menu"].get_children(): x.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
 		for x in self.configMenu.get_children(): x.set_sensitive(False)
@@ -208,8 +208,7 @@ class XGngeo:
 	def romList(self,widget):
 		def setRomTemp(treeview,path,view_column):
 			#Ensure that the set the right side is no more insensitive.
-			if not rightside.get_property("sensitive"):
-				rightside.set_sensitive(True)
+			if not rightside.get_property("sensitive"): rightside.set_sensitive(True)
 
 			treeselection = treeview.get_selection()
 			liststore,iter = treeselection.get_selected()
@@ -226,8 +225,8 @@ class XGngeo:
 
 			#Update mame name and availability icon.
 			self.mamename = mamename #The current selected mamename is exported.
-			self.widgets['mamename'].set_text("<b>%s</b>" % mamename)
-			self.widgets['mamename'].set_use_markup(True)
+			self.widgets['mamename_label'].set_text("<b>%s</b>" % mamename)
+			self.widgets['mamename_label'].set_use_markup(True)
 			self.avail_image.set_from_stock((gtk.STOCK_NO,gtk.STOCK_YES)[availability],gtk.ICON_SIZE_MENU)
 
 			#Update preview image.
@@ -287,7 +286,6 @@ class XGngeo:
 
 		def romDirectories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
-
 			dialog = gtk.Dialog(_("Set ROM directories."),parent,gtk.DIALOG_MODAL,(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 			label = gtk.Label(_("Here you can add multiple directories to scan for ROMs, in addition to your main ROM and Bios directory."))
 			label.set_line_wrap(True)
@@ -446,7 +444,7 @@ class XGngeo:
 		rightside = gtk.VBox(spacing=3)
 
 		noteisthere = 0
-		# Use add-ons if activated and valid.
+		# Using add-ons if activated and valid.
 		if((self.xgngeoParams["previewimages"]=="true" and os.path.isdir(self.xgngeoParams["previewimagedir"]))\
 		or (self.xgngeoParams["rominfos"]=="true" and os.path.isfile(self.xgngeoParams["rominfoxml"]))):
 			notebook = gtk.Notebook()
@@ -458,7 +456,7 @@ class XGngeo:
 				self.previewImage = gtk.Image()
 				self.previewImage.set_padding(3,3)
 				path = os.path.join(self.xgngeoParams["previewimagedir"],"unavailable.png")
-				if os.path.isfile(path): self.previewImage.set_from_file(path) #Display the ``unavailable" image by default.
+				if os.path.isfile(path): self.previewImage.set_from_file(path) #Displaying the ``unavailable" image by default.
 				container = gtk.EventBox()
 				container.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("black"))
 				container.add(self.previewImage)
@@ -535,9 +533,9 @@ class XGngeo:
 				notebook.append_page(box2,gtk.Label(_("Informations")))
 
 		box2 = gtk.HBox()
-		self.widgets['mamename'] = gtk.Label("<b>-----</b>")
-		self.widgets['mamename'].set_use_markup(True)
-		box2.pack_start(self.widgets['mamename'])
+		self.widgets['mamename_label'] = gtk.Label("<b>-----</b>")
+		self.widgets['mamename_label'].set_use_markup(True)
+		box2.pack_start(self.widgets['mamename_label'])
 		self.avail_image = gtk.Image()
 		self.avail_image.set_from_stock(gtk.STOCK_NO,gtk.ICON_SIZE_MENU)
 		box2.pack_end(self.avail_image,False)
@@ -617,7 +615,7 @@ class XGngeo:
 
 		self.widgets["fileselect_dialog"].run()
 
-	def setRomFromHistory(self,widget,fullname,path):
+	def setRomFromHistory(self,fullname,path,availability):
 		if os.path.exists(path): #ROM exists on file system, continuing...
 			#Setting important variables.
 			self.romPath = path
@@ -626,17 +624,28 @@ class XGngeo:
 			else: self.romMameName = os.path.basename(path)
 	
 			#Doing post-selection actions.
-			self.historyAdd(self.romFullName,self.romPath) #Appending it to the list.
-			self.statusbar.push(self.context_id,(_("ROM: \"%s\" (%s)") % (self.romFullName,self.romMameName))) #Updating status message
-			if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto execute the ROM...
+			self.historyAdd(self.romFullName,self.romPath) #Appending it to the ROM History list.
+			if not availability:
+				#Since a ROM marked as ``unavailable" loaded successfully, refreshing the entire ROM History list for the sake of accuracy.
+				self.history.refreshList(size=int(self.xgngeoParams["historysize"]))
+				self.historyMenuGeneration()
+			self.statusbar.push(self.context_id,(_("ROM: \"%s\" (%s)") % (self.romFullName,self.romMameName))) #Updating status message.
+			if self.xgngeoParams["autoexecrom"]=="true": self.gngeoExec() #Auto-executing the ROM...
 			else: self.execMenu_item.set_sensitive(True) #Activating the "Execute" button
-		else:
-			#ROM not found: no loading but warning message and ROM History menu rebuilding.
+
+		else: #ROM not found: no loading but display of warning message and rebuilding of the ROM History menu (with visual marks next to unavailable ROM).
+			message = _("Cannot continue: the ROM you wanted to load was not found on the file system!")
+
+			if availability:
+				#Since a ROM marked as ``available" wasn't actually found, refreshing the entire ROM History list for the sake of accuracy.
+				self.history.refreshList(size=int(self.xgngeoParams["historysize"]))
+				self.historyMenuGeneration()
+				message += "\n%s" % _("It is now indicated as unavailable in the ROM History menu.")
+
 			dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
-			dialog.set_markup(_("Cannot continue: the ROM you wanted to load was not found on the file system!"))
+			dialog.set_markup(message)
 			dialog.connect("response",lambda *args: dialog.destroy())
 			dialog.show_all()
-			self.historyMenuGeneration()
 
 	def manualRomPathSetting(self,dialog,response):
 		"""Setting ROM path from the file chooser."""
@@ -660,7 +669,6 @@ class XGngeo:
 						#Refreshing supported ROM listing to get that ROM full name.
 						self.emulator.getAllSupportedRom()
 						mame2full = self.emulator.getRomMameToFull()
-					#print mame2full['miexchng']
 					self.romFullName = mame2full[mamename]
 
 					#Doing post-selection actions.
@@ -682,31 +690,47 @@ class XGngeo:
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
 
+	def 	historyItemClicked(self,widget, event,*args):
+		if event.type == gtk.gdk.BUTTON_PRESS:
+			if event.button == 1: #Left click: loading ROM.
+				self.setRomFromHistory(args[0],args[1],args[2])
+			elif event.button == 3: #Right click: popping-up a menu.
+				menu = gtk.Menu()
+				item = gtk.ImageMenuItem(gtk.STOCK_REMOVE)
+				item.connect("activate",self.historyRemove,widget,args[3])
+				item.show()
+				menu.append(item)
+				menu.popup(None,None,None,event.button,event.time)
+
 	def historyMenuGeneration(self):
-		"""(Re)Generating history menu from the recently loaded ROM history file."""
-		for x in self.history.getList(size=int(self.xgngeoParams["historysize"])):
-			if x[2]: menu_item2 = gtk.MenuItem(x[0])
+		"""(Re)Generating ROM History menu from the current ROM History list."""
+
+		#Removing old entries (if any) but keeping the tear-off widget.
+		for x in self.widgets["history_menu"].get_children()[1:]:
+			self.widgets["history_menu"].remove(x) 
+
+		#Putting the new ones...
+		pos = 0
+		for val in self.history.getList():
+			if val[2]: menu_item = gtk.MenuItem(val[0])
 			else:
-				#Adding a "warning" icon when the ROM is not available on the file system.
-				menu_item2 = gtk.ImageMenuItem(x[0])
+				#Adding a ``warning" icon when the ROM is not available on the file system.
 				image = gtk.Image()
 				image.set_from_stock(gtk.STOCK_DIALOG_WARNING,gtk.ICON_SIZE_MENU)
-				menu_item2.set_image(image)
-			menu_item2.connect("activate",self.setRomFromHistory,x[0],x[1])
-			self.historyMenu.append(menu_item2)
+				menu_item = gtk.ImageMenuItem(val[0])
+				menu_item.set_image(image)
+			menu_item.connect("button_press_event",self.historyItemClicked,val[0],val[1],val[2],pos)
+			self.widgets["history_menu"].append(menu_item)
+			pos+=1
+		self.widgets["history_menu"].show_all()
 
 	def historyAdd(self,fullname,path):
-		#Update history file and get new list...
-		list = self.history.addRom(fullname,path,size=int(self.xgngeoParams["historysize"]))
+		self.history.addRom(fullname,path,size=int(self.xgngeoParams["historysize"])) #Updating ROM History file.
+		self.historyMenuGeneration() #Recreating ROM History menu.
 
-		#Recreate the history menu.
-		for x in self.historyMenu.get_children()[1:]: self.historyMenu.remove(x) #Remove old entries.
-		for x in list: #Put the new ones.
-			menu_item = gtk.MenuItem(x[0])
-			menu_item.connect("activate",self.setRomFromHistory,x[0],x[1])
-			self.historyMenu.append(menu_item)
-
-		self.historyMenu.show_all()
+	def historyRemove(self,widget,menu_item,position):
+		self.history.removeRom(position)
+		self.widgets["history_menu"].remove(menu_item)
 
 	def about(self,widget):
 		dialog = gtk.Dialog(_("About XGngeo"),self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,gtk.RESPONSE_CLOSE))
@@ -716,7 +740,7 @@ class XGngeo:
 		box = gtk.HBox()
 		image = gtk.Image()
 		image.set_from_file(os.path.join(datarootpath,"img","minilogo.png"))
-		box.pack_start(image)
+		box.pack_start(image,False,padding=4)
 		label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s</span>" % (_("XGngeo: a frontend for Gngeo. :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % self.emulator.getGngeoVersion()[1]))
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		label.set_use_markup(True)
@@ -1553,10 +1577,11 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
-		self.historyMenu = gtk.Menu()
-		self.history_menu_item.set_submenu(self.historyMenu)
-		self.historyMenu.append(gtk.TearoffMenuItem())
-		self.historyMenuGeneration()
+		self.widgets["history_menu"] = gtk.Menu()
+		self.history_menu_item.set_submenu(self.widgets["history_menu"])
+		self.widgets["history_menu"].append(gtk.TearoffMenuItem())
+		self.history.refreshList(size=int(self.xgngeoParams["historysize"])) #Building ROM History list.
+		self.historyMenuGeneration() #Generating ROM History menu.
 		menu.append(self.history_menu_item)
 
 		menu.append(gtk.SeparatorMenuItem()) #Separator
@@ -1672,7 +1697,7 @@ Spanish: Sheng Long Gradilla.""")))
 		box.pack_end(self.statusbar,False)
 
 		#Window positioning.
-		if self.xgngeoParams["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+		if self.xgngeoParams["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER)
 		#Show all.
 		self.window.show_all()
 
