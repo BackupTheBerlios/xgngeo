@@ -614,7 +614,7 @@ class XGngeo:
 				#Okay. Loading ROM using the obtained infos.
 				self.settingCurrentRom(path,archive_infos[0],archive_infos[1])
 
-		#	else: #Unknow ROM that cannot be loaded.
+			else: #Unknow ROM that cannot be loaded.
 				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
 				dialog.set_markup(_("Gngeo is not recognizing this ROM anymore!"))
 				dialog.format_secondary_text(_("Such an issue has two explanations: the ROM archive has been corrupted or the driver that used to handle this ROM has been altered/deleted (most probable)."))
@@ -1163,7 +1163,7 @@ Spanish: Sheng Long Gradilla.""")))
 			box.set_border_width(4)
 			notebook.append_page(box,gtk.Label(_("Controls")))
 
-			label = gtk.Label(_("To modify a key, click the button then push your new key.\nThis configuration is only for keyboard."))
+			label = gtk.Label(_("To modify a key, click on the corresponding input method button under it's icon, then push your new key."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_line_wrap(True)
 			box.pack_start(label)
@@ -1181,12 +1181,12 @@ Spanish: Sheng Long Gradilla.""")))
 			radio = gtk.RadioButton(radio,_("Player 2"))
 			radio.connect("toggled",radioToggled,1)
 			box2.pack_start(radio)
-			table.attach(frame,0,2,2,4)
+			table.attach(frame,0,2,0,2)
 
 			if len(temp_param["p1key"].split(","))==len(key_list):
 				#Given values seems to be okay.
 				plop = temp_param["p1key"]
-			else:	#There's a crap, let's use default key values.
+			else: #There's a crap, let's use default key values.
 				plop = self.configfile.getDefaultParams()[0]["p1key"]
 			self.p1key_int_vals = plop.split(",")
 
@@ -1203,7 +1203,7 @@ Spanish: Sheng Long Gradilla.""")))
 				p1keywidgets[i].connect("toggled",toggled)
 				p1keywidgets[i].connect("key_press_event",getPressed,i)
 				p1keywidgets[i].set_use_underline(False)
-				p1keywidgets[i].set_size_request(40,-1)
+				p1keywidgets[i].set_size_request(30,-1)
 				i+=1
 
 			if len(temp_param["p2key"].split(","))==len(key_list):
@@ -1226,9 +1226,9 @@ Spanish: Sheng Long Gradilla.""")))
 				p2keywidgets[i].connect("toggled",toggled)
 				p2keywidgets[i].connect("key_press_event",getPressed,i,1)
 				p2keywidgets[i].set_use_underline(False)
-				p2keywidgets[i].set_size_request(40,-1)
+				p2keywidgets[i].set_size_request(30,-1)
 
-				#Generate key's image
+				#Displaying key's icon.
 				image = gtk.Image()
 				image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % key_list[i]))
 
@@ -1236,13 +1236,16 @@ Spanish: Sheng Long Gradilla.""")))
 				box2.pack_start(p1keywidgets[i]) #with P1 key...
 				box2.pack_start(p2keywidgets[i]) #and P2 key :p
 
-				#Put them in table
-				if i<6:
-					table.attach(image,i,i+1,0,1)
-					table.attach(box2,i,i+1,1,2)
-				else:
-					table.attach(image,i-4,i-3,2,3)
-					table.attach(box2,i-4,i-3,3,4)
+				#Put them in table...
+				if i<6: #First 6 keys on 2nd row.
+					table.attach(image,i,i+1,2,3)
+					table.attach(box2,i,i+1,3,4)
+				elif i<10: #Keys from 6 to 10 (arrow) on 1st row.
+					table.attach(image,i-4,i-3,0,1)
+					table.attach(box2,i-4,i-3,1,2)
+				elif i<14: #Keys from 10 to 14 (hotkeys) on 3rd row.
+					table.attach(image,i-8,i-7,4,5)
+					table.attach(box2,i-8,i-7,5,6)
 				i+=1
 
 			box.pack_start(table)
