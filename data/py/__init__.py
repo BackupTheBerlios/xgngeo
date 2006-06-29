@@ -262,15 +262,14 @@ class XGngeo:
 
 			dialog.destroy()
 
-		def refreshingRomList(widget=None,setting_mode=0):
-			liststore.clear()
-			if setting_mode: self.xgngeoParams["showavailableromsonly"] = ("false","true")[widget.get_active()]
+		def refreshingRomList(widget=None):
+			liststore.clear() #First clearing the list out.
 
 			for name in romlist_fullname:
 				if romlist[name] in available_rom:
 					#Alway putting available ROMs.
 					liststore.append([name,True,available_rom[romlist[name]]])
-				elif self.xgngeoParams["showavailableromsonly"]=="false":
+				elif not buttonShowAvailable.get_active():
 					#Also putting unavailable ROMs if the box is unchecked.
 					liststore.append([name,False,''])
 
@@ -425,7 +424,7 @@ class XGngeo:
 		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK)
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
-		buttonShowAvailable.connect("toggled",refreshingRomList,1)
+		buttonShowAvailable.connect("toggled",refreshingRomList)
 		table.attach(buttonShowAvailable,2,3,2,3,yoptions=gtk.SHRINK)
 
 		#
@@ -1350,7 +1349,7 @@ Spanish: Sheng Long Gradilla.""")))
 			# Other things configuration.
 			#
 			self.configDialog.set_title(_("Other things configuration"))
-			table = gtk.Table(4,2) #The box :p
+			table = gtk.Table(2,3) #The box :p
 			table.set_col_spacings(6)
 			table.set_border_width(2)
 
@@ -1425,22 +1424,30 @@ Spanish: Sheng Long Gradilla.""")))
 			else: bouyaka(self.configwidgets['rominfos'],image,self.configwidgets['rominfoxml'],button)
 			self.configwidgets['rominfos'].connect("toggled",bouyaka,image,self.configwidgets['rominfoxml'],button)
 
-			self.configwidgets['autoexecrom'] = gtk.CheckButton(_("Auto execute ROMs."))
-			if self.xgngeoParams["autoexecrom"]=="true": self.configwidgets['autoexecrom'].set_active(1)
-			table.attach(self.configwidgets['autoexecrom'],1,2,0,1)
+			box2 = gtk.VBox(spacing=2)
 
-			self.configwidgets['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
-			if self.xgngeoParams["centerwindow"]=="true": self.configwidgets['centerwindow'].set_active(1)
-			table.attach(self.configwidgets['centerwindow'],1,2,2,3)
-			
 			#History size
-			box2 = gtk.HBox(spacing=4)
-			label = gtk.Label(_("History size:"))
-			box2.pack_start(label)
+			box3 = gtk.HBox(spacing=4)
+			label = gtk.Label(_("Maximum size of the ROM history:"))
+			box3.pack_start(label)
 			adjustment = gtk.Adjustment(float(self.xgngeoParams["historysize"]),1,20,1)
 			self.configwidgets['historysize'] = gtk.SpinButton(adjustment)
-			box2.pack_start(self.configwidgets['historysize'],False)
-			table.attach(box2,1,2,1,2)
+			box3.pack_start(self.configwidgets['historysize'],False)
+			box2.pack_start(box3)
+
+			self.configwidgets['autoexecrom'] = gtk.CheckButton(_("Auto-execute ROMs after loading."))
+			if self.xgngeoParams["autoexecrom"]=="true": self.configwidgets['autoexecrom'].set_active(True)
+			box2.pack_start(self.configwidgets['autoexecrom'])
+
+			self.configwidgets['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
+			if self.xgngeoParams["centerwindow"]=="true": self.configwidgets['centerwindow'].set_active(True)
+			box2.pack_start(self.configwidgets['centerwindow'])
+
+			self.configwidgets['showavailableromsonly'] = gtk.CheckButton(_("Only show available ROMs in ROM list by default."))
+			if self.xgngeoParams["showavailableromsonly"]=="true": self.configwidgets['showavailableromsonly'].set_active(True) #Activate button.
+			box2.pack_start(self.configwidgets['showavailableromsonly'])
+			
+			table.attach(box2,1,2,0,3)
 
 			self.configDialog.vbox.pack_start(table)
 
@@ -1496,14 +1503,15 @@ Spanish: Sheng Long Gradilla.""")))
 		elif type in (1,2,3,4):
 			temp_param = {}
 
-			#Update global emulation configuration params.
+			#Updating global emulation configuration params.
 			temp_param["fullscreen"] = ("false","true")[self.configwidgets['fullscreen'].get_active()] #fullscreen
 			temp_param["interpolation"] = ("false","true")[self.configwidgets['interpolation'].get_active()] #interpolation
 			temp_param["autoframeskip"] = ("false","true")[self.configwidgets['autoframeskip'].get_active()] #showfps
 			temp_param["showfps"] = ("false","true")[self.configwidgets['showfps'].get_active()] #autoframeskip
+			temp_param["raster"] = ("false","true")[self.configwidgets['raster'].get_active()] #raster
+			temp_param["hwsurface"] = ("false","true")[self.configwidgets['hwsurface'].get_active()] #hwsurface
 			temp_param["scale"] = int(self.configwidgets['scale'].get_value()) #scale
 			temp_param["screen320"] = ("false","true")[self.configwidgets['screen320'].get_active()] #screen320
-			temp_param["raster"] = ("false","true")[self.configwidgets['raster'].get_active()] #raster
 			temp_param["blitter"] = self.combo_params['blitter'][self.configwidgets['blitter'].get_active()] #blitter
 			temp_param["effect"] = self.combo_params['effect'][self.configwidgets['effect'].get_active()] #effect
 			temp_param["sound"] = ("false","true")[self.configwidgets['sound'].get_active()] #sound
@@ -1517,6 +1525,8 @@ Spanish: Sheng Long Gradilla.""")))
 			if self.configwidgets['country_japan'].get_active(): temp_param["country"] = "japan" #country
 			elif self.configwidgets['country_usa'].get_active(): temp_param["country"] = "usa"
 			else: temp_param["country"] = "europe"
+			temp_param["68kclock"] = int(self.configwidgets['68kclock'].get_value()) #68kclock
+			temp_param["z80clock"] = int(self.configwidgets['z80clock'].get_value()) #z80clock
 
 			# Controls.
 			#p1key
@@ -1532,14 +1542,15 @@ Spanish: Sheng Long Gradilla.""")))
 
 		elif type==5:
 			#Update Other things configuration params.
-			self.xgngeoParams["autoexecrom"] = ("false","true")[self.configwidgets['autoexecrom'].get_active()] #autoexecrom
-			self.xgngeoParams["historysize"] = int(self.configwidgets['historysize'].get_value()) #historysize
-			self.xgngeoParams["centerwindow"] = ("false","true")[self.configwidgets['centerwindow'].get_active()] #centerwindow_old
 			self.gngeoParams["libglpath"] = self.configwidgets['libglpath'].get_text() #libglpath
 			self.xgngeoParams["previewimages"] = ("false","true")[self.configwidgets['previewimages'].get_active()] #previewimage
 			self.xgngeoParams["previewimagedir"] = self.configwidgets['previewimagedir'].get_text() #previewimagedir
 			self.xgngeoParams["rominfos"] = ("false","true")[self.configwidgets['rominfos'].get_active()] #rominfo
 			self.xgngeoParams["rominfoxml"] = self.configwidgets['rominfoxml'].get_text() #rominfoxml
+			self.xgngeoParams["autoexecrom"] = ("false","true")[self.configwidgets['autoexecrom'].get_active()] #autoexecrom
+			self.xgngeoParams["historysize"] = int(self.configwidgets['historysize'].get_value()) #historysize
+			self.xgngeoParams["centerwindow"] = ("false","true")[self.configwidgets['centerwindow'].get_active()] #centerwindow
+			self.xgngeoParams["showavailableromsonly"] = ("false","true")[self.configwidgets['showavailableromsonly'].get_active()] #showavailableromsonly
 
 			letsWrite = 1 #Let's write!
 
