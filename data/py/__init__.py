@@ -340,7 +340,6 @@ class XGngeo:
 			liststore = gtk.ListStore(str)
 			treeview = gtk.TreeView(liststore)
 			treeview.set_headers_visible(False)
-		#	treeview.connect("row-activated",setRomTemp)
 			tvcolumn = gtk.TreeViewColumn("Directory")
 			treeview.append_column(tvcolumn)
 			for dir in ([_("Main ROM and BIOS directory.")]+temp_romdir_list[1:]): liststore.append([dir]) #Inserting content.
@@ -1345,7 +1344,7 @@ Spanish: Sheng Long Gradilla.""")))
 				else: return "%i%%" % value
 
 			#68kclock
-			adjustment = gtk.Adjustment(float(temp_param["68kclock"]),-50,50,5)
+			adjustment = gtk.Adjustment(float(temp_param["68kclock"]),-80,80,10)
 			label = gtk.Label(_("68K clock:"))
 			table.attach(label,0,1,0,1)
 			self.widgets["config"]['68kclock'] = gtk.HScale(adjustment)
@@ -1354,7 +1353,7 @@ Spanish: Sheng Long Gradilla.""")))
 			table.attach(self.widgets["config"]['68kclock'],1,2,0,1)
 
 			#Z80clock.
-			adjustment = gtk.Adjustment(float(temp_param["z80clock"]),-50,50,5)
+			adjustment = gtk.Adjustment(float(temp_param["z80clock"]),-80,80,10)
 			label = gtk.Label(_("DrZ80 clock:"))
 			table.attach(label,0,1,1,2)
 			self.widgets["config"]['z80clock'] = gtk.HScale(adjustment)
@@ -1369,10 +1368,11 @@ Spanish: Sheng Long Gradilla.""")))
 			# Other things configuration.
 			#
 			self.configDialog.set_title(_("Other things configuration"))
-			table = gtk.Table(2,3) #The box :p
-			table.set_col_spacings(6)
-			table.set_border_width(2)
+			table = gtk.Table(3,3) #The box :p
+			table.set_row_spacings(5)
+			table.set_border_width(6)
 
+			#LibGL path.
 			frame = gtk.Frame(_("Path to libGL.so (optional):"))
 			box2 = gtk.HBox()
 			image = gtk.Image()
@@ -1397,6 +1397,7 @@ Spanish: Sheng Long Gradilla.""")))
 				to answer mode widget selected param."""
 				for x in targets: x.set_sensitive(widget.get_active())
 
+			#Preview image directory.
 			frame = gtk.Frame(_("Preview image directory (optional):"))
 			box2 = gtk.HBox()
 			self.widgets["config"]['previewimages'] = gtk.CheckButton()
@@ -1420,6 +1421,7 @@ Spanish: Sheng Long Gradilla.""")))
 			else: bouyaka(self.widgets["config"]['previewimages'],image,self.widgets["config"]['previewimagedir'],button)
 			self.widgets["config"]['previewimages'].connect("toggled",bouyaka,image,self.widgets["config"]['previewimagedir'],button)
 
+			#ROM infos XML.
 			frame = gtk.Frame(_("XML file containing ROM infos (optional):"))
 			box2 = gtk.HBox()
 			self.widgets["config"]['rominfos'] = gtk.CheckButton()
@@ -1444,30 +1446,46 @@ Spanish: Sheng Long Gradilla.""")))
 			else: bouyaka(self.widgets["config"]['rominfos'],image,self.widgets["config"]['rominfoxml'],button)
 			self.widgets["config"]['rominfos'].connect("toggled",bouyaka,image,self.widgets["config"]['rominfoxml'],button)
 
-			box2 = gtk.VBox(spacing=2)
+			#Column separation.
+			table.attach(gtk.VSeparator(),1,2,0,3,xpadding=6, ypadding=8)
+
+			box2 = gtk.VBox(spacing=3)
 
 			#History size
-			box3 = gtk.HBox(spacing=4)
-			label = gtk.Label(_("Maximum size of the ROM history:"))
+			box3 = gtk.HBox()
+			label = gtk.Label(_("Maximum size of the ROM history menu:"))
 			box3.pack_start(label)
 			adjustment = gtk.Adjustment(float(self.xgngeoParams["historysize"]),1,20,1)
 			self.widgets["config"]['historysize'] = gtk.SpinButton(adjustment)
 			box3.pack_start(self.widgets["config"]['historysize'],False)
 			box2.pack_start(box3)
 
+			#Auto-execute ROMs.
 			self.widgets["config"]['autoexecrom'] = gtk.CheckButton(_("Auto-execute ROMs after loading."))
 			if self.xgngeoParams["autoexecrom"]=="true": self.widgets["config"]['autoexecrom'].set_active(True)
 			box2.pack_start(self.widgets["config"]['autoexecrom'])
 
+			#Show available ROMs only.
+			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(_("Only show available ROMs in ROM list by default."))
+			if self.xgngeoParams["showavailableromsonly"]=="true": self.widgets["config"]['showavailableromsonly'].set_active(True)
+			box2.pack_start(self.widgets["config"]['showavailableromsonly'])
+
+			#Center XGngeo window.
 			self.widgets["config"]['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
 			if self.xgngeoParams["centerwindow"]=="true": self.widgets["config"]['centerwindow'].set_active(True)
 			box2.pack_start(self.widgets["config"]['centerwindow'])
 
-			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(_("Only show available ROMs in ROM list by default."))
-			if self.xgngeoParams["showavailableromsonly"]=="true": self.widgets["config"]['showavailableromsonly'].set_active(True) #Activate button.
-			box2.pack_start(self.widgets["config"]['showavailableromsonly'])
-			
-			table.attach(box2,1,2,0,3)
+			#Sleep when idle.
+			self.widgets["config"]['sleepidle'] = gtk.CheckButton(_("Let emulator sleep when idle."))
+			if self.gngeoParams["sleepidle"]=="true": self.widgets["config"]['sleepidle'].set_active(True)
+			box2.pack_start(self.widgets["config"]['sleepidle'])
+
+			#Benchmark mode.
+			self.widgets["config"]['bench'] = gtk.CheckButton(_("Execute ROMs in benchmark mode."))
+			if self.gngeoParams["bench"]=="true": self.widgets["config"]['bench'].set_active(True)
+			box2.pack_start(self.widgets["config"]['bench'])
+
+			table.attach(box2,2,3,0,3)
 
 			self.configDialog.vbox.pack_start(table)
 
@@ -1568,20 +1586,22 @@ Spanish: Sheng Long Gradilla.""")))
 			self.xgngeoParams["previewimagedir"] = self.widgets["config"]['previewimagedir'].get_text() #previewimagedir
 			self.xgngeoParams["rominfos"] = ("false","true")[self.widgets["config"]['rominfos'].get_active()] #rominfo
 			self.xgngeoParams["rominfoxml"] = self.widgets["config"]['rominfoxml'].get_text() #rominfoxml
-			self.xgngeoParams["autoexecrom"] = ("false","true")[self.widgets["config"]['autoexecrom'].get_active()] #autoexecrom
 			self.xgngeoParams["historysize"] = int(self.widgets["config"]['historysize'].get_value()) #historysize
+			self.xgngeoParams["autoexecrom"] = ("false","true")[self.widgets["config"]['autoexecrom'].get_active()] #autoexecrom
 			self.xgngeoParams["centerwindow"] = ("false","true")[self.widgets["config"]['centerwindow'].get_active()] #centerwindow
 			self.xgngeoParams["showavailableromsonly"] = ("false","true")[self.widgets["config"]['showavailableromsonly'].get_active()] #showavailableromsonly
+			self.gngeoParams["sleepidle"] = ("false","true")[self.widgets["config"]['sleepidle'].get_active()] #sleepidle
+			self.gngeoParams["bench"] = ("false","true")[self.widgets["config"]['bench'].get_active()] #bench
 
 			letsWrite = 1 #Let's write!
 
 		if letsWrite: #We are now Ok to write into configuration file(s)...
 			self.configDialog.destroy()
 
-			#Perform particular actions.
-			if special in (0,1): #Do the default or the sligtly different ``firstrun" job.
+			#Performing particular actions.
+			if special in (0,1): #Doing the default or the sligtly different ``firstrun" job.
 			
-				#Put the options considered as temporary ROM-specific configuration parameters to the global parameter dictionnary.
+				#Putting options considered as temporary ROM-specific configuration parameters to the global parameter dictionnary.
 				if type in (1,2,3,4):
 					for key,val in temp_param.items(): self.gngeoParams[key] = val
 
@@ -1594,14 +1614,14 @@ Spanish: Sheng Long Gradilla.""")))
 				self.configfile.writeRomConfig(temp_param,mamename,VERSION) #Writing out! :p
 
 				if mamename==self.mamename:
-					#Update buttons.
+					#Updating buttons.
 					self.specconf['new'].hide()
 					self.specconf['properties'].show()
 					self.specconf['clear'].show()
 
 	def quit(self,*args):
 		if self.emulator.romRunningState(): self.gngeoStop() #Stop any running Gngeo.
-		gtk.main_quit() #Stop waiting for event...
+		gtk.main_quit() #Stopping waiting for event...
 		return False
 
 	def main(self):
