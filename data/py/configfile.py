@@ -52,8 +52,6 @@ as the `gngeorc'."""
 			"rompath": os.path.expanduser("~/..."),
 			"romrc":os.path.join(prefix,"share","gngeo","romrc"),
 			#Graphic
-			"blitter":"soft",
-			"effect":"none",
 			"fullscreen":"false",
 			"interpolation":"false",
 			"showfps":"false",
@@ -62,6 +60,9 @@ as the `gngeorc'."""
 			"hwsurface":"false",
 			"scale":1,
 			"screen320":"true",
+			"blitter":"soft",
+			"effect": None,
+			"transpack": None,
 			#Audio / Joystick
 			"sound":"true",
 			"samplerate":"22050",

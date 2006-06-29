@@ -39,8 +39,8 @@ class XGngeo:
 	def __init__(self):
 		#Default values...
 		self.tempparam = {}
-		self.configwidgets = {}
 		self.widgets = {}
+		self.widgets["config"] = {}
 		self.romPath = None
 
 		#Loading emulator/frontend configuration.
@@ -68,7 +68,7 @@ class XGngeo:
 		def callback(widget,response_id):
 			dialog.destroy()
 			if response_id==gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
-			else: self.config(firstrun=1) #Go to important path configuration window.
+			else: self.config(firstrun=1) #Going to important path configuration window.
 
 		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
 		dialog.set_markup(_("It seems that the important path parameters are not all valid. That is normal if Gngeo configuration file hasn't been yet created. Anyway, correct values should be specified for the emulation to work. Press OK to do so..."))
@@ -585,9 +585,9 @@ class XGngeo:
 		if callback:
 			if type(callback)==str:
 				#Ouputing the selected file or directory path to a particular text entry.
-				def outputEntry(widget,response):
+				def outputEntry(dialog,response):
 					if response==gtk.RESPONSE_OK:
-						self.configwidgets[callback].set_text(widget.get_filename())
+						self.widgets["config"][callback].set_text(dialog.get_filename())
 
 				self.widgets["fileselect_dialog"].connect("response",outputEntry)
 			else: self.widgets["fileselect_dialog"].connect("response",callback)
@@ -832,15 +832,15 @@ Spanish: Sheng Long Gradilla.""")))
 			box2.pack_start(self.imppathicons[0],False,padding=3)
 			bios_label = gtk.Label()
 			box2.pack_start(bios_label,False,padding=3)
-			self.configwidgets['rompath'] = gtk.Entry()
-			self.configwidgets['rompath'].connect("changed",setPathIcon,self.imppathicons[0],1,"rompath")
-			self.configwidgets['rompath'].set_text(self.gngeoParams["rompath"])
-			box2.pack_start(self.configwidgets['rompath'])
+			self.widgets["config"]['rompath'] = gtk.Entry()
+			self.widgets["config"]['rompath'].connect("changed",setPathIcon,self.imppathicons[0],1,"rompath")
+			self.widgets["config"]['rompath'].set_text(self.gngeoParams["rompath"])
+			box2.pack_start(self.widgets["config"]['rompath'])
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the main ROMs and BIOS directory."),self.configwidgets['rompath'].get_text(),"rompath",1)
+			button.connect("clicked",self.fileSelect,_("Select the main ROMs and BIOS directory."),self.widgets["config"]['rompath'].get_text(),"rompath",1)
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -850,15 +850,15 @@ Spanish: Sheng Long Gradilla.""")))
 
 			self.imppathicons.append(gtk.Image())
 			box2.pack_start(self.imppathicons[1],False,padding=3)
-			self.configwidgets['romrc'] = gtk.Entry()
-			self.configwidgets['romrc'].connect("changed",setPathIcon,self.imppathicons[1])
-			self.configwidgets['romrc'].set_text(self.gngeoParams["romrc"])
-			box2.pack_start(self.configwidgets['romrc'])
+			self.widgets["config"]['romrc'] = gtk.Entry()
+			self.widgets["config"]['romrc'].connect("changed",setPathIcon,self.imppathicons[1])
+			self.widgets["config"]['romrc'].set_text(self.gngeoParams["romrc"])
+			box2.pack_start(self.widgets["config"]['romrc'])
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the ROM driver file."),self.configwidgets['romrc'].get_text(),"romrc")
+			button.connect("clicked",self.fileSelect,_("Select the ROM driver file."),self.widgets["config"]['romrc'].get_text(),"romrc")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -870,15 +870,15 @@ Spanish: Sheng Long Gradilla.""")))
 			box2.pack_start(self.imppathicons[2],False,padding=3)
 			gngeoversion_label = gtk.Label()
 			box2.pack_start(gngeoversion_label,False,padding=3)
-			self.configwidgets['gngeopath'] = gtk.Entry()
-			self.configwidgets['gngeopath'].connect("changed",setPathIcon,self.imppathicons[2],0,"gngeopath")
-			self.configwidgets['gngeopath'].set_text(self.xgngeoParams["gngeopath"])
-			box2.pack_start(self.configwidgets['gngeopath'])
+			self.widgets["config"]['gngeopath'] = gtk.Entry()
+			self.widgets["config"]['gngeopath'].connect("changed",setPathIcon,self.imppathicons[2],0,"gngeopath")
+			self.widgets["config"]['gngeopath'].set_text(self.xgngeoParams["gngeopath"])
+			box2.pack_start(self.widgets["config"]['gngeopath'])
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the Gngeo executable."),self.configwidgets['gngeopath'].get_text(),"gngeopath")
+			button.connect("clicked",self.fileSelect,_("Select the Gngeo executable."),self.widgets["config"]['gngeopath'].get_text(),"gngeopath")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -911,29 +911,29 @@ Spanish: Sheng Long Gradilla.""")))
 			table = gtk.Table(2,3)
 
 			#Fullscreen.
-			self.configwidgets['fullscreen'] = gtk.CheckButton(_("Fullscreen"))
-			if temp_param["fullscreen"]=="true": self.configwidgets['fullscreen'].set_active(1)
-			table.attach(self.configwidgets['fullscreen'],0,1,0,1)
+			self.widgets["config"]['fullscreen'] = gtk.CheckButton(_("Fullscreen"))
+			if temp_param["fullscreen"]=="true": self.widgets["config"]['fullscreen'].set_active(1)
+			table.attach(self.widgets["config"]['fullscreen'],0,1,0,1)
 			#Interpolation.
-			self.configwidgets['interpolation'] = gtk.CheckButton(_("Interpolation"))
-			if temp_param["interpolation"]=="true": self.configwidgets['interpolation'].set_active(1)
-			table.attach(self.configwidgets['interpolation'],0,1,1,2)
+			self.widgets["config"]['interpolation'] = gtk.CheckButton(_("Interpolation"))
+			if temp_param["interpolation"]=="true": self.widgets["config"]['interpolation'].set_active(1)
+			table.attach(self.widgets["config"]['interpolation'],0,1,1,2)
 			#Show FPS.
-			self.configwidgets['showfps'] = gtk.CheckButton(_("Show FPS"))
-			if temp_param["showfps"]=="true": self.configwidgets['showfps'].set_active(1)
-			table.attach(self.configwidgets['showfps'],1,2,0,1)
+			self.widgets["config"]['showfps'] = gtk.CheckButton(_("Show FPS"))
+			if temp_param["showfps"]=="true": self.widgets["config"]['showfps'].set_active(1)
+			table.attach(self.widgets["config"]['showfps'],1,2,0,1)
 			#Auto Frameskip.
-			self.configwidgets['autoframeskip'] = gtk.CheckButton(_("Auto Frameskip"))
-			if temp_param["autoframeskip"]=="true": self.configwidgets['autoframeskip'].set_active(1)
-			table.attach(self.configwidgets['autoframeskip'],1,2,1,2)
+			self.widgets["config"]['autoframeskip'] = gtk.CheckButton(_("Auto Frameskip"))
+			if temp_param["autoframeskip"]=="true": self.widgets["config"]['autoframeskip'].set_active(1)
+			table.attach(self.widgets["config"]['autoframeskip'],1,2,1,2)
 			#Raster effect.
-			self.configwidgets['raster'] = gtk.CheckButton(_("Raster effect"))
-			if temp_param["raster"]=="true": self.configwidgets['raster'].set_active(True)
-			table.attach(self.configwidgets['raster'],0,1,2,3)
+			self.widgets["config"]['raster'] = gtk.CheckButton(_("Raster effect"))
+			if temp_param["raster"]=="true": self.widgets["config"]['raster'].set_active(True)
+			table.attach(self.widgets["config"]['raster'],0,1,2,3)
 			#Hardware surface.
-			self.configwidgets['hwsurface'] = gtk.CheckButton(_("Hardware surface"))
-			if temp_param["hwsurface"]=="true": self.configwidgets['hwsurface'].set_active(True)
-			table.attach(self.configwidgets['hwsurface'],1,2,2,3)
+			self.widgets["config"]['hwsurface'] = gtk.CheckButton(_("Hardware surface"))
+			if temp_param["hwsurface"]=="true": self.widgets["config"]['hwsurface'].set_active(True)
+			table.attach(self.widgets["config"]['hwsurface'],1,2,2,3)
 
 			frame = gtk.Frame(_("Windowed mode"))
 			frame.set_label_align(0.5,0.5)
@@ -943,16 +943,16 @@ Spanish: Sheng Long Gradilla.""")))
 			adjustment = gtk.Adjustment(float(temp_param["scale"]),1,5,1)
 			label = gtk.Label(_("Scale:"))
 			box2.pack_start(label)
-			self.configwidgets['scale'] = gtk.HScale(adjustment)
-			self.configwidgets['scale'].set_value_pos(gtk.POS_TOP)
+			self.widgets["config"]['scale'] = gtk.HScale(adjustment)
+			self.widgets["config"]['scale'].set_value_pos(gtk.POS_TOP)
 			def bouyaka(widget, value): return u"\xd7%i" % value
-			self.configwidgets['scale'].connect("format-value",bouyaka)
-			box2.pack_start(self.configwidgets['scale'])
+			self.widgets["config"]['scale'].connect("format-value",bouyaka)
+			box2.pack_start(self.widgets["config"]['scale'])
 
 			#320x224 window size.
-			self.configwidgets['screen320'] = gtk.CheckButton(_("Larger screen"))
-			if temp_param["screen320"]=="true": self.configwidgets['screen320'].set_active(True)
-			box2.pack_end(self.configwidgets['screen320'])
+			self.widgets["config"]['screen320'] = gtk.CheckButton(_("Larger screen"))
+			if temp_param["screen320"]=="true": self.widgets["config"]['screen320'].set_active(True)
+			box2.pack_end(self.widgets["config"]['screen320'])
 
 			frame.add(box2)
 			table.attach(frame,2,3,0,3)
@@ -969,22 +969,22 @@ Spanish: Sheng Long Gradilla.""")))
 				"opengl":_("OpenGL blitter"),
 				"yuv":_("YUV blitter (YV12)")}
 
-			self.configwidgets['blitter'] = gtk.combo_box_new_text()
+			self.widgets["config"]['blitter'] = gtk.combo_box_new_text()
 			i=0; list = []
 			pipe = os.popen('"%s" --blitter help' % self.xgngeoParams['gngeopath'].replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is `REF : FULLNAME'.
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
-					self.configwidgets['blitter'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
+					self.widgets["config"]['blitter'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
 					list.append(ref)
 					#Set active the last selection.
-					if ref==temp_param["blitter"]: self.configwidgets['blitter'].set_active(i)
+					if ref==temp_param["blitter"]: self.widgets["config"]['blitter'].set_active(i)
 					i+=1
 			pipe.close()
 
 			self.combo_params['blitter'] = list
-			frame.add(self.configwidgets['blitter'])
+			frame.add(self.widgets["config"]['blitter'])
 			box.pack_start(frame)
 
 			# EFFECT
@@ -1009,37 +1009,57 @@ Spanish: Sheng Long Gradilla.""")))
 				"supersai": _("SuperSAI effect"),
 				"eagle":_("Eagle effect")}
 
-			self.configwidgets['effect'] = gtk.combo_box_new_text()
-			self.configwidgets['effect'].set_wrap_width(2)
+			self.widgets["config"]['effect'] = gtk.combo_box_new_text()
+			self.widgets["config"]['effect'].set_wrap_width(2)
 			i=0; list = []
 			pipe = os.popen('"%s" --effect help' % self.xgngeoParams['gngeopath'].replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is "REF : FULLNAME"
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
-					self.configwidgets['effect'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
+					self.widgets["config"]['effect'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
 					list.append(ref)
 					#Set active the last selection.
-					if ref==temp_param["effect"]: self.configwidgets['effect'].set_active(i)
+					if ref==temp_param["effect"]: self.widgets["config"]['effect'].set_active(i)
 					i+=1
 			pipe.close()
 
 			self.combo_params['effect'] = list
-			frame.add(self.configwidgets['effect'])
+			frame.add(self.widgets["config"]['effect'])
 			box.pack_start(frame)
 
 			def bouyaka(*args):
 				"""Overlay does not support effect. So, when this blitter is selected, we
-				set the effect to ``none" and prevent it from being changed by user."""
-				if self.combo_params['blitter'][self.configwidgets['blitter'].get_active()]=="yuv":
+				set the effect to ``none" and prevent it from being changed by user.
+				Effects are also not (yet) supported when enabling hardware surface."""
+				if self.combo_params['blitter'][self.widgets["config"]['blitter'].get_active()]=="yuv" or self.widgets["config"]['hwsurface'].get_active():
 					temp_param['effect'] = "none" #Changing param.
-					self.configwidgets['effect'].set_active(0) #Changing widget.
-					self.configwidgets['effect'].set_sensitive(False) #Effect cannot be changed any more.
-				else: self.configwidgets['effect'].set_sensitive(True) #Resetting widget's sensibility.
+					self.widgets["config"]['effect'].set_active(0) #Changing widget.
+					self.widgets["config"]['effect'].set_sensitive(False) #Effect cannot be changed any more.
+				else: self.widgets["config"]['effect'].set_sensitive(True) #Resetting widget's sensibility.
 
-			#Tell to perform special actions over effect widget according to the selected blitter.
+			#Performing special actions over effect widget regarding blitter selection / hardware surface activation.
 			bouyaka()
-			self.configwidgets['blitter'].connect("changed",bouyaka)
+			self.widgets["config"]['blitter'].connect("changed",bouyaka)
+			self.widgets["config"]['hwsurface'].connect("toggled",bouyaka)
+
+			box2 = gtk.HBox()
+			label = gtk.Label(_("Transparency pack (optional):"))
+			box2.pack_start(label)
+			image = gtk.Image()
+			box2.pack_start(image,False,padding=3)
+			self.widgets["config"]['transpack'] = gtk.Entry()
+			self.widgets["config"]['transpack'].connect("changed",setPathIcon,image)
+			self.widgets["config"]['transpack'].set_text(self.gngeoParams["transpack"] or "--")
+			box2.pack_start(self.widgets["config"]['transpack'])
+			setPathIcon(self.widgets["config"]['transpack'],image)
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			button.add(image)
+			button.connect("clicked",self.fileSelect,_('Select a transparency pack.'),self.widgets["config"]['transpack'].get_text(),"transpack")
+			box2.pack_end(button,False)
+			box.pack_start(box2,False)
 
 			#
 			# AUDIO / JOYSTICK section.
@@ -1056,8 +1076,8 @@ Spanish: Sheng Long Gradilla.""")))
 				widget activation state."""
 				target.set_sensitive(widget.get_active())
 
-			self.configwidgets['sound'] = gtk.CheckButton(_("Enable sound"))
-			box2.pack_start(self.configwidgets['sound'])
+			self.widgets["config"]['sound'] = gtk.CheckButton(_("Enable sound"))
+			box2.pack_start(self.widgets["config"]['sound'])
 
 			#Sample rate.
 			box3 = gtk.HBox()
@@ -1065,19 +1085,19 @@ Spanish: Sheng Long Gradilla.""")))
 			label = gtk.Label(_("Sample rate:"))
 			box3.pack_start(label)
 
-			self.configwidgets['samplerate'] = gtk.combo_box_new_text()
+			self.widgets["config"]['samplerate'] = gtk.combo_box_new_text()
 			i=0
 			self.combo_params['samplerate'] = ["8192","11025","22050","32000","44100","48000"]
 			for val in self.combo_params['samplerate']:
-				self.configwidgets['samplerate'].append_text("%sHz" % val)
+				self.widgets["config"]['samplerate'].append_text("%sHz" % val)
 				#Set active the last selection
-				if val==temp_param["samplerate"]: self.configwidgets['samplerate'].set_active(i)
+				if val==temp_param["samplerate"]: self.widgets["config"]['samplerate'].set_active(i)
 				i+=1
-			box3.pack_start(self.configwidgets['samplerate'])
+			box3.pack_start(self.widgets["config"]['samplerate'])
 			#Bouyaka!
-			self.configwidgets['sound'].connect("toggled",bouyaka,box3)
-			if temp_param['sound']=='true': self.configwidgets['sound'].set_active(1)
-			else: bouyaka(self.configwidgets['sound'],box3)
+			self.widgets["config"]['sound'].connect("toggled",bouyaka,box3)
+			if temp_param['sound']=='true': self.widgets["config"]['sound'].set_active(1)
+			else: bouyaka(self.widgets["config"]['sound'],box3)
 
 			frame.add(box2)
 			box.pack_start(frame)
@@ -1085,30 +1105,30 @@ Spanish: Sheng Long Gradilla.""")))
 			frame = gtk.Frame(_("Joystick"))
 			box2 = gtk.VBox()
 
-			self.configwidgets['joystick'] = gtk.CheckButton(_("Enable joystick support"))
-			box2.pack_start(self.configwidgets['joystick'])
+			self.widgets["config"]['joystick'] = gtk.CheckButton(_("Enable joystick support"))
+			box2.pack_start(self.widgets["config"]['joystick'])
 
 			table = gtk.Table(2,2)
 			box2.pack_end(table)
 
 			label = gtk.Label(_("Player 1 device:"))
 			table.attach(label,0,1,0,1)
-			self.configwidgets['p1joydev'] = gtk.combo_box_new_text()
-			for x in range(4): self.configwidgets['p1joydev'].append_text("/dev/js%s" % x)
-			self.configwidgets['p1joydev'].set_active(int(temp_param["p1joydev"])) #Set active the last selection
-			table.attach(self.configwidgets['p1joydev'],1,2,0,1)
+			self.widgets["config"]['p1joydev'] = gtk.combo_box_new_text()
+			for x in range(4): self.widgets["config"]['p1joydev'].append_text("/dev/js%s" % x)
+			self.widgets["config"]['p1joydev'].set_active(int(temp_param["p1joydev"])) #Set active the last selection
+			table.attach(self.widgets["config"]['p1joydev'],1,2,0,1)
 
 			label = gtk.Label(_("Player 2 device:"))
 			table.attach(label,0,1,1,2)
-			self.configwidgets['p2joydev'] = gtk.combo_box_new_text()
-			for x in range(4): self.configwidgets['p2joydev'].append_text("/dev/js%s" % x)
-			self.configwidgets['p2joydev'].set_active(int(temp_param["p2joydev"])) #Set active the last selection
-			table.attach(self.configwidgets['p2joydev'],1,2,1,2)
+			self.widgets["config"]['p2joydev'] = gtk.combo_box_new_text()
+			for x in range(4): self.widgets["config"]['p2joydev'].append_text("/dev/js%s" % x)
+			self.widgets["config"]['p2joydev'].set_active(int(temp_param["p2joydev"])) #Set active the last selection
+			table.attach(self.widgets["config"]['p2joydev'],1,2,1,2)
 
 			#Bouyaka!
-			self.configwidgets['joystick'].connect("toggled",bouyaka,table)
-			if temp_param['joystick']=='true': self.configwidgets['joystick'].set_active(1)
-			else: bouyaka(self.configwidgets['joystick'],table)
+			self.widgets["config"]['joystick'].connect("toggled",bouyaka,table)
+			if temp_param['joystick']=='true': self.widgets["config"]['joystick'].set_active(1)
+			else: bouyaka(self.widgets["config"]['joystick'],table)
 
 			frame.add(box2)
 			box.pack_start(frame)
@@ -1274,15 +1294,15 @@ Spanish: Sheng Long Gradilla.""")))
 			#System.
 			frame2 = gtk.Frame(_("Neo Geo BIOS type:"))
 			box2 = gtk.HBox()
-			self.configwidgets['system_arcade'] = gtk.RadioButton(None,_("Arcade"))
-			box2.pack_start(self.configwidgets['system_arcade'])
-			self.configwidgets['system_home'] = gtk.RadioButton(self.configwidgets['system_arcade'],_("Home"))
-			box2.pack_start(self.configwidgets['system_home'])
-			radio = gtk.RadioButton(self.configwidgets['system_arcade'],_("Universal"))
+			self.widgets["config"]['system_arcade'] = gtk.RadioButton(None,_("Arcade"))
+			box2.pack_start(self.widgets["config"]['system_arcade'])
+			self.widgets["config"]['system_home'] = gtk.RadioButton(self.widgets["config"]['system_arcade'],_("Home"))
+			box2.pack_start(self.widgets["config"]['system_home'])
+			radio = gtk.RadioButton(self.widgets["config"]['system_arcade'],_("Universal"))
 			box2.pack_start(radio)
 			
-			if temp_param["system"]=="arcade": self.configwidgets['system_arcade'].set_active(1)
-			elif temp_param["system"]=="home": self.configwidgets['system_home'].set_active(1)
+			if temp_param["system"]=="arcade": self.widgets["config"]['system_arcade'].set_active(1)
+			elif temp_param["system"]=="home": self.widgets["config"]['system_home'].set_active(1)
 			elif temp_param["system"]=="unibios": radio.set_active(1)
 			
 			frame2.add(box2)
@@ -1292,26 +1312,26 @@ Spanish: Sheng Long Gradilla.""")))
 			frame2 = gtk.Frame(_("Country:"))
 
 			table = gtk.Table(3,2)
-			self.configwidgets['country_japan'] = gtk.RadioButton(None,_("Japan"))
-			table.attach(self.configwidgets['country_japan'],0,1,0,1)
+			self.widgets["config"]['country_japan'] = gtk.RadioButton(None,_("Japan"))
+			table.attach(self.widgets["config"]['country_japan'],0,1,0,1)
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","japan.png"))
 			table.attach(image,0,1,1,2)
 
-			self.configwidgets['country_usa'] = gtk.RadioButton(self.configwidgets['country_japan'],_("USA"))
-			table.attach(self.configwidgets['country_usa'],1,2,0,1)
+			self.widgets["config"]['country_usa'] = gtk.RadioButton(self.widgets["config"]['country_japan'],_("USA"))
+			table.attach(self.widgets["config"]['country_usa'],1,2,0,1)
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","usa.png"))
 			table.attach(image,1,2,1,2)
 
-			radio = gtk.RadioButton(self.configwidgets['country_japan'],_("Europe"))
+			radio = gtk.RadioButton(self.widgets["config"]['country_japan'],_("Europe"))
 			table.attach(radio,2,3,0,1)
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","europe.png"))
 			table.attach(image,2,3,1,2)
 
-			if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
-			elif temp_param["country"]=="usa": self.configwidgets['country_usa'].set_active(1)
+			if temp_param["country"]=="japan": self.widgets["config"]['country_japan'].set_active(1)
+			elif temp_param["country"]=="usa": self.widgets["config"]['country_usa'].set_active(1)
 			elif temp_param["country"]=="europe": radio.set_active(1)
 
 			frame2.add(table)
@@ -1328,19 +1348,19 @@ Spanish: Sheng Long Gradilla.""")))
 			adjustment = gtk.Adjustment(float(temp_param["68kclock"]),-50,50,5)
 			label = gtk.Label(_("68K clock:"))
 			table.attach(label,0,1,0,1)
-			self.configwidgets['68kclock'] = gtk.HScale(adjustment)
-			self.configwidgets['68kclock'].set_value_pos(gtk.POS_LEFT)
-			self.configwidgets['68kclock'].connect("format-value",bouyaka)
-			table.attach(self.configwidgets['68kclock'],1,2,0,1)
+			self.widgets["config"]['68kclock'] = gtk.HScale(adjustment)
+			self.widgets["config"]['68kclock'].set_value_pos(gtk.POS_LEFT)
+			self.widgets["config"]['68kclock'].connect("format-value",bouyaka)
+			table.attach(self.widgets["config"]['68kclock'],1,2,0,1)
 
 			#Z80clock.
 			adjustment = gtk.Adjustment(float(temp_param["z80clock"]),-50,50,5)
 			label = gtk.Label(_("DrZ80 clock:"))
 			table.attach(label,0,1,1,2)
-			self.configwidgets['z80clock'] = gtk.HScale(adjustment)
-			self.configwidgets['z80clock'].set_value_pos(gtk.POS_LEFT)
-			self.configwidgets['z80clock'].connect("format-value",bouyaka)
-			table.attach(self.configwidgets['z80clock'],1,2,1,2)
+			self.widgets["config"]['z80clock'] = gtk.HScale(adjustment)
+			self.widgets["config"]['z80clock'].set_value_pos(gtk.POS_LEFT)
+			self.widgets["config"]['z80clock'].connect("format-value",bouyaka)
+			table.attach(self.widgets["config"]['z80clock'],1,2,1,2)
 
 			self.configDialog.vbox.pack_start(notebook) #Packing the Notebook
 
@@ -1357,16 +1377,16 @@ Spanish: Sheng Long Gradilla.""")))
 			box2 = gtk.HBox()
 			image = gtk.Image()
 			box2.pack_start(image,False,padding=3)
-			self.configwidgets['libglpath'] = gtk.Entry()
-			self.configwidgets['libglpath'].connect("changed",setPathIcon,image)
-			self.configwidgets['libglpath'].set_text(self.gngeoParams["libglpath"])
-			box2.pack_start(self.configwidgets['libglpath'])
-			setPathIcon(self.configwidgets['libglpath'],image)
+			self.widgets["config"]['libglpath'] = gtk.Entry()
+			self.widgets["config"]['libglpath'].connect("changed",setPathIcon,image)
+			self.widgets["config"]['libglpath'].set_text(self.gngeoParams["libglpath"])
+			box2.pack_start(self.widgets["config"]['libglpath'])
+			setPathIcon(self.widgets["config"]['libglpath'],image)
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_('Select the "%s" file.') % "libGL.so",self.configwidgets['libglpath'].get_text(),"libglpath")
+			button.connect("clicked",self.fileSelect,_('Select the "%s" file.') % "libGL.so",self.widgets["config"]['libglpath'].get_text(),"libglpath")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,0,1)
@@ -1379,50 +1399,50 @@ Spanish: Sheng Long Gradilla.""")))
 
 			frame = gtk.Frame(_("Preview image directory (optional):"))
 			box2 = gtk.HBox()
-			self.configwidgets['previewimages'] = gtk.CheckButton()
-			box2.pack_start(self.configwidgets['previewimages'],False)
+			self.widgets["config"]['previewimages'] = gtk.CheckButton()
+			box2.pack_start(self.widgets["config"]['previewimages'],False)
 			image = gtk.Image()
 			box2.pack_start(image,False,padding=3)
-			self.configwidgets['previewimagedir'] = gtk.Entry()
-			self.configwidgets['previewimagedir'].connect("changed",setPathIcon,image,1)
-			self.configwidgets['previewimagedir'].set_text(self.xgngeoParams["previewimagedir"])
-			box2.pack_start(self.configwidgets['previewimagedir'])
+			self.widgets["config"]['previewimagedir'] = gtk.Entry()
+			self.widgets["config"]['previewimagedir'].connect("changed",setPathIcon,image,1)
+			self.widgets["config"]['previewimagedir'].set_text(self.xgngeoParams["previewimagedir"])
+			box2.pack_start(self.widgets["config"]['previewimagedir'])
 			button = gtk.Button()
 			image2 = gtk.Image()
 			image2.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image2)
-			button.connect('clicked',self.fileSelect,_('Select the preview image directory.'),self.configwidgets['previewimagedir'].get_text(),"previewimagedir",1)
+			button.connect('clicked',self.fileSelect,_('Select the preview image directory.'),self.widgets["config"]['previewimagedir'].get_text(),"previewimagedir",1)
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,1,2)
 			#Bouyaka.
-			if self.xgngeoParams['previewimages']=="true": self.configwidgets['previewimages'].set_active(1)
-			else: bouyaka(self.configwidgets['previewimages'],image,self.configwidgets['previewimagedir'],button)
-			self.configwidgets['previewimages'].connect("toggled",bouyaka,image,self.configwidgets['previewimagedir'],button)
+			if self.xgngeoParams['previewimages']=="true": self.widgets["config"]['previewimages'].set_active(1)
+			else: bouyaka(self.widgets["config"]['previewimages'],image,self.widgets["config"]['previewimagedir'],button)
+			self.widgets["config"]['previewimages'].connect("toggled",bouyaka,image,self.widgets["config"]['previewimagedir'],button)
 
 			frame = gtk.Frame(_("XML file containing ROM infos (optional):"))
 			box2 = gtk.HBox()
-			self.configwidgets['rominfos'] = gtk.CheckButton()
-			box2.pack_start(self.configwidgets['rominfos'],False)
+			self.widgets["config"]['rominfos'] = gtk.CheckButton()
+			box2.pack_start(self.widgets["config"]['rominfos'],False)
 			image = gtk.Image()
 			box2.pack_start(image,False,padding=3)
-			self.configwidgets['rominfoxml'] = gtk.Entry()
-			self.configwidgets['rominfoxml'].connect("changed",setPathIcon,image)
-			self.configwidgets['rominfoxml'].set_text(self.xgngeoParams["rominfoxml"])
-			box2.pack_start(self.configwidgets['rominfoxml'])
+			self.widgets["config"]['rominfoxml'] = gtk.Entry()
+			self.widgets["config"]['rominfoxml'].connect("changed",setPathIcon,image)
+			self.widgets["config"]['rominfoxml'].set_text(self.xgngeoParams["rominfoxml"])
+			box2.pack_start(self.widgets["config"]['rominfoxml'])
 			button = gtk.Button()
 			image2 = gtk.Image()
 			image2.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image2)
-			button.connect("clicked",self.fileSelect,_('Select the XML file containing ROM infos.'),self.configwidgets['rominfoxml'].get_text(),"rominfoxml")
+			button.connect("clicked",self.fileSelect,_('Select the XML file containing ROM infos.'),self.widgets["config"]['rominfoxml'].get_text(),"rominfoxml")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,2,3)
 			
 			#Bouyaka.
-			if self.xgngeoParams['rominfos']=="true": self.configwidgets['rominfos'].set_active(1)
-			else: bouyaka(self.configwidgets['rominfos'],image,self.configwidgets['rominfoxml'],button)
-			self.configwidgets['rominfos'].connect("toggled",bouyaka,image,self.configwidgets['rominfoxml'],button)
+			if self.xgngeoParams['rominfos']=="true": self.widgets["config"]['rominfos'].set_active(1)
+			else: bouyaka(self.widgets["config"]['rominfos'],image,self.widgets["config"]['rominfoxml'],button)
+			self.widgets["config"]['rominfos'].connect("toggled",bouyaka,image,self.widgets["config"]['rominfoxml'],button)
 
 			box2 = gtk.VBox(spacing=2)
 
@@ -1431,21 +1451,21 @@ Spanish: Sheng Long Gradilla.""")))
 			label = gtk.Label(_("Maximum size of the ROM history:"))
 			box3.pack_start(label)
 			adjustment = gtk.Adjustment(float(self.xgngeoParams["historysize"]),1,20,1)
-			self.configwidgets['historysize'] = gtk.SpinButton(adjustment)
-			box3.pack_start(self.configwidgets['historysize'],False)
+			self.widgets["config"]['historysize'] = gtk.SpinButton(adjustment)
+			box3.pack_start(self.widgets["config"]['historysize'],False)
 			box2.pack_start(box3)
 
-			self.configwidgets['autoexecrom'] = gtk.CheckButton(_("Auto-execute ROMs after loading."))
-			if self.xgngeoParams["autoexecrom"]=="true": self.configwidgets['autoexecrom'].set_active(True)
-			box2.pack_start(self.configwidgets['autoexecrom'])
+			self.widgets["config"]['autoexecrom'] = gtk.CheckButton(_("Auto-execute ROMs after loading."))
+			if self.xgngeoParams["autoexecrom"]=="true": self.widgets["config"]['autoexecrom'].set_active(True)
+			box2.pack_start(self.widgets["config"]['autoexecrom'])
 
-			self.configwidgets['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
-			if self.xgngeoParams["centerwindow"]=="true": self.configwidgets['centerwindow'].set_active(True)
-			box2.pack_start(self.configwidgets['centerwindow'])
+			self.widgets["config"]['centerwindow'] = gtk.CheckButton(_("Center XGngeo window on start."))
+			if self.xgngeoParams["centerwindow"]=="true": self.widgets["config"]['centerwindow'].set_active(True)
+			box2.pack_start(self.widgets["config"]['centerwindow'])
 
-			self.configwidgets['showavailableromsonly'] = gtk.CheckButton(_("Only show available ROMs in ROM list by default."))
-			if self.xgngeoParams["showavailableromsonly"]=="true": self.configwidgets['showavailableromsonly'].set_active(True) #Activate button.
-			box2.pack_start(self.configwidgets['showavailableromsonly'])
+			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(_("Only show available ROMs in ROM list by default."))
+			if self.xgngeoParams["showavailableromsonly"]=="true": self.widgets["config"]['showavailableromsonly'].set_active(True) #Activate button.
+			box2.pack_start(self.widgets["config"]['showavailableromsonly'])
 			
 			table.attach(box2,1,2,0,3)
 
@@ -1494,9 +1514,9 @@ Spanish: Sheng Long Gradilla.""")))
 				dialog.show_all()
 			else:
 				#Update important path configuration params.
-				self.gngeoParams["rompath"] = self.configwidgets['rompath'].get_text() #rompath
-				self.gngeoParams["romrc"] = self.configwidgets['romrc'].get_text() #romrc
-				self.xgngeoParams["gngeopath"] = self.configwidgets['gngeopath'].get_text() #gngeopath
+				self.gngeoParams["rompath"] = self.widgets["config"]['rompath'].get_text() #rompath
+				self.gngeoParams["romrc"] = self.widgets["config"]['romrc'].get_text() #romrc
+				self.xgngeoParams["gngeopath"] = self.widgets["config"]['gngeopath'].get_text() #gngeopath
 
 				letsWrite = 1 #Let's write!
 
@@ -1504,29 +1524,30 @@ Spanish: Sheng Long Gradilla.""")))
 			temp_param = {}
 
 			#Updating global emulation configuration params.
-			temp_param["fullscreen"] = ("false","true")[self.configwidgets['fullscreen'].get_active()] #fullscreen
-			temp_param["interpolation"] = ("false","true")[self.configwidgets['interpolation'].get_active()] #interpolation
-			temp_param["autoframeskip"] = ("false","true")[self.configwidgets['autoframeskip'].get_active()] #showfps
-			temp_param["showfps"] = ("false","true")[self.configwidgets['showfps'].get_active()] #autoframeskip
-			temp_param["raster"] = ("false","true")[self.configwidgets['raster'].get_active()] #raster
-			temp_param["hwsurface"] = ("false","true")[self.configwidgets['hwsurface'].get_active()] #hwsurface
-			temp_param["scale"] = int(self.configwidgets['scale'].get_value()) #scale
-			temp_param["screen320"] = ("false","true")[self.configwidgets['screen320'].get_active()] #screen320
-			temp_param["blitter"] = self.combo_params['blitter'][self.configwidgets['blitter'].get_active()] #blitter
-			temp_param["effect"] = self.combo_params['effect'][self.configwidgets['effect'].get_active()] #effect
-			temp_param["sound"] = ("false","true")[self.configwidgets['sound'].get_active()] #sound
-			temp_param["samplerate"] = self.combo_params['samplerate'][self.configwidgets['samplerate'].get_active()] #sample rate
-			temp_param["joystick"] = ("false","true")[self.configwidgets['joystick'].get_active()] #joystick
-			temp_param["p1joydev"] = self.configwidgets['p1joydev'].get_active() #p1joydev
-			temp_param["p2joydev"] = self.configwidgets['p2joydev'].get_active() #p2joydev
-			if self.configwidgets['system_arcade'].get_active(): temp_param["system"] = "arcade" #system
-			elif self.configwidgets['system_home'].get_active(): temp_param["system"] = "home"
+			temp_param["fullscreen"] = ("false","true")[self.widgets["config"]['fullscreen'].get_active()] #fullscreen
+			temp_param["interpolation"] = ("false","true")[self.widgets["config"]['interpolation'].get_active()] #interpolation
+			temp_param["autoframeskip"] = ("false","true")[self.widgets["config"]['autoframeskip'].get_active()] #showfps
+			temp_param["showfps"] = ("false","true")[self.widgets["config"]['showfps'].get_active()] #autoframeskip
+			temp_param["raster"] = ("false","true")[self.widgets["config"]['raster'].get_active()] #raster
+			temp_param["hwsurface"] = ("false","true")[self.widgets["config"]['hwsurface'].get_active()] #hwsurface
+			temp_param["scale"] = int(self.widgets["config"]['scale'].get_value()) #scale
+			temp_param["screen320"] = ("false","true")[self.widgets["config"]['screen320'].get_active()] #screen320
+			temp_param["blitter"] = self.combo_params['blitter'][self.widgets["config"]['blitter'].get_active()] #blitter
+			temp_param["effect"] = self.combo_params['effect'][self.widgets["config"]['effect'].get_active()] #effect
+			temp_param["transpack"] = (None,self.widgets["config"]['transpack'].get_text())[os.path.isfile(self.widgets["config"]['transpack'].get_text())] #transpack
+			temp_param["sound"] = ("false","true")[self.widgets["config"]['sound'].get_active()] #sound
+			temp_param["samplerate"] = self.combo_params['samplerate'][self.widgets["config"]['samplerate'].get_active()] #sample rate
+			temp_param["joystick"] = ("false","true")[self.widgets["config"]['joystick'].get_active()] #joystick
+			temp_param["p1joydev"] = self.widgets["config"]['p1joydev'].get_active() #p1joydev
+			temp_param["p2joydev"] = self.widgets["config"]['p2joydev'].get_active() #p2joydev
+			if self.widgets["config"]['system_arcade'].get_active(): temp_param["system"] = "arcade" #system
+			elif self.widgets["config"]['system_home'].get_active(): temp_param["system"] = "home"
 			else: temp_param["system"] = "unibios"
-			if self.configwidgets['country_japan'].get_active(): temp_param["country"] = "japan" #country
-			elif self.configwidgets['country_usa'].get_active(): temp_param["country"] = "usa"
+			if self.widgets["config"]['country_japan'].get_active(): temp_param["country"] = "japan" #country
+			elif self.widgets["config"]['country_usa'].get_active(): temp_param["country"] = "usa"
 			else: temp_param["country"] = "europe"
-			temp_param["68kclock"] = int(self.configwidgets['68kclock'].get_value()) #68kclock
-			temp_param["z80clock"] = int(self.configwidgets['z80clock'].get_value()) #z80clock
+			temp_param["68kclock"] = int(self.widgets["config"]['68kclock'].get_value()) #68kclock
+			temp_param["z80clock"] = int(self.widgets["config"]['z80clock'].get_value()) #z80clock
 
 			# Controls.
 			#p1key
@@ -1542,15 +1563,15 @@ Spanish: Sheng Long Gradilla.""")))
 
 		elif type==5:
 			#Update Other things configuration params.
-			self.gngeoParams["libglpath"] = self.configwidgets['libglpath'].get_text() #libglpath
-			self.xgngeoParams["previewimages"] = ("false","true")[self.configwidgets['previewimages'].get_active()] #previewimage
-			self.xgngeoParams["previewimagedir"] = self.configwidgets['previewimagedir'].get_text() #previewimagedir
-			self.xgngeoParams["rominfos"] = ("false","true")[self.configwidgets['rominfos'].get_active()] #rominfo
-			self.xgngeoParams["rominfoxml"] = self.configwidgets['rominfoxml'].get_text() #rominfoxml
-			self.xgngeoParams["autoexecrom"] = ("false","true")[self.configwidgets['autoexecrom'].get_active()] #autoexecrom
-			self.xgngeoParams["historysize"] = int(self.configwidgets['historysize'].get_value()) #historysize
-			self.xgngeoParams["centerwindow"] = ("false","true")[self.configwidgets['centerwindow'].get_active()] #centerwindow
-			self.xgngeoParams["showavailableromsonly"] = ("false","true")[self.configwidgets['showavailableromsonly'].get_active()] #showavailableromsonly
+			self.gngeoParams["libglpath"] = self.widgets["config"]['libglpath'].get_text() #libglpath
+			self.xgngeoParams["previewimages"] = ("false","true")[self.widgets["config"]['previewimages'].get_active()] #previewimage
+			self.xgngeoParams["previewimagedir"] = self.widgets["config"]['previewimagedir'].get_text() #previewimagedir
+			self.xgngeoParams["rominfos"] = ("false","true")[self.widgets["config"]['rominfos'].get_active()] #rominfo
+			self.xgngeoParams["rominfoxml"] = self.widgets["config"]['rominfoxml'].get_text() #rominfoxml
+			self.xgngeoParams["autoexecrom"] = ("false","true")[self.widgets["config"]['autoexecrom'].get_active()] #autoexecrom
+			self.xgngeoParams["historysize"] = int(self.widgets["config"]['historysize'].get_value()) #historysize
+			self.xgngeoParams["centerwindow"] = ("false","true")[self.widgets["config"]['centerwindow'].get_active()] #centerwindow
+			self.xgngeoParams["showavailableromsonly"] = ("false","true")[self.widgets["config"]['showavailableromsonly'].get_active()] #showavailableromsonly
 
 			letsWrite = 1 #Let's write!
 
