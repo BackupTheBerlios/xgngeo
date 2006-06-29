@@ -927,27 +927,36 @@ Spanish: Sheng Long Gradilla.""")))
 			self.configwidgets['autoframeskip'] = gtk.CheckButton(_("Auto Frameskip"))
 			if temp_param["autoframeskip"]=="true": self.configwidgets['autoframeskip'].set_active(1)
 			table.attach(self.configwidgets['autoframeskip'],1,2,1,2)
-
-			#Scale.
-			adjustment = gtk.Adjustment(float(temp_param["scale"]),1,5,1)
-			frame = gtk.Frame(_("Scale:"))
-			frame.set_label_align(0.5,0.5)
-			self.configwidgets['scale'] = gtk.HScale(adjustment)
-			self.configwidgets['scale'].set_value_pos(gtk.POS_TOP)
-			self.configwidgets['scale'].set_digits(0)
-			frame.add(self.configwidgets['scale'])
-			table.attach(frame,2,3,0,2)
-
-			#320x224 window size.
-			self.configwidgets['screen320'] = gtk.CheckButton(_("Larger screen (windowed mode)"))
-			if temp_param["screen320"]=="true": self.configwidgets['screen320'].set_active(True)
-			table.attach(self.configwidgets['screen320'],1,3,2,3)
-
 			#Raster effect.
 			self.configwidgets['raster'] = gtk.CheckButton(_("Raster effect"))
 			if temp_param["raster"]=="true": self.configwidgets['raster'].set_active(True)
 			table.attach(self.configwidgets['raster'],0,1,2,3)
+			#Hardware surface.
+			self.configwidgets['hwsurface'] = gtk.CheckButton(_("Hardware surface"))
+			if temp_param["hwsurface"]=="true": self.configwidgets['hwsurface'].set_active(True)
+			table.attach(self.configwidgets['hwsurface'],1,2,2,3)
 
+			frame = gtk.Frame(_("Windowed mode"))
+			frame.set_label_align(0.5,0.5)
+			box2 = gtk.VBox()
+
+			#Scale.
+			adjustment = gtk.Adjustment(float(temp_param["scale"]),1,5,1)
+			label = gtk.Label(_("Scale:"))
+			box2.pack_start(label)
+			self.configwidgets['scale'] = gtk.HScale(adjustment)
+			self.configwidgets['scale'].set_value_pos(gtk.POS_TOP)
+			def bouyaka(widget, value): return u"\xd7%i" % value
+			self.configwidgets['scale'].connect("format-value",bouyaka)
+			box2.pack_start(self.configwidgets['scale'])
+
+			#320x224 window size.
+			self.configwidgets['screen320'] = gtk.CheckButton(_("Larger screen"))
+			if temp_param["screen320"]=="true": self.configwidgets['screen320'].set_active(True)
+			box2.pack_end(self.configwidgets['screen320'])
+
+			frame.add(box2)
+			table.attach(frame,2,3,0,3)
 			box.pack_start(table)
 
 			self.combo_params = {}
@@ -1110,8 +1119,8 @@ Spanish: Sheng Long Gradilla.""")))
 			#
 			self.toggled = None
 
-			# Key order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT
-			key_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT"]
+			# Key order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT,hotkey1,hotkey2,hotkey3,hotkey4
+			key_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT","hotkey1","hotkey2","hotkey3","hotkey4"]
 
 			# The Gngeo compliant keymap (all in lowercase)!
 			compliant_KeyMap = {
@@ -1131,8 +1140,8 @@ Spanish: Sheng Long Gradilla.""")))
 				280:"page_up", 281:"page_down", 300:"num_lock", 301:"caps_lock", 302:"scroll_lock", 303:"shift_r", 304:"shift_l", 305:"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
 
 			def getPressed(widget,event,key_pos,secondplayer=0):
-				if widget.get_active() and event.keyval: #Only when widget is active
-					key_val = gtk.gdk.keyval_to_lower(event.keyval) #Get the value (lower only)
+				if widget.get_active() and event.keyval: #Only when widget is active.
+					key_val = gtk.gdk.keyval_to_lower(event.keyval) #Get the value (lower only).
 
 					# GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
 					# So, a Gngeo compatible key-value is given according to its GTK's name (set in lowercase).
@@ -1147,30 +1156,34 @@ Spanish: Sheng Long Gradilla.""")))
 						if not key_name in ("return","space"): widget.clicked()
 
 			def toggled(widget):
+				#Ensuring that only one key button is toggled...
 				if self.toggled and self.toggled!=widget:
-					if self.toggled.get_active(): self.toggled.set_active(False)
+					if self.toggled.get_active(): #Previous button goes back to normal state.
+						self.toggled.set_active(False)
+
+				#Changing current toggled button state.
 				self.toggled = widget
 
 			def radioToggled(widget,data):
-				if data: #Show P2 key and hide P1's
+				if data: #Show P2 keys and hide P1's.
 					for x in p2keywidgets: x.show()
 					for x in p1keywidgets: x.hide()
-				else: #Show P1 key and hide P2's
+				else: #Show P1 keys and hide P2's.
 					for x in p1keywidgets: x.show()
 					for x in p2keywidgets: x.hide()
 
 			box = gtk.VBox(spacing=4) #The box. :p
 			box.set_border_width(4)
-			notebook.append_page(box,gtk.Label(_("Controls")))
+			notebook.append_page(box,gtk.Label(_("Controllers")))
 
 			label = gtk.Label(_("To modify a key, click on the corresponding input method button under it's icon, then push your new key."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_line_wrap(True)
 			box.pack_start(label)
 
-			table = gtk.Table(4,6,True) #The sweet table O_o;;
+			table = gtk.Table(6,6,True) #The sweet table O_o;;
 
-			#Player's keyboard selection
+			#Player selection.
 			frame = gtk.Frame(_("Controller:"))
 			frame.set_border_width(5)
 			box2 = gtk.VBox()
@@ -1230,17 +1243,19 @@ Spanish: Sheng Long Gradilla.""")))
 
 				#Displaying key's icon.
 				image = gtk.Image()
-				image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % key_list[i]))
+				if i<10: image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % key_list[i]))
+				else: #Hotkeys.
+					image.set_from_file(os.path.join(datarootpath,"img","%s.png" % key_list[i]))
 
 				box2 = gtk.HBox() #A box...
 				box2.pack_start(p1keywidgets[i]) #with P1 key...
 				box2.pack_start(p2keywidgets[i]) #and P2 key :p
 
 				#Put them in table...
-				if i<6: #First 6 keys on 2nd row.
+				if i<6: #First 6 keys (fire buttons + start/coin) on 2nd row.
 					table.attach(image,i,i+1,2,3)
 					table.attach(box2,i,i+1,3,4)
-				elif i<10: #Keys from 6 to 10 (arrow) on 1st row.
+				elif i<10: #Keys from 6 to 10 (arrows) on 1st row.
 					table.attach(image,i-4,i-3,0,1)
 					table.attach(box2,i-4,i-3,1,2)
 				elif i<14: #Keys from 10 to 14 (hotkeys) on 3rd row.
@@ -1251,13 +1266,13 @@ Spanish: Sheng Long Gradilla.""")))
 			box.pack_start(table)
 
 			#
-			# SYSTEM section
+			# SYSTEM section.
 			#
 			box = gtk.VBox(spacing=4) #The box :p
 			box.set_border_width(4)
 			notebook.append_page(box,gtk.Label(_("System")))
 
-			#System
+			#System.
 			frame2 = gtk.Frame(_("Neo Geo BIOS type:"))
 			box2 = gtk.HBox()
 			self.configwidgets['system_arcade'] = gtk.RadioButton(None,_("Arcade"))
@@ -1274,7 +1289,7 @@ Spanish: Sheng Long Gradilla.""")))
 			frame2.add(box2)
 			box.pack_start(frame2)
 
-			#Country
+			#Country.
 			frame2 = gtk.Frame(_("Country:"))
 
 			table = gtk.Table(3,2)
@@ -1295,13 +1310,38 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","europe.png"))
 			table.attach(image,2,3,1,2)
-			
+
 			if temp_param["country"]=="japan": self.configwidgets['country_japan'].set_active(1)
 			elif temp_param["country"]=="usa": self.configwidgets['country_usa'].set_active(1)
 			elif temp_param["country"]=="europe": radio.set_active(1)
-			
+
 			frame2.add(table)
 			box.pack_start(frame2)
+
+			table = gtk.Table(2,2)
+			box.pack_start(table)
+
+			def bouyaka(widget, value):
+				if value>=1: return "+%i%%" % value
+				else: return "%i%%" % value
+
+			#68kclock
+			adjustment = gtk.Adjustment(float(temp_param["68kclock"]),-50,50,5)
+			label = gtk.Label(_("68K clock:"))
+			table.attach(label,0,1,0,1)
+			self.configwidgets['68kclock'] = gtk.HScale(adjustment)
+			self.configwidgets['68kclock'].set_value_pos(gtk.POS_LEFT)
+			self.configwidgets['68kclock'].connect("format-value",bouyaka)
+			table.attach(self.configwidgets['68kclock'],1,2,0,1)
+
+			#Z80clock.
+			adjustment = gtk.Adjustment(float(temp_param["z80clock"]),-50,50,5)
+			label = gtk.Label(_("DrZ80 clock:"))
+			table.attach(label,0,1,1,2)
+			self.configwidgets['z80clock'] = gtk.HScale(adjustment)
+			self.configwidgets['z80clock'].set_value_pos(gtk.POS_LEFT)
+			self.configwidgets['z80clock'].connect("format-value",bouyaka)
+			table.attach(self.configwidgets['z80clock'],1,2,1,2)
 
 			self.configDialog.vbox.pack_start(notebook) #Packing the Notebook
 
