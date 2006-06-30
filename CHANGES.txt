@@ -8,6 +8,8 @@
 Gngeo's scaning results: faster and more accurate!).
 - ROM list now supports multiple ROM directories.
 - New integrated ROM driver editor (IN PROGRESS).
+- New options support: `68kclock', `bench', `hwsurface',
+`transpack', `z80clock', `sleepidle'.
 - Visual indication of unavaible ROM and ability to remove
 entries in the History menu.
 - Added possibility to select the new Universal BIOS.
@@ -22,6 +24,7 @@ tallations.
 - System-wide installation (using distutil) & per-user XGngeo
 configuration.
 - New German translation by Peter Kainrad.
+
 
 * Changes in version 15 (2005-07-14):
 
