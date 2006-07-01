@@ -44,7 +44,7 @@ class XGngeo:
 
 		#Loading emulator/frontend configuration.
 		self.configfile = configfile.Configfile(datarootpath,xgngeoUserDir,gngeoUserDir)
-		self.params = {}
+		self.params = {"temp":{}}
 		self.params["gngeo"], self.params["xgngeo"] = self.configfile.getDefaultParams()
 		#Overwriting default params by the ones in configuration files.
 		dict = self.configfile.getParams()
@@ -54,11 +54,19 @@ class XGngeo:
 		self.emulator = emulator.Emulator(self.params["xgngeo"]['gngeopath'],self.params["gngeo"]['romrc'])
 		self.history = history.History()
 
-		
 		#Statusbar.
-		self.statusbar = gtk.Statusbar()
-		self.context_id = self.statusbar.get_context_id("Info")
+		self.widgets["statusbar"] = gtk.Statusbar()
+		self.context_id = self.widgets["statusbar"].get_context_id("Info")
 
+		#Registering some custom stock icons...
+		for val in ("key_A","key_B","key_C","key_D"):
+			factory = gtk.IconFactory()
+			pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(datarootpath,"img","%s.png" % val))
+			iconset = gtk.IconSet(pixbuf)
+			factory.add(val, iconset)
+			factory.add_default()
+
+		#Main window inital attributes.
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		gtk.window_set_default_icon_from_file(os.path.join(datarootpath,"img","icon.png"))
 	
@@ -106,7 +114,7 @@ class XGngeo:
 			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 			scrolled_window.add(textview)
 			scrolled_window.set_size_request(500,300)
-		
+
 			dialog.vbox.pack_end(scrolled_window)
 			dialog.connect('response', lambda *args: dialog.destroy())
 			dialog.show_all()
@@ -122,7 +130,7 @@ class XGngeo:
 		
 		#Simple post-execution instruction.
 		self.historyAdd(self.romFullName,self.romPath) #Append ROM too history.
-		self.statusbar.push(self.context_id,_("ROM stopped (%s).") % self.romMameName) #Update status bar.
+		self.widgets["statusbar"].push(self.context_id,_("ROM stopped (%s).") % self.romMameName) #Update status bar.
 
 		#-------------------------------------------------------------------------
 		# Introducing our exclusive and innovative system
@@ -178,7 +186,7 @@ class XGngeo:
 		for x in range(42): #Don't panic!
 			if not self.emulator.romRunningState(): break
 			gtk.threads_enter()
-			self.statusbar.push(self.context_id,("%s%s" % (message,("."*x))))
+			self.widgets["statusbar"].push(self.context_id,("%s%s" % (message,("."*x))))
 			gtk.threads_leave()
 			time.sleep(0.42)
 
@@ -441,7 +449,7 @@ class XGngeo:
 			noteisthere = 1
 
 			#Preview images.
-			if(self.params["xgngeo"]["previewimages"]=="true" and os.path.isdir(self.params["xgngeo"]["previewimagedir"])):
+			if self.params["xgngeo"]["previewimages"]=="true" and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
 				self.previewImage = gtk.Image()
 				self.previewImage.set_padding(3,3)
 				path = os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")
@@ -709,7 +717,7 @@ class XGngeo:
 
 			#Doing generic post-selection stuffs.
 			self.historyAdd(fullname,path) #Appending ROM to the History list.
-			self.statusbar.push(self.context_id,_("ROM: \"%s\" (%s)") % (fullname,mamename)) #Updating status message.
+			self.widgets["statusbar"].push(self.context_id,_("ROM: \"%s\" (%s)") % (fullname,mamename)) #Updating status message.
 			if self.params["xgngeo"]["autoexecrom"]=="true": self.gngeoExec() #Auto-executing the ROM...
 			else: self.execMenu_item.set_sensitive(True) #Activating the ``Execute" button
 
@@ -812,7 +820,7 @@ Spanish: Sheng Long Gradilla.""")))
 		self.widgets["config"]["main_dialog"] = gtk.Dialog(parent=self.window,flags=gtk.DIALOG_MODAL)
 
 		if firstrun: self.widgets["config"]["main_dialog"].connect("delete_event",self.quit)
-		elif not romspecific: self.widgets["config"]["main_dialog"].connect("destroy",lambda *args: self.statusbar.push(self.context_id,_("Configuration was not saved.")))
+		elif not romspecific: self.widgets["config"]["main_dialog"].connect("destroy",lambda *args: self.widgets["statusbar"].push(self.context_id,_("Configuration was not saved.")))
 
 		if type==0:
 			#
@@ -1224,6 +1232,36 @@ Spanish: Sheng Long Gradilla.""")))
 
 			def editHotkeys(widget):
 				player = self.widgets["config"]['player1controls_radio'].get_active() or 2
+				self.params["temp"]["hotkey_matrix_p%i" % player ]  =  [[None]*4,[None]*4,[None]*4,[None]*4] #Initial blank matrix.
+				buttval_convertion = {"1":"A","2":"B","4":"C","8":"D"}
+
+				def buttonClicked(widget,event,player,hotkey,pos):
+					menu = gtk.Menu()
+
+					firebuttons = buttval_convertion.keys()
+					firebuttons.sort()
+					hkbinding = self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey]
+					for x in hkbinding:
+						if x: firebuttons.remove(x)
+
+					if hkbinding[pos]:
+						item = gtk.ImageMenuItem()
+						image = gtk.Image()
+						image.set_from_stock(gtk.STOCK_REMOVE,gtk.ICON_SIZE_BUTTON)
+						item.add(image)
+					#	item.connect("activate",self.historyRemove,widget,args[3])
+						menu.append(item)
+
+					for butt in firebuttons:
+						item = gtk.ImageMenuItem()
+						image = gtk.Image()
+						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
+						item.add(image)
+						menu.append(item)
+
+					menu.popup(None,None,None,event.button,event.time)
+					menu.show_all()
+
 				dialog = gtk.Dialog(_("Hotkeys edition for player %i.") % player,self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
 				dialog.connect("response",lambda *args: dialog.destroy())
 
@@ -1241,19 +1279,25 @@ Spanish: Sheng Long Gradilla.""")))
 					hkbinding = self.params["gngeo"]["p%ihotkey%i" % (player,i)] 
 					j=1
 					if hkbinding:
-						j=1;	convertion = {"1":"A","2":"B","4":"C","8":"D"}
-						for value in hkbinding.split(","): 
+						j=1
+						for butt in hkbinding.split(","): 
+							#Updating matrix.
+							self.params["temp"]["hotkey_matrix_p%i" % player ][i][j-1] = butt
+
 							image = gtk.Image()
-							image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % convertion[value]))
+							image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
 							button = gtk.Button()
 							button.add(image)
+							button.connect("button_press_event",buttonClicked,player,i,j-1)
 							table.attach(button,2*j,2*j+1,i,i+1)
 							if j<4:
 								label = gtk.Label("+")
 								table.attach(label,2*j+1,2*j+2,i,i+1)
 							j+=1
+
 					if j<=4:
-						button = gtk.Button("Add...")
+						button = gtk.Button(stock=gtk.STOCK_ADD)
+						button.connect("button_press_event",buttonClicked,player,i,j-1)
 						table.attach(button,2*j,2*j+1,i,i+1)
 
 				table.set_border_width(4)
@@ -1661,7 +1705,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 				self.configfile.writeGlobalConfig(self.params["gngeo"],self.params["xgngeo"],VERSION) #Writing out! :p
 				
-				if not special: self.statusbar.push(self.context_id,_("Configuration has been saved.")) #Updating Status message
+				if not special: self.widgets["statusbar"].push(self.context_id,_("Configuration has been saved.")) #Updating Status message
 				else: self.main() #The program has been configured, so now we can use it!
 
 			elif special==2: #ROM-specific configuration.
@@ -1825,8 +1869,8 @@ Spanish: Sheng Long Gradilla.""")))
 		#
 		# Statusbar
 		#
-		self.statusbar.push(self.context_id,_("Welcome to XGngeo version %i.") % VERSION)
-		box.pack_end(self.statusbar,False)
+		self.widgets["statusbar"].push(self.context_id,_("Welcome to XGngeo version %i.") % VERSION)
+		box.pack_end(self.widgets["statusbar"],False)
 
 		#Window positioning.
 		if self.params["xgngeo"]["centerwindow"]=="true": self.window.set_position(gtk.WIN_POS_CENTER)
@@ -1838,7 +1882,7 @@ Spanish: Sheng Long Gradilla.""")))
 					print _("No boot check option enabled: going directly to the main window (unsafe!).")
 					self.main()
 
-		else: #Perform boot-time important checks.
+		else: #Performing boot-time important checks.
 			error = 0
 			#Are BIOS files present?
 			if not (os.path.isfile("%s/neo-geo.rom" % self.params["gngeo"]["rompath"]) or os.path.isfile("%s/sp-s2.sp1" % self.params["gngeo"]["rompath"]))\
