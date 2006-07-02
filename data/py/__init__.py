@@ -674,7 +674,8 @@ class XGngeo:
 			self.widgets["fileselect_dialog"].connect("selection-changed",updatePreview)
 			self.widgets["fileselect_dialog"].connect("current-folder-changed",scanDirForRoms)
 
-		scanDirForRoms() #Performing ROM scanning for the initial folder.
+			scanDirForRoms() #Performing ROM scanning for the initial folder.
+
 		self.widgets["fileselect_dialog"].run()
 
 	def loadRomFromHistory(self,fullname,path,availability):
