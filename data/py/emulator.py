@@ -45,7 +45,7 @@ class Emulator:
 			for num in version.group(1).split("."):
 				try: list.append(int(num))
 				except: list.append(num)
-			return tuple(list), version.group(1) #Returning as tuple and string.
+			return tuple(list), version.group(1) #Returning value as a tuple and a string.
 
 		return None #Returning nothing.
 
@@ -85,7 +85,7 @@ class Emulator:
 		filename = os.path.basename(archive_path)
 
 		#Getting Gngeo directory scan results.
-		pipe = os.popen("'%s' --scandir=%s" % (self.paths['gngeo'],dir.replace(" ","\ ")),"r")
+		pipe = os.popen("'%s' --scandir='%s'" % (self.paths['gngeo'],dir.replace("'","\'")),"r")
 		results = pipe.readlines()[1:]
 		pipe.close()
 
@@ -98,18 +98,27 @@ class Emulator:
 
 		return None #Arhive wasn't detected as a ROM, returning nothing... :-(
 
-	def scanRomInDirectory(self,dir):
-		"""Generating and returning a dictionary containing the MAME name and actual
-		file name of all the ROM available in a mentioned directory, according to the scan
-		results given by Gngeo (launched with the `--scandir=[dir]' argument)."""
+	def scanRomInDirectory(self,dir,filesel_dialog=False):
+		"""Generating and returning a dictionary containing the MAME name then the actual
+		file name (and optionaly full name) of all the ROMs available in a mentioned directory,
+		according to the scan results given by Gngeo (launched with the `--scandir=[dir]'
+		argument)."""
 		dict = {}
-		pipe = os.popen("'%s' --scandir=%s" % (self.paths['gngeo'],dir.replace(" ","\ ")),"r")
-		for line in pipe.readlines()[1:]:
-			plop = match("\s*(\S*):.*:(\S*)",line)
-			if plop:	#Append ROM information to the dict.
-				dict[plop.group(1)] = plop.group(2)
-		pipe.close()
+		pipe = os.popen("'%s' --scandir='%s'" % (self.paths['gngeo'],dir.replace("'","\'")),"r")
 
+		if not filesel_dialog:
+			#Normal dict formating: MAME name => file name.
+			for line in pipe.readlines()[1:]:
+				plop = match("\s*(\S*):.*:(\S*)",line)
+				if plop:	dict[plop.group(1)] = plop.group(2) #Appending ROM information to the dict.
+		else:
+			#Including ROM full names in the returned dict, whom keys will
+			#be file names (to use for the file selection dialog preview).
+			for line in pipe.readlines()[1:]:
+				plop = match("\s*(\S*):(.*):(\S*)",line)
+				if plop:	 dict[plop.group(3)] = (plop.group(1),plop.group(2)) #Appending ROM information to the dict.
+
+		pipe.close()
 		return dict
 
 	def romLaunching(self,rom_path):
@@ -122,7 +131,7 @@ class Emulator:
 		return self.cmd.join()
 
 	def romGetProcessOutput(self):
-		"""Returning raw Gngeo output of its ROM lauching process."""
+		"""Returning the raw Gngeo output of its ROM lauching process."""
 		return self.cmd.getOutput()
 	
 	def romRunningState(self):

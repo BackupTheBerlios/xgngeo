@@ -586,7 +586,7 @@ class XGngeo:
 		self.specconf['clear'].hide()
 		if self.params["xgngeo"]["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
 
-	def fileSelect(self,widget,title,folder,callback=None,dirselect=0,filter=None):
+	def fileSelect(self,widget,title,folder,callback=None,dirselect=0,filter=None,rompreview=False):
 		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 		self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(folder),folder)[os.path.isdir(folder)])
 
@@ -600,7 +600,7 @@ class XGngeo:
 				self.widgets["fileselect_dialog"].connect("response",outputEntry)
 			else: self.widgets["fileselect_dialog"].connect("response",callback)
 	
-		#Close the file selection dialog anyway.
+		#Closing the file selection dialog anyway.
 		self.widgets["fileselect_dialog"].connect('response', lambda *args: self.widgets["fileselect_dialog"].destroy())
 
 		if filter: #Using file selection filter(s).
@@ -611,6 +611,37 @@ class XGngeo:
 				self.widgets["fileselect_dialog"].add_filter(filter)
 			self.widgets["fileselect_dialog"].set_filter(filter) #Set filter to the last entry.
 
+		#Displaying ROM preview image.
+		if rompreview and self.params["xgngeo"]["previewimages"]=="true":
+
+			def scanDirForRoms(*args):
+				#Updating the ROM scan infos to match the new current directory.
+				self.params["temp"]["currdir_romscaninfos"] = self.emulator.scanRomInDirectory(self.widgets["fileselect_dialog"].get_current_folder(),True)
+
+			def updatePreview(preview_widget):
+				selection = self.widgets["fileselect_dialog"].get_preview_filename()
+
+				if selection and os.path.isfile(selection): 
+					filename = os.path.basename(selection)
+					if self.params["temp"]["currdir_romscaninfos"].has_key(filename):
+						#Current selection has been detected as a ROM: updating preview!
+						tuple =  self.params["temp"]["currdir_romscaninfos"][filename]
+						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0])): preview_widget.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0]))
+						elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): preview_widget.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
+						self.widgets["fileselect_dialog"].set_preview_widget_active(True)
+					else:
+						#Current selection has *not* been detected as a ROM: no preview.
+						self.widgets["fileselect_dialog"].set_preview_widget_active(False)
+
+				else: #Not a file: no preview. :p
+					self.widgets["fileselect_dialog"].set_preview_widget_active(False)
+
+			image = gtk.Image()
+			self.widgets["fileselect_dialog"].set_preview_widget(image)
+			self.widgets["fileselect_dialog"].connect_object("selection-changed",updatePreview,image)
+			self.widgets["fileselect_dialog"].connect("current-folder-changed",scanDirForRoms)
+
+		scanDirForRoms() #Performing ROM scanning for the initial folder.
 		self.widgets["fileselect_dialog"].run()
 
 	def loadRomFromHistory(self,fullname,path,availability):
@@ -986,7 +1017,7 @@ Spanish: Sheng Long Gradilla.""")))
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
 					self.widgets["config"]['blitter'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
 					list.append(ref)
-					#Set active the last selection.
+					#Setting active the last selection.
 					if ref==temp_param["blitter"]: self.widgets["config"]['blitter'].set_active(i)
 					i+=1
 			pipe.close()
@@ -1703,9 +1734,9 @@ Spanish: Sheng Long Gradilla.""")))
 				if type in (1,2,3,4):
 					for key,val in temp_param.items(): self.params["gngeo"][key] = val
 
-				self.configfile.writeGlobalConfig(self.params["gngeo"],self.params["xgngeo"],VERSION) #Writing out! :p
+				self.configfile.writeGlobalConfig(self.params["gngeo"],self.params["xgngeo"],VERSION) #Writting out! :p
 				
-				if not special: self.widgets["statusbar"].push(self.context_id,_("Configuration has been saved.")) #Updating Status message
+				if not special: self.widgets["statusbar"].push(self.context_id,_("Configuration has been saved.")) #Updating status message.
 				else: self.main() #The program has been configured, so now we can use it!
 
 			elif special==2: #ROM-specific configuration.
@@ -1718,7 +1749,7 @@ Spanish: Sheng Long Gradilla.""")))
 					self.specconf['clear'].show()
 
 	def quit(self,*args):
-		if self.emulator.romRunningState(): self.gngeoStop() #Stop any running Gngeo.
+		if self.emulator.romRunningState(): self.gngeoStop() #Stopping any running Gngeo.
 		gtk.main_quit() #Stopping waiting for event...
 		return False
 
@@ -1749,7 +1780,7 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.fileSelect,_("Select a ROM"),self.params["gngeo"]["rompath"],self.manualRomLoading,0,{ _("All files") : "*",_("ROM archive") : "*.zip"})
+		menu_item.connect("activate",self.fileSelect,_("Load a ROM manually..."),self.params["gngeo"]["rompath"],self.manualRomLoading,0,{ _("All files") : "*",_("ROM archive") : "*.zip"},True)
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
