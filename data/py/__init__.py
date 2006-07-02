@@ -1296,11 +1296,25 @@ Spanish: Sheng Long Gradilla.""")))
 			table.attach(frame,0,2,0,2,xpadding=15,ypadding=0)
 
 			def editHotkeys(widget):
-				player = self.widgets["config"]['player1controls_radio'].get_active() or 2
+				player = int(self.widgets["config"]['player1controls_radio'].get_active()) or 2
 				self.params["temp"]["hotkey_matrix_p%i" % player ]  =  [[None]*4,[None]*4,[None]*4,[None]*4] #Initial blank matrix.
 				buttval_convertion = {"1":"A","2":"B","4":"C","8":"D"}
+				hk_boxes = []
 
-				def buttonClicked(widget,event,player,hotkey,pos):
+				def buttonClicked(button,event,image,player,hotkey,pos,addition=False):
+					def buttChanged(widget,value):
+						self.params["temp"]["hotkey_matrix_p%i" % player][hotkey][pos] = value
+						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[value]))
+
+						if addition: #One button has been added: let's regen hotkey's row.
+							genHotkeyRow(hotkey,self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey])
+
+					def buttRemoved(*args):
+						del self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][pos]
+						self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey].append(None)
+
+						genHotkeyRow(hotkey,self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey])
+
 					menu = gtk.Menu()
 
 					firebuttons = buttval_convertion.keys()
@@ -1311,21 +1325,58 @@ Spanish: Sheng Long Gradilla.""")))
 
 					if hkbinding[pos]:
 						item = gtk.ImageMenuItem()
-						image = gtk.Image()
-						image.set_from_stock(gtk.STOCK_REMOVE,gtk.ICON_SIZE_BUTTON)
-						item.add(image)
-					#	item.connect("activate",self.historyRemove,widget,args[3])
+						image2 = gtk.Image()
+						image2.set_from_stock(gtk.STOCK_REMOVE,gtk.ICON_SIZE_BUTTON)
+						item.add(image2)
+						item.connect("activate",buttRemoved)
 						menu.append(item)
 
 					for butt in firebuttons:
 						item = gtk.ImageMenuItem()
-						image = gtk.Image()
-						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
-						item.add(image)
+						image2 = gtk.Image()
+						image2.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
+						item.connect("activate",buttChanged,butt)
+						item.add(image2)
 						menu.append(item)
 
 					menu.popup(None,None,None,event.button,event.time)
 					menu.show_all()
+
+				def genHotkeyRow(row,hkbinding,firstgen=False):
+					if firstgen: #Creating & attaching the box.
+						hk_boxes.append(gtk.HBox())
+						table.attach(hk_boxes[row],2,3,row,row+1)
+					else: #Emptying the box.
+						for x in hk_boxes[row].get_children(): hk_boxes[row].remove(x)
+
+					j = 1
+					if hkbinding: #There is already some button associated to the hot key.
+						for butt in hkbinding: 
+							if not butt: break #Hot key's end has been reached, getting out the ``for".
+
+							if firstgen: #Filling the hot key matrix with the right values.
+								self.params["temp"]["hotkey_matrix_p%i" % player ][row][j-1] = butt
+
+							image = gtk.Image()
+							image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
+							button = gtk.Button()
+							button.add(image)
+							button.connect("button_press_event",buttonClicked,image,player,row,j-1)
+							hk_boxes[row].pack_start(button)
+							if j<4:
+								label = gtk.Label("+")
+								hk_boxes[row].pack_start(label)
+							j+=1
+
+					if j<=4:
+						button = gtk.Button()
+						image = gtk.Image()
+						image.set_from_stock(gtk.STOCK_ADD,gtk.ICON_SIZE_BUTTON)
+						button.add(image)
+						button.connect("button_press_event",buttonClicked,image,player,row,j-1,True)
+						hk_boxes[row].pack_start(button)
+
+					hk_boxes[row].show_all()
 
 				dialog = gtk.Dialog(_("Hotkeys edition for player %i.") % player,self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
 				dialog.connect("response",lambda *args: dialog.destroy())
@@ -1333,39 +1384,21 @@ Spanish: Sheng Long Gradilla.""")))
 				label = gtk.Label(_("Here you can bind hotkeys to your desired combinations of fire buttons."))
 				dialog.vbox.pack_start(label,False)
 
-				table = gtk.Table(4,9)
+				table = gtk.Table(4,3)
+				table.set_col_spacings(4)
+
 				for i in range(4):
 					image = gtk.Image()
 					image.set_from_file(os.path.join(datarootpath,"img","hotkey%i.png" % (i+1)))
-					table.attach(image,0,1,i,i+1)
+					table.attach(image,0,1,i,i+1,xoptions=gtk.SHRINK)
 					label = gtk.Label("=")
-					table.attach(label,1,2,i,i+1)
+					table.attach(label,1,2,i,i+1,xoptions=gtk.SHRINK)
 
 					hkbinding = self.params["gngeo"]["p%ihotkey%i" % (player,i)] 
-					j=1
-					if hkbinding:
-						j=1
-						for butt in hkbinding.split(","): 
-							#Updating matrix.
-							self.params["temp"]["hotkey_matrix_p%i" % player ][i][j-1] = butt
+					if hkbinding: hkbinding = hkbinding.split(",")
+					genHotkeyRow(i,hkbinding,True)
 
-							image = gtk.Image()
-							image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
-							button = gtk.Button()
-							button.add(image)
-							button.connect("button_press_event",buttonClicked,player,i,j-1)
-							table.attach(button,2*j,2*j+1,i,i+1)
-							if j<4:
-								label = gtk.Label("+")
-								table.attach(label,2*j+1,2*j+2,i,i+1)
-							j+=1
-
-					if j<=4:
-						button = gtk.Button(stock=gtk.STOCK_ADD)
-						button.connect("button_press_event",buttonClicked,player,i,j-1)
-						table.attach(button,2*j,2*j+1,i,i+1)
-
-				table.set_border_width(4)
+				box.set_border_width(4)
 				dialog.vbox.pack_end(table)
 				dialog.show_all()
 
