@@ -4,10 +4,14 @@
 
 * Changes in version 16 (2006-XX-XX):
 
-- Improved ROM detection in the list (now directly based upon
-Gngeo's scaning results: faster and more accurate!).
+- Improved ROM detection in the list and file selection
+dialog (now directly based upon Gngeo's scaning results:
+faster and more accurate!).
 - ROM list now supports multiple ROM directories.
 - New integrated ROM driver editor (IN PROGRESS).
+- New hot keys configuration support, for the 2 players.
+- You can now see a ROM preview image (if activated) when
+loading using the file selection dialog.
 - New options support: `68kclock', `bench', `hwsurface',
 `transpack', `z80clock', `sleepidle'.
 - Visual indication of unavaible ROM and ability to remove

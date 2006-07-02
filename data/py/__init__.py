@@ -606,19 +606,20 @@ class XGngeo:
 		if filter: #Using file selection filter(s).
 			for name,patern in filter.items():
 				filter = gtk.FileFilter()
-				filter.set_name(name)
+				filter.set_name("%s (%s)" % (name,patern))
 				filter.add_pattern(patern)
 				self.widgets["fileselect_dialog"].add_filter(filter)
 			self.widgets["fileselect_dialog"].set_filter(filter) #Set filter to the last entry.
 
-		#Displaying ROM preview image.
-		if rompreview and self.params["xgngeo"]["previewimages"]=="true":
+		#Displaying ROM preview infos.
+		if rompreview:
+			show_image = self.params["xgngeo"]["previewimages"]
 
 			def scanDirForRoms(*args):
 				#Updating the ROM scan infos to match the new current directory.
 				self.params["temp"]["currdir_romscaninfos"] = self.emulator.scanRomInDirectory(self.widgets["fileselect_dialog"].get_current_folder(),True)
 
-			def updatePreview(preview_widget):
+			def updatePreview(*args):
 				selection = self.widgets["fileselect_dialog"].get_preview_filename()
 
 				if selection and os.path.isfile(selection): 
@@ -626,19 +627,51 @@ class XGngeo:
 					if self.params["temp"]["currdir_romscaninfos"].has_key(filename):
 						#Current selection has been detected as a ROM: updating preview!
 						tuple =  self.params["temp"]["currdir_romscaninfos"][filename]
-						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0])): preview_widget.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0]))
-						elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): preview_widget.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
-						self.widgets["fileselect_dialog"].set_preview_widget_active(True)
+
+						#With image mode.
+						if show_image=="true":
+							if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0])): self.widgets["fileselect_preview_image"].set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % tuple[0]))
+							elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): self.widgets["fileselect_preview_image"].set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
+
+						#Full name label.
+						self.widgets["fileselect_preview_label"].set_text(((_("Detected ROM: <b>%s</b>."),"<b>%s</b>")[show_image=="true"]) % tuple[1])
+
 					else:
 						#Current selection has *not* been detected as a ROM: no preview.
-						self.widgets["fileselect_dialog"].set_preview_widget_active(False)
+						if show_image=="true": #With image mode.
+							if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): self.widgets["fileselect_preview_image"].set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
+							self.widgets["fileselect_preview_label"].set_text("<b>--</b>")
+						else: self.widgets["fileselect_preview_label"].set_text(_("Detected ROM: <b>%s</b>.") % "--")
 
 				else: #Not a file: no preview. :p
-					self.widgets["fileselect_dialog"].set_preview_widget_active(False)
+					if show_image=="true": #With image mode.
+						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): self.widgets["fileselect_preview_image"].set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
+						self.widgets["fileselect_preview_label"].set_text("<b>--</b>")
+					else: self.widgets["fileselect_preview_label"].set_text(_("Detected ROM: <b>%s</b>.") % "--")
 
-			image = gtk.Image()
-			self.widgets["fileselect_dialog"].set_preview_widget(image)
-			self.widgets["fileselect_dialog"].connect_object("selection-changed",updatePreview,image)
+				self.widgets["fileselect_preview_label"].set_use_markup(True) #Setting use markup for the label which is displayed in any case.
+
+			box = gtk.VBox()
+
+			if show_image=="true": #With image mode.
+				self.widgets["fileselect_preview_image"] = gtk.Image()
+				frame = gtk.Frame()
+				frame.add(self.widgets["fileselect_preview_image"])
+				box.pack_start(frame,False)
+
+			self.widgets["fileselect_preview_label"] = gtk.Label()
+			self.widgets["fileselect_preview_label"].set_justify(gtk.JUSTIFY_CENTER)
+			box.pack_start(self.widgets["fileselect_preview_label"])
+			box.show_all()
+
+			if show_image=="true": #With image mode.
+				self.widgets["fileselect_preview_label"].set_size_request(280,-1)
+				self.widgets["fileselect_preview_label"].set_line_wrap(True)
+				self.widgets["fileselect_dialog"].set_preview_widget(box)
+				self.widgets["fileselect_dialog"].set_preview_widget_active(True)
+			else: self.widgets["fileselect_dialog"].set_extra_widget(box)
+			
+			self.widgets["fileselect_dialog"].connect("selection-changed",updatePreview)
 			self.widgets["fileselect_dialog"].connect("current-folder-changed",scanDirForRoms)
 
 		scanDirForRoms() #Performing ROM scanning for the initial folder.
