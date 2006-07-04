@@ -179,7 +179,7 @@ as the `gngeorc'."""
 \n" % (mamename,version)
 
 		for key, val in dict.items():
-			if val==None:	#Unset value, simply display the param in a commented line.
+			if val in (None,""):	#Unset value, simply display the param in a commented line.
 				val=""
 				content += "#"
 

@@ -74,9 +74,9 @@ class XGngeo:
 		#Check for Gngeo's home directory.
 		if not os.path.isdir(gngeoUserDir): os.mkdir(gngeoUserDir)
 
-		def callback(widget,response_id):
+		def callback(widget,response):
 			dialog.destroy()
-			if response_id==gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
+			if response==gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
 			else: self.config(firstrun=1) #Going to important path configuration window.
 
 		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
@@ -1043,20 +1043,20 @@ Spanish: Sheng Long Gradilla.""")))
 				"yuv":_("YUV blitter (YV12)")}
 
 			self.widgets["config"]['blitter'] = gtk.combo_box_new_text()
-			i=0; list = []
+			i=0; blitter_list = []
 			pipe = os.popen('"%s" --blitter help' % self.params["xgngeo"]['gngeopath'].replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is `REF : FULLNAME'.
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
 					self.widgets["config"]['blitter'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
-					list.append(ref)
+					blitter_list.append(ref)
 					#Setting active the last selection.
 					if ref==temp_param["blitter"]: self.widgets["config"]['blitter'].set_active(i)
 					i+=1
 			pipe.close()
 
-			self.combo_params['blitter'] = list
+			self.combo_params['blitter'] = blitter_list
 			frame.add(self.widgets["config"]['blitter'])
 			box.pack_start(frame)
 
@@ -1084,20 +1084,20 @@ Spanish: Sheng Long Gradilla.""")))
 
 			self.widgets["config"]['effect'] = gtk.combo_box_new_text()
 			self.widgets["config"]['effect'].set_wrap_width(2)
-			i=0; list = []
+			i=0; effect_list = []
 			pipe = os.popen('"%s" --effect help' % self.params["xgngeo"]['gngeopath'].replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is "REF : FULLNAME"
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
 					self.widgets["config"]['effect'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
-					list.append(ref)
+					effect_list.append(ref)
 					#Set active the last selection.
 					if ref==temp_param["effect"]: self.widgets["config"]['effect'].set_active(i)
 					i+=1
 			pipe.close()
 
-			self.combo_params['effect'] = list
+			self.combo_params['effect'] = effect_list
 			frame.add(self.widgets["config"]['effect'])
 			box.pack_start(frame)
 
@@ -1297,25 +1297,37 @@ Spanish: Sheng Long Gradilla.""")))
 
 			def editHotkeys(widget):
 				player = int(self.widgets["config"]['player1controls_radio'].get_active()) or 2
-				self.params["temp"]["hotkey_matrix_p%i" % player ]  =  [[None]*4,[None]*4,[None]*4,[None]*4] #Initial blank matrix.
 				buttval_convertion = {"1":"A","2":"B","4":"C","8":"D"}
 				hk_boxes = []
+
+				#Initial blank matrix (if not yet created & filled).
+				if not self.params["temp"].has_key("hotkey_matrix_p%i" % player):
+					self.params["temp"]["hotkey_matrix_p%i" % player]  =  [[None]*4,[None]*4,[None]*4,[None]*4]
+					for hotkey in range(4):
+						if self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)]:
+							i=0
+							for butt in self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)].split(","):
+								self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][i] = butt
+								i+=1
+				#Building the initial matrix (used to revert previous hotkeys configuration if the changes are cancelled).
+				initial_matrix = []
+
+				def dialResponse(widget,response):
+					if response==gtk.RESPONSE_REJECT:
+						print initial_matrix
+						self.params["temp"]["hotkey_matrix_p%i" % player] = initial_matrix #Restoring the previous matrix.
+					widget.destroy()
 
 				def buttonClicked(button,event,image,player,hotkey,pos,addition=False):
 					def buttChanged(widget,value):
 						self.params["temp"]["hotkey_matrix_p%i" % player][hotkey][pos] = value
 						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[value]))
-
-						if addition: #One button has been added: let's regen hotkey's row.
-							genHotkeyRow(hotkey,self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey])
+						if addition: genHotkeyRow(hotkey)  #One button has been added: let's regen hotkey's row.
 
 					def buttRemoved(*args):
 						del self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][pos]
 						self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey].append(None)
-
-						genHotkeyRow(hotkey,self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey])
-
-					menu = gtk.Menu()
+						genHotkeyRow(hotkey)
 
 					firebuttons = buttval_convertion.keys()
 					firebuttons.sort()
@@ -1323,6 +1335,7 @@ Spanish: Sheng Long Gradilla.""")))
 					for x in hkbinding:
 						if x: firebuttons.remove(x)
 
+					menu = gtk.Menu()
 					if hkbinding[pos]:
 						item = gtk.ImageMenuItem()
 						image2 = gtk.Image()
@@ -1342,7 +1355,7 @@ Spanish: Sheng Long Gradilla.""")))
 					menu.popup(None,None,None,event.button,event.time)
 					menu.show_all()
 
-				def genHotkeyRow(row,hkbinding,firstgen=False):
+				def genHotkeyRow(row,firstgen=False):
 					if firstgen: #Creating & attaching the box.
 						hk_boxes.append(gtk.HBox())
 						table.attach(hk_boxes[row],2,3,row,row+1)
@@ -1350,23 +1363,22 @@ Spanish: Sheng Long Gradilla.""")))
 						for x in hk_boxes[row].get_children(): hk_boxes[row].remove(x)
 
 					j = 1
-					if hkbinding: #There is already some button associated to the hot key.
-						for butt in hkbinding: 
-							if not butt: break #Hot key's end has been reached, getting out the ``for".
+					for butt in self.params["temp"]["hotkey_matrix_p%i" % player ][row]: 
+						if not butt: break #Hot key's end has been reached, getting out the ``for".
 
-							if firstgen: #Filling the hot key matrix with the right values.
-								self.params["temp"]["hotkey_matrix_p%i" % player ][row][j-1] = butt
+						if firstgen: #Filling the hot key matrix with the right values.
+							self.params["temp"]["hotkey_matrix_p%i" % player ][row][j-1] = butt
 
-							image = gtk.Image()
-							image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
-							button = gtk.Button()
-							button.add(image)
-							button.connect("button_press_event",buttonClicked,image,player,row,j-1)
-							hk_boxes[row].pack_start(button)
-							if j<4:
-								label = gtk.Label("+")
-								hk_boxes[row].pack_start(label)
-							j+=1
+						image = gtk.Image()
+						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" % buttval_convertion[butt]))
+						button = gtk.Button()
+						button.add(image)
+						button.connect("button_press_event",buttonClicked,image,player,row,j-1)
+						hk_boxes[row].pack_start(button)
+						if j<4:
+							label = gtk.Label("+")
+							hk_boxes[row].pack_start(label)
+						j+=1
 
 					if j<=4:
 						button = gtk.Button()
@@ -1379,24 +1391,19 @@ Spanish: Sheng Long Gradilla.""")))
 					hk_boxes[row].show_all()
 
 				dialog = gtk.Dialog(_("Hotkeys edition for player %i.") % player,self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
-				dialog.connect("response",lambda *args: dialog.destroy())
-
+				dialog.connect("response",dialResponse)
 				label = gtk.Label(_("Here you can bind hotkeys to your desired combinations of fire buttons."))
 				dialog.vbox.pack_start(label,False)
 
 				table = gtk.Table(4,3)
 				table.set_col_spacings(4)
-
 				for i in range(4):
 					image = gtk.Image()
 					image.set_from_file(os.path.join(datarootpath,"img","hotkey%i.png" % (i+1)))
 					table.attach(image,0,1,i,i+1,xoptions=gtk.SHRINK)
 					label = gtk.Label("=")
 					table.attach(label,1,2,i,i+1,xoptions=gtk.SHRINK)
-
-					hkbinding = self.params["gngeo"]["p%ihotkey%i" % (player,i)] 
-					if hkbinding: hkbinding = hkbinding.split(",")
-					genHotkeyRow(i,hkbinding,True)
+					genHotkeyRow(i,True)
 
 				box.set_border_width(4)
 				dialog.vbox.pack_end(table)
@@ -1703,7 +1710,7 @@ Spanish: Sheng Long Gradilla.""")))
 			self.widgets["config"]["main_dialog"].action_area.pack_end(button)
 
 		self.widgets["config"]["main_dialog"].show_all()
-		
+
 		#Post ``show all" operations...
 		if type in (1,2,3,4):
 			notebook.set_current_page(type-1) #Showing the right section in global emulation configuration.
@@ -1763,15 +1770,27 @@ Spanish: Sheng Long Gradilla.""")))
 			temp_param["68kclock"] = int(self.widgets["config"]['68kclock'].get_value()) #68kclock
 			temp_param["z80clock"] = int(self.widgets["config"]['z80clock'].get_value()) #z80clock
 
-			# Controls.
-			#p1key
+			#Controls.
+			#Player 1.
 			temp_param["p1key"] = str()
 			for val in self.p1key_int_vals: temp_param["p1key"] += "%s," %  (val,"-1")[val=="--"]
 			temp_param["p1key"] = temp_param["p1key"][:-1]
-			#p1key	
+			#Player 2.
 			temp_param["p2key"] = str()
 			for val in self.p2key_int_vals: temp_param["p2key"] += "%s," % (val,"-1")[val=="--"]
 			temp_param["p2key"] = temp_param["p2key"][:-1]
+
+			#Hotkeys' config.
+			for x in (1,2):
+				if self.params["temp"].has_key("hotkey_matrix_p%i" % x):
+					i=0
+					for row in self.params["temp"]["hotkey_matrix_p%i" % x]:
+						temp_param["p%ihotkey%i" % (x,i)] = ""
+						for butt in row:
+							if butt: temp_param["p%ihotkey%i" % (x,i)] += "%s," % butt
+							else: break
+						if len(temp_param["p%ihotkey%i" % (x,i)]): temp_param["p%ihotkey%i" % (x,i)] = temp_param["p%ihotkey%i" % (x,i)][:-1]
+						i+=1
 
 			letsWrite = 1 #Let's write!
 
