@@ -1303,19 +1303,31 @@ Spanish: Sheng Long Gradilla.""")))
 				#Initial blank matrix (if not yet created & filled).
 				if not self.params["temp"].has_key("hotkey_matrix_p%i" % player):
 					self.params["temp"]["hotkey_matrix_p%i" % player]  =  [[None]*4,[None]*4,[None]*4,[None]*4]
+					#The initial matrix is used to revert previous hotkeys configuration (if the changes are cancelled).
+					self.params["temp"]["backup_matrix_p%i" % player]  =  [[None]*4,[None]*4,[None]*4,[None]*4]
 					for hotkey in range(4):
 						if self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)]:
 							i=0
 							for butt in self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)].split(","):
 								self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][i] = butt
+								self.params["temp"]["backup_matrix_p%i" % player][hotkey][i] = butt
 								i+=1
-				#Building the initial matrix (used to revert previous hotkeys configuration if the changes are cancelled).
-				initial_matrix = []
 
 				def dialResponse(widget,response):
-					if response==gtk.RESPONSE_REJECT:
-						print initial_matrix
-						self.params["temp"]["hotkey_matrix_p%i" % player] = initial_matrix #Restoring the previous matrix.
+					if response==gtk.RESPONSE_ACCEPT:
+						#Saving current matrix for hypothetical restoration.
+						for hotkey in range(4):
+							i=0
+							for butt in self.params["temp"]["hotkey_matrix_p%i" % player][hotkey]:
+								self.params["temp"]["backup_matrix_p%i" % player][hotkey][i] = butt
+								i+=1
+					elif response==gtk.RESPONSE_REJECT:
+						#Restoring the previously saved matrix.
+						for hotkey in range(4):
+							i=0
+							for butt in self.params["temp"]["backup_matrix_p%i" % player][hotkey]:
+								self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][i] = butt
+								i+=1
 					widget.destroy()
 
 				def buttonClicked(button,event,image,player,hotkey,pos,addition=False):
