@@ -17,6 +17,8 @@ loading using the file selection dialog.
 - Visual indication of unavaible ROM and ability to remove
 entries in the History menu.
 - Added possibility to select the new Universal BIOS.
+- Added comments and general layout preservative writting
+method for the `gngeorc' file.
 - Better guessing of the default path to Gngeo's `romrc' file.
 - Added possibility to choose XGngeo window to be centered on
 the screen on start.
