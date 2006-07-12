@@ -27,7 +27,7 @@ from threading import Timer
 #Internal modules.
 import configfile, emulator, history, rominfos
 
-VERSION = 16
+VERSION = "16 [beta]"
 xgngeoUserDir = os.path.expanduser("~/.xgngeo")
 gngeoUserDir = os.path.expanduser("~/.gngeo")
 datarootpath = os.path.join(sys.prefix,'share','xgngeo')
@@ -399,18 +399,18 @@ class XGngeo:
 			file.close()
 		available_rom = {}
 		for dir in self.romdir_list:
-			for name,file in  self.emulator.scanRomInDirectory(dir).items():
-				available_rom[name] = os.path.join(dir,file)
+			for mame,file in  self.emulator.scanRomInDirectory(dir).items():
+				available_rom[mame] = os.path.join(dir,file)
 
 		#Adding (ROM) rows.
 		self.emulator.getAllSupportedRom()
-		romlist = self.emulator.getRomFullToMame()
 		romlist_fullname = self.emulator.getRomFullNames()
+		romlist = self.emulator.getRomFullToMame()
 
 		for name in romlist_fullname:
-				if romlist[name] in available_rom:
-					liststore.append([name,True,available_rom[romlist[name]]])
-				else: liststore.append([name,False,''])
+			if romlist[name] in available_rom.keys():
+				liststore.append([name,True,available_rom[romlist[name]]])
+			else: liststore.append([name,False,''])
 
 		#Rendering data.
 		cell = gtk.CellRendererText()
@@ -427,7 +427,7 @@ class XGngeo:
 		button.connect("clicked",romDirectories,dialog)
 		table.attach(button,0,1,2,3,yoptions=gtk.SHRINK)
 
-		label = gtk.Label(_("Driver supporting <b>%s</b> ROMs.") % len(romlist))
+		label = gtk.Label(_("<b>%s</b> available ROMs.") % len(available_rom.keys()))
 		label.set_use_markup(True)
 		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK)
 
@@ -795,7 +795,7 @@ class XGngeo:
 		image = gtk.Image()
 		image.set_from_file(os.path.join(datarootpath,"img","minilogo.png"))
 		box.pack_start(image,False,padding=4)
-		label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s</span>" % (_("XGngeo: a frontend for Gngeo. :p"),_("Version %i.") % VERSION,_("Running Gngeo version %s.") % self.emulator.getGngeoVersion()[1]))
+		label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s</span>" % (_("XGngeo: a frontend for Gngeo. :p"),_("Version %s.") % VERSION,_("Running Gngeo version %s.") % self.emulator.getGngeoVersion()[1]))
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		label.set_use_markup(True)
 		box.pack_start(label)
@@ -1260,7 +1260,7 @@ Spanish: Sheng Long Gradilla.""")))
 			box.set_border_width(4)
 			notebook.append_page(box,gtk.Label(_("Controls")))
 
-			label = gtk.Label(_("To modify a key, click on the corresponding input method button under it's icon, then push your new key."))
+			label = gtk.Label(_("To modify a key, click on the button under it's icon, then push your new key. It works for keyboard only."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_line_wrap(True)
 			box.pack_start(label,False)
@@ -1561,7 +1561,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 			#68kclock
 			adjustment = gtk.Adjustment(float(temp_param["68kclock"]),-80,80,10)
-			label = gtk.Label(_("68K clock:"))
+			label = gtk.Label(_("68K CPU clock:"))
 			table.attach(label,0,1,0,1)
 			self.widgets["config"]['68kclock'] = gtk.HScale(adjustment)
 			self.widgets["config"]['68kclock'].set_value_pos(gtk.POS_LEFT)
@@ -1570,7 +1570,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 			#Z80clock.
 			adjustment = gtk.Adjustment(float(temp_param["z80clock"]),-80,80,10)
-			label = gtk.Label(_("DrZ80 clock:"))
+			label = gtk.Label(_("Z80 CPU clock:"))
 			table.attach(label,0,1,1,2)
 			self.widgets["config"]['z80clock'] = gtk.HScale(adjustment)
 			self.widgets["config"]['z80clock'].set_value_pos(gtk.POS_LEFT)
@@ -1954,10 +1954,12 @@ Spanish: Sheng Long Gradilla.""")))
 
 		menu_item = gtk.MenuItem(_("_View/edit"))
 	#	menu_item.connect("activate",self.driverList)
+		menu_item.set_sensitive(False)
 		menu.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Add new"))
 	#	menu_item.connect("activate",self.driverAdd)
+		menu_item.set_sensitive(False)
 		menu.append(menu_item)
 
 		#
@@ -1998,7 +2000,7 @@ Spanish: Sheng Long Gradilla.""")))
 		#
 		# Statusbar
 		#
-		self.widgets["statusbar"].push(self.context_id,_("Welcome to XGngeo version %i.") % VERSION)
+		self.widgets["statusbar"].push(self.context_id,_("Welcome to XGngeo version %s.") % VERSION)
 		box.pack_end(self.widgets["statusbar"],False)
 
 		#Window positioning.

@@ -59,7 +59,7 @@ class Emulator:
 
 		pipe = os.popen("'%s' --listgame" % self.paths['gngeo'])
 		for line in pipe.readlines():
-			plop = match("(\S*) : (.*)",line)
+			plop = match("(\S*)\s*:\s*(.*)",line)
 			if plop:
 				#Appending ROM information to the lists & dicts.
 				self.romMameNames.append(plop.group(1))
