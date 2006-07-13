@@ -6,15 +6,15 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 15, released on 2005-07-14.
-Copyleft 2003, 2004, 2005 Choplair-network.
+Version 16 beta, released on 2006-07-13.
+Copyleft 2003, 2004, 2005, 2006 Choplair-network.
 
      Copying and distribution of this file, with or without
      modification, are permitted in any medium without royalty provided
      the copyleft notice and this notice are preserved.
 
-Table of Contents
-*****************
+Table des matières
+*******************
 
 1 Introduction
 2 Getting started
@@ -27,71 +27,77 @@ Table of Contents
     2.4.1 Status bar
     2.4.2 Menu bar
   2.5 Playing a game
+    2.5.1 Through the ROM list window
+    2.5.2 Through the file chooser
+    2.5.3 Through the recent ROM history menu
 3 Details
-  3.1 Used files
+  3.1 Used configuration files
     3.1.1 Main configuration files
       3.1.1.1 `gngeorc'
       3.1.1.2 `xgngeo.conf'
-    3.1.2 Rom-specific configuration files
-    3.1.3 Rom driver file
+    3.1.2 ROM-specific configuration files
+    3.1.3 ROM drivers
     3.1.4 History file
   3.2 Particular windows
-    3.2.1 Rom list add-ons
-      3.2.1.1 Preview images
-      3.2.1.2 Rom information
+    3.2.1 ROM list
+      3.2.1.1 Preview images (add-on)
+      3.2.1.2 ROM information
     3.2.2 Emulation configuration panels
-      3.2.2.1 Graphic panel
+      3.2.2.1 Display panel
       3.2.2.2 Sound / Joystick panel
-      3.2.2.3 Keyboard panel
+      3.2.2.3 Controls panel
       3.2.2.4 System panel
-  3.3 Special actions in Gngeo
-  3.4 Internationalization
-    3.4.1 Making a new translation
+    3.2.3 Special actions in GnGeo
+  3.3 Internationalization
+    3.3.1 Making new translation
 4 Web links and ML
   4.1 Home pages
-    4.1.1 Websites of the great duo
+    4.1.1 The great duo
     4.1.2 Their dependencies
-    4.1.3 Miscellaneous
-  4.2 Gngeo mailling list
+    4.1.3 Other
+  4.2 GnGeo mailling list
 5 Credits
 
 
 1 Introduction
 **************
 
-This is the official documentation for *XGngeo*, a frontend (graphical
-user interface) for *Gngeo*, a command line *Neo Geo* (arcade game
-playing system made by SNK) emulator for the _GNU/Linux_ operating
-system (and may be some other Unices) with high speed performance and
-many configurable options. Both are free/libre softwares released under
-the terms of the _GNU General Public License_.
+ This is the official documentation for *XGngeo*, a frontend (graphical
+user interface) for *GnGeo*, which a command line *Neo Geo* (arcade
+game playing system made by SNK) emulator for the _GNU/Linux_ and
+_FreeBSD_ operating systems (and may be some other Unices) with high
+speed performance and many configurable options. On top of all, both
+are free/libre softwares released under the terms of the _GNU General
+Public License_.
 
    XGngeo is written in _Python_ and uses the _PyGTK_ library to
-provide a complete, practical and user-friendly _GTK+_ interface! With
+provide a practical and user-friendly _GTK+_ interface over GnGeo! With
 its multiple configuration panels, designed in an intuitive way,
 emulator behaviour can be regulated both precisely and easily; while
-Rom selection is made simple thanks to a full featured list with
+ROM selection is made simple thanks to a full featured list with
 preview image and various game information, etc.
 
    This program development is conducted by the *Choplair-network*
-crew, the lastest version and information about XGngeo are available
+crew, the lastest version and informations about XGngeo are available
 from our website (see chapter 4 section 1.1). Although we are not
-directly taking part in the Gngeo development (and are not the official
-frontend too), we follow it closely and try to implement all its
-functionalities in the most correct way possible, in accordance with
-the author (Mathieu Peponas) who gently encourages interactions between
-frontends and its emulator.
+directly taking part in the GnGeo development (and there is not
+official frontend too), we follow it closely and try to implement all
+its functionalities in the most correct way possible, in accordance
+with the author (Mathieu Peponas) who gently encourages interactions
+between frontends and its emulator.
 
-   This paper, which is supposed to grow up with each new XGngeo
-release, provides a sort of _Newbie Guide_ to get started with easy Neo
-Geo emulation combining these two programs, and also some details about
-this frontend's features and its functioning.
+   This paper, which is supposed to grow up and keep up-to-date with
+each new XGngeo release, provides a sort of _Newbie Guide_ to get
+started with easy Neo Geo emulation combining these two programs, and
+also some details about this frontend or GnGeo's features and their
+functioning.
 
 2 Getting started
 *****************
 
 This is the complete procedure about how to get the dynamic combination
-of Gngeo and XGngeo fully functional from scratch, step by step!
+of GnGeo and XGngeo fully functional on your system, from scratch, step
+by step!
 
 2.1 Prerequisites
 =================
@@ -99,32 +105,39 @@ of Gngeo and XGngeo fully functional from scratch, step by step!
 2.1.1 Emulator and Bios
 -----------------------
 
-XGngeo is a frontend for Gngeo, so this must be installed somewhere on
-your computer! You can download the last version from its home page
-(see chapter 4 section 1.1). Although the emulator is available in
+XGngeo is a frontend for GnGeo, so this one must be installed somewhere
+on your computer! You can download the last version from its home page
+(see chapter 4 section 1). Although the emulator is available in
 various binary formats (deb, RPM...), keep in mind that these packages
-may be older than the classic source code archive. For this release, we
-do recommand the use of Gngeo version *0.6.4*. But consider that any
-previous 0.6.x version should be fine for being used under XGngeo.
+may be older than the classic source code archive.
 
-   Before installing Gngeo, you have to check for the some
-dependencies: Gngeo graphical rendering is based over the *SDL*
-(`Simple Directmedia Layer') library (version 1.2 or more), which is
-thus required, with *OpenGL* headers for its OpenGL blitter. It also
-needs *zlib* to extract Rom zip archives. Optionally, you may install
-the *NASM* package (version 0.98 or more) in order to provide assembler
-optimisations. Their home page address, for informational purposes, are
-given on chapter 4 section 1.
+   As of XGngeo version 16, the minimum version of GnGeo we ask you to
+use is the *0.6.11*. Trying to launch the frontend with an older
+version of the emulator will make XGngeo refusing to start untill you
+indicated where to find a supported version of GnGeo on your computer.
 
-   Once this is okay, you can install Gngeo, corresponding to the
+   Before installing GnGeo, you have to check for the some dependencies:
+   - GnGeo graphical rendering is based over the *SDL* (`Simple
+     Directmedia Layer') library (version 1.2 or more), which is thus
+     required, with *OpenGL* headers for its OpenGL blitter.
+
+   - It also needs *zlib* to extract ROM zip archives.
+
+   - Optionaly, you may install the *NASM* package (version 0.98 or
+     more) in order to provide assembler optimisations.
+   Their home page adress, for information purpose, are given on
+chapter 4 section 1.
+
+   Once this is okay, you can install GnGeo, corresponding to the
 format it was grabed into. If, for some reasons, the installation does
-not work, you may ask for help from the Gngeo mailling list (chapter 4
+not work, you may ask for help from the GnGeo mailling list (chapter 4
 section 2).
 
-   To be able to launch Roms, Gngeo will need a Neo Geo Bios. It is an
+   To be able to launch ROMs, GnGeo will need a Neo Geo BIOS. It is an
 archive which consists of the following files: `neo-geo.rom',
-`ng-sfix.rom' and `ng-lo.rom'. They have to be put into the same
-directory as your Roms (the so called `Rom and Bios directory'!).
+`ng-sfix.rom' and `ng-lo.rom'. They have to be put (decompressed) into
+the same directory as your Roms (the so called `ROM and Bios
+directory'!).
 
 2.1.2 Other requirements
 ------------------------
@@ -146,18 +159,31 @@ their home page on chapter 4 section 1.2.
 
 It's show time! Your are now ready to taste the power of XGngeo. ^^
 
-   If you didn't obtain this documentation as a part of an XGngeo
+   Here is the installation procedure for the source code archive.
+You'll have to process differently if you choosed to use a specific
+package for your distribution. In a such case, check its documentation
+for details, then pass directly to the next section if installation
+succeeded.
+
+   If you didn't obtain this documentation as a part of a XGngeo
 package, you have to get one! You'll find download links for the last
 version on the Choplair-network homepage (see chapter 4 section 1.1).
-Thereafter, unpack the archive, then move to the directory which have
-just been created (something like `xgngeo-_XX_' where _XX_ is the
+
+   Thereafter, unpack the archive, then move to the directory which
+have just been created (something like `xgngeo-_XX_' where _XX_ is the
 version number).
 
    *At this time, we _do_ assume that you have installed everything
-indicated above.* Since Python code is interpreted, XGngeo doesn't
-require any compilation phase. To launch it, simply enter: `python
-xgngeo.py'. If you get an error doing so, please refer to the chapter 4
-section 2.
+indicated above.*
+
+   Since Python code is interpreted, XGngeo doesn't require any
+compilation phase. T You just have to install the files on your
+computer by entering, _as root_: `python setup.py install'.
+
+   After the installation process quickly ended up, you may just, _as a
+normal user_ now, type the `xgngeo' command to launch the frontend. If
+you get an error doing so, please refer to the chapter 4 section 2.
+Otherwise, you are entering the serious things! :)
 
 2.3 First time important path configuration
 ===========================================
@@ -165,17 +191,17 @@ section 2.
 At the beggining, XGngeo should invite you to set up some important
 parameters that are required to build up basic configuration files with
 three important options required for a working emulation. The first
-one, the path to your Rom driver file (`romrc'), is set with the
-default value, like the path to the Gngeo executable. Actually, you
-would just have to tell the directory where are located your Neo Geo
-Roms and Bios.
+one, the path to your ROM driver file (`romrc'), is set with the
+default value, like the path to the GnGeo executable. Actually, you
+would have just to tell the directory where are located your Neo Geo
+ROMs and BIOS.
 
    Once you have finished, press SAVE. Of course, these parameters can
 be modified at any time thereafter, using the same configuration window.
 
-   If for some reason you want to skip this important path check at
+   If for some reason you want to pass out this important path check at
 boot time, it is possible by just giving `--nobootcheck' as a command
-line parameter. But this is definitely *not* recommanded!
+line parameter. But this is definitively *not* recommanded!
 
 2.4 Main window
 ===============
@@ -190,65 +216,87 @@ First, you might be pleased by the welcome message at bottom of the
 main window. However, the message in this status bar may change and
 provide some information which is not so useless for the user. For
 example, it confirms that configuration has been saved or not, and also
-indicate which Rom you have selected, and it's status
+indicate which ROM you have selected, and it's status
 (stopped/running). In one word: marvellous!
 
 2.4.2 Menu bar
 --------------
 
-Of course, you may fall in love with the great logo, but actually your
-attention should go to the menu bar, on the upper part, which you'll be
-able to control everything with!
+Of course, you may fall in love with the great XGngeo logo, but
+actually your attention should go to the menu bar, on the upper part,
+which you'll be able to control everything with!
 
-   It is primarily composed of the FILE menu, which permits you do
-simple operations such as loading Rom, starting or stopping it, and
+   It is primarily composed of the FILE  menu, which permits you do
+simple operations such as loading ROM, starting or stopping it, and
 exiting the program.
 
    Next to that is, comes the CONFIGURATION menu, from where you can
 modify the paramaters which you entered at the XGngeo first load and
 also some other little options, mostly related to XGngeo's own
 behaviour. But the most interesting thing here is the GLOBAL EMULATION
-sub-menu which allows you to set the default Gngeo emulation
+sub-menu which allows you to set the default GnGeo emulation
 configuration (graphic, audio, keys, etc.) for every game (but it is
 also possible to set specific game configuration). These emulation
 configuration panels are detailed in the section 2 of the next chapter.
 
    At last, on the very right-hand, from the INFO menu you can look at
-the credits or read again and again the holy GNU General Public Licence
-whom XGngeo is released under!
+the credits or read (again and again) the holy GNU General Public
+Licence which XGngeo is released under!
 
 2.5 Playing a game
 ==================
 
 Okay, you can set emulation options as you want, then it's time to
-launch a game! There are 3 ways to select a Rom for playing : through
-the Rom list, a file chooser, or the recent Rom history. The file
-chooser is useful only if the Rom you want to load is located in
-another place than the `Rom and Bios directory', and the recent Rom
-history is just a menu providing quick selection for some Roms you have
-previously chosen.
+launch a game!
+There are 3 different ways to load a ROM for being executed...
 
-   Actually, you would probably use the Rom list window which allows
-you to see all the Roms available in your `Rom and Bios directory', in
-a clean way, and select one from those. From there, you can also set
-specific emulation configuration for any Rom, and even see game preview
-or information (see chapter 3 section 2.1)
+2.5.1 Through the ROM list window
+---------------------------------
 
-   Once you have selected a Rom, it should be launched by Gngeo and
+Actually, you would generaly use the ROM list window which brings you
+an overall view of all the ROMs available in your `ROM and Bios
+directory' (plus any other dictory you mentioned), and select one from
+those. From there, you can also set specific emulation configuration
+for any ROM, and even see game preview and/or information (see chapter
+3 section 2.1)
+
+2.5.2 Through the file chooser
+------------------------------
+
+The file chooser, as its name lets understand, is a classic GTK file
+seclection window that allow you to load a ROM manually, from any place
+in your file system. This method is useful if the ROM you want to load
+is located in another place than in directories specified in the ROM
+list window.
+
+   If preview images were enabled, a ROM preview would be displayed, in
+addition to its name, each time you would click on a file that appears
+to be a valid ROM archive, detected by GnGeo.
+
+2.5.3 Through the recent ROM history menu
+-----------------------------------------
+
+The recent ROM history is no more than a simple menu providing quick
+loading function for the last ROMs you have previously chosen. Note
+that you can remove a ROM from that list by right clicking over its
+name.
+
+
+
+   Once you have selected a ROM, it should be launched by GnGeo and
 playable only a few seconds later! `The future is now', enjoy the Neo
 Geo! :-D
-
-   While playing, you still can perform some special actions in the
+While playing, you still can perform some special actions in the
 emulator, like toggling beetween fullscreen/windowed mode,
 saving/loading state, etc. (see chapter 3 section 3). By the way, you
-can also disable the auto Rom execution feature (if you prefer to do so
+can also disable the auto ROM execution feature (if you prefer to do so
 manually) in the OTHER THINGS configuration window.
 
 3 Details
 *********
 
-3.1 Used files
-==============
+3.1 Used configuration files
+============================
 
 3.1.1 Main configuration files
 ------------------------------
@@ -261,65 +309,71 @@ corresponding value. :p
 3.1.1.1 `gngeorc'
 .................
 
-This is the Gngeo's global configuration file, situated in the
-`~/gngeo/' directory. It lets you customize many params of the
-emulator, some of which are highly important (path to the `romrc' file,
-etc.), which will be the default for any Rom.
+This is the GnGeo's global configuration file, situated in the
+`~/gngeo/' directory. It lets you customize many params of the emulator
+which will be the default for any ROM. Some of these param are highly
+important: path to the `romrc' file, `Main ROM and BIOS dictory', etc.
 
 3.1.1.2 `xgngeo.conf'
 .....................
 
-This is the XGngeo's own configuration file, situated in the `data/'
-directory which is in the XGngeo's. This second file is less important,
-there are only options related to XGngeo (size of history, preview
-images' directory, etc.).  That's why most of these options are
-modifiable in the OTHER THINGS section.
+This is the XGngeo's own configuration file, situated in the XGngeo's
+user directory (`~/.xgngeo'). This second file may be considered as
+less important since there are only options related to XGngeo (size of
+history, path to preview images' directory, etc.). That's why most of
+these options are modifiable in the OTHER THINGS section.
 
-3.1.2 Rom-specific configuration files
+3.1.2 ROM-specific configuration files
 --------------------------------------
 
-Since its version 0.6, Gngeo is able to perform emulation in a specific
-way for each Rom.
+Since its version 0.6, GnGeo is able to perform emulation in a specific
+way for each ROM.
 
-   That's quite simple: before loading the Rom, the emulator looks for
+   That's quite simple: before loading the ROM, the emulator looks for
 a file, in the `~/gngeo/' directory, which is named in the form of
 `_mame_name_.cf' (where _mame_name_ is the Mame name of the game). If
 it does exist, the emulation parameters from are taken from, without
 taking care of the ones set in the `gngeorc', which is used otherwise.
 The syntax for these files is still the same.
 
-   Rom-specific configuration files can be easily handled through
+   ROM-specific configuration files can be easily handled through
 XGngeo, as detailed in the next section...
 
-3.1.3 Rom driver file
----------------------
+3.1.3 ROM drivers
+-----------------
 
-The Rom driver file (named `romrc') is very important as it contains
-all the instructions for the emulator to correctly handle the Roms. All
-technical specifications required for them to work are all put together
-in that (very big!) Rom driver file.
+ROM drivers are actualy defined a single driver file, named `romrc'.
+This ASCII file is very important as it contains all the instructions
+for the emulator to correctly handle all the ROMs.
+
+   A more convenient to let the user add/modify/delete ROM drivers to
+GnGeo than editing this very large file (presently more than 12.000
+lines long!), would be to split all drivers into several ROM-specific
+driver files that would be put in a `romrc.d' directory. This is hoped
+to soon become the default in GnGeo, since it would among others really
+facilitate a `ROM drivers editing interface' to be implemented in
+future XGngeo version...
 
 3.1.4 History file
 ------------------
 
-This simple ASCII file (`~/.gngeo/history') contains, in descending
+This simple ASCII file (`~/.xgngeo/history') contains, in a descending
 order, lines of the full name (between double quotes) and the absolute
 path of recently loaded Roms, in order to be displayed in the HISTORY
-menu of XGngeo. Note that although it is placed in the Gngeo user
-directory, this file was created for XGngeo and is thus not directly
-updated by the emulator but by the frontend.
+menu of XGngeo. Placed in the XGngeo user directory, this file is thus
+created and updated by the frontend and not the emulator.
 
 3.2 Particular windows
 ======================
 
-3.2.1 Rom list add-ons
-----------------------
+3.2.1 ROM list
+--------------
 
 There are also optional features (add-on) which bring you a more
-comfortable game selection in the Rom list window. Here they are...
+comfortable game selection in the ROM list window. Here they are...
 
-3.2.1.1 Preview images
-......................
+3.2.1.1 Preview images (add-on)
+...............................
 
 XGngeo is able to display a preview image of any of the games selected
 in the list.  It is fully compatible with the preview images used by
@@ -327,44 +381,44 @@ other frontends such as *GGF* (`GnGeo Frontend'), which implemented it
 formerly.
 
    Thus, a preview image pack archive can be easily obtained from the
-Gngeo, GGF or Choplair-network home page.  You will need to unpack them
+GnGeo, GGF or Choplair-network home page.  You will need to unpack them
 somewhere, then to indicate the directory where they are located in the
 OTHER THING CONFIGURATION window, in order to get it working instantly!
 
-3.2.1.2 Rom information
+3.2.1.2 ROM information
 .......................
 
-GGF's developpers created an XML file containing information
-(description, manufacturer, year, etc.) about loads of Roms in order to
-be displayed by frontends. This is the perfect addition to preview
-images and it's fully supported by XGngeo!  Moreover, because of the
-small size of this file, it is already included in our packages and
-this add-on is activated by default.
+GGF's developpers created an XML file containing informations for each
+ROM (description, manufacturer, year, etc.) about loads of Roms in
+order to be displayed by frontends. This is the perfect addition to
+preview images and it's fully supported by XGngeo!
+Moreover, because of the small size of this file, it is already
+included in our packages and this add-on is activated by default.
 
    *Note:* the game reviews are not ours, but have been performed by
-the _Ultimate Neo Gaming Ressource_ (UNGR). You can read them online
+the `Ultimate Neo Gaming Ressource' (UNGR). You can read them online
 and find other interesting things on their homepage (see chapter 4
 section 1.3).
 
 3.2.2 Emulation configuration panels
 ------------------------------------
 
-The options which can be set in global or the rom-specific emulation
+The options which can be set in global or the ROM-specific emulation
 configuration window are exactly the same. As XGngeo provides graphical
-management for a lot of Gngeo parameters, they have been divided in
+management for a lot of GnGeo parameters, they have been divided in
 serveral panels according to which emulation domain they are dealing
 with, for the sake of clarity.
 
-3.2.2.1 Graphic panel
+3.2.2.1 Display panel
 .....................
 
 You can activate many options here: fullscreen mode, frame skipping
-(real-time speed), interpolation (smoother animation), etc.  Moreover,
+(real-time speed), interpolation (smoother animation), etc. Moreover,
 you may select your prefered blitter (software, OpenGL, YUV) and choose
 to apply an effect upon it (scanline, HQX, etc.).
 
    Please note that effects are currently not supported by the YUV
-blitter of Gngeo. Thus, the effect list becomes disabled in XGngeo when
+blitter of GnGeo. Thus, the effect list becomes disabled in XGngeo when
 you select this blitter.
 
 3.2.2.2 Sound / Joystick panel
@@ -374,31 +428,41 @@ There are few options for sound and joystick, which is why they are
 regrouped in one panel. You may set support for them and, if enabled,
 specify some options (sound sample rate, joystick devices).
 
-3.2.2.3 Keyboard panel
+3.2.2.3 Controls panel
 ......................
 
-This panel is a *keyboard* (not joystick! :p) control configurator
-which permits you to easily customize the 2 player controls. To modify
-a key, just click on the corresponding button then push your new key.
+In the Neo Geo, we can observe 4 kinds of key: the _directional
+arrows_, the _fire buttons_ (A, B, C & D), the _Start/Coin_, and the
+_hot keys_.
 
-   *Warning:* since Gngeo (SDL's) and XGngeo (GTK's) keymaps are
+   XGngeo has a keyboard configurator which permits you to easily
+customize all the 2 player controls. To modify a key, just click on the
+corresponding button then push your new key.
+
+   *Warning:* since GnGeo (SDL's) and XGngeo (GTK's) keymaps are
 different, some special keys might be not recognized by XGngeo. If it
 occurs, please tell us (refer to the chapter 2 section 2)!
+
+   Please give some attention to the four *hot keys*: they are optional
+and allow you to actually binds one key to a combination of multiple
+fire buttons (ie. to perform special game actions in a easier way).
+Those combinations are freely configurable, independently for the 2
+players.
 
 3.2.2.4 System panel
 ....................
 
 Here you can set some Neo Geo core preference. You can change the
 region (Japan, USA, Europe), which often modifies the game language,
-and also the Neo Geo type: _arcade_ (classic mode with credit given by
-coins) or _console_ (usually more complete and permiting configuration
-through an option menu).
+and also the Neo Geo BIOS type: _arcade_ (classic mode with credit
+given by coins), _console_ (usually more complete and permiting
+configuration through an option menu) or _universe_ (a mix of both!).
 
-3.3 Special actions in Gngeo
-============================
+3.2.3 Special actions in GnGeo
+------------------------------
 
 Using function keys, you can perform some special actions while playing
-a Rom in Gngeo.  Here comes the list of what you can do by pressing
+a ROM in GnGeo. Here comes the list of what you can do by pressing
 these keys:
 
    - <Escape>: exit game.
@@ -422,11 +486,11 @@ these keys:
 
    - <F10>: enable/disable auto frame skip.
 
-   - <F11>: enable/disable sleep mode when Gngeo is idle.
+   - <F11>: enable/disable sleep mode when GnGeo is idle.
 
    - <F12>: enable/disable fullscreen mode.
 
-3.4 Internationalization
+3.3 Internationalization
 ========================
 
 XGngeo is multilingual! Translations are currently available in the
@@ -436,54 +500,25 @@ following languages:
 
    - French
 
+   - German
+
    - Polish*
 
    - Portuguese of Brazil
 
    - Spanish
 
-   *Note:* a language followed by an asterisk means that its
-translation is unfortunately not up-to-date with the current release
-original strings. Don't hesitate to update it! You can even make a new
-translation, just look bellow...
+   *Note:* the translations of a language followed by an asterisk, are,
+unfortunately, not up-to-date with the current release original
+strings. Don't hesitate to update them! You can even make new
+translation, just look below...
 
-3.4.1 Making a new translation
-------------------------------
+3.3.1 Making new translation
+----------------------------
 
-If you want to create a new translation of XGngeo into your language,
-follow these generic instructions:
-
-  1. Get the current XGngeo developement version from its CVS by doing
-     the following command (on a single line):
-     `cvs -z3
-     -d:pserver:anonymous@cvs.xgngeo.berlios.de:/cvsroot/xgngeo
-     checkout xgngeo'
-
-  2. Go to the `lang/' directory which is in `xgngeo/data/'.
-
-  3. Create a directory named like your language code (usually the one
-     returned by `echo $LANG').  See
-     `http://www.gnu.org/software/gettext/manual/html_chapter/
-     gettext_15.html#SEC221' for an exhaustive list.
-
-  4. Into this one, create a new directory named `LC_MESSAGES'.
-
-  5. Go back to the `lang/' directory then open the translation
-     template `xgngeo.pot' with your favorite translation tool (KBabel,
-     GTranslator, Poedit, etc.).
-
-  6. Once you've finished translating. Save it as
-     `_XX_/LC_MESSAGES/xgngeo.po' (where _XX_ is your language code).
-
-  7. Go to `_XX_/LC_MESSAGES/' then do: `msgfmt xgngeo.po -o
-     xgngeo.mo'. This will create a binary file (`xgngeo.mo') readable
-     by the program.
-
-  8. Launch XGngeo, which is now translated in your language!
-
-   Every time you update your translation, don't forget to repeat step
-number 7. When you feel it's perfect, you may send your `po' file to
-<chopinou[AT]choplair.org>.
+If you want to perform a new translation of XGngeo into your language,
+please follow the last instructions that you'll find mentionned on the
+Choplair-network's website (see address below).
 
 4 Web links and ML
 ******************
@@ -491,12 +526,13 @@ number 7. When you feel it's perfect, you may send your `po' file to
 4.1 Home pages
 ==============
 
-4.1.1 Websites of the great duo
--------------------------------
+4.1.1 The great duo
+-------------------
 
-   - Gngeo: `http://m.peponas.free.fr/gngeo/'.
+   - GnGeo homepage: `http://m.peponas.free.fr/gngeo/'.
 
-   - Choplair-network (for XGngeo): `http://www.choplair.org/'.
+   - Choplair-network home page (for XGngeo):
+     `http://www.choplair.org/'.
 
 4.1.2 Their dependencies
 ------------------------
@@ -513,38 +549,34 @@ number 7. When you feel it's perfect, you may send your `po' file to
 
    - PyGTK: `http://www.pygtk.org/'.
 
-4.1.3 Miscellaneous
--------------------
+4.1.3 Other
+-----------
 
-   - Gngeo Brazil (Brazilian website about Gngeo):
+   - GnGeo Brazil (Brazilian website about GnGeo):
      `http://www.gngeo.hpg.ig.com.br/'.
 
-   - Ultimate Neo Gaming Ressource (Neo Geo fan site):
-     `http://ungr.emuunlim.com/'.
-
-   - GGF (first Gngeo frontend):
+   - GGF (previous frontend) homepage:
      `http://gngeofrontend.sourceforge.net/'.
 
-4.2 Gngeo mailling list
+4.2 GnGeo mailling list
 =======================
 
-If you encounter any problem using Gngeo, directly or through a
-frontend such as XGngeo, the best way is certainly to ask for help on
-the official Gngeo mailling list, where you should get quick and
-effective answers from its little community, including XGngeo
-developers.
+If you get any problem using GnGeo, directly or through a frontend such
+as XGngeo, the best way is certainly to ask for help on the official
+GnGeo mailling list, where you should get quick and effective answers
+from its little community, including XGngeo developers.
 Here is how to:
 
    - *Suscribe:* send a blank email, with the word `subscribe' as a
      subject, to <gngeo-request[AT]ml.free.fr>. Note that prior
-     subscribtion is mandatory before posting any new message.
+     subscribtion is mandatory to post any new message.
 
    - *Post:* send your messages to <gngeo[AT]ml.free.fr>.
 
    By the way, list archives are available on the web at the following
-address: `http://www.mail-archive.com/gngeo@ml.free.fr/'. Please check
-that your problem hasn't already been adressed, disscussed and solved
-before posting a new help request message.
+address: `http://www.mail-archive.com/gngeo@ml.free.fr/'. You would
+have better to check out that your problem hasn't been already
+discussed and solved before posting a new help message.
 
 5 Credits
 *********
@@ -558,10 +590,9 @@ involved in the making of this program since the beginning:
 
    - *Pachilor* (<pachilor[AT]choplair.org>): assistant programmer.
 
-   - *Ms. Marie-Claire* (<marie-claire[AT]choplair.org>): documentation
-     editor.
-
    - *hori*(1) (<x_psyence[AT]hotmail.com>): English spelling corrector.
+
+   - *Peter Kainrad* (<peter.kainrad[AT]inode.at>): German translator.
 
    - *Shilon* (<sheng.long.gradilla[AT]gmail.com>): Spanish translator.
 
@@ -572,8 +603,11 @@ involved in the making of this program since the beginning:
    - *Paulo Eduardo Chiva* (<paulo.chiva[AT]ig.com.br>): previous
      Brazilian translator.
 
-   Special thanks to the Gngeo authors, *Mathieu Peponas* and others,
-for writing such a great emulator!
+   - *Ms. Marie-Claire* (<marie-claire[AT]choplair.org>): documentation
+     editor.
+
+   Special thanks to the GnGeo author, *Mathieu Peponas*, for writing
+such a great emulator!
 
    ---------- Footnotes ----------
 

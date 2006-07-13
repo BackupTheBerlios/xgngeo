@@ -3,6 +3,7 @@
 ~~~~~~~~~~~~~~~~~~~~
 
 * Changes in version 16 (2006-XX-XX):
+[NOT YET FINALIZED, THIS IS BETA VERSION]
 
 - Improved ROM detection in the list and file selection
 dialog (now directly based upon Gngeo's scaning results:
