@@ -36,7 +36,7 @@ as the `gngeorc'."""
 	def __init__(self,datarootpath,xgngeoUserDir,gngeoUserDir):
 		#Initial attributes.
 		self.datarootpath = datarootpath
-		self.gngeorc_buffer = None
+		self.gngeorc_buffer = []
 		self.paths = {
 			"xgngeoUserDir" : xgngeoUserDir, #XGngeo local configuration directory.
 			"xgngeoConf" : os.path.join(xgngeoUserDir,"xgngeo.conf"), #Path to XGngeo config file.
@@ -63,7 +63,7 @@ as the `gngeorc'."""
 			"scale":1,
 			"screen320":"true",
 			"blitter":"soft",
-			"effect": None,
+			"effect": "none",
 			"transpack": None,
 			#Audio / Joystick section.
 			"sound":"true",
