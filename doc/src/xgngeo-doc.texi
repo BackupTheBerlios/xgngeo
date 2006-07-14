@@ -27,7 +27,7 @@ notice and this notice are preserved.
 
 @ifplaintext
 @example
-GNU/Linux Neo Geo emulation made easy!
+ Neo Geo emulation on Unix made easy!
 __  __  ____  _   _   ____  ____   __
 \ \/ / / ___|| \ | | / ___||  __| /  \
  \\// / / ___|  \| |/ / ___| |_  | /\ |

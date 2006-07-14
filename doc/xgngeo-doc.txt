@@ -1,4 +1,4 @@
-     GNU/Linux Neo Geo emulation made easy!
+      Neo Geo emulation on Unix made easy!
      __  __  ____  _   _   ____  ____   __
      \ \/ / / ___|| \ | | / ___||  __| /  \
       \\// / / ___|  \| |/ / ___| |_  | /\ |
@@ -13,8 +13,8 @@ Copyleft 2003, 2004, 2005, 2006 Choplair-network.
      modification, are permitted in any medium without royalty provided
      the copyleft notice and this notice are preserved.
 
-Table of Contents
-*****************
+Table des matières
+*******************
 
 1 Introduction
 2 Getting started
@@ -62,7 +62,7 @@ Table of Contents
 1 Introduction
 **************
 
- This is the official documentation for *XGngeo*, a frontend (graphical
+This is the official documentation for *XGngeo*, a frontend (graphical
 user interface) for *GnGeo*, which a command line *Neo Geo* (arcade
 game playing system made by SNK) emulator for the _GNU/Linux_ and
 _FreeBSD_ operating systems (and may be some other Unices) with high

@@ -113,7 +113,7 @@ class XGngeo:
 			scrolled_window = gtk.ScrolledWindow()
 			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 			scrolled_window.add(textview)
-			scrolled_window.set_size_request(520,320)
+			scrolled_window.set_size_request(550,342)
 
 			dialog.vbox.pack_end(scrolled_window)
 			dialog.connect('response', lambda *args: dialog.destroy())
