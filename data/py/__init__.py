@@ -286,9 +286,9 @@ class XGngeo:
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
 			dialog = gtk.Dialog(_("Setting ROM directories."),parent,gtk.DIALOG_MODAL,(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 			label = gtk.Label(_("Here you can add multiple directories to scan for ROMs, in addition to your main ROM and Bios directory."))
-			label.set_line_wrap(True)
 			label.set_justify(gtk.JUSTIFY_CENTER)
-			label.set_padding(2,2)
+			label.set_padding(3,4)
+			label.set_line_wrap(True)
 			dialog.vbox.pack_start(label,False)
 
 			box = gtk.HBox()
@@ -328,7 +328,7 @@ class XGngeo:
 					file = open(os.path.join(xgngeoUserDir,"romdirs"),"w")
 					file.write(content)
 					file.close()
-					
+
 					#Refreshing ROM list (using the new ROM directories).
 					refreshingRomList()
 
@@ -429,7 +429,7 @@ class XGngeo:
 
 		label = gtk.Label(_("<b>%s</b> available ROMs.") % len(available_rom.keys()))
 		label.set_use_markup(True)
-		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK)
+		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK,xpadding=3,ypadding=0)
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
 		buttonShowAvailable.connect("toggled",refreshingRomList)
@@ -1405,6 +1405,9 @@ Spanish: Sheng Long Gradilla.""")))
 				dialog = gtk.Dialog(_("Hotkeys edition for player %i.") % player,self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(gtk.STOCK_OK, gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
 				dialog.connect("response",dialResponse)
 				label = gtk.Label(_("Here you can bind hotkeys to your desired combinations of fire buttons."))
+				label.set_justify(gtk.JUSTIFY_CENTER)
+				label.set_padding(3,4)
+				label.set_line_wrap(True)
 				dialog.vbox.pack_start(label,False)
 
 				table = gtk.Table(4,3)
@@ -2010,7 +2013,7 @@ Spanish: Sheng Long Gradilla.""")))
 
 	def boot(self):
 		if "--nobootcheck" in sys.argv:
-					print _("No boot check option enabled: going directly to the main window (unsafe!).")
+					print _('``No boot check" option enabled: going directly to the main window (unsafe!).')
 					self.main()
 
 		else: #Performing boot-time important checks.
