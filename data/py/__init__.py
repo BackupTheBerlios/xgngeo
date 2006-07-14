@@ -113,7 +113,7 @@ class XGngeo:
 			scrolled_window = gtk.ScrolledWindow()
 			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_AUTOMATIC)
 			scrolled_window.add(textview)
-			scrolled_window.set_size_request(500,300)
+			scrolled_window.set_size_request(520,320)
 
 			dialog.vbox.pack_end(scrolled_window)
 			dialog.connect('response', lambda *args: dialog.destroy())
@@ -1092,7 +1092,7 @@ Spanish: Sheng Long Gradilla.""")))
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
 					self.widgets["config"]['effect'].append_text((fullname,i18n_dict[ref])[i18n_dict.has_key(ref)])
 					effect_list.append(ref)
-					#Set active the last selection.
+					#Setting active the last selection.
 					if ref==temp_param["effect"]: self.widgets["config"]['effect'].set_active(i)
 					i+=1
 			pipe.close()

@@ -6,15 +6,15 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 16 beta, released on 2006-07-13.
+Version 16 beta, released on 2006-07-14.
 Copyleft 2003, 2004, 2005, 2006 Choplair-network.
 
      Copying and distribution of this file, with or without
      modification, are permitted in any medium without royalty provided
      the copyleft notice and this notice are preserved.
 
-Table des matières
-*******************
+Table of Contents
+*****************
 
 1 Introduction
 2 Getting started
@@ -40,7 +40,7 @@ Table des matières
     3.1.4 History file
   3.2 Particular windows
     3.2.1 ROM list
-      3.2.1.1 Preview images (add-on)
+      3.2.1.1 Preview images
       3.2.1.2 ROM information
     3.2.2 Emulation configuration panels
       3.2.2.1 Display panel
@@ -170,7 +170,7 @@ package, you have to get one! You'll find download links for the last
 version on the Choplair-network homepage (see chapter 4 section 1.1).
 
    Thereafter, unpack the archive, then move to the directory which
-have just been created (something like `xgngeo-_XX_' where _XX_ is the
+have just been created (something like `XGngeo-_XX_' where _XX_ is the
 version number).
 
    *At this time, we _do_ assume that you have installed everything
@@ -372,8 +372,8 @@ created and updated by the frontend and not the emulator.
 There are also optional features (add-on) which bring you a more
 comfortable game selection in the ROM list window. Here they are...
 
-3.2.1.1 Preview images (add-on)
-...............................
+3.2.1.1 Preview images
+......................
 
 XGngeo is able to display a preview image of any of the games selected
 in the list.  It is fully compatible with the preview images used by

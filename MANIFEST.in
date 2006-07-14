@@ -1,5 +1,6 @@
 include *.txt
-include data/doc/ *.txt *.pdf
-include data/img *.png
-include data/ rominfos.*
+include doc/*.txt doc/*.pdf
+include data/img/*.png
+include data/rominfos.*
 recursive-include data/locale *.pot *.po *.mo
+

@@ -23,13 +23,19 @@ import os, glob, sys
 
 setup(
 	name='XGngeo',
-	version='16cvs',
+	version='16_beta',
 	description='A frontend for the Gngeo emulator.',
+	long_description= """\
+``XGngeo" is a frontend providing a complete, practical and
+user-friendly GTK+ interface over ``Gngeo" which is a fast and
+powerful command line Neo Geo emulator for the Unix platforms
+(GNU/Linux, FreeBSD...).""",
 	author='Choplair-network',
 	author_email='contact@choplair.org',
 	url='http://www.choplair.org/',
 	download_url='http://developer.berlios.de/project/showfiles.php?group_id=1276',
 	license='GNU General Public License',
+	platforms='Unix',
 	packages=['xgngeo'],
 	package_dir={'xgngeo': 'data/py'},
 	data_files=[
@@ -40,14 +46,15 @@ setup(
 		#License text.
 		(os.path.join("share","xgngeo"),['LICENSE.txt']),
 		#Plan text documentation.
-		(os.path.join("share","xgngeo","doc"),glob.glob(os.path.join("doc","xgngeo-doc.txt"))),
+		(os.path.join("share","xgngeo","doc"),[os.path.join("doc","xgngeo-doc.txt")]),
 		#Localization files.
 		(os.path.join("share","xgngeo","locale","es","LC_MESSAGES"),[os.path.join("data","locale","es","LC_MESSAGES","xgngeo.mo")]), #Spanish
-		(os.path.join("share","xgngeo","locale","de","LC_MESSAGES"),[os.path.join("data","locale","de","LC_MESSAGES","xgngeo.mo")]), #Spanish
+		(os.path.join("share","xgngeo","locale","de","LC_MESSAGES"),[os.path.join("data","locale","de","LC_MESSAGES","xgngeo.mo")]), #German
 		(os.path.join("share","xgngeo","locale","fr","LC_MESSAGES"),[os.path.join("data","locale","fr","LC_MESSAGES","xgngeo.mo")]), #French
 		(os.path.join("share","xgngeo","locale","pl","LC_MESSAGES"),[os.path.join("data","locale","pl","LC_MESSAGES","xgngeo.mo")]), #Polish
 		(os.path.join("share","xgngeo","locale","pt_BR","LC_MESSAGES"),[os.path.join("data","locale","pt_BR","LC_MESSAGES","xgngeo.mo")]) #Portuguese of Brazil
-		]
+		],
+	scripts = [os.path.join("data","script","xgngeo_startup.py")] #Startup script.
 	)
 	
 if "install" in sys.argv:
@@ -60,7 +67,7 @@ if "install" in sys.argv:
 			if val[:len(str)]==str: prefix = val[len(str):]; break 
 		if not prefix: prefix = sys.prefix #Use Python prefix.
 
-		startup_script = os.path.join(prefix,"bin/xgngeo") #Startup script path.
+		startup_script = os.path.join(prefix,"bin","xgngeo") #Startup script path.
 		startup_script_dir = os.path.dirname(startup_script) 
 		
 		import shutil

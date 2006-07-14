@@ -2,7 +2,7 @@
 
 @set title XGngeo documentation
 @set xgngeo-version 16 beta
-@set subtitle Version @value{xgngeo-version}, released on 2006-07-13.
+@set subtitle Version @value{xgngeo-version}, released on 2006-07-14.
 
 @settitle @value{title}
 
@@ -90,7 +90,7 @@ Here is the installation procedure for the source code archive. You'll have to p
 @sp 1
 If you didn't obtain this documentation as a part of a XGngeo package, you have to get one! You'll find download links for the last version on the Choplair-network homepage (see chapter 4 section 1.1).
 @sp 1
-Thereafter, unpack the archive, then move to the directory which have just been created (something like @file{xgngeo-@emph{XX}} where @emph{XX} is the version number).
+Thereafter, unpack the archive, then move to the directory which have just been created (something like @file{XGngeo-@emph{XX}} where @emph{XX} is the version number).
 @sp 1
 @strong{At this time, we @emph{do} assume that you have installed everything indicated above.}
 @sp 1
@@ -181,7 +181,7 @@ This simple ASCII file (@file{~/.xgngeo/history}) contains, in a descending orde
 
 There are also optional features (add-on) which bring you a more comfortable game selection in the ROM list window. Here they are...
 
-@subsubsection Preview images (add-on)
+@subsubsection Preview images
 XGngeo is able to display a preview image of any of the games selected in the list.
 It is fully compatible with the preview images used by other frontends such as @strong{@acronym{GGF}} (@cite{GnGeo Frontend}), which implemented it formerly.
 @sp 1
