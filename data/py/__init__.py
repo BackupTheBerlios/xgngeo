@@ -324,7 +324,7 @@ class XGngeo:
 
 					#Saving it in the appropriate file.
 					content = ""
-					for dir in self.romdir_list: content += dir
+					for dir in self.romdir_list[1:]: content += "%s\n" % dir
 					file = open(os.path.join(xgngeoUserDir,"romdirs"),"w")
 					file.write(content)
 					file.close()
@@ -395,7 +395,8 @@ class XGngeo:
 		self.romdir_list = [self.params["gngeo"]["rompath"]]
 		if os.path.exists(os.path.join(xgngeoUserDir,"romdirs")):
 			file = open(os.path.join(xgngeoUserDir,"romdirs"),"r")
-			for line in file.readlines(): self.romdir_list.append(line)
+			for line in file.readlines():
+				if line.strip(): self.romdir_list.append(line[:-1])
 			file.close()
 		available_rom = {}
 		for dir in self.romdir_list:
