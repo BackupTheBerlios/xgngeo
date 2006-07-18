@@ -243,7 +243,7 @@ class XGngeo:
 				if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"%s.png" % mamename)): self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],mamename+".png"))
 				elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png")): self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
 
-			#Update rom infos.
+			#Updating rom infos.
 			if self.params["xgngeo"]["rominfos"]=="true" and os.path.isfile(self.params["xgngeo"]["rominfoxml"]):
 				#Check for game informations.
 				if self.romInfos.has_key(mamename):
@@ -271,9 +271,19 @@ class XGngeo:
 
 			dialog.destroy()
 
-		def refreshingRomList(widget=None):
+		def refreshingRomList(*args):
 			liststore.clear() #First clearing the list out.
 
+			available_rom = {}
+			for dir in self.romdir_list:
+				for mame,file in  self.emulator.scanRomInDirectory(dir).items():
+					available_rom[mame] = os.path.join(dir,file)
+			
+			#Adding ROM rows.
+			self.emulator.getAllSupportedRom()
+			romlist_fullname = self.emulator.getRomFullNames()
+			romlist = self.emulator.getRomFullToMame()
+			
 			for name in romlist_fullname:
 				if romlist[name] in available_rom:
 					#Alway putting available ROMs.
@@ -281,6 +291,9 @@ class XGngeo:
 				elif not buttonShowAvailable.get_active():
 					#Also putting unavailable ROMs if the box is unchecked.
 					liststore.append([name,False,''])
+
+			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.") % len(available_rom.keys()))
+			labelAvailableRoms.set_use_markup(True)
 
 		def romDirectories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
@@ -391,28 +404,6 @@ class XGngeo:
 		tvcolumn = gtk.TreeViewColumn("Fullname")
 		treeview.append_column(tvcolumn)
 
-		#Creating a list of of all availbable ROMs (after scanning all ROM directories).
-		self.romdir_list = [self.params["gngeo"]["rompath"]]
-		if os.path.exists(os.path.join(xgngeoUserDir,"romdirs")):
-			file = open(os.path.join(xgngeoUserDir,"romdirs"),"r")
-			for line in file.readlines():
-				if line.strip(): self.romdir_list.append(line[:-1])
-			file.close()
-		available_rom = {}
-		for dir in self.romdir_list:
-			for mame,file in  self.emulator.scanRomInDirectory(dir).items():
-				available_rom[mame] = os.path.join(dir,file)
-
-		#Adding (ROM) rows.
-		self.emulator.getAllSupportedRom()
-		romlist_fullname = self.emulator.getRomFullNames()
-		romlist = self.emulator.getRomFullToMame()
-
-		for name in romlist_fullname:
-			if romlist[name] in available_rom.keys():
-				liststore.append([name,True,available_rom[romlist[name]]])
-			else: liststore.append([name,False,''])
-
 		#Rendering data.
 		cell = gtk.CellRendererText()
 		cell.set_property("cell-background","#9cf")
@@ -428,12 +419,12 @@ class XGngeo:
 		button.connect("clicked",romDirectories,dialog)
 		table.attach(button,0,1,2,3,yoptions=gtk.SHRINK)
 
-		label = gtk.Label(_("<b>%s</b> available ROMs.") % len(available_rom.keys()))
-		label.set_use_markup(True)
-		table.attach(label,1,2,2,3,yoptions=gtk.SHRINK,xpadding=3,ypadding=0)
+		labelAvailableRoms = gtk.Label()
+		table.attach(labelAvailableRoms,1,2,2,3,yoptions=gtk.SHRINK,xpadding=3,ypadding=0)
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
-		buttonShowAvailable.connect("toggled",refreshingRomList)
+		if self.params["xgngeo"]["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activating button. 
+		buttonShowAvailable.connect("toggled",refreshingRomList) #Connecting the toggled event (*after* potention button activation)
 		table.attach(buttonShowAvailable,2,3,2,3,yoptions=gtk.SHRINK)
 
 		#
@@ -571,6 +562,23 @@ class XGngeo:
 		dialog.vbox.pack_start(table)
 		rightside.set_sensitive(False)
 
+		#Creating a list of of all availbable ROMs (after scanning all ROM directories).
+		self.romdir_list = [self.params["gngeo"]["rompath"]]
+		if os.path.exists(os.path.join(xgngeoUserDir,"romdirs")):
+			file = open(os.path.join(xgngeoUserDir,"romdirs"),"r")
+			for line in file.readlines():
+				if line.strip(): self.romdir_list.append(line[:-1])
+			file.close()
+		available_rom = {}
+
+		#Initial ROM list generation.
+		refreshingRomList()
+
+		#Initialize ROM names (MAME <=> full name) correspondency list (only needed once).
+		self.emulator.getAllSupportedRom()
+		romlist_fullname = self.emulator.getRomFullNames()
+		romlist = self.emulator.getRomFullToMame()
+		
 		#Buttons at bottom.
 		open_button = gtk.Button(stock=gtk.STOCK_OPEN)
 		open_button.set_sensitive(False)
@@ -585,7 +593,6 @@ class XGngeo:
 		#Let's hide ourselves!
 		self.specconf['properties'].hide()
 		self.specconf['clear'].hide()
-		if self.params["xgngeo"]["showavailableromsonly"]=="true": buttonShowAvailable.set_active(True) #Activate button.
 
 	def fileSelect(self,widget,title,folder,callback=None,dirselect=0,filter=None,rompreview=False):
 		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
