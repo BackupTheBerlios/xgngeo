@@ -91,7 +91,7 @@ class XGngeo:
 
 		if os.path.isfile(filename):
 			file = open(filename,"r")
-			textbuffer.set_text("%s" % file.read())
+			textbuffer.set_text(file.read())
 			file.close()
 		else:
 			if filename[-11:]=="LICENSE.txt":
