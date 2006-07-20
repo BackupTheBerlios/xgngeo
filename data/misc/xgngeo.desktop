@@ -1,0 +1,18 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Name=XGngeo
+
+Comment=Frontend for Gngeo
+Comment[fr]=Frontend pour Gngeo
+
+GenericName=Frontend
+GenericName[fr]=Interface graphique
+
+Type=Application
+Categories=Application;Game
+
+Icon=/usr/share/xgngeo/img/icon.png
+Exec=xgngeo
+Terminal=false
+StartupNotify=false

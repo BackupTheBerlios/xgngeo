@@ -45,10 +45,10 @@ powerful command line Neo Geo emulator for the Unix platforms
 		(os.path.join("share","xgngeo"),glob.glob(os.path.join("data","rominfos.*"))),
 		#License text.
 		(os.path.join("share","xgngeo"),['LICENSE.txt']),
-		#Plan text documentation.
+		#Plain text documentation.
 		(os.path.join("share","xgngeo","doc"),[os.path.join("doc","xgngeo-doc.txt")]),
 		# *.desktop (menu entry)
-		(os.path.join("share", "applications"), [os.path.join("misc", "xgngeo.desktop")]),
+		(os.path.join("share", "applications"), [os.path.join("data","misc", "xgngeo.desktop")]),
 		#Localization files.
 		(os.path.join("share","xgngeo","locale","es","LC_MESSAGES"),[os.path.join("data","locale","es","LC_MESSAGES","xgngeo.mo")]), #Spanish
 		(os.path.join("share","xgngeo","locale","de","LC_MESSAGES"),[os.path.join("data","locale","de","LC_MESSAGES","xgngeo.mo")]), #German
