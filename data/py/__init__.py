@@ -743,6 +743,8 @@ class XGngeo:
 	def 	historyItemClicked(self,widget, event,*args):
 		if event.type == gtk.gdk.BUTTON_PRESS:
 			if event.button == 1: #Left click: loading ROM.
+				menu = gtk.Menu()
+				menu.hide()
 				self.loadRomFromHistory(args[0],args[1],args[2])
 			elif event.button == 3: #Right click: popping-up a menu.
 				menu = gtk.Menu()
@@ -781,6 +783,7 @@ class XGngeo:
 	def historyRemove(self,widget,menu_item,position):
 		self.history.removeRom(position)
 		self.widgets["history_menu"].remove(menu_item)
+		self.historyMenuGeneration()
 
 	def settingCurrentRom(self,path,mamename,fullname):
 			#Updating variables.

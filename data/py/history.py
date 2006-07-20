@@ -74,3 +74,4 @@ class History:
 		"""Popping the ROM out of the list."""
 		self.list.pop(position)
 		self.updateFile() #Writing changes.
+
