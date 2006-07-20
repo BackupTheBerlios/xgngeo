@@ -70,7 +70,7 @@ class XGngeo:
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		gtk.window_set_default_icon_from_file(os.path.join(datarootpath,"img","icon.png"))
 	
-	def checkError(self):
+	def check_error(self):
 		#Check for Gngeo's home directory.
 		if not os.path.isdir(gngeoUserDir): os.mkdir(gngeoUserDir)
 
@@ -101,7 +101,7 @@ class XGngeo:
 		if display:
 			dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,gtk.RESPONSE_CLOSE))
 
-			if filename=="LICENSE.txt":
+			if filename[-11:]=="LICENSE.txt":
 				label = gtk.Label(_("This program is released under the terms of the GNU General Public License."))
 				label.set_padding(2,4)
 				dialog.vbox.pack_start(label,False)
@@ -2038,7 +2038,7 @@ Spanish: Sheng Long Gradilla.""")))
 			version = self.emulator.getGngeoVersion()
 			if not version or version[0][1:3]<(6,11): error = 1
 
-			if error: self.checkError() #Display value setting invitation.
+			if error: self.check_error() #Display value setting invitation.
 			else: self.main() #Everything seems okay, so let's display the main window...
 
 if __name__ == "__main__":
