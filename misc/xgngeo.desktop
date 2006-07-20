@@ -12,7 +12,7 @@ GenericName[fr]=Interface graphique
 Type=Application
 Categories=Application;Game
 
-Icon=xgngeo.png
+Icon=/usr/share/xgngeo/img/icon.png
 Exec=xgngeo
 Terminal=false
 StartupNotify=false
