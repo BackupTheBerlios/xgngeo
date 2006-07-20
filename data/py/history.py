@@ -33,14 +33,14 @@ class History:
         self.path = os.path.expanduser("~/.xgngeo/history")
         self.list = []
 
-    def refreshList(self, size):
+    def refresh_list(self, size):
         """ Reading content of the ROM History file to build a list 
             containing tuple with full name, path and file system
             presence for each of the recently loaded ROMs.
         
         """
 
-        self.list = [] #(Re)Create ROM History list from scratch.
+        self.list = [] #(Re)Creating ROM History list from scratch.
 
         if os.path.isfile(self.path):
             file = open(self.path, "r") #Opening.
@@ -54,12 +54,12 @@ class History:
                     self.list.append((plop.group(1), path, 
                                       os.path.exists(path)))
 
-    def getList(self):
-        """Returning current, up-to-date ROM History list."""
+    def get_list(self):
+        "Returning current, up-to-date ROM History list."
         return self.list
 
-    def updateFile(self):
-        """Updating ROM History file."""
+    def update_file(self):
+        "Updating ROM History file."
         content = ""
         for line in self.list:
             content += '"%s" %s\n' % (line[0], line[1])
@@ -68,7 +68,7 @@ class History:
         file.write(content) #Writing.
         file.close() #And closing. :p
 
-    def addRom(self, name, path, size):
+    def add_rom(self, name, path, size):
         "Adding a new Rom to the list, with duplicate entries prevention."
 
         #Popping the ROM out of the list if already mentioned (similar path).
@@ -83,9 +83,9 @@ class History:
         self.list = self.list[:size] #Removing any extra item.
         self.updateFile() #Writing changes.
 
-    def removeRom(self, position):
+    def remove_rom(self, position):
         "Popping the ROM out of the list."
         self.list.pop(position)
-        self.updateFile() #Writing changes.
+        self.update_file() #Writing changes.
 
 # vim:ai:et:sw=4:ts=4:sts=4:tw=78:fenc=utf-8

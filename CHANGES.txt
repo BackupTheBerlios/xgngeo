@@ -3,13 +3,22 @@
 ~~~~~~~~~~~~~~~~~~~~
 
 * Changes in version 16 (2006-XX-XX):
-[NOT YET FINALIZED, THIS IS BETA VERSION]
 
+- Bug fix: no more crash when removing an entry which was below
+a just removed one in the ROM History menu [Achraf Cherti].
+- Improved ROM list refreshing feature (now applied just after
+having updated the ROM directory list).
+- Increased ROM list displaying speed (especialy when ``Show
+available ROM only"option is enabled).
+- Bug fix: multiple custom ROM directory paths were considered
+as one single big path because of lack of line break in the
+related configuration file [patch by Achraf Cherti].
+
+Yet present in the beta version:
 - Improved ROM detection in the list and file selection
 dialog (now directly based upon Gngeo's scaning results:
 faster and more accurate!).
 - ROM list now supports multiple ROM directories.
-- New integrated ROM driver editor (IN PROGRESS).
 - New hot keys configuration support, for the 2 players.
 - You can now see a ROM preview image (if activated) when
 loading using the file selection dialog.

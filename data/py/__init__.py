@@ -706,7 +706,7 @@ class XGngeo:
 
 			if availability:
 				#Since a ROM marked as ``available" wasn't actually found, refreshing the entire ROM History list for the sake of accuracy.
-				self.history.refreshList(size=int(self.params["xgngeo"]["historysize"]))
+				self.history.refresh_list(size=int(self.params["xgngeo"]["historysize"]))
 				self.historyMenuGeneration()
 				message += "\n%s" % _("It is now indicated as unavailable in the ROM History menu.")
 
@@ -761,7 +761,7 @@ class XGngeo:
 
 		#Putting the new ones...
 		pos = 0
-		for val in self.history.getList():
+		for val in self.history.get_list():
 			if val[2]: menu_item = gtk.MenuItem(val[0])
 			else:
 				#Adding a ``warning" icon when the ROM is not available on the file system.
@@ -775,11 +775,11 @@ class XGngeo:
 		self.widgets["history_menu"].show_all()
 
 	def historyAdd(self,fullname,path):
-		self.history.addRom(fullname,path,size=int(self.params["xgngeo"]["historysize"])) #Updating ROM History file.
+		self.history.add_rom(fullname,path,size=int(self.params["xgngeo"]["historysize"])) #Updating ROM History file.
 		self.historyMenuGeneration() #Recreating ROM History menu.
 
 	def historyRemove(self,widget,menu_item,position):
-		self.history.removeRom(position)
+		self.history.remove_rom(position)
 		self.widgets["history_menu"].remove(menu_item)
 		self.historyMenuGeneration()
 
@@ -1897,7 +1897,7 @@ Spanish: Sheng Long Gradilla.""")))
 		self.widgets["history_menu"] = gtk.Menu()
 		self.history_menu_item.set_submenu(self.widgets["history_menu"])
 		self.widgets["history_menu"].append(gtk.TearoffMenuItem())
-		self.history.refreshList(size=int(self.params["xgngeo"]["historysize"])) #Building ROM History list.
+		self.history.refresh_list(size=int(self.params["xgngeo"]["historysize"])) #Building ROM History list.
 		self.historyMenuGeneration() #Generating ROM History menu.
 		menu.append(self.history_menu_item)
 
