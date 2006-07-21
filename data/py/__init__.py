@@ -18,6 +18,15 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
+
+try:
+	import psyco
+except ImportError:
+	pass
+else:
+	print "Loading psyco..."
+	psyco.full()
+
 import sys, gtk
 if gtk.pygtk_version[:2]<(2,6): sys.exit("Error: PyGTK version 2.6 or more is required.")
 import os, gettext
