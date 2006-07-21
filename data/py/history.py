@@ -81,7 +81,7 @@ class History:
         #Prepending it to the recent Rom list (indicating the file exists).
         self.list.insert(0, (name, path, True)) 
         self.list = self.list[:size] #Removing any extra item.
-        self.updateFile() #Writing changes.
+        self.update_file() #Writing changes.
 
     def remove_rom(self, position):
         "Popping the ROM out of the list."
