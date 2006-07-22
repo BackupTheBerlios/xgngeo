@@ -5,7 +5,7 @@
 * Changes in version 16 (2006-XX-XX):
 
 - Optional use of Psyco (if module is available) to boost
-XGngeo's overall speed performance [Acharf Cherti].
+XGngeo's overall speed performance [Achraf Cherti].
 - Bug fix: no more crash when removing an entry which was below
 a just removed one in the ROM History menu [Achraf Cherti].
 - Improved ROM list refreshing feature (now applied just after
