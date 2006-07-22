@@ -62,7 +62,7 @@ class Configfile:
             if not os.path.isdir(dir_):
                 os.mkdir(dir_)
 
-    def getDefaultParams(self):
+    def get_default_params(self):
         """ Returns default options for the `gngeorc'/Rom-specific
             and XGngeo configuration files.
         
@@ -129,7 +129,7 @@ class Configfile:
         return os.path.isfile(self.paths["gngeorc"]), \
                os.path.isfile(self.paths["xgngeoConf"])
 
-    def getParams(self, mamename=None):
+    def get_params(self, mamename=None):
         """ Try to get the params of the global or a Rom-specific 
             configuration file.
 
@@ -174,7 +174,7 @@ class Configfile:
 
         return dictionary
 
-    def writeGlobalConfig(self, gngeoDict, xgngeoDict, version):
+    def write_global_config(self, gngeoDict, xgngeoDict, version):
         #Top comments. :p
         content = []
         content.append("# Gngeo global configuration file.\n\
@@ -241,7 +241,7 @@ class Configfile:
         file.write(content[1]) # Writing.
         file.close() # And closing.
 
-    def writeRomConfig(self, dictionary, mamename, version):
+    def write_rom_config(self, dictionary, mamename, version):
         path = os.path.join(self.paths["gngeoUserDir"], "%s.cf" % mamename)
 
         # Top comment. :p

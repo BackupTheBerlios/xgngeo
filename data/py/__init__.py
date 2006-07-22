@@ -28,7 +28,8 @@ else:
 	psyco.full()
 
 import sys, gtk
-if gtk.pygtk_version[:2]<(2,6): sys.exit("Error: PyGTK version 2.6 or more is required.")
+if gtk.pygtk_version[:2]<(2,6):
+	sys.exit("Error: PyGTK version 2.6 or more is required.")
 import os, gettext
 from string import capwords
 from re import match
@@ -54,9 +55,9 @@ class XGngeo:
 		#Loading emulator/frontend configuration.
 		self.configfile = configfile.Configfile(datarootpath,xgngeoUserDir,gngeoUserDir)
 		self.params = {"temp":{}}
-		self.params["gngeo"], self.params["xgngeo"] = self.configfile.getDefaultParams()
+		self.params["gngeo"], self.params["xgngeo"] = self.configfile.get_default_params()
 		#Overwriting default params by the ones in configuration files.
-		dict = self.configfile.getParams()
+		dict = self.configfile.get_params()
 		for key,val in dict[0].items(): self.params["gngeo"][key] = val
 		for key,val in dict[1].items(): self.params["xgngeo"][key] = val
 
@@ -88,8 +89,12 @@ class XGngeo:
 			if response==gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
 			else: self.config(firstrun=1) #Going to important path configuration window.
 
-		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK)
-		dialog.set_markup(_("It seems that the important path parameters are not all valid. That is normal if Gngeo configuration file hasn't been yet created. Anyway, correct values should be specified for the emulation to work. Press OK to do so..."))
+		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING,\
+		buttons=gtk.BUTTONS_OK)
+		dialog.set_markup(_("It seems that the important path parameters are not all \
+valid. That is normal if Gngeo configuration file hasn't been yet created.\
+Anyway, correct values should be specified for the emulation to work. Press OK\
+to do so..."))
 		dialog.connect("response",callback)
 		dialog.show_all()
 
@@ -104,11 +109,15 @@ class XGngeo:
 			file.close()
 		else:
 			if filename[-11:]=="LICENSE.txt":
-				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\nYou can read the GNU GPL license at:\nhttp://www.gnu.org/licenses/gpl.html") % filename)
+				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\n\
+You can read the GNU GPL license at:\n\
+http://www.gnu.org/licenses/gpl.html") % filename)
 			else: display = 0
 
 		if display:
-			dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,gtk.RESPONSE_CLOSE))
+			dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],\
+			self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,\
+			gtk.RESPONSE_CLOSE))
 
 			if filename[-11:]=="LICENSE.txt":
 				label = gtk.Label(_("This program is released under the terms of the GNU General Public License."))
@@ -167,12 +176,16 @@ class XGngeo:
 					and not match("deltaptr=(\S)* sai",line)\
 					and not line[:4]=="Add "\
 					and not line[:8]=="save to ":
-						#The line contains a unexpected message, certainly an important, so we record it.
+						#The line contains a unexpected message whic is thus certainly important,
+						#so we record it.
 						message += "%s\n" % line.strip()
 
 			if message!="": #Oh dear! There was a f*ck! Let's display the info dialog.
-				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" % (_("Gngeo returned the following message:"),unicode(message[:-1],'iso-8859-1').replace("&","&amp;")))
+				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,\
+				type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %\
+				(_("Gngeo returned the following message:"),unicode(message[:-1],\
+				'iso-8859-1').replace("&","&amp;")))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
 		#-------------------------------------------------------------------------
@@ -362,7 +375,8 @@ class XGngeo:
 			button.connect("clicked",remDirectory)
 			box2.pack_start(button)
 			button = gtk.Button(stock=gtk.STOCK_ADD)
-			button.connect("clicked",self.fileSelect,_("Select a ROM directory to add."),temp_romdir_list[-1],addDirectory,1,None)
+			button.connect("clicked",self.file_select,_("Select a ROM directory to\
+add."),temp_romdir_list[-1],addDirectory,1,None)
 			button.set_border_width(5)
 			box2.pack_start(button)
 			box.pack_start(box2,False,padding=2)
@@ -373,7 +387,8 @@ class XGngeo:
 			treeview.set_headers_visible(False)
 			tvcolumn = gtk.TreeViewColumn("Directory")
 			treeview.append_column(tvcolumn)
-			for dir in ([_("Main ROM and BIOS directory.")]+temp_romdir_list[1:]): liststore.append([dir]) #Inserting content.
+			for dir in ([_("Main ROM and BIOS directory.")]+temp_romdir_list[1:]):
+				liststore.append([dir]) #Inserting content.
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
 			tvcolumn.set_attributes(cell,text=0)
@@ -603,7 +618,7 @@ class XGngeo:
 		self.specconf['properties'].hide()
 		self.specconf['clear'].hide()
 
-	def fileSelect(self,widget,title,folder,callback=None,dirselect=0,filter=None,rompreview=False):
+	def file_select(self,widget,title,folder,callback=None,dirselect=0,filter=None,rompreview=False):
 		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title,action=(gtk.FILE_CHOOSER_ACTION_OPEN,gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)[dirselect],buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 		self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(folder),folder)[os.path.isdir(folder)])
 
@@ -903,7 +918,10 @@ Spanish: Sheng Long Gradilla.""")))
 		self.widgets["config"]["main_dialog"] = gtk.Dialog(parent=self.window,flags=gtk.DIALOG_MODAL)
 
 		if firstrun: self.widgets["config"]["main_dialog"].connect("delete_event",self.quit)
-		elif not romspecific: self.widgets["config"]["main_dialog"].connect("destroy",lambda *args: self.widgets["statusbar"].push(self.context_id,_("Configuration was not saved.")))
+		elif not romspecific:
+			self.widgets["config"]["main_dialog"].connect("destroy",lambda *args:\
+			self.widgets["statusbar"].push(self.context_id,_("Configuration was not \
+saved.")))
 
 		if type==0:
 			#
@@ -931,7 +949,8 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the main ROMs and BIOS directory."),self.widgets["config"]['rompath'].get_text(),"rompath",1)
+			button.connect("clicked",self.file_select,_("Select the main ROMs and BIOS \
+			directory."),self.widgets["config"]['rompath'].get_text(),"rompath",1)
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -949,7 +968,7 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the ROM driver file."),self.widgets["config"]['romrc'].get_text(),"romrc")
+			button.connect("clicked",self.file_select,_("Select the ROM driver file."),self.widgets["config"]['romrc'].get_text(),"romrc")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -969,7 +988,8 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_("Select the Gngeo executable."),self.widgets["config"]['gngeopath'].get_text(),"gngeopath")
+			button.connect("clicked",self.file_select,_("Select the Gngeo executable.")\
+			,self.widgets["config"]['gngeopath'].get_text(),"gngeopath")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -977,19 +997,23 @@ Spanish: Sheng Long Gradilla.""")))
 			self.widgets["config"]["main_dialog"].vbox.pack_start(box)
 
 		elif type in (1,2,3,4):
-			#By default the parameters of these sections will be set with the values of the previously saved global emulation options.
+			#By default the parameters of these sections will be set with the values of
+			#the previously saved global emulation options.
 			temp_param = {}
 			for key,val in self.params["gngeo"].items(): temp_param[key] = val
 			if romspecific:
-				#Replace global params by (hypotheticaly) previously saved specific rom ones.
-				for key,val in self.configfile.getParams(self.mamename).items():
+				#Replace global params by (hypotheticaly) previously saved ROM-specific
+				#ones.
+				for key,val in self.configfile.get_params(self.mamename).items():
 					temp_param[key] = val
 
 			#
 			# Global emulation configuration.
 			#
-			if not romspecific: self.widgets["config"]["main_dialog"].set_title(_("Global emulation configuration."))
-			else: self.widgets["config"]["main_dialog"].set_title(_("Specific emulation options for \"%s\".") % self.mamename)
+			if not romspecific: self.widgets["config"]["main_dialog"].set_title(\
+			_("Global emulation configuration."))
+			else: self.widgets["config"]["main_dialog"].set_title(_(\
+			"Specific emulation options for \"%s\".") % self.mamename)
 			notebook = gtk.Notebook()
 
 			#
@@ -1123,13 +1147,15 @@ Spanish: Sheng Long Gradilla.""")))
 				"""Overlay does not support effect. So, when this blitter is selected, we
 				set the effect to ``none" and prevent it from being changed by user.
 				Effects are also not (yet) supported when enabling hardware surface."""
-				if self.combo_params['blitter'][self.widgets["config"]['blitter'].get_active()]=="yuv" or self.widgets["config"]['hwsurface'].get_active():
+				if self.combo_params['blitter'][self.widgets["config"]['blitter']\
+				.get_active()]=="yuv" or self.widgets["config"]['hwsurface'].get_active():
 					temp_param['effect'] = "none" #Changing param.
 					self.widgets["config"]['effect'].set_active(0) #Changing widget.
 					self.widgets["config"]['effect'].set_sensitive(False) #Effect cannot be changed any more.
 				else: self.widgets["config"]['effect'].set_sensitive(True) #Resetting widget's sensibility.
 
-			#Performing special actions over effect widget regarding blitter selection / hardware surface activation.
+			#Performing special actions over effect widget regarding blitter selection
+			#or hardware surface activation.
 			bouyaka()
 			self.widgets["config"]['blitter'].connect("changed",bouyaka)
 			self.widgets["config"]['hwsurface'].connect("toggled",bouyaka)
@@ -1148,7 +1174,8 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_('Select a transparency pack.'),self.widgets["config"]['transpack'].get_text(),"transpack")
+			button.connect("clicked",self.file_select,_('Select a transparency pack.'),\
+			self.widgets["config"]['transpack'].get_text(),"transpack")
 			box2.pack_end(button,False)
 			box.pack_start(box2,False)
 
@@ -1234,27 +1261,48 @@ Spanish: Sheng Long Gradilla.""")))
 
 			#The Gngeo compliant keymap (all in lowercase)!
 			compliant_KeyMap = {
-				"backspace":8, "tab":9, "return":13, "pause":19, "space":32, "exclam":33, "quotedbl":34, "dollar":36, "ampersand":38, "apostrophe":39, "parenleft":40, "parenright":41, "comma":44, "minus":45,
-				"colon":58, "semicolon":59,"less":60, "equal":61, "asciicircum":94, "underscore":95, "a":97, "b":98, "c":99, "d":100, "e":101, "f":102, "g":103, "h":104, "i":105, "j":106, "k":107, "l":108,
-				"m":109, "n":110, "o":111, "p":112, "q":113, "r":114, "s":115, "t":116, "u":117, "v":118, "w":119, "x":120, "y":121, "z":122, "delete":127, "twosuperior":178, "agrave":224, "ccedilla":231,
-				"egrave":232, "eacute":233, "ugrave":249, "kp_0":256, "kp_1":257, "kp_2":258, "kp_3":259, "kp_4":260, "kp_5":261, "kp_6":262, "kp_home":263, "kp_7":263, "kp_up":264, "kp_8":264, "kp_9":265,
-				"kp_decimal":266, "kp_divide":267, "kp_multiply":268, "kp_subtract":269, "kp_add":270, "kp_enter":271, "up":273, "down":274, "right":275, "left":276, "insert":277, "home":278, "end":279,
-				"page_up":280, "page_down":281, "num_lock":300, "caps_lock":301, "scroll_lock":302, "shift_r":303, "shift_l":304, "control_r":305, "control_l":306, "super_l":311, "super_r":312, "print":316}
+				"backspace":8, "tab":9, "return":13, "pause":19, "space":32, "exclam":33,
+				"quotedbl":34, "dollar":36, "ampersand":38, "apostrophe":39, "parenleft":\
+				40, "parenright":41, "comma":44, "minus":45, "colon":58, "semicolon":59,\
+				"less":60, "equal":61, "asciicircum":94, "underscore":95, "a":97, "b":98,\
+				"c":99, "d":100, "e":101, "f":102, "g":103, "h":104, "i":105, "j":106,\
+				"k":107, "l":108, "m":109, "n":110, "o":111, "p":112, "q":113, "r":114,\
+				"s":115, "t":116, "u":117, "v":118, "w":119, "x":120, "y":121, "z":122,\
+				"delete":127, "twosuperior":178, "agrave":224, "ccedilla":231, "egrave":\
+				232, "eacute":233, "ugrave":249, "kp_0":256, "kp_1":257, "kp_2":258,\
+				"kp_3":259, "kp_4":260, "kp_5":261, "kp_6":262, "kp_home":263, "kp_7":263,\
+				"kp_up":264, "kp_8":264, "kp_9":265, "kp_decimal":266, "kp_divide":267,\
+				"kp_multiply":268, "kp_subtract":269, "kp_add":270, "kp_enter":271, "up":\
+				273, "down":274, "right":275, "left":276, "insert":277, "home":278, "end":\
+				279, "page_up":280, "page_down":281, "num_lock":300, "caps_lock":301,\
+				"scroll_lock":302, "shift_r":303, "shift_l":304, "control_r":305,\
+				"control_l":306, "super_l":311, "super_r":312, "print":316}
 			#Reverse mode.
 			compliant_KeyMap_reverse = {
-				8:"backspace", 9:"tab", 13:"return", 19:"pause", 32:"space", 33:"exclam", 34:"quotedbl", 36:"dollar", 38:"ampersand", 39:"apostrophe", 40:"parenleft", 41:"parenright", 44:"comma", 45:"minus",
-				58:"colon", 59:"semicolon",60:"less", 61:"equal", 94:"asciicircum", 95:"underscore", 97:"a", 98:"b", 99:"c", 100:"d", 101:"e", 102:"f", 103:"g", 104:"h", 105:"i", 106:"j", 107:"k", 108:"l",
-				109:"m", 110:"n", 111:"o", 112:"p", 113:"q", 114:"r", 115:"s", 116:"t", 117:"u", 118:"v", 119:"w", 120:"x", 121:"y", 122:"z", 127:"delete", 178:"twosuperior", 224:"agrave", 231:"ccedilla",
-				232:"egrave", 233:"eacute", 249:"ugrave", 256:"kp_0", 257:"kp_1", 258:"kp_2", 259:"kp_3", 260:"kp_4", 261:"kp_5", 262:"kp_6", 263:"kp_home", 263:"kp_7", 264:"kp_up", 264:"kp_8", 265:"kp_9",
-				266:"kp_decimal", 267:"kp_divide", 268:"kp_multiply", 269:"kp_subtract", 270:"kp_add", 271:"kp_enter", 273:"up", 274:"down", 275:"right", 276:"left", 277:"insert", 278:"home", 279:"end",
-				280:"page_up", 281:"page_down", 300:"num_lock", 301:"caps_lock", 302:"scroll_lock", 303:"shift_r", 304:"shift_l", 305:"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
+				8:"backspace", 9:"tab", 13:"return", 19:"pause", 32:"space", 33:"exclam",\
+				34:"quotedbl", 36:"dollar", 38:"ampersand", 39:"apostrophe", 40:\
+				"parenleft", 41:"parenright", 44:"comma", 45:"minus", 58:"colon", 59:\
+				"semicolon",60:"less", 61:"equal", 94:"asciicircum", 95:"underscore", 97:\
+				"a", 98:"b", 99:"c", 100:"d", 101:"e", 102:"f", 103:"g", 104:"h", 105:"i",\
+				106:"j", 107:"k", 108:"l", 109:"m", 110:"n", 111:"o", 112:"p", 113:"q",\
+				114:"r", 115:"s", 116:"t", 117:"u", 118:"v", 119:"w", 120:"x", 121:"y",\
+				122:"z", 127:"delete", 178:"twosuperior", 224:"agrave", 231:"ccedilla",\
+				232:"egrave", 233:"eacute", 249:"ugrave", 256:"kp_0", 257:"kp_1", 258:\
+				"kp_2", 259:"kp_3", 260:"kp_4", 261:"kp_5", 262:"kp_6", 263:"kp_home",\
+				263:"kp_7", 264:"kp_up", 264:"kp_8", 265:"kp_9", 266:"kp_decimal", 267:\
+				"kp_divide", 268:"kp_multiply", 269:"kp_subtract", 270:"kp_add", 271:\
+				"kp_enter", 273:"up", 274:"down", 275:"right", 276:"left", 277:"insert",\
+				278:"home", 279:"end", 280:"page_up", 281:"page_down", 300:"num_lock",\
+				301:"caps_lock", 302:"scroll_lock", 303:"shift_r", 304:"shift_l", 305:\
+				"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
 
 			def getPressed(widget,event,key_pos,secondplayer=0):
 				if widget.get_active() and event.keyval: #Only when widget is active.
 					key_val = gtk.gdk.keyval_to_lower(event.keyval) #Get the value (lower only).
 
-					# GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
-					# So, a Gngeo compatible key-value is given according to its GTK's name (set in lowercase).
+					#GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
+					#So, a Gngeo compatible key-value is given according to its GTK's name
+					#(set in lowercase).
 					key_name = gtk.gdk.keyval_name(key_val).lower()
 
 					if key_name in compliant_KeyMap.keys():
@@ -1456,13 +1504,14 @@ Spanish: Sheng Long Gradilla.""")))
 				#Given values seems to be okay.
 				plop = temp_param["p1key"]
 			else: #There's a crap, let's use default key values.
-				plop = self.configfile.getDefaultParams()[0]["p1key"]
+				plop = self.configfile.get_default_params()[0]["p1key"]
 			self.p1key_int_vals = plop.split(",")
 
 			p1key_names = []
 			#Display the names of known key values.
 			for x in self.p1key_int_vals:
-				if int(x) in compliant_KeyMap_reverse.keys(): p1key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace("_"," ")))
+				if int(x) in compliant_KeyMap_reverse.keys():
+					p1key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace("_"," ")))
 				else: p1key_names.append(x)
 
 			p1keywidgets = []; i=0
@@ -1478,13 +1527,14 @@ Spanish: Sheng Long Gradilla.""")))
 				#Given values seems to be okay.
 				plop = temp_param["p2key"]
 			else:	#There's a crap, let's use default key values.
-				plop = self.configfile.getDefaultParams()[0]["p2key"]
+				plop = self.configfile.get_default_params()[0]["p2key"]
 			self.p2key_int_vals = plop.split(",")
 
 			p2key_names = []
 			#Display the names of known key values.
 			for x in self.p2key_int_vals:
-				if int(x) in compliant_KeyMap_reverse.keys(): p2key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace("_"," ")))
+				if int(x) in compliant_KeyMap_reverse.keys():
+					p2key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace("_"," ")))
 				else: p2key_names.append(x)
 
 			p2keywidgets = []; i=0
@@ -1623,7 +1673,7 @@ Spanish: Sheng Long Gradilla.""")))
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.fileSelect,_('Select the "%s" file.') % "libGL.so",self.widgets["config"]['libglpath'].get_text(),"libglpath")
+			button.connect("clicked",self.file_select,_('Select the "%s" file.') % "libGL.so",self.widgets["config"]['libglpath'].get_text(),"libglpath")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,0,1)
@@ -1649,7 +1699,7 @@ Spanish: Sheng Long Gradilla.""")))
 			image2 = gtk.Image()
 			image2.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image2)
-			button.connect('clicked',self.fileSelect,_('Select the preview image directory.'),self.widgets["config"]['previewimagedir'].get_text(),"previewimagedir",1)
+			button.connect('clicked',self.file_select,_('Select the preview image directory.'),self.widgets["config"]['previewimagedir'].get_text(),"previewimagedir",1)
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,1,2)
@@ -1673,7 +1723,9 @@ Spanish: Sheng Long Gradilla.""")))
 			image2 = gtk.Image()
 			image2.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
 			button.add(image2)
-			button.connect("clicked",self.fileSelect,_('Select the XML file containing ROM infos.'),self.widgets["config"]['rominfoxml'].get_text(),"rominfoxml")
+			button.connect("clicked",self.file_select,\
+			_('Select the XML file containing ROM infos.'),self.widgets["config"]\
+			['rominfoxml'].get_text(),"rominfoxml")
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame,0,1,2,3)
@@ -1763,7 +1815,8 @@ Spanish: Sheng Long Gradilla.""")))
 
 			if error:				
 				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be saved because one or more parameters does not look valid."),_("Please check it up then try to save again... ^^;")))
+				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be saved \
+because one or more parameters does not look valid."),_("Please check it up then try to save again... ^^;")))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
 			else:
@@ -1853,13 +1906,13 @@ Spanish: Sheng Long Gradilla.""")))
 				if type in (1,2,3,4):
 					for key,val in temp_param.items(): self.params["gngeo"][key] = val
 
-				self.configfile.writeGlobalConfig(self.params["gngeo"],self.params["xgngeo"],VERSION) #Writting out! :p
+				self.configfile.write_global_config(self.params["gngeo"],self.params["xgngeo"],VERSION) #Writting out! :p
 				
 				if not special: self.widgets["statusbar"].push(self.context_id,_("Configuration has been saved.")) #Updating status message.
 				else: self.main() #The program has been configured, so now we can use it!
 
 			elif special==2: #ROM-specific configuration.
-				self.configfile.writeRomConfig(temp_param,mamename,VERSION) #Writing out! :p
+				self.configfile.write_rom_config(temp_param,mamename,VERSION) #Writing out! :p
 
 				if mamename==self.mamename:
 					#Updating buttons.
@@ -1899,14 +1952,17 @@ Spanish: Sheng Long Gradilla.""")))
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.fileSelect,_("Load a ROM manually..."),self.params["gngeo"]["rompath"],self.manualRomLoading,0,{ _("All files") : "*",_("ROM archive") : "*.zip"},True)
+		menu_item.connect("activate",self.file_select,_("Load a ROM manually..."),\
+		self.params["gngeo"]["rompath"],self.manualRomLoading,0,{ _("All files") :\
+		"*",_("ROM archive") : "*.zip"},True)
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
 		self.widgets["history_menu"] = gtk.Menu()
 		self.history_menu_item.set_submenu(self.widgets["history_menu"])
 		self.widgets["history_menu"].append(gtk.TearoffMenuItem())
-		self.history.refresh_list(size=int(self.params["xgngeo"]["historysize"])) #Building ROM History list.
+		self.history.refresh_list(size=int(self.params["xgngeo"]\
+		["historysize"])) #Building ROM History list.
 		self.historyMenuGeneration() #Generating ROM History menu.
 		menu.append(self.history_menu_item)
 
@@ -1993,7 +2049,8 @@ Spanish: Sheng Long Gradilla.""")))
 		menu_bar.append(menu_item)
 
 		menu_item = gtk.ImageMenuItem(gtk.STOCK_HELP)
-		menu_item.connect("activate",self.displayfile,os.path.join(datarootpath,"doc","xgngeo-doc.txt"))
+		menu_item.connect("activate",self.displayfile,\
+		os.path.join(datarootpath,"doc","xgngeo-doc.txt"))
 		menu.append(menu_item)
 
 		menu_item = gtk.ImageMenuItem(gtk.STOCK_ABOUT)
@@ -2031,15 +2088,19 @@ Spanish: Sheng Long Gradilla.""")))
 
 	def boot(self):
 		if "--nobootcheck" in sys.argv:
-					print _('``No boot check" option enabled: going directly to the main window (unsafe!).')
-					self.main()
+			print _('``No boot check" option enabled: going directly to the main \
+window (unsafe!).')
+			self.main()
 
 		else: #Performing boot-time important checks.
 			error = 0
 			#Are BIOS files present?
-			if not (os.path.isfile("%s/neo-geo.rom" % self.params["gngeo"]["rompath"]) or os.path.isfile("%s/sp-s2.sp1" % self.params["gngeo"]["rompath"]))\
-			or not (os.path.isfile("%s/ng-sfix.rom" % self.params["gngeo"]["rompath"]) or os.path.isfile("%s/sfix.sfx" % self.params["gngeo"]["rompath"]))\
-			or not (os.path.isfile("%s/ng-lo.rom" % self.params["gngeo"]["rompath"]) or os.path.isfile("%s/000-lo.lo" % self.params["gngeo"]["rompath"])):
+			if not (os.path.isfile("%s/neo-geo.rom" % self.params["gngeo"]["rompath"])\
+			or os.path.isfile("%s/sp-s2.sp1" % self.params["gngeo"]["rompath"]))\
+			or not (os.path.isfile("%s/ng-sfix.rom" % self.params["gngeo"]["rompath"])\
+			or os.path.isfile("%s/sfix.sfx" % self.params["gngeo"]["rompath"]))\
+			or not (os.path.isfile("%s/ng-lo.rom" % self.params["gngeo"]["rompath"])\
+			or os.path.isfile("%s/000-lo.lo" % self.params["gngeo"]["rompath"])):
 				error = 1
 			#Is ROM driver file present?
 			if not (os.path.isfile(self.params["gngeo"]["romrc"])): error = 1
