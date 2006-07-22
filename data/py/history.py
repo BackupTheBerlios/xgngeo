@@ -52,7 +52,8 @@ class History:
                 plop = match('"(.*)" (.*)', line)
                 if plop: 
                     path = plop.group(2)
-                    self.list.append((plop.group(1), path, 
+                    self.list.append((plop.group(1),
+                                      path, 
                                       os.path.exists(path)))
 
     def get_list(self):
