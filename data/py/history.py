@@ -23,6 +23,7 @@ __author__ = "Choplair-network"
 __copyright__ = "Copyleft 2003, 2004, 2005, 2006 Choplair-network"
 __license__ = "GPL"
 __revision__ = "$Revision$"
+# $Source$
 __date__ = "$Date$"
 
 import os.path
