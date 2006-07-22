@@ -26,6 +26,7 @@ except ImportError:
 else:
 	print "Loading psyco..."
 	psyco.full()
+	print "psyco loaded."
 
 import sys, gtk
 if gtk.pygtk_version[:2]<(2,6):
