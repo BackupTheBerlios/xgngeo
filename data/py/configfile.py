@@ -189,7 +189,7 @@ class Configfile:
         #WAGLAMOT (``Write A Gngeorc Like A Maman Ours Technology") 
         # version 3 in action!
         i = 0
-        for dict in gngeoDict, xgngeoDict:
+        for dictionary in gngeoDict, xgngeoDict:
             # Use a first-pass, formating & comment preservative method 
             # (for gngeorc only).
             if i == 0:
@@ -204,9 +204,9 @@ class Configfile:
                         plop = match("(\S*) .*", line)
                         if plop:
                             key = plop.group(1).strip()
-                            if dict.has_key(key) and not key in yet_passed:
+                            if dictionary.has_key(key) and not key in yet_passed:
                                 preserved_content += "%s %s\n" % \
-                                                     (key, dict[key])
+                                                     (key, dictionary[key])
                                 yet_passed.append(key.strip())
 
                 #Removing top XGngeo comment if yet present.
@@ -218,7 +218,7 @@ class Configfile:
                 content[i] += "%s\n" % preserved_content.rstrip()
 
             #Then follows the classic, destructive method. :p
-            for key, val in dict.items():
+            for key, val in dictionary.items():
                 if i == 0 and key in yet_passed:
                     continue
                 #Unset value, simply display the param in a commented line.
