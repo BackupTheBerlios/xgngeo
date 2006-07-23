@@ -44,9 +44,9 @@ class History:
         self.list = [] #(Re)Creating ROM History list from scratch.
 
         if os.path.isfile(self.path):
-            file = open(self.path, "r") #Opening.
-            content = file.readlines() #Reading.
-            file.close() #And closing. :p
+            handle = open(self.path, "r") #Opening.
+            content = handle.readlines() #Reading.
+            handle.close() #And closing. :p
 
             for line in content[:size]:
                 plop = match('"(.*)" (.*)', line)
@@ -66,9 +66,9 @@ class History:
         for line in self.list:
             content += '"%s" %s\n' % (line[0], line[1])
 
-        file = open(self.path, "w") #Opening (creating if doesn't exist)
-        file.write(content) #Writing.
-        file.close() #And closing. :p
+        handle = open(self.path, "w") #Opening (creating if doesn't exist)
+        handle.write(content) #Writing.
+        handle.close() #And closing. :p
 
     def add_rom(self, name, path, size):
         "Adding a new Rom to the list, with duplicate entries prevention."
