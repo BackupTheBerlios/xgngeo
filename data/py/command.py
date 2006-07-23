@@ -42,7 +42,7 @@ class ThreadedCmd(Thread):
         threads_leave()
         self.output = pipe.read()
 
-    def getOutput(self):
+    def get_output(self):
         return self.output
 
 # vim:ai:et:sw=4:ts=4:sts=4:tw=78:fenc=utf-8
