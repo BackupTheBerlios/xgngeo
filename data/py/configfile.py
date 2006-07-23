@@ -204,7 +204,8 @@ class Configfile:
                         plop = match("(\S*) .*", line)
                         if plop:
                             key = plop.group(1).strip()
-                            if dictionary.has_key(key) and not key in yet_passed:
+                            if dictionary.has_key(key) and \
+                               not key in yet_passed:
                                 preserved_content += "%s %s\n" % \
                                                      (key, dictionary[key])
                                 yet_passed.append(key.strip())

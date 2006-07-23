@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-"""
-XGngeo: a frontend for Gngeo in GTK. ^_^.
+""" XGngeo: a frontend for Gngeo in GTK. ^_^.
+
 Copyleft 2003, 2004, 2005, 2006 Choplair-network
 $Id$
 
@@ -17,8 +17,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 """
 
+__author__ = "Choplair-network"
+__copyright__ = "Copyleft 2003, 2004, 2005, 2006 Choplair-network"
+__license__ = "GPL"
+__revision__ = "$Revision$"
+# $Source$
+__date__ = "$Date$"
+
+# Psyco module (Just in time compiler)
 try:
 	import psyco
 except ImportError:
@@ -28,6 +37,7 @@ else:
 	psyco.full()
 	print "psyco loaded."
 
+# Imports
 import sys, gtk
 if gtk.pygtk_version[:2]<(2,6):
 	sys.exit("Error: PyGTK version 2.6 or more is required.")
