@@ -2340,7 +2340,7 @@ class XGngeo:
 		#Show all.
 		self.window.show_all()
 
-	def get_bios_presence(self):
+	def get_bios_presence(self, path):
 		return True
 
 	def boot(self):
