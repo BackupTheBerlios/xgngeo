@@ -48,7 +48,7 @@ from threading import Timer
 #Internal modules.
 import configfile, emulator, history, rominfos
 
-__version__ = "16 [beta]"
+VERSION = "16 [beta]"
 xgngeoUserDir = os.path.expanduser("~/.xgngeo")
 gngeoUserDir = os.path.expanduser("~/.gngeo")
 datarootpath = os.path.join(sys.prefix,'share','xgngeo')
@@ -931,7 +931,7 @@ class XGngeo:
 		image.set_from_file(os.path.join(datarootpath,"img","minilogo.png"))
 		box.pack_start(image,False,padding=4)
 		label = gtk.Label("<span color='#008'><b>%s</b>\n%s\n%s</span>" %
-			(_("XGngeo: a frontend for Gngeo. :p"),_("Version %s.") % __version__,
+			(_("XGngeo: a frontend for Gngeo. :p"),_("Version %s.") % VERSION,
 			_("Running Gngeo version %s.") % self.emulator.get_gngeo_version()[1]))
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		label.set_use_markup(True)
@@ -2154,7 +2154,7 @@ class XGngeo:
 					for key,val in temp_param.items(): self.params["gngeo"][key] = val
 
 				self.configfile.write_global_config(self.params["gngeo"],
-				self.params["xgngeo"],__version__) #Writting out! :p
+				self.params["xgngeo"],VERSION) #Writting out! :p
 				
 				if not special:
 					#Updating status message.
@@ -2163,7 +2163,7 @@ class XGngeo:
 				else: self.main() #The program has been configured, so now we can use it!
 
 			elif special==2: #ROM-specific configuration.
-				self.configfile.write_rom_config(temp_param,mamename,__version__) #Writing out! :p
+				self.configfile.write_rom_config(temp_param,mamename,VERSION) #Writing out! :p
 
 				if mamename==self.mamename:
 					#Updating buttons.
@@ -2331,7 +2331,7 @@ class XGngeo:
 		# Statusbar
 		#
 		self.widgets["statusbar"].push(self.context_id,_(
-		"Welcome to XGngeo version %s.") % __version__)
+		"Welcome to XGngeo version %s.") % VERSION)
 		box.pack_end(self.widgets["statusbar"],False)
 
 		#Window positioning.
