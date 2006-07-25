@@ -906,6 +906,11 @@ class XGngeo:
 		self.widgets["history_menu"].show_all()
 
 	def history_add(self,fullname,path):
+		# Get the full name of the Rom
+		infos = self.emulator.archive_recognition(path)
+		if infos:
+			fullname = infos[1]
+		# Add  the Rom
 		self.history.add_rom(fullname,path,size=int(self.params["xgngeo"]\
 		["historysize"])) #Updating ROM History file.
 		self.history_menu_generation() #Recreating ROM History menu.
