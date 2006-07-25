@@ -38,33 +38,42 @@ else:
 	print "psyco loaded."
 
 # Imports
-import sys, gtk
+import sys
+import os
+import gettext
+
+import gtk
 if gtk.pygtk_version[:2]<(2,6):
 	sys.exit("Error: PyGTK version 2.6 or more is required.")
-import os, gettext
+
 from string import capwords
 from re import match
 from threading import Timer
-#Internal modules.
-import configfile, emulator, history, rominfos
 
+#Internal modules.
+import configfile
+import emulator
+import history
+import rominfos
+
+# Global variables
 VERSION = "16 [beta]"
 xgngeoUserDir = os.path.expanduser("~/.xgngeo")
 gngeoUserDir = os.path.expanduser("~/.gngeo")
-datarootpath = os.path.join(sys.prefix,'share','xgngeo')
+datarootpath = os.path.join(sys.prefix, 'share', 'xgngeo')
 
 #Internationalization.
-gettext.install("xgngeo",os.path.join(datarootpath,"locale"))
+gettext.install("xgngeo", os.path.join(datarootpath, "locale"))
 
 class XGngeo:
 	def __init__(self):
-		#Default values...
+		# Default values...
 		self.tempparam = {}
 		self.widgets = {"config":{}}
 		self.romPath = None
 
-		#Loading emulator/frontend configuration.
-		self.configfile = configfile.Configfile(datarootpath,xgngeoUserDir,
+		# Loading emulator/frontend configuration.
+		self.configfile = configfile.Configfile(datarootpath, xgngeoUserDir,
 		gngeoUserDir)
 		self.params = {"temp":{}}
 		self.params["gngeo"], self.params["xgngeo"] = self.configfile\
@@ -83,7 +92,7 @@ class XGngeo:
 		self.context_id = self.widgets["statusbar"].get_context_id("Info")
 
 		#Registering some custom stock icons...
-		for val in ("key_A","key_B","key_C","key_D"):
+		for val in ("key_A", "key_B", "key_C", "key_D"):
 			factory = gtk.IconFactory()
 			pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(datarootpath,"img",
 				"%s.png" % val))
@@ -93,7 +102,7 @@ class XGngeo:
 
 		#Main window inital attributes.
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-		gtk.window_set_default_icon_from_file(os.path.join(datarootpath,"img",
+		gtk.window_set_default_icon_from_file(os.path.join(datarootpath, "img",
 		"icon.png"))
 	
 	def check_error(self):
