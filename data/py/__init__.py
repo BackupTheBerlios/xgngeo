@@ -1456,7 +1456,7 @@ class XGngeo:
 				301:"caps_lock", 302:"scroll_lock", 303:"shift_r", 304:"shift_l", 305:\
 				"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
 
-			def getPressed(widget,event,key_pos,secondplayer=0):
+			def get_pressed(widget,event,key_pos,secondplayer=0):
 				if widget.get_active() and event.keyval: #Only when widget is active.
 					key_val = gtk.gdk.keyval_to_lower(event.keyval) #Get the value (lower only).
 
@@ -1698,7 +1698,7 @@ class XGngeo:
 				#Generate P1key's buttons.
 				p1keywidgets.append(gtk.ToggleButton((x,"--")[x=="-1"]))
 				p1keywidgets[i].connect("toggled",toggled)
-				p1keywidgets[i].connect("key_press_event",getPressed,i)
+				p1keywidgets[i].connect("key_press_event",get_pressed,i)
 				p1keywidgets[i].set_use_underline(False)
 				i+=1
 
@@ -1722,7 +1722,7 @@ class XGngeo:
 				#Generate P2key's buttons.
 				p2keywidgets.append(gtk.ToggleButton((x,"--")[x=="-1"]))
 				p2keywidgets[i].connect("toggled",toggled)
-				p2keywidgets[i].connect("key_press_event",getPressed,i,1)
+				p2keywidgets[i].connect("key_press_event",get_pressed,i,1)
 				p2keywidgets[i].set_use_underline(False)
 
 				#Displaying key's icon.
