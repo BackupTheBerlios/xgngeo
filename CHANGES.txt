@@ -4,6 +4,7 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- LICENSE.txt updated (because the FSF adress are old) [Achraf cherti]
 - Long name for all new history entry [Achraf cherti] 
 - xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 - Optional use of Psyco (if module is available) to boost
