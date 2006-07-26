@@ -55,8 +55,7 @@ powerful command line Neo Geo emulator for the Unix platforms
 		(os.path.join("share","xgngeo","locale","fr","LC_MESSAGES"),[os.path.join("data","locale","fr","LC_MESSAGES","xgngeo.mo")]), #French
 		(os.path.join("share","xgngeo","locale","pl","LC_MESSAGES"),[os.path.join("data","locale","pl","LC_MESSAGES","xgngeo.mo")]), #Polish
 		(os.path.join("share","xgngeo","locale","pt_BR","LC_MESSAGES"),[os.path.join("data","locale","pt_BR","LC_MESSAGES","xgngeo.mo")]) #Portuguese of Brazil
-		],
-	scripts = [os.path.join("data","script","xgngeo_startup.py")] #Startup script.
+		]
 	)
 	
 if "install" in sys.argv:
