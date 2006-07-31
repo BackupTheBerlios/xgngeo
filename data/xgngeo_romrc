@@ -1,7 +1,7 @@
 #
 #  NOTE:
 # This GnGeo ROM driver file is the one recommend to use withing XGngeo.
-# If features correct game full name for all ROMsets and is got rid of
+# If features correct game full name for all ROMsets and is get rid of
 # duplicate entries.
 #
 # $Id$
@@ -7903,7 +7903,7 @@ END
 END
 
 #mame set of kof2003a
-game kof2003a MVS "KoF 2003a"
+game kof2003a MVS "The King of Fighters 2003a"
 BANKSWITCH 0x1
 CPU 0xa00000
 271-p1.bin 0x100000 0x400000 NORM
@@ -7934,7 +7934,7 @@ END
 END
 
 #mame set of kof2003b
-game kof2003b MVS "KoF 2003"
+game kof2003b MVS "The King of Fighters 2003"
 BANKSWITCH 0x1
 CPU 0x700000
 271-p1bl.bin 0x100000 0x400000 NORM
@@ -7990,7 +7990,7 @@ END
 END
 
 #mame set of kof2003
-game kof2003 MVS "KoF 2003"
+game kof2003 MVS "The King of Fighters 2003"
 BANKSWITCH 0x1
 CPU 0x800000
 271-p1.bin 0x100000 0x400000 NORM
@@ -8021,7 +8021,7 @@ GFX 0x4000000
 END
 END
 
-game kof2002 MVS "KoF 2002"
+game kof2002 MVS "The King of Fighters 2002"
 BANKSWITCH 0x1
 CPU 0x800000
 265-p1.bin 0x100000 0x100000 NORM
@@ -8047,7 +8047,7 @@ END
 END
 
 #mame set of kof2003c
-game kof2003 MVS "KoF 2003"
+game kof2003 MVS "The King of Fighters 2003"
 BANKSWITCH 0x1
 CPU 0x800000
 271-p1.rom 0x000000 0x800000 NORM
