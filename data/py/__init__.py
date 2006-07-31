@@ -77,14 +77,14 @@ class XGngeo:
 		gngeoUserDir)
 		self.params = {"temp":{}}
 		self.params["gngeo"], self.params["xgngeo"] = self.configfile\
-		.get_default_params()
+			.get_default_params()
 		#Overwriting default params by the ones in configuration files.
 		dict = self.configfile.get_params()
 		for key,val in dict[0].items(): self.params["gngeo"][key] = val
 		for key,val in dict[1].items(): self.params["xgngeo"][key] = val
 
-		self.emulator = emulator.Emulator(self.params["xgngeo"]['gngeopath'],
-			self.params["gngeo"]['romrc'])
+		self.emulator = emulator.Emulator(self.params["xgngeo"]["gngeopath"],
+			self.params["gngeo"]["romrc"])
 		self.history = history.History()
 
 		#Statusbar.
@@ -103,7 +103,7 @@ class XGngeo:
 		#Main window inital attributes.
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		gtk.window_set_default_icon_from_file(os.path.join(datarootpath, "img",
-		"icon.png"))
+			"icon.png"))
 	
 	def check_error(self):
 		#Check for Gngeo's home directory.
@@ -141,12 +141,12 @@ class XGngeo:
 
 		if display:
 			dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],
-			self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,
-			gtk.RESPONSE_CLOSE))
+				self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,
+				gtk.RESPONSE_CLOSE))
 
 			if filename[-11:]=="LICENSE.txt":
 				label = gtk.Label(_("This program is released under the terms of the "\
-				"GNU General Public License."))
+					"GNU General Public License."))
 				label.set_padding(2,4)
 				dialog.vbox.pack_start(label,False)
 
@@ -174,8 +174,9 @@ class XGngeo:
 		gtk.threads_enter() #Without this, it often bugs. :p
 		
 		#Simple post-execution instruction.
-		self.history_add(self.romFullName,self.romPath) #Append ROM too history.
-		self.widgets["statusbar"].push(self.context_id,_("ROM stopped (%s).") % self.romMameName) #Update status bar.
+		self.history_add(self.romFullName,self.romPath) #Appendding ROM too history.
+		self.widgets["statusbar"].push(self.context_id,_("ROM stopped (%s).") %
+			self.romMameName) #Updating status bar.
 
 		#--------------------------------------------------------
 		# Introducing our exclusive and innovative system
@@ -198,21 +199,22 @@ class XGngeo:
 					#4: ROM driver creation message (in Gngeo 0.6.5beta).
 					#5: Screenshot saving message.
 					if not line.strip()=="" \
-					and not match(".* [[][\-|\*]{62}[]]?",line)\
-					and not match("Update sai .*",line)\
-					and not match("deltaptr=(\S)* sai",line)\
-					and not line[:4]=="Add "\
-					and not line[:8]=="save to ":
-						#The line contains a unexpected message whic is thus certainly important,
-						#so we record it.
+						and not match(".* [[][\-|\*]{62}[]]?",line)\
+						and not match("Update sai .*",line)\
+						and not match("deltaptr=(\S)* sai",line)\
+						and not line[:4]=="Add "\
+						and not line[:8]=="save to ":
+						#The line contains a unexpected message which is thus
+						#certainly important, so we record it.
 						message += "%s\n" % line.strip()
 
-			if message!="": #Oh dear! There was a f*ck! Let's display the info dialog.
-				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,\
-				type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %\
-				(_("Gngeo returned the following message:"),unicode(message[:-1],\
-				'iso-8859-1').replace("&","&amp;")))
+			if message!="": 
+				#Oh dear! There was a f*ck! Let's display the info dialog.
+				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,
+					type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %
+					(_("Gngeo returned the following message:"),unicode(message[:-1],
+					'iso-8859-1').replace("&","&amp;")))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
 		#-------------------------------------------------------------------------
@@ -235,7 +237,8 @@ class XGngeo:
 		for x in range(42): #Don't panic!
 			if not self.emulator.rom_running_state(): break
 			gtk.threads_enter()
-			self.widgets["statusbar"].push(self.context_id,("%s%s" % (message,("."*x))))
+			self.widgets["statusbar"].push(self.context_id,("%s%s" %
+				(message,("."*x))))
 			gtk.threads_leave()
 			time.sleep(0.42)
 
@@ -245,7 +248,8 @@ class XGngeo:
 		#Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
-		for x in self.widgets["history_menu"].get_children(): x.set_sensitive(False)
+		for x in self.widgets["history_menu"].get_children():
+			x.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
 		for x in self.configMenu.get_children(): x.set_sensitive(False)
@@ -260,8 +264,8 @@ class XGngeo:
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
 		if self.emulator.rom_running_state():
-			Timer(0,os.system,('killall -9 "%s"' \
-			% self.params["xgngeo"]['gngeopath'].replace('"','\"'),)).start()
+			Timer(0,os.system,('killall -9 "%s"' %
+				self.params["xgngeo"]["gngeopath"].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
 	def romList(self,widget):
@@ -321,13 +325,13 @@ class XGngeo:
 			#Update specific configuration buttons.
 			path = os.path.join(gngeoUserDir,"%s.cf" % mamename)
 			if os.path.isfile(path):
-				self.specconf['new'].hide()
-				self.specconf['properties'].show()
-				self.specconf['clear'].show()
+				self.widgets['specconf_new'].hide()
+				self.widgets['specconf_properties'].show()
+				self.widgets['specconf_clear'].show()
 			else:
-				self.specconf['new'].show()
-				self.specconf['properties'].hide()
-				self.specconf['clear'].hide()
+				self.widgets['specconf_new'].show()
+				self.widgets['specconf_properties'].hide()
+				self.widgets['specconf_clear'].hide()
 
 		def set_rom_from_list(widget):
 			if self.romFromList: #Is something selected?
@@ -356,16 +360,16 @@ class XGngeo:
 					#Also putting unavailable ROMs if the box is unchecked.
 					liststore.append([name,False,''])
 
-			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.")\
-			% len(available_rom.keys()))
+			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.")	%
+				len(available_rom.keys()))
 			labelAvailableRoms.set_use_markup(True)
 
 		def romDirectories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
 			dialog = gtk.Dialog(_("Setting ROM directories."),parent,gtk.DIALOG_MODAL,
-			(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
+				(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
 			label = gtk.Label(_("Here you can add multiple directories to scan for "
-			"ROMs, in addition to your main ROM and Bios directory."))
+				"ROMs, in addition to your main ROM and Bios directory."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_padding(3,4)
 			label.set_line_wrap(True)
@@ -374,16 +378,16 @@ class XGngeo:
 			box = gtk.HBox()
 
 			def addDirectory(widget,response):
-				if response==gtk.RESPONSE_OK:
+				if response == gtk.RESPONSE_OK:
 					dir = self.widgets["fileselect_dialog"].get_filename()
 					if not dir in temp_romdir_list:
 						temp_romdir_list.append(dir)
 						liststore.append([dir])
 					else: #No need to put the same directory twice.
 						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,
-						type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-						dialog2.set_markup(_("This directory is already in the ROM directory "
-						"list!"))
+							type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+						dialog2.set_markup(_("This directory is already in the ROM directory "\
+							"list!"))
 						dialog2.connect("response",lambda *args: dialog2.destroy())
 						dialog2.show_all()
 
@@ -620,26 +624,26 @@ class XGngeo:
 		def deleteRomConf(*args):
 			os.remove(os.path.join(gngeoUserDir,"%s.cf" % self.mamename))
 			#Update buttons.
-			self.specconf['new'].show()
-			self.specconf['properties'].hide()
-			self.specconf['clear'].hide()
+			self.widgets['specconf_new'].show()
+			self.widgets['specconf_properties'].hide()
+			self.widgets['specconf_clear'].hide()
 
 		self.specconf = {}
 		frame = gtk.Frame(_("Specific configuration:"))
 		frame.set_label_align(0.5,0.5) #Center is better. :p
 		box2 = (gtk.VBox(),gtk.HBox())[noteisthere]
 
-		self.specconf['new'] = gtk.Button(stock=gtk.STOCK_NEW)
-		self.specconf['new'].connect("clicked",self.config,1,0,1)
-		box2.pack_start(self.specconf['new'])
+		self.widgets['specconf_new'] = gtk.Button(stock=gtk.STOCK_NEW)
+		self.widgets['specconf_new'].connect("clicked",self.config,1,0,1)
+		box2.pack_start(self.widgets['specconf_new'])
 
-		self.specconf['properties'] = gtk.Button(stock=gtk.STOCK_EDIT)
-		self.specconf['properties'].connect("clicked",self.config,1,0,1)
-		box2.pack_start(self.specconf['properties'])
+		self.widgets['specconf_properties'] = gtk.Button(stock=gtk.STOCK_EDIT)
+		self.widgets['specconf_properties'].connect("clicked",self.config,1,0,1)
+		box2.pack_start(self.widgets['specconf_properties'])
 
-		self.specconf['clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
-		self.specconf['clear'].connect("clicked",deleteRomConf)
-		box2.pack_start(self.specconf['clear'])
+		self.widgets['specconf_clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
+		self.widgets['specconf_clear'].connect("clicked",deleteRomConf)
+		box2.pack_start(self.widgets['specconf_clear'])
 
 		frame.add(box2)
 		rightside.pack_end(frame,not noteisthere)
@@ -679,8 +683,8 @@ class XGngeo:
 
 		dialog.show_all()
 		#Let's hide ourselves!
-		self.specconf['properties'].hide()
-		self.specconf['clear'].hide()
+		self.widgets['specconf_properties'].hide()
+		self.widgets['specconf_clear'].hide()
 
 	def file_select(self,widget,title,folder,callback=None,dirselect=0,
 		filter=None,rompreview=False):
@@ -1231,7 +1235,7 @@ class XGngeo:
 
 			self.widgets["config"]['blitter'] = gtk.combo_box_new_text()
 			i=0; blitter_list = []
-			pipe = os.popen('"%s" --blitter help' % self.params["xgngeo"]['gngeopath']\
+			pipe = os.popen('"%s" --blitter help' % self.params["xgngeo"]["gngeopath"]\
 				.replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is `REF : FULLNAME'.
@@ -1275,7 +1279,7 @@ class XGngeo:
 			self.widgets["config"]['effect'] = gtk.combo_box_new_text()
 			self.widgets["config"]['effect'].set_wrap_width(2)
 			i=0; effect_list = []
-			pipe = os.popen('"%s" --effect help' % self.params["xgngeo"]['gngeopath']\
+			pipe = os.popen('"%s" --effect help' % self.params["xgngeo"]["gngeopath"]\
 				.replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is "REF : FULLNAME"
@@ -2177,12 +2181,20 @@ class XGngeo:
 			self.widgets["config"]["main_dialog"].destroy()
 
 			#Performing particular actions.
-			if special in (0,1): #Doing the default or the sligtly different ``firstrun" job.
+			if special in (0,1):
+				#Doing the default or the sligtly different ``firstrun" job.
 			
-				#Putting options considered as temporary ROM-specific configuration
-				#parameters to the global parameter dictionnary.
-				if type in (1,2,3,4):
-					for key,val in temp_param.items(): self.params["gngeo"][key] = val
+				if type==0:
+					#Indicating new paths to the emulator handling module.
+					self.emulator.set_path("gngeo",self.params["xgngeo"]["gngeopath"])
+					self.emulator.set_path("romrc",self.params["gngeo"]["romrc"])
+
+				elif type in (1,2,3,4):
+					#Putting options considered as temporary ROM-specific
+					#configuration parameters to the global parameter
+					#dictionnary.
+					for key,val in temp_param.items():
+						self.params["gngeo"][key] = val
 
 				self.configfile.write_global_config(self.params["gngeo"],
 					self.params["xgngeo"],VERSION) #Writting out! :p
@@ -2191,20 +2203,23 @@ class XGngeo:
 					#Updating status message.
 					self.widgets["statusbar"].push(self.context_id,_(
 						"Configuration has been saved.")) 
-				else: self.main() #The program has been configured, so now we can use it!
+				else: 
+						#The program has been configured, so that we can use it!
+						self.main()
 
 			elif special==2: #ROM-specific configuration.
-				self.configfile.write_rom_config(temp_param,mamename,VERSION) #Writing out! :p
+				#Writing out! :p
+				self.configfile.write_rom_config(temp_param,mamename,VERSION)
 
 				if mamename==self.mamename:
 					#Updating buttons.
-					self.specconf['new'].hide()
-					self.specconf['properties'].show()
-					self.specconf['clear'].show()
+					self.widgets['specconf_new'].hide()
+					self.widgets['specconf_properties'].show()
+					self.widgets['specconf_clear'].show()
 
 	def quit(self,*args):
 		if self.emulator.rom_running_state():
-			self.gngeo_stop() #Stopping any running Gngeo.
+			self.gngeo_stop() #Stopping potentialy running Gngeo.
 		gtk.main_quit() #Stopping waiting for event...
 		return False
 
@@ -2372,6 +2387,10 @@ class XGngeo:
 		self.window.show_all()
 
 	def get_bios_presence(self, path):
+		#
+		# TO BE IMPLEMENTED
+		#	
+		
 		return True
 
 	def boot(self):

@@ -2,6 +2,6 @@ include *.txt
 include doc/*.txt doc/*.pdf
 include data/img/*.png
 include data/rominfos.*
+include data/xgngeo_romrc
 include data/misc/*.desktop
 recursive-include data/locale *.pot *.po *.mo
-

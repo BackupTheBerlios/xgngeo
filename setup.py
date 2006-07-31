@@ -19,17 +19,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 """
 from distutils.core import setup
-import os, glob, sys
+import os
+import glob
+import sys
 
 setup(
 	name='XGngeo',
 	version='16_beta',
 	description='A frontend for the Gngeo emulator.',
-	long_description= """\
-``XGngeo" is a frontend providing a complete, practical and
-user-friendly GTK+ interface over ``Gngeo" which is a fast and
-powerful command line Neo Geo emulator for the Unix platforms
-(GNU/Linux, FreeBSD...).""",
+	long_description= """
+		``XGngeo" is a frontend providing a complete, practical and
+		user-friendly GTK+ interface over ``Gngeo" which is a fast and
+		powerful command line Neo Geo emulator for the Unix platforms
+		(GNU/Linux, FreeBSD...).
+		""",
 	author='Choplair-network',
 	author_email='contact@choplair.org',
 	url='http://www.choplair.org/',
@@ -41,8 +44,9 @@ powerful command line Neo Geo emulator for the Unix platforms
 	data_files=[
 		#Images.
 		(os.path.join("share","xgngeo","img"),glob.glob(os.path.join("data","img","*.png"))),
-		#Rom infos.
+		#ROM info and drivers.
 		(os.path.join("share","xgngeo"),glob.glob(os.path.join("data","rominfos.*"))),
+		(os.path.join("share","xgngeo"),[os.path.join("data","xgngeo_romrc")]),
 		#License text.
 		(os.path.join("share","xgngeo"),['LICENSE.txt']),
 		#Plain text documentation.
@@ -64,9 +68,14 @@ if "install" in sys.argv:
 		#Determining the best start-up script path prefix.
 		prefix = None
 		str = "--prefix="
+
 		for val in sys.argv: #Check if mentioned as command parameter.
-			if val[:len(str)]==str: prefix = val[len(str):]; break 
-		if not prefix: prefix = sys.prefix #Use Python prefix.
+			if val[:len(str)]==str:
+				prefix = val[len(str):]
+				break
+
+		if not prefix:
+			prefix = sys.prefix #Use Python prefix.
 
 		startup_script = os.path.join(prefix,"bin","xgngeo") #Startup script path.
 		startup_script_dir = os.path.dirname(startup_script) 
