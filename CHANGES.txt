@@ -4,7 +4,12 @@
 
 * Changes in version 16 (2006-XX-XX):
 
-- LICENSE.txt updated (because the FSF adress are old) [Achraf cherti]
+- ROM selection in the list doesn't require double click any
+more, just single. :p
+- New inclusion of a default and clean ROM divers file (aka
+romrc) into XGngeo to be sure to obtain something nice to
+handle within the frontend (correct ROM full names, etc.).
+- LICENSE.txt updated (because of old FSF adress) [Achraf cherti]
 - Long name for all new history entry [Achraf cherti] 
 - xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 - Optional use of Psyco (if module is available) to boost
@@ -20,7 +25,8 @@ as one single big path because of lack of line break in the
 related configuration file [patch by Achraf Cherti].
 - Several code style improvement.
 
-Yet present in the beta version:
+	Yet present in the beta version:
+
 - Improved ROM detection in the list and file selection
 dialog (now directly based upon Gngeo's scaning results:
 faster and more accurate!).

@@ -269,69 +269,70 @@ class XGngeo:
 			self.gngeokilledbyme = 1
 
 	def romList(self,widget):
-		def setRomTemp(treeview,path,view_column):
-			#Ensure that the set the right side is no more insensitive.
-			if not rightside.get_property("sensitive"): rightside.set_sensitive(True)
+		def new_list_selection(*args):
+				#Ensure that the set the right side is no more insensitive.
+				if not rightside.get_property("sensitive"): rightside.set_sensitive(True)
 
-			treeselection = treeview.get_selection()
-			liststore,iter = treeselection.get_selected()
+				liststore, iter = treeselection.get_selected()
+				
+				if iter: #Is there anything selected?
+					fullname = liststore.get_value(iter,0)
+					availability = liststore.get_value(iter,1)
+					filepath =  liststore.get_value(iter,2)
+					mamename = romlist[fullname]
 
-			fullname = liststore.get_value(iter,0)
-			availability = liststore.get_value(iter,1)
-			filepath =  liststore.get_value(iter,2)
-			mamename = romlist[fullname]
+					#Temporary select the ROM for loading if available.
+					if availability:
+						self.romFromList,self.romFromListName, self.romFromListPath = \
+							mamename, fullname, filepath
+					else:
+						self.romFromList,self.romFromListName,self.romFromListPath = \
+							None, None, None
+					open_button.set_sensitive(availability)
 
-			#Temporary select the ROM for loading if available.
-			if availability:
-				self.romFromList,self.romFromListName, self.romFromListPath = \
-					mamename, fullname, filepath
-			else:
-				self.romFromList,self.romFromListName,self.romFromListPath = \
-					None, None, None
-			open_button.set_sensitive(availability)
+					#Update mame name and availability icon.
+					self.mamename = mamename #The current selected mamename is exported.
+					self.widgets['mamename_label'].set_text("<b>%s</b>" % mamename)
+					self.widgets['mamename_label'].set_use_markup(True)
+					self.avail_image.set_from_stock((gtk.STOCK_NO,gtk.STOCK_YES)[availability],
+						gtk.ICON_SIZE_MENU)
 
-			#Update mame name and availability icon.
-			self.mamename = mamename #The current selected mamename is exported.
-			self.widgets['mamename_label'].set_text("<b>%s</b>" % mamename)
-			self.widgets['mamename_label'].set_use_markup(True)
-			self.avail_image.set_from_stock((gtk.STOCK_NO,gtk.STOCK_YES)[availability],
-				gtk.ICON_SIZE_MENU)
+					#Update preview image.
+					if self.params["xgngeo"]["previewimages"]=="true":
+						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
+							"%s.png" % mamename)): 
+							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
+								["previewimagedir"],"%s.png" % mamename))
+						elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
+							"unavailable.png")):
+							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
+								["previewimagedir"],"unavailable.png"))
 
-			#Update preview image.
-			if self.params["xgngeo"]["previewimages"]=="true":
-				if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
-					"%s.png" % mamename)): 
-					self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
-						["previewimagedir"],"%s.png" % mamename))
-				elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
-					"unavailable.png")):
-					self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
-						["previewimagedir"],"unavailable.png"))
+					#Updating rom infos.
+					if self.params["xgngeo"]["rominfos"]=="true" and os.path.isfile(
+						self.params["xgngeo"]["rominfoxml"]):
+						#Check for game informations.
+						if self.romInfos.has_key(mamename):
+							for x in ("desc","manufacturer","year","genre","players","rating"):
+								self.romInfosWidget[x].set_text(("--",self.romInfos[mamename][x],"--")\
+									[self.romInfos[mamename].has_key(x)])
+							if self.romInfos[mamename].has_key("size"):
+								self.romInfosWidget["size"].set_text("%sMbit" %
+									self.romInfos[mamename]["size"])
+						else:
+							for x in ("desc","manufacturer","year","genre","players","rating","size"):
+								self.romInfosWidget[x].set_text("--")
 
-			#Updating rom infos.
-			if self.params["xgngeo"]["rominfos"]=="true" and os.path.isfile(
-				self.params["xgngeo"]["rominfoxml"]):
-				#Check for game informations.
-				if self.romInfos.has_key(mamename):
-					for x in ("desc","manufacturer","year","genre","players","rating"):
-						self.romInfosWidget[x].set_text(("--",self.romInfos[mamename][x],"--")\
-						[self.romInfos[mamename].has_key(x)])
-					if self.romInfos[mamename].has_key("size"): self.romInfosWidget["size"]\
-						.set_text("%sMbit" % self.romInfos[mamename]["size"])
-				else:
-					for x in ("desc","manufacturer","year","genre","players","rating","size"):
-						self.romInfosWidget[x].set_text("--")
-
-			#Update specific configuration buttons.
-			path = os.path.join(gngeoUserDir,"%s.cf" % mamename)
-			if os.path.isfile(path):
-				self.widgets['specconf_new'].hide()
-				self.widgets['specconf_properties'].show()
-				self.widgets['specconf_clear'].show()
-			else:
-				self.widgets['specconf_new'].show()
-				self.widgets['specconf_properties'].hide()
-				self.widgets['specconf_clear'].hide()
+					#Update specific configuration buttons.
+					path = os.path.join(gngeoUserDir,"%s.cf" % mamename)
+					if os.path.isfile(path):
+						self.widgets['specconf_new'].hide()
+						self.widgets['specconf_properties'].show()
+						self.widgets['specconf_clear'].show()
+					else:
+						self.widgets['specconf_new'].show()
+						self.widgets['specconf_properties'].hide()
+						self.widgets['specconf_clear'].hide()
 
 		def set_rom_from_list(widget):
 			if self.romFromList: #Is something selected?
@@ -364,7 +365,7 @@ class XGngeo:
 				len(available_rom.keys()))
 			labelAvailableRoms.set_use_markup(True)
 
-		def romDirectories(widget,parent):
+		def rom_directories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
 			dialog = gtk.Dialog(_("Setting ROM directories."),parent,gtk.DIALOG_MODAL,
 				(gtk.STOCK_APPLY,gtk.RESPONSE_APPLY,gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL))
@@ -377,7 +378,7 @@ class XGngeo:
 
 			box = gtk.HBox()
 
-			def addDirectory(widget,response):
+			def add_directory(widget,response):
 				if response == gtk.RESPONSE_OK:
 					dir = self.widgets["fileselect_dialog"].get_filename()
 					if not dir in temp_romdir_list:
@@ -386,12 +387,12 @@ class XGngeo:
 					else: #No need to put the same directory twice.
 						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,
 							type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-						dialog2.set_markup(_("This directory is already in the ROM directory "\
+						dialog2.set_markup(_("This directory is already in the ROM directory "
 							"list!"))
 						dialog2.connect("response",lambda *args: dialog2.destroy())
 						dialog2.show_all()
 
-			def remDirectory(*args):
+			def rem_directory(*args):
 				model,iter = treeview.get_selection().get_selected()
 				if iter:
 					dir = model.get_value(iter,0)
@@ -400,8 +401,8 @@ class XGngeo:
 						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,
 						type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
 						dialog2.set_markup(_("You cannot remove the main ROM and BIOS directory "
-						"since it's the default place to look for ROMs.\nIf you want to, you "
-						"can modify its path in the important path configuration window."))
+							"since it's the default place to look for ROMs.\nIf you want to, you "
+							"can modify its path in the important path configuration window."))
 						dialog2.connect("response",lambda *args: dialog2.destroy())
 						dialog2.show_all()
 					else:
@@ -427,11 +428,11 @@ class XGngeo:
 			box2 = gtk.VBox()
 			button = gtk.Button(stock=gtk.STOCK_REMOVE)
 			button.set_border_width(5)
-			button.connect("clicked",remDirectory)
+			button.connect("clicked",rem_directory)
 			box2.pack_start(button)
 			button = gtk.Button(stock=gtk.STOCK_ADD)
 			button.connect("clicked",self.file_select,_("Select a ROM directory to "
-			"add."),temp_romdir_list[-1],addDirectory,1,None)
+				"add."),temp_romdir_list[-1],add_directory,1,None)
 			button.set_border_width(5)
 			box2.pack_start(button)
 			box.pack_start(box2,False,padding=2)
@@ -460,8 +461,9 @@ class XGngeo:
 
 		table = gtk.Table(4,3)
 
-		label = gtk.Label(_("Double-click on its name to select a ROM, then press "
-		"Open to load it if available (blue background)."))
+		label = gtk.Label(_("Select a ROM by clicking on its name, then press "
+			"<b>Open</b> to load it if available (colored background)."))
+		label.set_use_markup(True)
 		label.set_line_wrap(True)
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		#PyGTK bug on 2005-07-18, avoid by explicitly giving a ``xpadding" value...
@@ -470,15 +472,17 @@ class XGngeo:
 
 		#DA ROM list!
 		scrolled_window = gtk.ScrolledWindow()
-		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,gtk.POLICY_ALWAYS)
+		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,  gtk.POLICY_ALWAYS)
 		scrolled_window.set_size_request(500,250) #Set scrolled window's height.
 		table.attach(scrolled_window,0,3,1,2,xpadding=2,ypadding=5)
 
-		#The list will contain the ROM fullname and its availability.
+		#The list will contain the ROM full name and its availability.
 		liststore = gtk.ListStore(str,"gboolean",str)
 		treeview = gtk.TreeView(liststore)
 		treeview.set_headers_visible(False)
-		treeview.connect("row-activated",setRomTemp)
+		#treeview.connect("row-activated",set_rom_temp)
+		treeselection = treeview.get_selection()
+		treeselection.connect("changed",new_list_selection)
 
 		#Columns to display data.
 		tvcolumn = gtk.TreeViewColumn("Fullname")
@@ -496,7 +500,7 @@ class XGngeo:
 		scrolled_window.add_with_viewport(treeview)
 
 		button = gtk.Button(_("ROM directories..."))
-		button.connect("clicked",romDirectories,dialog)
+		button.connect("clicked",rom_directories,dialog)
 		table.attach(button,0,1,2,3,yoptions=gtk.SHRINK)
 
 		labelAvailableRoms = gtk.Label()
@@ -510,10 +514,9 @@ class XGngeo:
 		table.attach(buttonShowAvailable,2,3,2,3,yoptions=gtk.SHRINK)
 
 		#
-		# Mame name/preview image/info's/specific configuration. :P
+		# Mame name/preview image/info side. :P
 		#
 		rightside = gtk.VBox(spacing=3)
-		# Mame name/preview image/info's/specific configuration. :P
 		noteisthere = 0
 		# Using add-ons if activated and valid.
 		if((self.params["xgngeo"]["previewimages"]=="true" and os.path.isdir(
@@ -526,11 +529,11 @@ class XGngeo:
 
 			#Preview images.
 			if self.params["xgngeo"]["previewimages"]=="true"\
-			and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
+				and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
 				self.previewImage = gtk.Image()
 				self.previewImage.set_padding(3,3)
 				path = os.path.join(self.params["xgngeo"]["previewimagedir"],
-				"unavailable.png")
+					"unavailable.png")
 				if os.path.isfile(path):
 					#Displaying the ``unavailable" image by default.
 					self.previewImage.set_from_file(path) 
@@ -925,8 +928,6 @@ class XGngeo:
 		self.history_menu_generation()
 
 	def setting_current_rom(self,path,mamename,fullname):
-		print path, mamename, fullname
-		
 		#Updating variables.
 		self.romPath = path
 		self.romMameName = mamename
@@ -1585,7 +1586,7 @@ class XGngeo:
 							buttval_convertion[value]))
 						if addition: 
 							#One button has been added: let's regen hotkey's row.
-							genHotkeyRow(hotkey) 
+							gen_hotkey_row(hotkey) 
 
 					def buttRemoved(*args):
 						del self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][pos]
@@ -2226,7 +2227,7 @@ class XGngeo:
 	def main(self):
 		#Window attributes.
 		self.window.set_title("XGngeo")
-		self.window.connect("delete_event",self.quit)
+		self.window.connect("delete_event", self.quit)
 
 		box = gtk.VBox(False,0)
 		self.window.add(box)
@@ -2251,8 +2252,8 @@ class XGngeo:
 
 		menu_item = gtk.MenuItem(_("_Manually"))
 		menu_item.connect("activate",self.file_select,_("Load a ROM manually..."),
-		self.params["gngeo"]["rompath"],self.manual_rom_loading,0,{ _("All files") :
-		"*",_("ROM archive") : "*.zip"},True)
+			self.params["gngeo"]["rompath"],self.manual_rom_loading,0,{ _("All files") :
+			"*",_("ROM archive") : "*.zip"},True)
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
@@ -2260,7 +2261,7 @@ class XGngeo:
 		self.history_menu_item.set_submenu(self.widgets["history_menu"])
 		self.widgets["history_menu"].append(gtk.TearoffMenuItem())
 		self.history.refresh_list(size=int(self.params["xgngeo"]\
-		["historysize"])) #Building ROM History list.
+			["historysize"])) #Building ROM History list.
 		self.history_menu_generation() #Generating ROM History menu.
 		menu.append(self.history_menu_item)
 
@@ -2377,7 +2378,7 @@ class XGngeo:
 		# Statusbar
 		#
 		self.widgets["statusbar"].push(self.context_id,_(
-		"Welcome to XGngeo version %s.") % VERSION)
+			"Welcome to XGngeo version %s.") % VERSION)
 		box.pack_end(self.widgets["statusbar"],False)
 
 		#Window positioning.
@@ -2386,17 +2387,21 @@ class XGngeo:
 		#Show all.
 		self.window.show_all()
 
-	def get_bios_presence(self, path):
-		#
-		# TO BE IMPLEMENTED
-		#	
+	def get_bios_presence(self, path,give_type=0):
+		"""Indicating if any BIOS is present on a given directory,
+		with optional information regarding its/their type."""
+		if give_path:
+			pass
+		else:
+			pass
+			
 		
 		return True
 
 	def boot(self):
 		if "--nobootcheck" in sys.argv:
-			print _('``No boot check" option enabled: going directly to the main "\
-			"window (unsafe!).')
+			print _('``No boot check" option enabled: going directly to the main "
+				"window (unsafe!).')
 			self.main()
 
 		else: #Performing boot-time important checks.

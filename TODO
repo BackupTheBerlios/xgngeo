@@ -2,7 +2,7 @@
  XGngeo - TODO list
 ~~~~~~~~~~~~~~~~~~~~
 
-- Including a default `romrc' file into XGngeo to be sure to
+- [DONE] Including a default `romrc' file into XGngeo to be sure to
 obtain something nice to handle within a frontend (correct
 ROM full names, etc.)
 - Joystick key configuration support.
