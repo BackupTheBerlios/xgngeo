@@ -114,12 +114,12 @@ class XGngeo:
 			if response==gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
 			else: self.config(firstrun=1) #Going to important path configuration window.
 
-		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING,
-		buttons=gtk.BUTTONS_OK)
-		dialog.set_markup(_("It seems that the important path parameters are not "\
-			"all valid. That is normal if Gngeo configuration file hasn't been yet "\
-			"created. Anyway, correct values should be specified for the emulation "\
-			"to work. Press OK to do so..."))
+		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL, type=gtk.MESSAGE_WARNING,
+			buttons=gtk.BUTTONS_OK, message_format = _("It seems that the "
+			"important path parameters are not all valid. That is normal if "
+			"Gngeo configuration file hasn't been yet created. Anyway, correct "
+			"values should be specified for the emulation to work. Press OK "
+			"to do so..."))
 		dialog.connect("response",callback)
 		dialog.show_all()
 
@@ -134,8 +134,8 @@ class XGngeo:
 			file.close()
 		else:
 			if filename[-11:]=="LICENSE.txt":
-				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\n"\
-				"You can read the GNU GPL license at:\n"\
+				textbuffer.set_text(_("Error: Unable to open the file \"%s\"!\n"
+				"You can read the GNU GPL license at:\n"
 				"http://www.gnu.org/licenses/gpl.html") % filename)
 			else: display = 0
 
@@ -145,7 +145,7 @@ class XGngeo:
 				gtk.RESPONSE_CLOSE))
 
 			if filename[-11:]=="LICENSE.txt":
-				label = gtk.Label(_("This program is released under the terms of the "\
+				label = gtk.Label(_("This program is released under the terms of the "
 					"GNU General Public License."))
 				label.set_padding(2,4)
 				dialog.vbox.pack_start(label,False)
@@ -210,12 +210,12 @@ class XGngeo:
 
 			if message!="": 
 				#Oh dear! There was a f*ck! Let's display the info dialog.
-				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,
-					type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %
-					(_("Gngeo returned the following message:"),unicode(message[:-1],
-					'iso-8859-1').replace("&","&amp;")))
-				dialog.connect("response",lambda *args: dialog.destroy())
+				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+					gtk.MESSAGE_INFO,  gtk.BUTTONS_OK,  "%s\n\n<span "
+					"color='#b00'>%s</span>" % (_("Gngeo returned the following "
+					"message:"),unicode(message[:-1], 'iso-8859-1').replace('&',
+					'&amp;')))
+				dialog.connect("response", lambda *args: dialog.destroy())
 				dialog.show_all()
 		#-------------------------------------------------------------------------
 
@@ -260,7 +260,7 @@ class XGngeo:
 		#Starting another thread which watch out the last one!
 		Timer(0,self.gngeo_get_output).start()
 
-	def gngeo_stop(self,widget=None):
+	def gngeo_stop(self, widget=None):
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
 		if self.emulator.rom_running_state():
@@ -268,7 +268,34 @@ class XGngeo:
 				self.params["xgngeo"]["gngeopath"].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
-	def romList(self,widget):
+	def rom_list(self, widget):
+		def button_pressed(widget, event):
+			"""Popping-up a menu on rigth clicking over an available ROM
+			in the list."""
+			def confirm_deletion_dial(*args):
+				liststore, iter = treeselection.get_selected()
+				if iter: #Is there anything selected?
+					fullname =  liststore.get_value(iter, 0)
+					availability = liststore.get_value(iter, 1)
+					filepath =  liststore.get_value(iter, 2)
+
+					if availability:
+						print filepath
+						dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
+							gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
+						dialog.set_markup(_("Should XGngeo proceed with the "
+							"deletion of the ROM <b>%s</b> located at <i>%s</i>?" %
+							(fullname, filepath)))
+						dialog.show_all()
+			
+			if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
+				menu = gtk.Menu()
+				item = gtk.ImageMenuItem(gtk.STOCK_DELETE)
+				item.connect("activate", confirm_deletion_dial)
+				item.show()
+				menu.append(item)
+				menu.popup(None,None,None,event.button,event.time)
+
 		def new_list_selection(*args):
 				#Ensure that the set the right side is no more insensitive.
 				if not rightside.get_property("sensitive"): rightside.set_sensitive(True)
@@ -276,17 +303,17 @@ class XGngeo:
 				liststore, iter = treeselection.get_selected()
 				
 				if iter: #Is there anything selected?
-					fullname = liststore.get_value(iter,0)
-					availability = liststore.get_value(iter,1)
-					filepath =  liststore.get_value(iter,2)
+					fullname = liststore.get_value(iter, 0)
+					availability = liststore.get_value(iter, 1)
+					filepath =  liststore.get_value(iter, 2)
 					mamename = romlist[fullname]
 
 					#Temporary select the ROM for loading if available.
 					if availability:
-						self.romFromList,self.romFromListName, self.romFromListPath = \
+						self.romFromList, self.romFromListName,  self.romFromListPath = \
 							mamename, fullname, filepath
 					else:
-						self.romFromList,self.romFromListName,self.romFromListPath = \
+						self.romFromList, self.romFromListName, self.romFromListPath = \
 							None, None, None
 					open_button.set_sensitive(availability)
 
@@ -298,7 +325,7 @@ class XGngeo:
 						gtk.ICON_SIZE_MENU)
 
 					#Update preview image.
-					if self.params["xgngeo"]["previewimages"]=="true":
+					if self.params["xgngeo"]["previewimages"] == "true":
 						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
 							"%s.png" % mamename)): 
 							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
@@ -309,7 +336,7 @@ class XGngeo:
 								["previewimagedir"],"unavailable.png"))
 
 					#Updating rom infos.
-					if self.params["xgngeo"]["rominfos"]=="true" and os.path.isfile(
+					if self.params["xgngeo"]["rominfos"] == "true" and os.path.isfile(
 						self.params["xgngeo"]["rominfoxml"]):
 						#Check for game informations.
 						if self.romInfos.has_key(mamename):
@@ -385,11 +412,11 @@ class XGngeo:
 						temp_romdir_list.append(dir)
 						liststore.append([dir])
 					else: #No need to put the same directory twice.
-						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,
-							type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-						dialog2.set_markup(_("This directory is already in the ROM directory "
+						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
+							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK,
+							_("This directory is already in the ROM directory "
 							"list!"))
-						dialog2.connect("response",lambda *args: dialog2.destroy())
+						dialog2.connect("response", lambda *args: dialog2.destroy())
 						dialog2.show_all()
 
 			def rem_directory(*args):
@@ -398,10 +425,10 @@ class XGngeo:
 					dir = model.get_value(iter,0)
 					#Main ROM and BIOS directory must be kept.
 					if dir==_("Main ROM and BIOS directory."): 
-						dialog2 = gtk.MessageDialog(parent=dialog,flags=gtk.DIALOG_MODAL,
-						type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-						dialog2.set_markup(_("You cannot remove the main ROM and BIOS directory "
-							"since it's the default place to look for ROMs.\nIf you want to, you "
+						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
+							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK,	_("You cannot "
+							"remove the main ROM and BIOS directory since it's "
+							"the default place to look for ROMs.\nIf you want to, you "
 							"can modify its path in the important path configuration window."))
 						dialog2.connect("response",lambda *args: dialog2.destroy())
 						dialog2.show_all()
@@ -480,9 +507,9 @@ class XGngeo:
 		liststore = gtk.ListStore(str,"gboolean",str)
 		treeview = gtk.TreeView(liststore)
 		treeview.set_headers_visible(False)
-		#treeview.connect("row-activated",set_rom_temp)
 		treeselection = treeview.get_selection()
 		treeselection.connect("changed",new_list_selection)
+		treeview.connect("button_press_event",button_pressed)
 
 		#Columns to display data.
 		tvcolumn = gtk.TreeViewColumn("Fullname")
@@ -520,9 +547,9 @@ class XGngeo:
 		noteisthere = 0
 		# Using add-ons if activated and valid.
 		if((self.params["xgngeo"]["previewimages"]=="true" and os.path.isdir(
-		self.params["xgngeo"]["previewimagedir"])) or (self.params["xgngeo"]\
-		["rominfos"]=="true" and os.path.isfile(self.params["xgngeo"]\
-		["rominfoxml"]))):
+			self.params["xgngeo"]["previewimagedir"])) or (self.params["xgngeo"]\
+			["rominfos"]=="true" and os.path.isfile(self.params["xgngeo"]\
+			["rominfoxml"]))):
 			notebook = gtk.Notebook()
 			rightside.pack_start(notebook,padding=4)
 			noteisthere = 1
@@ -624,7 +651,7 @@ class XGngeo:
 		rightside.pack_start(box2,not noteisthere)
 
 		#ROM-specific configuration.
-		def deleteRomConf(*args):
+		def delete_rom_conf(*args):
 			os.remove(os.path.join(gngeoUserDir,"%s.cf" % self.mamename))
 			#Update buttons.
 			self.widgets['specconf_new'].show()
@@ -645,7 +672,7 @@ class XGngeo:
 		box2.pack_start(self.widgets['specconf_properties'])
 
 		self.widgets['specconf_clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
-		self.widgets['specconf_clear'].connect("clicked",deleteRomConf)
+		self.widgets['specconf_clear'].connect("clicked",delete_rom_conf)
 		box2.pack_start(self.widgets['specconf_clear'])
 
 		frame.add(box2)
@@ -728,7 +755,7 @@ class XGngeo:
 				#Updating the ROM scan infos to match the new current directory.
 				self.params["temp"]["currdir_romscaninfos"] = \
 					self.emulator.scan_rom_in_directory(self.widgets["fileselect_dialog"]\
-					.get_current_folder(),True)
+						.get_current_folder(),True)
 
 			def updatePreview(*args):
 				selection = self.widgets["fileselect_dialog"].get_preview_filename()
@@ -821,8 +848,8 @@ class XGngeo:
 
 			else: #Unknow ROM that cannot be loaded.
 				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR,
-				buttons=gtk.BUTTONS_OK)
-				dialog.set_markup(_("Gngeo is not recognizing this ROM anymore!"))
+					buttons=gtk.BUTTONS_OK, message_format=_("Gngeo is not "
+					"recognizing this ROM anymore!"))
 				dialog.format_secondary_text(_("Such an issue has two explanations: "\
 					"the ROM archive has been corrupted or the driver that used to handle "\
 					"this ROM has been altered/deleted (most probable)."))
@@ -844,8 +871,7 @@ class XGngeo:
 					"History menu.")
 
 			dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_WARNING,
-				buttons=gtk.BUTTONS_OK)
-			dialog.set_markup(message)
+				buttons=gtk.BUTTONS_OK, message_format=message)
 			dialog.connect("response",lambda *args: dialog.destroy())
 			dialog.show_all()
 
@@ -864,16 +890,15 @@ class XGngeo:
 
 				else: #Unknow ROM that cannot be loaded.
 					dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR,
-						buttons=gtk.BUTTONS_OK)
-					dialog.set_markup(_("This ROM is unloadable because Gngeo could not "\
-						"find any suitable driver to handle it."))
+						buttons=gtk.BUTTONS_OK, message_format = _("This ROM "
+						"is unloadable because Gngeo could not find any "
+						"suitable driver to handle it."))
 					dialog.connect("response",lambda *args: dialog.destroy())
 					dialog.show_all()
 
 			else: #Unexisting file!
 				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR,
-				buttons=gtk.BUTTONS_OK)
-				dialog.set_markup(_("Error: file doesn't exist!"))
+					buttons=gtk.BUTTONS_OK, message_format = _("Error: file doesn't exist!"))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
 
@@ -2054,10 +2079,10 @@ class XGngeo:
 				if x.get_stock()[0]=="gtk-no": error = 1
 
 			if error:				
-				dialog = gtk.MessageDialog(parent=self.window,flags=gtk.DIALOG_MODAL,
-					type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-				dialog.set_markup("%s %s" % (_("Sorry, this configuration cannot be "\
-					"saved because one or more parameters does not look valid."),
+				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
+					gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "%s %s" %
+					(_("Sorry, this configuration cannot be saved because "
+					"one or more parameters does not look valid."),
 					_("Please check it up then try to save again... ^^;")))
 				dialog.connect("response",lambda *args: dialog.destroy())
 				dialog.show_all()
@@ -2247,7 +2272,7 @@ class XGngeo:
 		menu.append(self.loadrom_menu_item)
 
 		menu_item = gtk.MenuItem(_("From _list"))
-		menu_item.connect("activate",self.romList)
+		menu_item.connect("activate",self.rom_list)
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
@@ -2390,18 +2415,17 @@ class XGngeo:
 	def get_bios_presence(self, path,give_type=0):
 		"""Indicating if any BIOS is present on a given directory,
 		with optional information regarding its/their type."""
-		if give_path:
+		if give_type:
 			pass
 		else:
 			pass
-			
 		
 		return True
 
 	def boot(self):
 		if "--nobootcheck" in sys.argv:
-			print _('``No boot check" option enabled: going directly to the main "
-				"window (unsafe!).')
+			print _('``No boot check" option enabled: going directly to the main '
+				'window (unsafe!).')
 			self.main()
 
 		else: #Performing boot-time important checks.
