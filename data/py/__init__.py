@@ -107,7 +107,8 @@ class XGngeo:
 	
 	def check_error(self):
 		#Check for Gngeo's home directory.
-		if not os.path.isdir(gngeoUserDir): os.mkdir(gngeoUserDir)
+		if not os.path.isdir(gngeoUserDir):
+			os.mkdir(gngeoUserDir)
 
 		def callback(widget,response):
 			dialog.destroy()
@@ -257,14 +258,14 @@ class XGngeo:
 		self.emulator.rom_launching(self.romPath)
 
 		self.gngeokilledbyme = 0
-		#Starting another thread which watch out the last one!
+		#Starting another thread which watchs out the last one!
 		Timer(0,self.gngeo_get_output).start()
 
 	def gngeo_stop(self, widget=None):
 		"""``Close you eyes and prey, Gngeo!"
 		This function kills gngeo if it is alive."""
 		if self.emulator.rom_running_state():
-			Timer(0,os.system,('killall -9 "%s"' %
+			Timer(0, os.system,('killall -9 "%s"' %
 				self.params["xgngeo"]["gngeopath"].replace('"','\"'),)).start()
 			self.gngeokilledbyme = 1
 
@@ -272,23 +273,48 @@ class XGngeo:
 		def button_pressed(widget, event):
 			"""Popping-up a menu on rigth clicking over an available ROM
 			in the list."""
-			def confirm_deletion_dial(*args):
-				liststore, iter = treeselection.get_selected()
-				if iter: #Is there anything selected?
-					fullname =  liststore.get_value(iter, 0)
-					availability = liststore.get_value(iter, 1)
-					filepath =  liststore.get_value(iter, 2)
+			if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
+				def confirm_deletion_dial(*args):
+					liststore, iter = treeselection.get_selected()
+					if iter: #Is there anything selected?
+						fullname =  liststore.get_value(iter, 0)
+						availability = liststore.get_value(iter, 1)
+						filepath =  liststore.get_value(iter, 2)
 
-					if availability:
-						print filepath
-						dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
-							gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
-						dialog.set_markup(_("Should XGngeo proceed with the "
-							"deletion of the ROM <b>%s</b> located at <i>%s</i>?" %
-							(fullname, filepath)))
+						if availability:
+							def response(widget, response_id):
+								if response_id == gtk.RESPONSE_YES:
+									try:
+										#Proceeding with deletion.
+										os.remove(filepath)
+									except:
+										#A problem happend in doing so.
+										dialog2 = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
+											gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, _("An error "
+											"occured while trying to delete the ROM archive."))
+										dialog2.connect("response", lambda *args: dialog2.destroy())
+									else:
+										#Deletion succeded. Now refreshing the list.
+										refreshing_rom_list()
+										
+								#Closing the dialog in any case.
+								dialog.destroy()
+							
+							dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
+								gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
+							dialog.set_markup(_("Should XGngeo proceed with the "
+								"deletion of the ROM <b>%s</b> located at <i>%s</i>?" %
+								(fullname, filepath)))
+							dialog. format_secondary_text(_("Please note this operation "
+								"is irremediable."))
+							dialog.connect("response", response)
+						else: 
+							dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
+								gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, _("Cannot delete "
+								"a ROM which unavailable!"))
+							dialog.connect("response", lambda *args: dialog.destroy())
 						dialog.show_all()
 			
-			if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
 				menu = gtk.Menu()
 				item = gtk.ImageMenuItem(gtk.STOCK_DELETE)
 				item.connect("activate", confirm_deletion_dial)
@@ -436,7 +462,7 @@ class XGngeo:
 						temp_romdir_list.remove(dir)
 						liststore.remove(iter)
 
-			def callback(widget,response):
+			def response(widget, response):
 				if response==gtk.RESPONSE_APPLY:
 					self.romdir_list = temp_romdir_list #Validating the ROM list.
 
@@ -474,17 +500,18 @@ class XGngeo:
 				liststore.append([dir]) #Inserting content.
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
-			tvcolumn.set_attributes(cell,text=0)
+			tvcolumn.set_attributes(cell, text=0)
 			frame = gtk.Frame()
 			frame.add(treeview)
-			box.pack_start(frame,padding=2)
+			box.pack_start(frame, padding=2)
 	
 			dialog.vbox.pack_start(box)
 			dialog.show_all()
-			dialog.connect("response",callback)
+			dialog.connect("response", response)
 
 		self.romFromList = None #Selected ROM.
-		dialog = gtk.Dialog(_("Your Neo Geo ROM list."),self.window,gtk.DIALOG_MODAL)
+		dialog = gtk.Dialog(_("Your Neo Geo ROM list."), self.window,
+			gtk.DIALOG_MODAL)
 
 		table = gtk.Table(4,3)
 
@@ -500,10 +527,10 @@ class XGngeo:
 		#DA ROM list!
 		scrolled_window = gtk.ScrolledWindow()
 		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,  gtk.POLICY_ALWAYS)
-		scrolled_window.set_size_request(500,250) #Set scrolled window's height.
+		scrolled_window.set_size_request(500,250) #Setting scrolled window's height.
 		table.attach(scrolled_window,0,3,1,2,xpadding=2,ypadding=5)
 
-		#The list will contain the ROM full name and its availability.
+		#The list will contain the ROM full name and an availability indicator.
 		liststore = gtk.ListStore(str,"gboolean",str)
 		treeview = gtk.TreeView(liststore)
 		treeview.set_headers_visible(False)
@@ -585,7 +612,7 @@ class XGngeo:
 				textview.set_editable(0)
 				textview.set_wrap_mode(gtk.WRAP_WORD)
 				scrolled_window = gtk.ScrolledWindow()
-				scrolled_window.set_policy(gtk.POLICY_NEVER,gtk.POLICY_ALWAYS)
+				scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
 				box2.set_size_request(220,-1) #Set width.
 				scrolled_window.add(textview)
 				frame = gtk.Frame(_("Description:"))
@@ -727,12 +754,13 @@ class XGngeo:
 
 		if callback:
 			if type(callback)==str:
-				#Ouputing the selected file or directory path to a particular text entry.
-				def outputEntry(dialog,response):
+				def response(dialog,response):
+					"""Ouputing the selected file or directory path to a 
+					particular text entry."""
 					if response==gtk.RESPONSE_OK:
 						self.widgets["config"][callback].set_text(dialog.get_filename())
 
-				self.widgets["fileselect_dialog"].connect("response",outputEntry)
+				self.widgets["fileselect_dialog"].connect("response",response)
 			else: self.widgets["fileselect_dialog"].connect("response",callback)
 	
 		#Closing the file selection dialog anyway.
@@ -751,13 +779,13 @@ class XGngeo:
 		if rompreview:
 			show_image = self.params["xgngeo"]["previewimages"]
 
-			def scanDirForRoms(*args):
+			def scan_dir_for_roms(*args):
 				#Updating the ROM scan infos to match the new current directory.
 				self.params["temp"]["currdir_romscaninfos"] = \
 					self.emulator.scan_rom_in_directory(self.widgets["fileselect_dialog"]\
 						.get_current_folder(),True)
 
-			def updatePreview(*args):
+			def update_preview(*args):
 				selection = self.widgets["fileselect_dialog"].get_preview_filename()
 
 				if selection and os.path.isfile(selection): 
@@ -830,11 +858,11 @@ class XGngeo:
 				self.widgets["fileselect_dialog"].set_preview_widget_active(True)
 			else: self.widgets["fileselect_dialog"].set_extra_widget(box)
 			
-			self.widgets["fileselect_dialog"].connect("selection-changed",updatePreview)
+			self.widgets["fileselect_dialog"].connect("selection-changed", update_preview)
 			self.widgets["fileselect_dialog"].connect("current-folder-changed",
-				scanDirForRoms)
+				scan_dir_for_roms)
 
-			scanDirForRoms() #Performing ROM scanning for the initial folder.
+			scan_dir_for_roms() #Performing ROM scanning for the initial folder.
 
 		self.widgets["fileselect_dialog"].run()
 
@@ -1376,8 +1404,8 @@ class XGngeo:
 			box2 = gtk.VBox()
 
 			def bouyaka(widget,target):
-				"""Set widget sensitive state according to another
-				widget activation state."""
+				"""Setting widget sensitive state according to another
+				widget's activation state."""
 				target.set_sensitive(widget.get_active())
 
 			self.widgets["config"]['sound'] = gtk.CheckButton(_("Enable sound"))
@@ -2413,7 +2441,7 @@ class XGngeo:
 		self.window.show_all()
 
 	def get_bios_presence(self, path,give_type=0):
-		"""Indicating if any BIOS is present on a given directory,
+		"""Indicating whether any BIOS is present on a given directory,
 		with optional information regarding its/their type."""
 		if give_type:
 			pass
