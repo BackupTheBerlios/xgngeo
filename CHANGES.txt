@@ -4,6 +4,7 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- Bug fix in the manual ROM selection window.
 - ROM selection in the list doesn't require double click any
 more, just single. :p
 - Ability to remove a ROM from the file system through the ROM

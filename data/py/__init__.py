@@ -862,7 +862,9 @@ class XGngeo:
 			self.widgets["fileselect_dialog"].connect("current-folder-changed",
 				scan_dir_for_roms)
 
-			scan_dir_for_roms() #Performing ROM scanning for the initial folder.
+			#Performing ROM scanning for the initial folder (if valid).
+			if self.widgets["fileselect_dialog"].get_current_folder():
+				scan_dir_for_roms()
 
 		self.widgets["fileselect_dialog"].run()
 
@@ -2441,7 +2443,7 @@ class XGngeo:
 		self.window.show_all()
 
 	def get_bios_presence(self, path,give_type=0):
-		"""Indicating whether any BIOS is present on a given directory,
+		"""Indicating whether any BIOS files are present on a given directory,
 		with optional information regarding its/their type."""
 		if give_type:
 			pass
