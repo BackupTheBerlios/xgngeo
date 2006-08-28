@@ -14,6 +14,6 @@ list window.
 - ROM list generation progress bar.
 - Allowing the user to choose the universal BIOS only if the
 corresponding files have been found in the BIOS directory.
-- Ability to customize the background color of available ROMs
-in the list.
+- [IN PROGRESS] Ability to customize the background color of
+available ROMs in the list.
 
