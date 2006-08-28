@@ -1,9 +1,11 @@
 
- XGngeo - Changelog
+     XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
 * Changes in version 16 (2006-XX-XX):
 
+- Ignoring joystick device initialization message within Gngeo
+standart output.
 - Bug fix in the manual ROM selection window.
 - ROM selection in the list doesn't require double click any
 more, just single. :p
@@ -196,4 +198,4 @@ XGngeo yet. WAGLAMOT is the Future! O_o;;
 ``You're just an illusion...
 When I'm awaken, my tears have dried in the sand of sleep
 I'm a rose blooming in the desert"
- -- Endless rain, X Japan
+-- Endless rain, X Japan

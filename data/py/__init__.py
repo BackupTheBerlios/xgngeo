@@ -199,12 +199,14 @@ class XGngeo:
 					#2 & 3: YUV driver output.
 					#4: ROM driver creation message (in Gngeo 0.6.5beta).
 					#5: Screenshot saving message.
+					#6: Joystick device init message.
 					if not line.strip()=="" \
 						and not match(".* [[][\-|\*]{62}[]]?",line)\
 						and not match("Update sai .*",line)\
 						and not match("deltaptr=(\S)* sai",line)\
 						and not line[:4]=="Add "\
-						and not line[:8]=="save to ":
+						and not line[:8]=="save to "\
+						and not match("joy .*, axe:\d+, button:\d+"):
 						#The line contains a unexpected message which is thus
 						#certainly important, so we record it.
 						message += "%s\n" % line.strip()
@@ -212,9 +214,10 @@ class XGngeo:
 			if message!="": 
 				#Oh dear! There was a f*ck! Let's display the info dialog.
 				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
-					gtk.MESSAGE_INFO,  gtk.BUTTONS_OK,  "%s\n\n<span "
-					"color='#b00'>%s</span>" % (_("Gngeo returned the following "
-					"message:"),unicode(message[:-1], 'iso-8859-1').replace('&',
+					gtk.MESSAGE_INFO,  gtk.BUTTONS_OK)
+				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %
+					(_("Gngeo returned the following message:"),
+					unicode(message[:-1], 'iso-8859-1').replace('&',
 					'&amp;')))
 				dialog.connect("response", lambda *args: dialog.destroy())
 				dialog.show_all()
@@ -2041,6 +2044,12 @@ class XGngeo:
 			if self.params["xgngeo"]["showavailableromsonly"]=="true":
 				self.widgets["config"]['showavailableromsonly'].set_active(True)
 			box2.pack_start(self.widgets["config"]['showavailableromsonly'])
+
+			#Available ROM background color.
+			label = gtk.Label(_("Available ROM background color:"))
+			box2.pack_start(label)
+			button = gtk.Button("")
+			box2.pack_start(button)
 
 			#Center XGngeo window.
 			self.widgets["config"]['centerwindow'] = gtk.CheckButton(
