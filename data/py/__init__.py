@@ -91,15 +91,6 @@ class XGngeo:
 		self.widgets["statusbar"] = gtk.Statusbar()
 		self.context_id = self.widgets["statusbar"].get_context_id("Info")
 
-		#Registering some custom stock icons...
-	#	for val in ("key_A", "key_B", "key_C", "key_D"):
-	#		factory = gtk.IconFactory()
-	#		pixbuf = gtk.gdk.pixbuf_new_from_file(os.path.join(datarootpath,"img",
-	#			"%s.png" % val))
-	#		iconset = gtk.IconSet(pixbuf)
-	#		factory.add(val, iconset)
-	#		factory.add_default()
-
 		#Main window inital attributes.
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		gtk.window_set_default_icon_from_file(os.path.join(datarootpath, "img",
@@ -115,19 +106,19 @@ class XGngeo:
 			if response == gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
 			else: self.config(firstrun=1) #Going to important path configuration window.
 
-		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL, type=gtk.MESSAGE_WARNING,
-			buttons=gtk.BUTTONS_OK, message_format = _("It seems that the "
-			"important path parameters are not all valid. That is normal if "
-			"Gngeo configuration file hasn't been yet created. Anyway, correct "
-			"values should be specified for the emulation to work. Press OK "
-			"to do so..."))
-		dialog.connect("response",callback)
+		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,
+			type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK,
+			message_format = _("It seems that the important path parameters "
+			"are not all valid. That is normal if Gngeo configuration file hasn't "
+			"been yet created. Anyway, correct values should be specified for "
+			"the emulation to work. Press OK to do so..."))
+		dialog.connect("response", callback)
 		dialog.show_all()
 
-	def display_file(self,widget,filename):
+	def display_file(self,widget, filename):
 		display = 1
 		textbuffer = gtk.TextBuffer()
-		filename = os.path.join(datarootpath,filename)
+		filename = os.path.join(datarootpath, filename)
 
 		if os.path.isfile(filename):
 			file = open(filename, "r")
@@ -141,14 +132,14 @@ class XGngeo:
 			else: display = 0
 
 		if display:
-			dialog = gtk.Dialog((filename,_("License"))[filename[-11:]=="LICENSE.txt"],
-				self.window,gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,(gtk.STOCK_CLOSE,
-				gtk.RESPONSE_CLOSE))
+			dialog = gtk.Dialog((filename, _("License"))[filename[-11:]=="LICENSE.txt"],
+				self.window, gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,
+				(gtk.STOCK_CLOSE,	gtk.RESPONSE_CLOSE))
 
 			if filename[-11:]=="LICENSE.txt":
-				label = gtk.Label(_("This program is released under the terms of the "
-					"GNU General Public License."))
-				label.set_padding(2,4)
+				label = gtk.Label(_("This program is released under the terms "
+					"of the GNU General Public License."))
+				label.set_padding(2, 4)
 				dialog.vbox.pack_start(label, False)
 
 			textview = gtk.TextView(textbuffer)
@@ -157,7 +148,8 @@ class XGngeo:
 				textbuffer.get_end_iter())
 
 			scrolled_window = gtk.ScrolledWindow()
-			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+			scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,
+				gtk.POLICY_AUTOMATIC)
 			scrolled_window.add(textview)
 			scrolled_window.set_size_request(550, 342)
 
@@ -456,17 +448,17 @@ class XGngeo:
 						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
 							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK,	_("You cannot "
 							"remove the main ROM and BIOS directory since it's "
-							"the default place to look for ROMs.\nIf you want to, you "
-							"can modify its path in the important path configuration "
-							"window."))
-						dialog2.connect("response",lambda *args: dialog2.destroy())
+							"the default place to look for ROMs.\nIf you want "
+							"to, you can modify its path in the important path "
+							"configuration window."))
+						dialog2.connect("response", lambda *args: dialog2.destroy())
 						dialog2.show_all()
 					else:
 						temp_romdir_list.remove(dir)
 						liststore.remove(iter)
 
 			def response(widget, response):
-				if response==gtk.RESPONSE_APPLY:
+				if response == gtk.RESPONSE_APPLY:
 					self.romdir_list = temp_romdir_list #Validating the ROM list.
 
 					#Saving it in the appropriate file.
@@ -483,16 +475,17 @@ class XGngeo:
 				dialog.destroy()
 
 			box2 = gtk.VBox()
-			button = gtk.Button(stock = gtk.STOCK_REMOVE)
+			button = gtk.Button(stock=gtk.STOCK_REMOVE)
 			button.set_border_width(5)
 			button.connect("clicked", rem_directory)
 			box2.pack_start(button)
-			button = gtk.Button(stock = gtk.STOCK_ADD)
-			button.connect("clicked",self.file_select,_("Select a ROM directory to "
-				"add."),temp_romdir_list[-1], add_directory, 1, None)
+			button = gtk.Button(stock=gtk.STOCK_ADD)
+			button.connect("clicked",self.file_select,_("Select a ROM "
+				"directory to add."),temp_romdir_list[-1], add_directory, 1,
+				None)
 			button.set_border_width(5)
 			box2.pack_start(button)
-			box.pack_start(box2,False,padding=2)
+			box.pack_start(box2, False, padding=2)
 
 			#Da ROM directory list!
 			liststore = gtk.ListStore(str)
@@ -500,14 +493,15 @@ class XGngeo:
 			treeview.set_headers_visible(False)
 			tvcolumn = gtk.TreeViewColumn("Directory")
 			treeview.append_column(tvcolumn)
-			for dir in ([_("Main ROM and BIOS directory.")]+temp_romdir_list[1:]):
+			for dir in ([_("Main ROM and BIOS directory.")] + temp_romdir_list\
+				[1:]):
 				liststore.append([dir]) #Inserting content.
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
-			tvcolumn.set_attributes(cell, text = 0)
+			tvcolumn.set_attributes(cell, text=0)
 			frame = gtk.Frame()
 			frame.add(treeview)
-			box.pack_start(frame, padding = 2)
+			box.pack_start(frame, padding=2)
 	
 			dialog.vbox.pack_start(box)
 			dialog.show_all()
@@ -526,21 +520,22 @@ class XGngeo:
 		label.set_justify(gtk.JUSTIFY_CENTER)
 		#PyGTK bug on 2005-07-18, avoid by explicitly giving a ``xpadding" value...
 		#table.attach(label,0,2,0,1,yoptions=gtk.SHRINK,ypadding=2)
-		table.attach(label, 0, 3, 0, 1, yoptions = gtk.SHRINK, xpadding = 0, ypadding = 2)
+		table.attach(label, 0, 3, 0, 1, yoptions=gtk.SHRINK, xpadding=0,
+			ypadding=2)
 
 		#DA ROM list!
 		scrolled_window = gtk.ScrolledWindow()
 		scrolled_window.set_policy(gtk.POLICY_AUTOMATIC,  gtk.POLICY_ALWAYS)
-		scrolled_window.set_size_request(500,250) #Setting scrolled window's height.
-		table.attach(scrolled_window, 0, 3, 1, 2, xpadding = 2, ypadding = 5)
+		scrolled_window.set_size_request(500, 250) #Setting scrolled window's height.
+		table.attach(scrolled_window, 0, 3, 1, 2, xpadding=2, ypadding=5)
 
 		#The list will contain the ROM full name and an availability indicator.
-		liststore = gtk.ListStore(str,"gboolean",str)
+		liststore = gtk.ListStore(str, "gboolean", str)
 		treeview = gtk.TreeView(liststore)
 		treeview.set_headers_visible(False)
 		treeselection = treeview.get_selection()
-		treeselection.connect("changed",new_list_selection)
-		treeview.connect("button_press_event",button_pressed)
+		treeselection.connect("changed", new_list_selection)
+		treeview.connect("button_press_event", button_pressed)
 
 		#Columns to display data.
 		tvcolumn = gtk.TreeViewColumn("Fullname")
@@ -548,9 +543,9 @@ class XGngeo:
 
 		#Rendering data.
 		cell = gtk.CellRendererText()
-		cell.set_property("cell-background", "#9cf")
+		cell.set_property("cell-background", self.params["xgngeo"]["availableromcolor"])
 		tvcolumn.pack_start(cell,True)
-		tvcolumn.set_attributes(cell,text = 0, cell_background_set = 1)
+		tvcolumn.set_attributes(cell, text=0, cell_background_set=1)
 
 		treeview.set_search_column(0) #Making treeview searchable.
 		tvcolumn.set_sort_column_id(0) #Make columns sortable.
@@ -558,19 +553,19 @@ class XGngeo:
 		scrolled_window.add_with_viewport(treeview)
 
 		button = gtk.Button(_("ROM directories..."))
-		button.connect("clicked",rom_directories,dialog)
-		table.attach(button, 0, 1, 2, 3, yoptions = gtk.SHRINK)
+		button.connect("clicked", rom_directories, dialog)
+		table.attach(button, 0, 1, 2, 3, yoptions=gtk.SHRINK)
 
 		labelAvailableRoms = gtk.Label()
-		table.attach(labelAvailableRoms, 1, 2, 2, 3, yoptions = gtk.SHRINK,
-			xpadding = 3, ypadding = 0)
+		table.attach(labelAvailableRoms, 1, 2, 2, 3, yoptions=gtk.SHRINK,
+			xpadding=3, ypadding=0)
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
 		if self.params["xgngeo"]["showavailableromsonly"] == "true":
 			buttonShowAvailable.set_active(True) #Activating button. 
 		#Connecting the toggled event (*after* potential button activation).
 		buttonShowAvailable.connect("toggled", refreshing_rom_list) 
-		table.attach(buttonShowAvailable, 2, 3, 2, 3, yoptions = gtk.SHRINK)
+		table.attach(buttonShowAvailable, 2, 3, 2, 3, yoptions=gtk.SHRINK)
 
 		#
 		# Mame name/preview image/info side. :P
@@ -587,10 +582,10 @@ class XGngeo:
 			noteisthere = 1
 
 			#Preview images.
-			if self.params["xgngeo"]["previewimages"]=="true"\
+			if self.params["xgngeo"]["previewimages"] == "true"\
 				and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
 				self.previewImage = gtk.Image()
-				self.previewImage.set_padding(3,3)
+				self.previewImage.set_padding(3, 3)
 				path = os.path.join(self.params["xgngeo"]["previewimagedir"],
 					"unavailable.png")
 				if os.path.isfile(path):
@@ -736,7 +731,7 @@ class XGngeo:
 		#Buttons at bottom.
 		open_button = gtk.Button(stock = gtk.STOCK_OPEN)
 		open_button.set_sensitive(False)
-		open_button.connect("clicked",set_rom_from_list)
+		open_button.connect("clicked", set_rom_from_list)
 		dialog.action_area.pack_start(open_button)
 
 		button = gtk.Button(stock = gtk.STOCK_CANCEL)
@@ -1226,10 +1221,11 @@ class XGngeo:
 			#
 			# Global emulation configuration.
 			#
-			if not romspecific: self.widgets["config"]["main_dialog"].set_title(\
-			_("Global emulation configuration."))
-			else: self.widgets["config"]["main_dialog"].set_title(_(\
-			"Specific emulation options for \"%s\".") % self.mamename)
+			if not romspecific:
+				self.widgets["config"]["main_dialog"].set_title(_("Global "
+					"emulation configuration."))
+			else: self.widgets["config"]["main_dialog"].set_title(_(
+				"Specific emulation options for \"%s\".") % self.mamename)
 			notebook = gtk.Notebook()
 
 			#
@@ -1243,58 +1239,58 @@ class XGngeo:
 
 			#Fullscreen.
 			self.widgets["config"]['fullscreen'] = gtk.CheckButton(_("Fullscreen"))
-			if temp_param["fullscreen"]=="true": self.widgets["config"]['fullscreen']\
-				.set_active(1)
-			table.attach(self.widgets["config"]['fullscreen'],0,1,0,1)
+			if temp_param["fullscreen"]=="true":
+				self.widgets["config"]['fullscreen']	.set_active(1)
+			table.attach(self.widgets["config"]['fullscreen'], 0, 1, 0, 1)
 			#Interpolation.
 			self.widgets["config"]['interpolation'] = gtk.CheckButton(_("Interpolation"))
-			if temp_param["interpolation"]=="true": self.widgets["config"]\
-				['interpolation'].set_active(1)
-			table.attach(self.widgets["config"]['interpolation'],0,1,1,2)
+			if temp_param["interpolation"]=="true":
+				self.widgets["config"]['interpolation'].set_active(1)
+			table.attach(self.widgets["config"]['interpolation'], 0, 1, 1, 2)
 			#Show FPS.
 			self.widgets["config"]['showfps'] = gtk.CheckButton(_("Show FPS"))
-			if temp_param["showfps"]=="true": self.widgets["config"]['showfps']\
-				.set_active(1)
-			table.attach(self.widgets["config"]['showfps'],1,2,0,1)
+			if temp_param["showfps"]=="true":
+				self.widgets["config"]['showfps'].set_active(1)
+			table.attach(self.widgets["config"]['showfps'], 1, 2, 0, 1)
 			#Auto Frameskip.
 			self.widgets["config"]['autoframeskip'] = gtk.CheckButton(_(
 				"Auto Frameskip"))
-			if temp_param["autoframeskip"]=="true": self.widgets["config"]\
-				['autoframeskip'].set_active(1)
-			table.attach(self.widgets["config"]['autoframeskip'],1,2,1,2)
+			if temp_param["autoframeskip"]=="true":
+				self.widgets["config"]['autoframeskip'].set_active(1)
+			table.attach(self.widgets["config"]['autoframeskip'], 1, 2, 1, 2)
 			#Raster effect.
 			self.widgets["config"]['raster'] = gtk.CheckButton(_("Raster effect"))
-			if temp_param["raster"]=="true": self.widgets["config"]['raster']\
-				.set_active(True)
-			table.attach(self.widgets["config"]['raster'],0,1,2,3)
+			if temp_param["raster"]=="true":
+				self.widgets["config"]['raster'].set_active(True)
+			table.attach(self.widgets["config"]['raster'], 0, 1, 2, 3)
 			#Hardware surface.
 			self.widgets["config"]['hwsurface'] = gtk.CheckButton(_("Hardware surface"))
-			if temp_param["hwsurface"]=="true": self.widgets["config"]['hwsurface']\
-				.set_active(True)
-			table.attach(self.widgets["config"]['hwsurface'],1,2,2,3)
+			if temp_param["hwsurface"]=="true":
+				self.widgets["config"]['hwsurface'].set_active(True)
+			table.attach(self.widgets["config"]['hwsurface'], 1, 2, 2, 3)
 
 			frame = gtk.Frame(_("Windowed mode"))
-			frame.set_label_align(0.5,0.5)
+			frame.set_label_align(0.5, 0.5)
 			box2 = gtk.VBox()
 
 			#Scale.
-			adjustment = gtk.Adjustment(float(temp_param["scale"]),1,5,1)
+			adjustment = gtk.Adjustment(float(temp_param["scale"]), 1, 5, 1)
 			label = gtk.Label(_("Scale:"))
 			box2.pack_start(label)
 			self.widgets["config"]['scale'] = gtk.HScale(adjustment)
 			self.widgets["config"]['scale'].set_value_pos(gtk.POS_TOP)
 			def bouyaka(widget, value): return u"\xd7%i" % value
-			self.widgets["config"]['scale'].connect("format-value",bouyaka)
+			self.widgets["config"]['scale'].connect("format-value", bouyaka)
 			box2.pack_start(self.widgets["config"]['scale'])
 
 			#320x224 window size.
 			self.widgets["config"]['screen320'] = gtk.CheckButton(_("Larger screen"))
-			if temp_param["screen320"]=="true": self.widgets["config"]['screen320']\
-				.set_active(True)
+			if temp_param["screen320"]=="true": self.widgets["config"]\
+				['screen320'].set_active(True)
 			box2.pack_end(self.widgets["config"]['screen320'])
 
 			frame.add(box2)
-			table.attach(frame,2,3,0,3)
+			table.attach(frame, 2, 3, 0, 3)
 			box.pack_start(table)
 
 			self.combo_params = {}
@@ -1304,24 +1300,24 @@ class XGngeo:
 
 			#Translation of known blitter fullnames.
 			i18n_dict = {
-				"soft":_("Software blitter"),
-				"opengl":_("OpenGL blitter"),
-				"yuv":_("YUV blitter (YV12)")}
+				"soft": _("Software blitter"),
+				"opengl": _("OpenGL blitter"),
+				"yuv": _("YUV blitter (YV12)")}
 
 			self.widgets["config"]['blitter'] = gtk.combo_box_new_text()
 			i=0; blitter_list = []
-			pipe = os.popen('"%s" --blitter help' % self.params["xgngeo"]["gngeopath"]\
-				.replace('"','\"'))
+			pipe = os.popen('"%s" --blitter help' % self.params["xgngeo"]\
+				["gngeopath"].replace('"','\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is `REF : FULLNAME'.
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
-					self.widgets["config"]['blitter'].append_text((fullname,i18n_dict[ref])\
-					[i18n_dict.has_key(ref)])
+					self.widgets["config"]['blitter'].append_text((fullname,
+						i18n_dict[ref])[i18n_dict.has_key(ref)])
 					blitter_list.append(ref)
 					#Setting active the last selection.
-					if ref==temp_param["blitter"]: self.widgets["config"]['blitter']\
-					.set_active(i)
+					if ref == temp_param["blitter"]:
+						self.widgets["config"]['blitter'].set_active(i)
 					i+=1
 			pipe.close()
 
@@ -1334,20 +1330,20 @@ class XGngeo:
 
 			#Translation of known effect fullnames.
 			i18n_dict = {
-				"none":_("No effect"),
-				"scanline":_("Scanline effect"),
-				"scanline50":_("Scanline 50% effect"),
-				"scale2x":_("Scale2x effect"),
-				"scale3x":_("Scale3x effect"),
-				"scale4x":_("Scale4x effect"),
-				"scale2x50":_("Scale2x effect with 50% scanline"),
-				"scale2x75":_("Scale2x effect with 75% scanline"),
-				"hq2x":_("HQ2X effect. High quality"),
-				"hq3x":_("HQ3X effect. High quality"),
-				"lq2x":_("LQ2X effect. Low quality"),
-				"lq3x":_("LQ3X effect. Low quality"),
-				"doublex":_("Double the x resolution (soft blitter only)"),
-				"sai":_("SAI effect"),
+				"none": _("No effect"),
+				"scanline": _("Scanline effect"),
+				"scanline50": _("Scanline 50% effect"),
+				"scale2x": _("Scale2x effect"),
+				"scale3x": _("Scale3x effect"),
+				"scale4x": _("Scale4x effect"),
+				"scale2x50": _("Scale2x effect with 50% scanline"),
+				"scale2x75": _("Scale2x effect with 75% scanline"),
+				"hq2x": _("HQ2X effect. High quality"),
+				"hq3x": _("HQ3X effect. High quality"),
+				"lq2x": _("LQ2X effect. Low quality"),
+				"lq3x": _("LQ3X effect. Low quality"),
+				"doublex": _("Double the x resolution (soft blitter only)"),
+				"sai": _("SAI effect"),
 				"supersai": _("SuperSAI effect"),
 				"eagle":_("Eagle effect")}
 
@@ -1360,8 +1356,8 @@ class XGngeo:
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is "REF : FULLNAME"
 				if plop:
 					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
-					self.widgets["config"]['effect'].append_text((fullname,i18n_dict[ref])\
-					[i18n_dict.has_key(ref)])
+					self.widgets["config"]['effect'].append_text((fullname,
+						i18n_dict[ref])[i18n_dict.has_key(ref)])
 					effect_list.append(ref)
 					#Setting active the last selection.
 					if ref==temp_param["effect"]:
@@ -1391,26 +1387,28 @@ class XGngeo:
 			#Performing special actions over effect widget regarding blitter selection
 			#or hardware surface activation.
 			bouyaka()
-			self.widgets["config"]['blitter'].connect("changed",bouyaka)
-			self.widgets["config"]['hwsurface'].connect("toggled",bouyaka)
+			self.widgets["config"]['blitter'].connect("changed", bouyaka)
+			self.widgets["config"]['hwsurface'].connect("toggled", bouyaka)
 
 			box2 = gtk.HBox()
 			label = gtk.Label(_("Transparency pack (optional):"))
 			box2.pack_start(label)
 			image = gtk.Image()
-			box2.pack_start(image,False,padding=3)
+			box2.pack_start(image, False, padding=3)
 			self.widgets["config"]['transpack'] = gtk.Entry()
-			self.widgets["config"]['transpack'].connect("changed",set_path_icon,image)
+			self.widgets["config"]['transpack'].connect("changed",
+				set_path_icon, image)
 			self.widgets["config"]['transpack'].set_text(self.params["gngeo"]\
 				["transpack"] or "--")
 			box2.pack_start(self.widgets["config"]['transpack'])
-			set_path_icon(self.widgets["config"]['transpack'],image)
+			set_path_icon(self.widgets["config"]['transpack'], image)
 			button = gtk.Button()
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.file_select,_('Select a transparency pack.'),
-			self.widgets["config"]['transpack'].get_text(),"transpack")
+			button.connect("clicked", self.file_select, _("Select a "
+				"transparency pack."), self.widgets["config"]['transpack']\
+				.get_text(), "transpack")
 			box2.pack_end(button,False)
 			box.pack_start(box2,False)
 
@@ -1424,9 +1422,11 @@ class XGngeo:
 			frame = gtk.Frame(_("Audio"))
 			box2 = gtk.VBox()
 
-			def bouyaka(widget,target):
+			def bouyaka(widget, target):
 				"""Setting widget sensitive state according to another
-				widget's activation state."""
+				widget's activation state.
+				
+				"""
 				target.set_sensitive(widget.get_active())
 
 			self.widgets["config"]['sound'] = gtk.CheckButton(_("Enable sound"))
@@ -1501,8 +1501,8 @@ class XGngeo:
 			self.toggled = None
 
 			#Key order : A,B,C,D,START,COIN,UP,DOWN,LEFT,RIGHT,hotkey1,hotkey2,hotkey3,hotkey4
-			key_list = ["A","B","C","D","START","COIN","UP","DOWN","LEFT","RIGHT",
-				"hotkey1","hotkey2","hotkey3","hotkey4"]
+			key_list = ["A", "B", "C", "D", "START", "COIN", "UP", "DOWN",
+				"LEFT", "RIGHT", "hotkey1", "hotkey2", "hotkey3", "hotkey4"]
 
 			#The Gngeo compliant keymap (all in lowercase)!
 			compliant_KeyMap = {
@@ -1541,13 +1541,13 @@ class XGngeo:
 				301:"caps_lock", 302:"scroll_lock", 303:"shift_r", 304:"shift_l", 305:\
 				"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
 
-			def get_pressed(widget,event,key_pos,secondplayer=0):
-				if widget.get_active() and event.keyval: #Only when widget is active.
-					key_val = gtk.gdk.keyval_to_lower(event.keyval) #Get the value (lower only).
+			def get_pressed(widget, event, key_pos,secondplayer=0):
+				if widget.get_active() and event.keyval: # Only when widget is active.
+					key_val = gtk.gdk.keyval_to_lower(event.keyval) # Get the value (lower only).
 
-					#GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
-					#So, a Gngeo compatible key-value is given according to its GTK's name
-					#(set in lowercase).
+					# GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
+					# So, a Gngeo compatible key-value is given according to its
+					# GTK's name (set in lowercase).
 					key_name = gtk.gdk.keyval_name(key_val).lower()
 
 					if key_name in compliant_KeyMap.keys():
@@ -1556,48 +1556,49 @@ class XGngeo:
 						else: self.p1key_int_vals[key_pos] = compliant_KeyMap[key_name]
 
 						#Put the key name (in an elegant form :p) as button label.
-						widget.set_label(capwords(key_name.replace("_"," ")))
-						if not key_name in ("return","space"): widget.clicked()
+						widget.set_label(capwords(key_name.replace("_", " ")))
+						if not key_name in ("return", "space"): widget.clicked()
 
 			def toggled(widget):
-				#Ensuring that only one key button is toggled...
-				if self.toggled and self.toggled!=widget:
-					if self.toggled.get_active(): #Previous button goes back to normal state.
+				# Ensuring that only one key button is toggled...
+				if self.toggled and self.toggled != widget:
+					if self.toggled.get_active(): # Previous button goes back to normal state.
 						self.toggled.set_active(False)
 
 				#Changing current toggled button state.
 				self.toggled = widget
 
-			box = gtk.VBox(spacing=4) #The box. :p
+			box = gtk.VBox(spacing=4) # The box. :p
 			box.set_border_width(4)
-			notebook.append_page(box,gtk.Label(_("Controls")))
+			notebook.append_page(box, gtk.Label(_("Controls")))
 
-			label = gtk.Label(_("To modify a key, click on the button under it's "\
-			"icon, then push your new key. It works for keyboard only."))
+			label = gtk.Label(_("To modify a key, click on the button under "
+				"it's icon, then push your new key. It works for keyboard only."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_line_wrap(True)
-			box.pack_start(label,False)
+			box.pack_start(label, False)
 
-			table = gtk.Table(6,6) #The sweet table O_o;;
+			table = gtk.Table(6, 6) # The sweet table O_o;;
 
 			def playerChanged(widget,justloaded=False):
 				"""Performing some interface modifications when another player selection
 				is changed."""
-				player = self.widgets["config"]['player1controls_radio'].get_active() or 2
+				player = self.widgets["config"]['player1controls_radio']\
+					.get_active() or 2
 
 				#Changing the hotkey edition label.
 				self.widgets["config"]['edithotkeys_label'].set_text(
 					_("Edit player %i hotkeys...") % player)
 
-				if player==1: #Showing P1 keys and hidding P2's.
-					if not justloaded: #P1 keys are already shown after window loading.
+				if player == 1: # Showing P1 keys and hidding P2's.
+					if not justloaded: # P1 keys are already shown after window loading.
 						for x in p1keywidgets: x.show()
 					for x in p2keywidgets: x.hide()
-				else: #Showing P2 keys and hidding P1's.
+				else: # Showing P2 keys and hidding P1's.
 					for x in p2keywidgets: x.show()
 					for x in p1keywidgets: x.hide()
 
-			#Control allocation.
+			# Control allocation.
 			frame = gtk.Frame(_("Allocation:"))
 			frame.set_border_width(4)
 			box2 = gtk.VBox()
@@ -1619,57 +1620,70 @@ class XGngeo:
 				buttval_convertion = {"1":"A","2":"B","4":"C","8":"D"}
 				hk_boxes = []
 
-				#Initial blank matrix (if not yet created & filled).
-				if not self.params["temp"].has_key("hotkey_matrix_p%i" % player):
+				# Initial blank matrix (if not yet created & filled).
+				if not self.params["temp"].has_key("hotkey_matrix_p%i" %
+					player):
 					self.params["temp"]["hotkey_matrix_p%i" % player]  =  \
-						[[None]*4,[None]*4,[None]*4,[None]*4]
-					#The initial matrix is used to revert previous hotkeys configuration
-					#(if the changes are cancelled).
+						[[None] * 4, [None] * 4, [None] * 4, [None] * 4]
+					# The initial matrix is used to revert previous hotkeys
+					# configuration (if the changes are cancelled).
 					self.params["temp"]["backup_matrix_p%i" % player]  =  \
-						[[None]*4,[None]*4,[None]*4,[None]*4]
+						[[None] * 4, [None] * 4, [None] * 4, [None] * 4]
 					for hotkey in range(4):
-						if self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)]:
-							i=0
-							for butt in self.params["gngeo"]["p%ihotkey%i" % (player,hotkey)]\
-								.split(","):
-								self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][i] = butt
-								self.params["temp"]["backup_matrix_p%i" % player][hotkey][i] = butt
-								i+=1
+						if self.params["gngeo"]["p%ihotkey%i" % (player,
+							hotkey)]:
+							i = 0
+							for butt in self.params["gngeo"]["p%ihotkey%i" %
+								(player, hotkey)].split(","):
+								self.params["temp"]["hotkey_matrix_p%i" %
+									player ][hotkey][i] = butt
+								self.params["temp"]["backup_matrix_p%i" %
+									player][hotkey][i] = butt
+								i += 1
 
-				def dialResponse(widget,response):
-					if response==gtk.RESPONSE_ACCEPT:
-						#Saving current matrix for hypothetical restoration.
+				def dialResponse(widget, response):
+					if response == gtk.RESPONSE_ACCEPT:
+						# Saving current matrix for hypothetical restoration.
+						for hotkey in range(4):
+							i = 0
+							for butt in self.params["temp"]["hotkey_matrix_p%i" %
+								player][hotkey]:
+								self.params["temp"]["backup_matrix_p%i" %
+									player][hotkey][i] = butt
+								i += 1
+					elif response == gtk.RESPONSE_REJECT:
+						# Restoring the previously saved matrix.
 						for hotkey in range(4):
 							i=0
-							for butt in self.params["temp"]["hotkey_matrix_p%i" % player][hotkey]:
-								self.params["temp"]["backup_matrix_p%i" % player][hotkey][i] = butt
-								i+=1
-					elif response==gtk.RESPONSE_REJECT:
-						#Restoring the previously saved matrix.
-						for hotkey in range(4):
-							i=0
-							for butt in self.params["temp"]["backup_matrix_p%i" % player][hotkey]:
-								self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][i] = butt
+							for butt in self.params["temp"]["backup_matrix_p%i" %
+								player][hotkey]:
+								self.params["temp"]["hotkey_matrix_p%i" %
+								player ][hotkey][i] = butt
 								i+=1
 					widget.destroy()
 
-				def buttonClicked(button,event,image,player,hotkey,pos,addition=False):
-					def buttChanged(widget,value):
-						self.params["temp"]["hotkey_matrix_p%i" % player][hotkey][pos] = value
-						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" %
-							buttval_convertion[value]))
+				def buttonClicked(button, event, image, player, hotkey, pos, 
+					addition=False):
+					def buttChanged(widget, value):
+						self.params["temp"]["hotkey_matrix_p%i" % player]\
+							[hotkey][pos] = value
+						image.set_from_file(os.path.join(datarootpath, "img",
+							"key_%s.png" %	buttval_convertion[value]))
 						if addition: 
-							#One button has been added: let's regen hotkey's row.
+							# One button has been added: let's regen hotkey's row.
 							gen_hotkey_row(hotkey) 
 
 					def buttRemoved(*args):
-						del self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey][pos]
-						self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey].append(None)
+						del self.params["temp"]["hotkey_matrix_p%i" % player ]\
+							[hotkey][pos]
+						self.params["temp"]["hotkey_matrix_p%i" % player ]\
+							[hotkey].append(None)
 						genHotkeyRow(hotkey)
 
 					firebuttons = buttval_convertion.keys()
 					firebuttons.sort()
-					hkbinding = self.params["temp"]["hotkey_matrix_p%i" % player ][hotkey]
+					hkbinding = self.params["temp"]["hotkey_matrix_p%i" %
+						player ][hotkey]
 					for x in hkbinding:
 						if x: firebuttons.remove(x)
 
@@ -1677,17 +1691,18 @@ class XGngeo:
 					if hkbinding[pos]:
 						item = gtk.ImageMenuItem()
 						image2 = gtk.Image()
-						image2.set_from_stock(gtk.STOCK_REMOVE,gtk.ICON_SIZE_BUTTON)
+						image2.set_from_stock(gtk.STOCK_REMOVE,
+							gtk.ICON_SIZE_BUTTON)
 						item.add(image2)
-						item.connect("activate",buttRemoved)
+						item.connect("activate", buttRemoved)
 						menu.append(item)
 
 					for butt in firebuttons:
 						item = gtk.ImageMenuItem()
 						image2 = gtk.Image()
-						image2.set_from_file(os.path.join(datarootpath,"img","key_%s.png" %
-							buttval_convertion[butt]))
-						item.connect("activate",buttChanged,butt)
+						image2.set_from_file(os.path.join(datarootpath, "img",
+							"key_%s.png" %	buttval_convertion[butt]))
+						item.connect("activate", buttChanged,butt)
 						item.add(image2)
 						menu.append(item)
 
@@ -1697,62 +1712,68 @@ class XGngeo:
 				def genHotkeyRow(row,firstgen=False):
 					if firstgen: #Creating & attaching the box.
 						hk_boxes.append(gtk.HBox())
-						table.attach(hk_boxes[row],2,3,row,row+1)
+						table.attach(hk_boxes[row], 2, 3, row, row + 1)
 					else: #Emptying the box.
-						for x in hk_boxes[row].get_children(): hk_boxes[row].remove(x)
+						for x in hk_boxes[row].get_children():
+							hk_boxes[row].remove(x)
 
 					j = 1
-					for butt in self.params["temp"]["hotkey_matrix_p%i" % player ][row]: 
+					for butt in self.params["temp"]["hotkey_matrix_p%i" %
+						player ][row]:
 						if not butt:
-							break #Hot key's end has been reached, getting out the ``for".
+							#Hot key's end has been reached, getting out the ``for".
+							break
 
 						if firstgen: #Filling the hot key matrix with the right values.
-							self.params["temp"]["hotkey_matrix_p%i" % player ][row][j-1] = butt
+							self.params["temp"]["hotkey_matrix_p%i" % player ]\
+								[row][ j -1] = butt
 
 						image = gtk.Image()
-						image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" %
-							buttval_convertion[butt]))
+						image.set_from_file(os.path.join(datarootpath,"img",
+							"key_%s.png" %	buttval_convertion[butt]))
 						button = gtk.Button()
 						button.add(image)
-						button.connect("button_press_event",buttonClicked,image,player,row,j-1)
+						button.connect("button_press_event", buttonClicked, image,
+							player, row, j - 1)
 						hk_boxes[row].pack_start(button)
 						if j<4:
 							label = gtk.Label("+")
 							hk_boxes[row].pack_start(label)
-						j+=1
+						j += 1
 
 					if j<=4:
 						button = gtk.Button()
 						image = gtk.Image()
 						image.set_from_stock(gtk.STOCK_ADD,gtk.ICON_SIZE_BUTTON)
 						button.add(image)
-						button.connect("button_press_event",buttonClicked,image,player,row,j-1,
-							True)
+						button.connect("button_press_event", buttonClicked, image,
+							player, row, j - 1, True)
 						hk_boxes[row].pack_start(button)
 
 					hk_boxes[row].show_all()
 
 				dialog = gtk.Dialog(_("Hotkeys edition for player %i.") % player,
-					self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(gtk.STOCK_OK,
-					gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT))
-				dialog.connect("response",dialResponse)
-				label = gtk.Label(_("Here you can bind hotkeys to your desired "\
-				"combinations of fire buttons."))
+					self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(
+					gtk.STOCK_OK,	gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL,
+					gtk.RESPONSE_REJECT))
+				dialog.connect("response", dialResponse)
+				label = gtk.Label(_("Here you can bind hotkeys to your desired "
+					"combinations of fire buttons."))
 				label.set_justify(gtk.JUSTIFY_CENTER)
-				label.set_padding(3,4)
+				label.set_padding(3, 4)
 				label.set_line_wrap(True)
-				dialog.vbox.pack_start(label,False)
+				dialog.vbox.pack_start(label, False)
 
-				table = gtk.Table(4,3)
+				table = gtk.Table(4, 3)
 				table.set_col_spacings(4)
 				for i in range(4):
 					image = gtk.Image()
-					image.set_from_file(os.path.join(datarootpath,"img","hotkey%i.png" %
-						(i+1)))
-					table.attach(image,0,1,i,i+1,xoptions=gtk.SHRINK)
+					image.set_from_file(os.path.join(datarootpath, "img",
+						"hotkey%i.png" % (i + 1)))
+					table.attach(image, 0, 1, i, i + 1, xoptions=gtk.SHRINK)
 					label = gtk.Label("=")
-					table.attach(label,1,2,i,i+1,xoptions=gtk.SHRINK)
-					genHotkeyRow(i,True)
+					table.attach(label, 1, 2, i, i + 1, xoptions=gtk.SHRINK)
+					genHotkeyRow(i, True)
 
 				box.set_border_width(4)
 				dialog.vbox.pack_end(table)
@@ -1761,14 +1782,15 @@ class XGngeo:
 			#Hotkeys edition.
 			button = gtk.Button()
 			self.widgets["config"]['edithotkeys_label'] = gtk.Label()
-			self.widgets["config"]['edithotkeys_label'].set_size_request(100,-1)
+			self.widgets["config"]['edithotkeys_label'].set_size_request(100, -1)
 			self.widgets["config"]['edithotkeys_label'].set_line_wrap(True)
-			self.widgets["config"]['edithotkeys_label'].set_justify(gtk.JUSTIFY_CENTER)
+			self.widgets["config"]['edithotkeys_label'].set_justify\
+				(gtk.JUSTIFY_CENTER)
 			button.add(self.widgets["config"]['edithotkeys_label'])
 			button.connect("clicked",editHotkeys)
-			table.attach(button,0,2,4,6,xpadding=15,ypadding=15)
+			table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
-			if len(temp_param["p1key"].split(","))==len(key_list):
+			if len(temp_param["p1key"].split(",")) == len(key_list):
 				#Given values seems to be okay.
 				plop = temp_param["p1key"]
 			else: #There's a crap, let's use default key values.
@@ -1779,23 +1801,23 @@ class XGngeo:
 			#Display the names of known key values.
 			for x in self.p1key_int_vals:
 				if int(x) in compliant_KeyMap_reverse.keys():
-					p1key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace(
-						"_"," ")))
+					p1key_names.append(capwords(compliant_KeyMap_reverse\
+						[int(x)].replace("_", " ")))
 				else: p1key_names.append(x)
 
 			p1keywidgets = []; i=0
 			for x in p1key_names:
 				#Generate P1key's buttons.
-				p1keywidgets.append(gtk.ToggleButton((x,"--")[x=="-1"]))
-				p1keywidgets[i].connect("toggled",toggled)
-				p1keywidgets[i].connect("key_press_event",get_pressed,i)
+				p1keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
+				p1keywidgets[i].connect("toggled", toggled)
+				p1keywidgets[i].connect("key_press_event", get_pressed, i)
 				p1keywidgets[i].set_use_underline(False)
 				i+=1
 
-			if len(temp_param["p2key"].split(","))==len(key_list):
+			if len(temp_param["p2key"].split(",")) == len(key_list):
 				#Given values seems to be okay.
 				plop = temp_param["p2key"]
-			else:	#There's a crap, let's use default key values.
+			else: #There's a crap, let's use default key values.
 				plop = self.configfile.get_default_params()[0]["p2key"]
 			self.p2key_int_vals = plop.split(",")
 
@@ -1803,42 +1825,42 @@ class XGngeo:
 			#Display the names of known key values.
 			for x in self.p2key_int_vals:
 				if int(x) in compliant_KeyMap_reverse.keys():
-					p2key_names.append(capwords(compliant_KeyMap_reverse[int(x)].replace(
-						"_"," ")))
+					p2key_names.append(capwords(compliant_KeyMap_reverse\
+						[int(x)].replace("_"," ")))
 				else: p2key_names.append(x)
 
 			p2keywidgets = []; i=0
 			for x in p2key_names:
 				#Generate P2key's buttons.
-				p2keywidgets.append(gtk.ToggleButton((x,"--")[x=="-1"]))
-				p2keywidgets[i].connect("toggled",toggled)
-				p2keywidgets[i].connect("key_press_event",get_pressed,i,1)
+				p2keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
+				p2keywidgets[i].connect("toggled", toggled)
+				p2keywidgets[i].connect("key_press_event", get_pressed, i, 1)
 				p2keywidgets[i].set_use_underline(False)
 
 				#Displaying key's icon.
 				image = gtk.Image()
 				if i<10: 
-					image.set_from_file(os.path.join(datarootpath,"img","key_%s.png" %
-						key_list[i]))
+					image.set_from_file(os.path.join(datarootpath, "img",
+						"key_%s.png" % key_list[i]))
 				else: #Hotkeys.
-					image.set_from_file(os.path.join(datarootpath,"img","%s.png" %
-						key_list[i]))
+					image.set_from_file(os.path.join(datarootpath, "img",
+						"%s.png" % key_list[i]))
 
 				box2 = gtk.HBox() #A box...
-				box2.set_size_request(70,35)
+				box2.set_size_request(70, 35)
 				box2.pack_start(p1keywidgets[i]) #with P1 key...
 				box2.pack_start(p2keywidgets[i]) #and P2 key :p
 
 				#Put them in table...
 				if i<6: #First 6 keys (fire buttons + start/coin) on 2nd row.
-					table.attach(image,i,i+1,2,3)
-					table.attach(box2,i,i+1,3,4)
+					table.attach(image, i, i+1, 2, 3)
+					table.attach(box2, i, i+1, 3, 4)
 				elif i<10: #Keys from 6 to 10 (arrows) on 1st row.
-					table.attach(image,i-4,i-3,0,1)
-					table.attach(box2,i-4,i-3,1,2)
+					table.attach(image, i-4, i-3, 0, 1)
+					table.attach(box2, i-4, i-3,1, 2)
 				elif i<14: #Keys from 10 to 14 (hotkeys) on 3rd row.
-					table.attach(image,i-8,i-7,4,5)
-					table.attach(box2,i-8,i-7,5,6)
+					table.attach(image, i-8, i-7, 4, 5)
+					table.attach(box2, i-8, i-7, 5, 6)
 				i+=1
 
 			box.pack_start(table)
@@ -1864,9 +1886,9 @@ class XGngeo:
 
 			if temp_param["system"]=="arcade":
 				self.widgets["config"]['system_arcade'].set_active(1)
-			elif temp_param["system"]=="home": self.widgets["config"]['system_home']\
-				.set_active(1)
-			elif temp_param["system"]=="unibios": radio.set_active(1)
+			elif temp_param["system"] == "home":
+				self.widgets["config"]['system_home'].set_active(1)
+			elif temp_param["system"] == "unibios": radio.set_active(1)
 
 			frame2.add(box2)
 			box.pack_start(frame2)
@@ -1874,31 +1896,31 @@ class XGngeo:
 			#Country.
 			frame2 = gtk.Frame(_("Country:"))
 
-			table = gtk.Table(3,2)
+			table = gtk.Table(3, 2)
 			self.widgets["config"]['country_japan'] = gtk.RadioButton(None,_("Japan"))
 			table.attach(self.widgets["config"]['country_japan'], 0, 1, 0, 1)
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","japan.png"))
-			table.attach(image,0,1,1,2)
+			table.attach(image, 0, 1, 1, 2)
 
 			self.widgets["config"]['country_usa'] = gtk.RadioButton(
 			self.widgets["config"]['country_japan'],_("USA"))
 			table.attach(self.widgets["config"]['country_usa'], 1, 2, 0, 1)
 			image = gtk.Image()
 			image.set_from_file(os.path.join(datarootpath,"img","usa.png"))
-			table.attach(image,1,2,1,2)
+			table.attach(image, 1, 2, 1, 2)
 
 			radio = gtk.RadioButton(self.widgets["config"]['country_japan'],_("Europe"))
-			table.attach(radio,2,3,0,1)
+			table.attach(radio, 2, 3, 0, 1)
 			image = gtk.Image()
-			image.set_from_file(os.path.join(datarootpath,"img","europe.png"))
-			table.attach(image,2,3,1,2)
+			image.set_from_file(os.path.join(datarootpath, "img", "europe.png"))
+			table.attach(image, 2, 3, 1, 2)
 
-			if temp_param["country"]=="japan":
+			if temp_param["country"] == "japan":
 				self.widgets["config"]['country_japan'].set_active(1)
-			elif temp_param["country"]=="usa": 
+			elif temp_param["country"] == "usa": 
 				self.widgets["config"]['country_usa'].set_active(1)
-			elif temp_param["country"]=="europe":
+			elif temp_param["country"] == "europe":
 				radio.set_active(1)
 
 			frame2.add(table)
@@ -2032,7 +2054,6 @@ class XGngeo:
 			self.widgets["config"]['rominfos'].connect("toggled", bouyaka, image,
 				self.widgets["config"]['rominfoxml'], button)
 
-
 			#History size
 			box2 = gtk.HBox()
 			label = gtk.Label(_("Maximum size of the ROM history menu:"))
@@ -2042,7 +2063,6 @@ class XGngeo:
 			self.widgets["config"]['historysize'] = gtk.SpinButton(adjustment)
 			box2.pack_start(self.widgets["config"]['historysize'],False)
 			table.attach(box2, 0, 1, 3, 4)
-
 
 			#Column separation.
 			table.attach(gtk.VSeparator(), 1, 2, 0, 4, xpadding=6, ypadding=8)
@@ -2073,35 +2093,63 @@ class XGngeo:
 			#Benchmark mode.
 			self.widgets["config"]['bench'] = gtk.CheckButton(
 				_("Execute ROMs in benchmark mode."))
-			if self.params["gngeo"]["bench"]=="true":
+			if self.params["gngeo"]["bench"] == "true":
 				self.widgets["config"]['bench'].set_active(True)
 			box2.pack_start(self.widgets["config"]['bench'])
 
 			frame = gtk.Frame(_("ROM list"))
-			table2 = gtk.Table(2, 2)
+			table2 = gtk.Table(3, 2)
 			
 			#Show available ROMs only.
 			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(
 				_("Only show available ROMs by default."))
 			if self.params["xgngeo"]["showavailableromsonly"] == "true":
 				self.widgets["config"]['showavailableromsonly'].set_active(True)
-			table2.attach(self.widgets["config"]['showavailableromsonly'], 0, 2, 0, 1)
+			table2.attach(self.widgets["config"]['showavailableromsonly'], 0,
+				3, 0, 1)
 
-			def color_select(*args):
-				dialog = gtk.Dialog(title = _("Set available ROM background color"),
-					flags = gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT)
+			def color_select(container):
+				def callback(widget, response):
+					if response == gtk.RESPONSE_OK:
+						# Updating color value and the container background.
+
+						self.params["temp"]["availableromcolor"] = \
+							gtk.color_selection_palette_to_string(
+							[colorsel.get_current_color()])
+							
+						container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(
+							self.params["temp"]["availableromcolor"]))
+
+					dialog.destroy() # Closing the dialog in any case.
+
+				dialog = gtk.Dialog(title=_("Set available ROM background color"),
+					flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+					buttons=(gtk.STOCK_OK, gtk.RESPONSE_OK, gtk.STOCK_CANCEL,
+					gtk.RESPONSE_CANCEL))
 				
 				colorsel = gtk.ColorSelection()
+				colorsel.set_current_color(gtk.color_selection_palette_from_string(
+					self.params["temp"]["availableromcolor"])[0])
 				dialog.vbox.pack_start(colorsel)
-								
+	
+				dialog.connect("response", callback)
 				dialog.show_all()
 
 			#Available ROM background color.
 			label = gtk.Label(_("Available ROM background color:"))
 			table2.attach(label, 0, 1, 1, 2)
-			button = gtk.Button("")
-			button.connect("clicked", color_select)
-			table2.attach(button, 1, 2, 1, 2)
+			self.params["temp"]["availableromcolor"] = self.params["xgngeo"]\
+				["availableromcolor"]
+			container = gtk.EventBox()
+			container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(
+				self.params["temp"]["availableromcolor"]))
+			table2.attach(container, 1, 2, 1, 2)
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_BUTTON)
+			button.add(image)
+			button.connect_object("clicked", color_select, container)
+			table2.attach(button, 2, 3, 1, 2)
 
 			frame.add(table2)
 			box2.pack_start(frame)
@@ -2125,7 +2173,7 @@ class XGngeo:
 		if not firstrun:
 			#"Cancel" Button (except for the first time configuration).
 			button = gtk.Button(stock=gtk.STOCK_CANCEL)
-			button.connect("clicked",lambda *args: self.widgets["config"]\
+			button.connect("clicked", lambda *args: self.widgets["config"]\
 				["main_dialog"].destroy())
 			self.widgets["config"]["main_dialog"].action_area.pack_end(button)
 
@@ -2138,18 +2186,18 @@ class XGngeo:
 			playerChanged(None,True) #Selecting player 1 controls by default.
 
 		#Enlarging the window width if too small.
-		if self.widgets["config"]["main_dialog"].get_size()[0]<380:
-			self.widgets["config"]["main_dialog"].set_size_request(380,-1)
+		if self.widgets["config"]["main_dialog"].get_size()[0] < 380:
+			self.widgets["config"]["main_dialog"].set_size_request(380, -1)
 
-	def config_write(self,widget,type,special=0,mamename=None):
+	def config_write(self, widget, type, special=0, mamename=None):
 		letsWrite = 0
 
-		if type==0:
+		if type == 0:
 			error = 0
 			#Display error dialog or not, according to value icon image stock!
 			#(PATENT PENDING :p)
 			for x in self.imppathicons:
-				if x.get_stock()[0]=="gtk-no": error = 1
+				if x.get_stock()[0] == "gtk-no": error = 1
 
 			if error:				
 				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
@@ -2157,20 +2205,22 @@ class XGngeo:
 					(_("Sorry, this configuration cannot be saved because "
 					"one or more parameters does not look valid."),
 					_("Please check it up then try to save again... ^^;")))
-				dialog.connect("response",lambda *args: dialog.destroy())
+				dialog.connect("response", lambda *args: dialog.destroy())
 				dialog.show_all()
 			else:
-				#Update important path configuration params.
+				#Updating important path configuration params.
 				self.params["gngeo"]["rompath"] = self.widgets["config"]['rompath']\
 					.get_text() #rompath
+				self.params["gngeo"]["biospath"] = self.widgets["config"]['rompath']\
+					.get_text() #biospath (same as rompath for the moment).
 				self.params["gngeo"]["romrc"] = self.widgets["config"]['romrc']\
 					.get_text() #romrc
-				self.params["xgngeo"]["gngeopath"] = self.widgets["config"]['gngeopath']\
-					.get_text() #gngeopath
+				self.params["xgngeo"]["gngeopath"] = self.widgets["config"]\
+					['gngeopath'].get_text() #gngeopath
 
 				letsWrite = 1 #Let's write!
 
-		elif type in (1,2,3,4):
+		elif type in (1, 2, 3, 4):
 			temp_param = {}
 
 			#Updating global emulation configuration params.
@@ -2180,19 +2230,20 @@ class XGngeo:
 				['interpolation'].get_active()] #interpolation
 			temp_param["autoframeskip"] = ("false","true")[self.widgets["config"]\
 				['autoframeskip'].get_active()] #showfps
-			temp_param["showfps"] = ("false","true")[self.widgets["config"]['showfps']\
-				.get_active()] #autoframeskip
+			temp_param["showfps"] = ("false","true")[self.widgets["config"]\
+				['showfps'].get_active()] #autoframeskip
 			temp_param["raster"] = ("false","true")[self.widgets["config"]['raster']\
 				.get_active()] #raster
 			temp_param["hwsurface"] = ("false","true")[self.widgets["config"]\
 				['hwsurface'].get_active()] #hwsurface
-			temp_param["scale"] = int(self.widgets["config"]['scale'].get_value()) #scale
+			temp_param["scale"] = int(self.widgets["config"]['scale']\
+				.get_value()) #scale
 			temp_param["screen320"] = ("false","true")[self.widgets["config"]\
 				['screen320'].get_active()] #screen320
-			temp_param["blitter"] = self.combo_params['blitter'][self.widgets["config"]\
-				['blitter'].get_active()] #blitter
-			temp_param["effect"] = self.combo_params['effect'][self.widgets["config"]\
-				['effect'].get_active()] #effect
+			temp_param["blitter"] = self.combo_params['blitter'][self.widgets\
+				["config"]['blitter'].get_active()] #blitter
+			temp_param["effect"] = self.combo_params['effect'][self.widgets\
+				["config"]['effect'].get_active()] #effect
 			temp_param["transpack"] = (None,self.widgets["config"]['transpack']\
 				.get_text())[os.path.isfile(self.widgets["config"]['transpack']\
 				.get_text())] #transpack
@@ -2240,20 +2291,21 @@ class XGngeo:
 					for row in self.params["temp"]["hotkey_matrix_p%i" % x]:
 						temp_param["p%ihotkey%i" % (x,i)] = ""
 						for butt in row:
-							if butt: temp_param["p%ihotkey%i" % (x,i)] += "%s," % butt
+							if butt:
+								temp_param["p%ihotkey%i" % (x,i)] += "%s," % butt
 							else: break
 						if len(temp_param["p%ihotkey%i" % (x,i)]):
-							temp_param["p%ihotkey%i" % (x,i)] = temp_param["p%ihotkey%i"\
-							% (x,i)][:-1]
+							temp_param["p%ihotkey%i" % (x,i)] = temp_param[
+							"p%ihotkey%i" % (x,i)][:-1]
 						i+=1
 
 			letsWrite = 1 #Let's write!
 
-		elif type==5:
+		elif type == 5:
 			#Update Other things configuration params.
 			self.params["gngeo"]["libglpath"] = self.widgets["config"]['libglpath']\
 				.get_text() #libglpath
-			self.params["xgngeo"]["previewimages"] = ("false","true")\
+			self.params["xgngeo"]["previewimages"] = ("false", "true")\
 				[self.widgets["config"]['previewimages'].get_active()] #previewimage
 			self.params["xgngeo"]["previewimagedir"] = self.widgets["config"]\
 				['previewimagedir'].get_text() #previewimagedir
@@ -2263,12 +2315,14 @@ class XGngeo:
 				.get_text() #rominfoxml
 			self.params["xgngeo"]["historysize"] = int(self.widgets["config"]\
 				['historysize'].get_value()) #historysize
-			self.params["xgngeo"]["autoexecrom"] = ("false","true")\
+			self.params["xgngeo"]["autoexecrom"] = ("false", "true")\
 				[self.widgets["config"]['autoexecrom'].get_active()] #autoexecrom
 			self.params["xgngeo"]["centerwindow"] = ("false","true")\
 				[self.widgets["config"]['centerwindow'].get_active()] #centerwindow
-			self.params["xgngeo"]["showavailableromsonly"] = ("false","true")\
+			self.params["xgngeo"]["showavailableromsonly"] = ("false", "true")\
 				[self.widgets["config"]['showavailableromsonly'].get_active()] #showavailableromsonly
+			self.params["xgngeo"]["availableromcolor"] = self.params["temp"]\
+				["availableromcolor"] #availableromcolor
 			self.params["gngeo"]["sleepidle"] = ("false","true")\
 				[self.widgets["config"]['sleepidle'].get_active()] #sleepidle
 			self.params["gngeo"]["bench"] = ("false","true")[self.widgets["config"]\
@@ -2285,8 +2339,8 @@ class XGngeo:
 			
 				if type==0:
 					#Indicating new paths to the emulator handling module.
-					self.emulator.set_path("gngeo",self.params["xgngeo"]["gngeopath"])
-					self.emulator.set_path("romrc",self.params["gngeo"]["romrc"])
+					self.emulator.set_path("gngeo", self.params["xgngeo"]["gngeopath"])
+					self.emulator.set_path("romrc", self.params["gngeo"]["romrc"])
 
 				elif type in (1,2,3,4):
 					#Putting options considered as temporary ROM-specific
@@ -2296,11 +2350,11 @@ class XGngeo:
 						self.params["gngeo"][key] = val
 
 				self.configfile.write_global_config(self.params["gngeo"],
-					self.params["xgngeo"],VERSION) #Writting out! :p
+					self.params["xgngeo"], VERSION) #Writting out! :p
 				
 				if not special:
 					#Updating status message.
-					self.widgets["statusbar"].push(self.context_id,_(
+					self.widgets["statusbar"].push(self.context_id, _(
 						"Configuration has been saved.")) 
 				else: 
 						#The program has been configured, so that we can use it!
@@ -2349,9 +2403,10 @@ class XGngeo:
 		menu2.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
-		menu_item.connect("activate",self.file_select,_("Load a ROM manually..."),
-			self.params["gngeo"]["rompath"],self.manual_rom_loading,0,{ _("All files") :
-			"*",_("ROM archive") : "*.zip"},True)
+		menu_item.connect("activate", self.file_select, _("Load a ROM "
+			"manually..."), self.params["gngeo"]["rompath"], 
+			self.manual_rom_loading, 0,	{ _("All files") : "*",
+			_("ROM archive") :  "*.zip"}, True)
 		menu2.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
@@ -2366,19 +2421,19 @@ class XGngeo:
 		menu.append(gtk.SeparatorMenuItem()) #Separator
 
 		self.execMenu_item = gtk.ImageMenuItem(gtk.STOCK_EXECUTE)
-		self.execMenu_item.connect("activate",self.gngeo_exec)
+		self.execMenu_item.connect("activate", self.gngeo_exec)
 		self.execMenu_item.set_state(gtk.STATE_INSENSITIVE)
 		menu.append(self.execMenu_item)
 
 		self.stopMenu_item = gtk.ImageMenuItem(gtk.STOCK_STOP)
-		self.stopMenu_item.connect("activate",self.gngeo_stop)
+		self.stopMenu_item.connect("activate", self.gngeo_stop)
 		self.stopMenu_item.set_state(gtk.STATE_INSENSITIVE)
 		menu.append(self.stopMenu_item)
 
 		menu.append(gtk.SeparatorMenuItem()) #Separator
 
 		menu_item = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-		menu_item.connect("activate",self.quit)		
+		menu_item.connect("activate", self.quit)		
 		menu.append(menu_item)
 
 		#
@@ -2465,7 +2520,7 @@ class XGngeo:
 		# Logo
 		#
 		container = gtk.EventBox()
-		container.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("white"))
+		container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
 		logo = gtk.Image()
 		logo.set_from_file(os.path.join(datarootpath,"img","xgngeo.png"))
 		logo.set_padding(25,2)
