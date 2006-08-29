@@ -83,8 +83,7 @@ class XGngeo:
 		for key,val in dict[0].items(): self.params["gngeo"][key] = val
 		for key,val in dict[1].items(): self.params["xgngeo"][key] = val
 
-		self.emulator = emulator.Emulator(self.params["xgngeo"]["gngeopath"],
-			self.params["gngeo"]["romrc"])
+		self.emulator = emulator.Emulator(self.params["xgngeo"]["gngeopath"])
 		self.history = history.History()
 
 		#Statusbar.
@@ -193,12 +192,12 @@ class XGngeo:
 					#5: Screenshot saving message.
 					#6: Joystick device init message.
 					if not line.strip()=="" \
-						and not match(".* [[][\-|\*]{62}[]]?",line)\
-						and not match("Update sai .*",line)\
-						and not match("deltaptr=(\S)* sai",line)\
+						and not match(".* [[][\-|\*]{62}[]]?", line)\
+						and not match("Update sai .*", line)\
+						and not match("deltaptr=(\S)* sai", line)\
 						and not line[:4]=="Add "\
 						and not line[:8]=="save to "\
-						and not match("joy .*, axe:\d+, button:\d+"):
+						and not match("joy .*, axe:\d+, button:\d+", line):
 						#The line contains a unexpected message which is thus
 						#certainly important, so we record it.
 						message += "%s\n" % line.strip()
@@ -469,9 +468,10 @@ class XGngeo:
 			button.connect("clicked", rem_directory)
 			box2.pack_start(button)
 			button = gtk.Button(stock=gtk.STOCK_ADD)
-			button.connect("clicked",self.file_select,_("Select a ROM "
-				"directory to add."),temp_romdir_list[-1], add_directory, 1,
-				None)
+			if len(temp_romdir_list) >= 1: folder = temp_romdir_list[-1]
+			else: folder = None
+			button.connect("clicked",self.file_select, _("Select a ROM "
+				"directory to add."), folder, add_directory, 1, None)
 			button.set_border_width(5)
 			box2.pack_start(button)
 			box.pack_start(box2, False, padding=2)
@@ -732,14 +732,15 @@ class XGngeo:
 		self.widgets['specconf_properties'].hide()
 		self.widgets['specconf_clear'].hide()
 
-	def file_select(self,widget,title,folder,callback=None,dirselect=0,
-		filter=None,rompreview=False):
-		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title, action = (
+	def file_select(self, widget, title, folder=None, callback=None,
+		dirselect=0, filter=None, rompreview=False):
+		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title, action=(
 			gtk.FILE_CHOOSER_ACTION_OPEN, gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)\
-			[dirselect], buttons = (gtk.STOCK_OPEN, gtk.RESPONSE_OK, gtk.STOCK_CANCEL,
+			[dirselect], buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK, gtk.STOCK_CANCEL,
 			gtk.RESPONSE_CANCEL))
-		self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(
-			folder), folder)[os.path.isdir(folder)])
+		if folder:
+			self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(
+				folder), folder)[os.path.isdir(folder)])
 
 		if callback:
 			if type(callback) == str:
@@ -749,8 +750,9 @@ class XGngeo:
 					if response == gtk.RESPONSE_OK:
 						self.widgets["config"][callback].set_text(dialog.get_filename())
 
-				self.widgets["fileselect_dialog"].connect("response",response)
-			else: self.widgets["fileselect_dialog"].connect("response",callback)
+				self.widgets["fileselect_dialog"].connect("response", response)
+			else:
+				self.widgets["fileselect_dialog"].connect("response", callback)
 	
 		#Closing the file selection dialog anyway.
 		self.widgets["fileselect_dialog"].connect('response', lambda *args:
@@ -759,10 +761,11 @@ class XGngeo:
 		if filter: #Using file selection filter(s).
 			for name,patern in filter.items():
 				filter = gtk.FileFilter()
-				filter.set_name("%s (%s)" % (name,patern))
+				filter.set_name("%s (%s)" % (name, patern))
 				filter.add_pattern(patern)
 				self.widgets["fileselect_dialog"].add_filter(filter)
-			self.widgets["fileselect_dialog"].set_filter(filter) #Set filter to the last entry.
+			#Setting filter to the last entry.
+			self.widgets["fileselect_dialog"].set_filter(filter)
 
 		#Displaying ROM preview infos.
 		if rompreview:
@@ -1151,36 +1154,16 @@ class XGngeo:
 			frame.add(box2)
 			box.pack_start(frame)
 
-			frame = gtk.Frame(_('ROM driver file ("romrc"):'))
-			box2 = gtk.HBox()
-
-			self.imppathicons.append(gtk.Image())
-			box2.pack_start(self.imppathicons[1], False, padding=3)
-			self.widgets["config"]['romrc'] = gtk.Entry()
-			self.widgets["config"]['romrc'].connect("changed", set_path_icon,
-				self.imppathicons[1])
-			self.widgets["config"]['romrc'].set_text(self.params["gngeo"]["romrc"])
-			box2.pack_start(self.widgets["config"]['romrc'])
-			button = gtk.Button()
-			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
-			button.add(image)
-			button.connect("clicked", self.file_select, _("Select the ROM driver file."),
-				self.widgets["config"]['romrc'].get_text(), "romrc")
-			box2.pack_end(button, False)
-			frame.add(box2)
-			box.pack_start(frame)
-
 			frame = gtk.Frame(_("Gngeo executable:"))
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
-			box2.pack_start(self.imppathicons[2],False,padding=3)
+			box2.pack_start(self.imppathicons[1], False, padding=3)
 			gngeoversion_label = gtk.Label()
-			box2.pack_start(gngeoversion_label,False,padding=3)
+			box2.pack_start(gngeoversion_label, False, padding=3)
 			self.widgets["config"]['gngeopath'] = gtk.Entry()
 			self.widgets["config"]['gngeopath'].connect("changed",set_path_icon,
-			self.imppathicons[2],0,"gngeopath")
+				self.imppathicons[1], 0, "gngeopath")
 			self.widgets["config"]['gngeopath'].set_text(self.params["xgngeo"]\
 				["gngeopath"])
 			box2.pack_start(self.widgets["config"]['gngeopath'])
@@ -2200,8 +2183,6 @@ class XGngeo:
 				#Updating important path configuration params.
 				self.params["gngeo"]["biospath"] = self.widgets["config"]['biospath']\
 					.get_text() #biospath
-				self.params["gngeo"]["romrc"] = self.widgets["config"]['romrc']\
-					.get_text() #romrc
 				self.params["xgngeo"]["gngeopath"] = self.widgets["config"]\
 					['gngeopath'].get_text() #gngeopath
 
@@ -2327,7 +2308,6 @@ class XGngeo:
 				if type==0:
 					#Indicating new paths to the emulator handling module.
 					self.emulator.set_path("gngeo", self.params["xgngeo"]["gngeopath"])
-					self.emulator.set_path("romrc", self.params["gngeo"]["romrc"])
 
 				elif type in (1,2,3,4):
 					#Putting options considered as temporary ROM-specific
@@ -2547,8 +2527,6 @@ class XGngeo:
 			error = 0
 			#Are BIOS files present?
 			if not self.get_bios_presence(self.params["gngeo"]["biospath"]): error = 1
-			#Is ROM driver file present?
-			if not (os.path.isfile(self.params["gngeo"]["romrc"])): error = 1
 			#Is the Gngeo executable present and returning correct version informations?
 			version = self.emulator.get_gngeo_version()
 			if not version or version[0][1:3]<(6,11): error = 1

@@ -32,8 +32,7 @@ from re import match
 
 class Emulator:
 	def __init__(self, *paths):
-		self.paths = {"gngeo" : paths[0].replace("'","\'"),
-					"romrc" : paths[1].replace("'","\'")}
+		self.paths = {"gngeo" : paths[0].replace("'","\'")}
 		self.cmd = None
 		self.romFullToMame = {}
 		self.romMameToFull = {}
@@ -162,8 +161,8 @@ class Emulator:
 
 	def rom_launching(self, rom_path):
 		"""Starting the Gngeo (failsafe :p) thread."""
-		self.cmd = command.ThreadedCmd("'%s' -d '%s' '%s'" %
-			(self.paths['gngeo'],self.paths['romrc'],rom_path))
+		self.cmd = command.ThreadedCmd("'%s' '%s'" % (self.paths['gngeo'],
+			rom_path))
 		self.cmd.start()
 
 	def rom_waiting_for_hanging_up(self):
