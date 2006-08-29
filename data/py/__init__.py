@@ -43,7 +43,7 @@ import os
 import gettext
 
 import gtk
-if gtk.pygtk_version[:2]<(2,6):
+if gtk.pygtk_version[:2] < (2, 6):
 	sys.exit("Error: PyGTK version 2.6 or more is required.")
 
 from string import capwords
@@ -417,8 +417,8 @@ class XGngeo:
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
 			dialog = gtk.Dialog(_("Setting ROM directories."), parent, gtk.DIALOG_MODAL,
 				(gtk.STOCK_APPLY, gtk.RESPONSE_APPLY, gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
-			label = gtk.Label(_("Here you can add multiple directories to scan for "
-				"ROMs, in addition to your main ROM and Bios directory."))
+			label = gtk.Label(_("Here you can add multiple directories to "
+				"scan for ROMs."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_padding(3, 4)
 			label.set_line_wrap(True)
@@ -443,19 +443,8 @@ class XGngeo:
 				model,iter = treeview.get_selection().get_selected()
 				if iter:
 					dir = model.get_value(iter,0)
-					#Main ROM and BIOS directory must be kept.
-					if dir==_("Main ROM and BIOS directory."): 
-						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
-							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK,	_("You cannot "
-							"remove the main ROM and BIOS directory since it's "
-							"the default place to look for ROMs.\nIf you want "
-							"to, you can modify its path in the important path "
-							"configuration window."))
-						dialog2.connect("response", lambda *args: dialog2.destroy())
-						dialog2.show_all()
-					else:
-						temp_romdir_list.remove(dir)
-						liststore.remove(iter)
+					temp_romdir_list.remove(dir)
+					liststore.remove(iter)
 
 			def response(widget, response):
 				if response == gtk.RESPONSE_APPLY:
@@ -493,9 +482,9 @@ class XGngeo:
 			treeview.set_headers_visible(False)
 			tvcolumn = gtk.TreeViewColumn("Directory")
 			treeview.append_column(tvcolumn)
-			for dir in ([_("Main ROM and BIOS directory.")] + temp_romdir_list\
-				[1:]):
-				liststore.append([dir]) #Inserting content.
+			for dir in temp_romdir_list:
+				#Inserting content.
+				liststore.append([dir])
 			cell = gtk.CellRendererText()
 			tvcolumn.pack_start(cell,True)
 			tvcolumn.set_attributes(cell, text=0)
@@ -711,7 +700,7 @@ class XGngeo:
 
 		#Creating a list of of all availbable ROMs (after scanning all ROM
 		#directories).
-		self.romdir_list = [self.params["gngeo"]["rompath"]]
+		self.romdir_list = []
 		if os.path.exists(os.path.join(xgngeoUserDir, "romdirs")):
 			file = open(os.path.join(xgngeoUserDir, "romdirs"), "r")
 			for line in file.readlines():
@@ -1081,7 +1070,7 @@ class XGngeo:
 					stock = 1
 				else: stock = 0
 
-			elif special=="rompath":
+			elif special=="biospath":
 				#Check for BIOS files.
 				if self.get_bios_presence(path):
 					stock = 1
@@ -1139,25 +1128,25 @@ class XGngeo:
 			box.pack_start(gtk.Label(_("These paths must be valid for a working "
 				"emulation.")))
 
-			frame = gtk.Frame(_("Main ROM and BIOS directory:"))
+			frame = gtk.Frame(_("BIOS files location:"))
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
 			box2.pack_start(self.imppathicons[0], False, padding = 3)
 			bios_label = gtk.Label()
 			box2.pack_start(bios_label, False, padding = 3)
-			self.widgets["config"]['rompath'] = gtk.Entry()
-			self.widgets["config"]['rompath'].connect("changed", set_path_icon,
-				self.imppathicons[0], 1, "rompath")
-			self.widgets["config"]['rompath'].set_text(self.params["gngeo"]["rompath"])
-			box2.pack_start(self.widgets["config"]['rompath'])
+			self.widgets["config"]['biospath'] = gtk.Entry()
+			self.widgets["config"]['biospath'].connect("changed", set_path_icon,
+				self.imppathicons[0], 1, "biospath")
+			self.widgets["config"]['biospath'].set_text(self.params["gngeo"]["biospath"])
+			box2.pack_start(self.widgets["config"]['biospath'])
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked", self.file_select, _("Select the main ROMs "
-				"and BIOS directory."), self.widgets["config"]['rompath'].get_text(),
-				"rompath", 1)
+			button.connect("clicked", self.file_select, _("Select the BIOS files "
+				"location."), self.widgets["config"]['biospath'].get_text(),
+				"biospath", 1)
 			box2.pack_end(button, False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -2209,10 +2198,8 @@ class XGngeo:
 				dialog.show_all()
 			else:
 				#Updating important path configuration params.
-				self.params["gngeo"]["rompath"] = self.widgets["config"]['rompath']\
-					.get_text() #rompath
-				self.params["gngeo"]["biospath"] = self.widgets["config"]['rompath']\
-					.get_text() #biospath (same as rompath for the moment).
+				self.params["gngeo"]["biospath"] = self.widgets["config"]['biospath']\
+					.get_text() #biospath
 				self.params["gngeo"]["romrc"] = self.widgets["config"]['romrc']\
 					.get_text() #romrc
 				self.params["xgngeo"]["gngeopath"] = self.widgets["config"]\
@@ -2404,7 +2391,7 @@ class XGngeo:
 
 		menu_item = gtk.MenuItem(_("_Manually"))
 		menu_item.connect("activate", self.file_select, _("Load a ROM "
-			"manually..."), self.params["gngeo"]["rompath"], 
+			"manually..."), self.params["gngeo"]["biospath"], 
 			self.manual_rom_loading, 0,	{ _("All files") : "*",
 			_("ROM archive") :  "*.zip"}, True)
 		menu2.append(menu_item)
@@ -2559,7 +2546,7 @@ class XGngeo:
 		else: #Performing boot-time important checks.
 			error = 0
 			#Are BIOS files present?
-			if not self.get_bios_presence(self.params["gngeo"]["rompath"]): error = 1
+			if not self.get_bios_presence(self.params["gngeo"]["biospath"]): error = 1
 			#Is ROM driver file present?
 			if not (os.path.isfile(self.params["gngeo"]["romrc"])): error = 1
 			#Is the Gngeo executable present and returning correct version informations?

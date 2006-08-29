@@ -179,7 +179,9 @@ class Configfile:
 
 	def write_global_config(self, gngeoDict, xgngeoDict, version):
 		"""Creating/updatating global configuration files of GnGeo (`gngeorc')
-		and XGngeo (`xgngeo.conf')."""
+		and XGngeo (`xgngeo.conf').
+		
+		"""
 		
 		#Top comments. :p
 		content = []
