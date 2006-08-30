@@ -32,7 +32,7 @@ from re import match
 
 class Emulator:
 	def __init__(self, *paths):
-		self.paths = {"gngeo" : paths[0].replace("'","\'")}
+		self.paths = {"gngeo" : paths[0].replace("'", "\'")}
 		self.cmd = None
 		self.romFullToMame = {}
 		self.romMameToFull = {}
@@ -45,7 +45,7 @@ class Emulator:
 
 	def get_gngeo_version(self, path=None):
 		"""Returning Gngeo version number as tuple and string (or None)."""
-		pipe = os.popen("'%s' --version" % (path or self.paths['gngeo']),"r")
+		pipe = os.popen("'%s' --version" % (path or self.paths['gngeo']), "r")
 		version = match("Gngeo (\S*)", pipe.readline())
 		pipe.close()
 
@@ -121,7 +121,7 @@ class Emulator:
 			plop = match("\s*(\S*):(.*):(\S*)", line)
 			if plop:
 				#Archive was effectively recognized as a ROM!
-				if plop.group(3)==filename:
+				if plop.group(3) == filename:
 					#Returning the infos. :-)
 					return plop.group(1), plop.group(2) 
 
@@ -137,8 +137,7 @@ class Emulator:
 		"""
 		dictionary = {}
 		pipe = os.popen("'%s' --scandir='%s'" % (self.paths['gngeo'],
-			directory.replace("'","\'")),
-			"r")
+			directory.replace("'", "\'")), "r")
 
 		if not filesel_dialog:
 			#Normal dict formating: MAME name => file name.

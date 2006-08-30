@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 """ XGngeo: a frontend for Gngeo in GTK. ^_^.
 
-Copyleft 2003, 2004, 2005, 2006 Choplair-network
-$Id$
+	Copyleft 2003, 2004, 2005, 2006 Choplair-network
+	$Id$
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 """
 
@@ -50,7 +50,7 @@ from string import capwords
 from re import match
 from threading import Timer
 
-#Internal modules.
+# Internal modules.
 import configfile
 import emulator
 import history
@@ -62,23 +62,23 @@ xgngeoUserDir = os.path.expanduser("~/.xgngeo")
 gngeoUserDir = os.path.expanduser("~/.gngeo")
 datarootpath = os.path.join(sys.prefix, 'share', 'xgngeo')
 
-#Internationalization.
+# Internationalization.
 gettext.install("xgngeo", os.path.join(datarootpath, "locale"))
 
 class XGngeo:
 	def __init__(self):
 		# Default values...
 		self.tempparam = {}
-		self.widgets = {"config":{}}
+		self.widgets = {"config": {}}
 		self.romPath = None
 
 		# Loading emulator/frontend configuration.
 		self.configfile = configfile.Configfile(datarootpath, xgngeoUserDir,
 		gngeoUserDir)
-		self.params = {"temp":{}}
+		self.params = {"temp": {}}
 		self.params["gngeo"], self.params["xgngeo"] = self.configfile\
 			.get_default_params()
-		#Overwriting default params by the ones in configuration files.
+		# Overwriting default params by the ones in configuration files.
 		dict = self.configfile.get_params()
 		for key,val in dict[0].items(): self.params["gngeo"][key] = val
 		for key,val in dict[1].items(): self.params["xgngeo"][key] = val
@@ -86,35 +86,37 @@ class XGngeo:
 		self.emulator = emulator.Emulator(self.params["xgngeo"]["gngeopath"])
 		self.history = history.History()
 
-		#Statusbar.
+		# Statusbar.
 		self.widgets["statusbar"] = gtk.Statusbar()
 		self.context_id = self.widgets["statusbar"].get_context_id("Info")
 
-		#Main window inital attributes.
+		# Main window inital attributes.
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		gtk.window_set_default_icon_from_file(os.path.join(datarootpath, "img",
 			"icon.png"))
 	
 	def check_error(self):
-		#Check for Gngeo's home directory.
+		#Checking for Gngeo's home directory.
 		if not os.path.isdir(gngeoUserDir):
 			os.mkdir(gngeoUserDir)
 
 		def callback(widget, response):
 			dialog.destroy()
 			if response == gtk.RESPONSE_DELETE_EVENT: self.quit() #Exit all.
-			else: self.config(firstrun=1) #Going to important path configuration window.
+			else:
+				# Going to important path configuration window.
+				self.config(firstrun=1)
 
 		dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,
 			type=gtk.MESSAGE_WARNING, buttons=gtk.BUTTONS_OK,
 			message_format = _("It seems that the important path parameters "
-			"are not all valid. That is normal if Gngeo configuration file hasn't "
-			"been yet created. Anyway, correct values should be specified for "
-			"the emulation to work. Press OK to do so..."))
+			"are not all valid. That is normal if Gngeo configuration file "
+			"hasn't been yet created. Anyway, correct values should be "
+			"specified for the emulation to work. Press OK to do so..."))
 		dialog.connect("response", callback)
 		dialog.show_all()
 
-	def display_file(self,widget, filename):
+	def display_file(self, widget, filename):
 		display = 1
 		textbuffer = gtk.TextBuffer()
 		filename = os.path.join(datarootpath, filename)
@@ -131,9 +133,9 @@ class XGngeo:
 			else: display = 0
 
 		if display:
-			dialog = gtk.Dialog((filename, _("License"))[filename[-11:]=="LICENSE.txt"],
-				self.window, gtk.DIALOG_NO_SEPARATOR|gtk.DIALOG_MODAL,
-				(gtk.STOCK_CLOSE,	gtk.RESPONSE_CLOSE))
+			dialog = gtk.Dialog((filename, _("License"))[filename[-11:] == \
+				"LICENSE.txt"], self.window, gtk.DIALOG_NO_SEPARATOR |
+				gtk.DIALOG_MODAL, (gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
 
 			if filename[-11:]=="LICENSE.txt":
 				label = gtk.Label(_("This program is released under the terms "
@@ -158,24 +160,26 @@ class XGngeo:
 
 	def gngeo_get_output(self):
 		"""This function is embeded in a thread and perform
-		some Gngeo post-execution instructions after it
-		terminates."""
-		#Waiting for Gngeo to hang up...
+			some Gngeo post-execution instructions after it
+			terminates.
+		
+		"""
+		# Waiting for Gngeo to hang up...
 		self.emulator.rom_waiting_for_hanging_up()
 
-		gtk.threads_enter() #Without this, it often bugs. :p
+		gtk.threads_enter() # Without this, it often bugs. :p
 		
-		#Simple post-execution instruction.
-		self.history_add(self.romFullName,self.romPath) #Appendding ROM too history.
+		# Simple post-execution instruction.
+		self.history_add(self.romFullName,self.romPath) # Appendding ROM too history.
 		self.widgets["statusbar"].push(self.context_id,_("ROM stopped (%s).") %
-			self.romMameName) #Updating status bar.
+			self.romMameName) # Updating status bar.
 
-		#--------------------------------------------------------
+		# --------------------------------------------------------
 		# Introducing our exclusive and innovative system
 		# to catch and display error returned by Gngeo, aka :
 		#         `` DA XGNGEO CRAP DETECTOR " !
 		# Covererd by patents 2173965, 1004076, 5867297, etc.
-		#--------------------------------------------------------
+		# --------------------------------------------------------
 		# We'll check whether there was a f*ck then try to display
 		# the error/warning message returned by Gngeo if it's the case.
 		# We do not so when the game was stopped from XGngeo.
@@ -185,12 +189,12 @@ class XGngeo:
 			#Parsing the output, line per line, looking for error...
 			for line in output.split("\n"):
 				for line in line.split("\r"):
-					#We ignore usual messages:
-					#1: ROM loading progression.
-					#2 & 3: YUV driver output.
-					#4: ROM driver creation message (in Gngeo 0.6.5beta).
-					#5: Screenshot saving message.
-					#6: Joystick device init message.
+					# We ignore usual messages:
+					# 1: ROM loading progression.
+					# 2 & 3: YUV driver output.
+					# 4: ROM driver creation message (in Gngeo 0.6.5beta).
+					# 5: Screenshot saving message.
+					# 6: Joystick device init message.
 					if not line.strip()=="" \
 						and not match(".* [[][\-|\*]{62}[]]?", line)\
 						and not match("Update sai .*", line)\
@@ -198,12 +202,12 @@ class XGngeo:
 						and not line[:4]=="Add "\
 						and not line[:8]=="save to "\
 						and not match("joy .*, axe:\d+, button:\d+", line):
-						#The line contains a unexpected message which is thus
-						#certainly important, so we record it.
+						# The line contains a unexpected message which is thus
+						# certainly important, so we record it.
 						message += "%s\n" % line.strip()
 
 			if message!="": 
-				#Oh dear! There was a f*ck! Let's display the info dialog.
+				# Oh dear! There was a f*ck! Let's display the info dialog.
 				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
 					gtk.MESSAGE_INFO,  gtk.BUTTONS_OK)
 				dialog.set_markup("%s\n\n<span color='#b00'>%s</span>" %
@@ -214,7 +218,7 @@ class XGngeo:
 				dialog.show_all()
 		#-------------------------------------------------------------------------
 
-		#Performing some modifications on the menu.
+		# Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(True)
 		self.history_menu_item.set_sensitive(True)
 		for x in self.widgets["history_menu"].get_children(): x.set_sensitive(True)
@@ -240,7 +244,7 @@ class XGngeo:
 	def gngeo_exec(self,widget=None):
 		Timer(0,self.rom_loading_in_progress).start()
 
-		#Performing some modifications on the menu.
+		# Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(False)
 		self.history_menu_item.set_sensitive(False)
 		for x in self.widgets["history_menu"].get_children():
@@ -252,7 +256,7 @@ class XGngeo:
 		self.emulator.rom_launching(self.romPath)
 
 		self.gngeokilledbyme = 0
-		#Starting another thread which watchs out the last one!
+		# Starting another thread which watchs out the last one!
 		Timer(0,self.gngeo_get_output).start()
 
 	def gngeo_stop(self, widget=None):
@@ -266,11 +270,13 @@ class XGngeo:
 	def rom_list(self, widget):
 		def button_pressed(widget, event):
 			"""Popping-up a menu on rigth clicking over an available ROM
-			in the list."""
+				in the list.
+			
+			"""
 			if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
 				def confirm_deletion_dial(*args):
 					liststore, iter = treeselection.get_selected()
-					if iter: #Is there anything selected?
+					if iter: # Is there anything selected?
 						fullname =  liststore.get_value(iter, 0)
 						availability = liststore.get_value(iter, 1)
 						filepath =  liststore.get_value(iter, 2)
@@ -279,16 +285,19 @@ class XGngeo:
 							def response(widget, response_id):
 								if response_id == gtk.RESPONSE_YES:
 									try:
-										#Proceeding with deletion.
+										# Proceeding with deletion.
 										os.remove(filepath)
 									except:
-										#A problem happend in doing so.
-										dialog2 = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
-											gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, _("An error "
-											"occured while trying to delete the ROM archive."))
-										dialog2.connect("response", lambda *args: dialog2.destroy())
+										# A problem happend in doing so.
+										dialog2 = gtk.MessageDialog(
+											self.window, gtk.DIALOG_MODAL,
+											gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+											_("An error occured while trying "
+											"to delete the ROM archive."))
+										dialog2.connect("response",
+											lambda *args: dialog2.destroy())
 									else:
-										#Deletion succeded. Now refreshing the list.
+										# Deletion succeded. Now refreshing the list.
 										refreshing_rom_list()
 										
 								#Closing the dialog in any case.
@@ -299,13 +308,13 @@ class XGngeo:
 							dialog.set_markup(_("Should XGngeo proceed with the "
 								"deletion of the ROM <b>%s</b> located at <i>%s</i>?" %
 								(fullname, filepath)))
-							dialog. format_secondary_text(_("Please note this operation "
-								"is irremediable."))
+							dialog. format_secondary_text(_("Please note this "
+								"operation is irremediable."))
 							dialog.connect("response", response)
 						else: 
 							dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
-								gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, _("Cannot delete "
-								"a ROM which unavailable!"))
+								gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, _("Cannot "
+								"delete a ROM which unavailable!"))
 							dialog.connect("response", lambda *args: dialog.destroy())
 						dialog.show_all()
 			
@@ -314,7 +323,7 @@ class XGngeo:
 				item.connect("activate", confirm_deletion_dial)
 				item.show()
 				menu.append(item)
-				menu.popup(None,None,None,event.button,event.time)
+				menu.popup(None, None, None, event.button, event.time)
 
 		def new_list_selection(*args):
 				#Ensure that the set the right side is no more insensitive.
@@ -330,19 +339,19 @@ class XGngeo:
 
 					#Temporary select the ROM for loading if available.
 					if availability:
-						self.romFromList, self.romFromListName,  self.romFromListPath = \
-							mamename, fullname, filepath
+						self.romFromList, self.romFromListName,\
+							self.romFromListPath = mamename, fullname, filepath
 					else:
-						self.romFromList, self.romFromListName, self.romFromListPath = \
-							None, None, None
+						self.romFromList, self.romFromListName,\
+							self.romFromListPath = None, None, None
 					open_button.set_sensitive(availability)
 
 					#Update mame name and availability icon.
 					self.mamename = mamename #The current selected mamename is exported.
 					self.widgets['mamename_label'].set_text("<b>%s</b>" % mamename)
 					self.widgets['mamename_label'].set_use_markup(True)
-					self.avail_image.set_from_stock((gtk.STOCK_NO, gtk.STOCK_YES)[availability],
-						gtk.ICON_SIZE_MENU)
+					self.avail_image.set_from_stock((gtk.STOCK_NO,
+						gtk.STOCK_YES)[availability], gtk.ICON_SIZE_MENU)
 
 					#Update preview image.
 					if self.params["xgngeo"]["previewimages"] == "true":
@@ -355,19 +364,21 @@ class XGngeo:
 							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
 								["previewimagedir"], "unavailable.png"))
 
-					#Updating rom infos.
-					if self.params["xgngeo"]["rominfos"] == "true" and os.path.isfile(
-						self.params["xgngeo"]["rominfoxml"]):
-						#Check for game informations.
+					# Updating rom infos.
+					if self.params["xgngeo"]["rominfos"] == "true" and \
+						os.path.isfile(self.params["xgngeo"]["rominfoxml"]):
+						# Checking for game informations.
 						if self.romInfos.has_key(mamename):
-							for x in ("desc", "manufacturer", "year", "genre", "players", "rating"):
+							for x in ("desc", "manufacturer", "year", "genre",
+								"players", "rating"):
 								self.romInfosWidget[x].set_text(("--",self.romInfos[mamename][x], "--")\
 									[self.romInfos[mamename].has_key(x)])
 							if self.romInfos[mamename].has_key("size"):
 								self.romInfosWidget["size"].set_text("%sMbit" %
 									self.romInfos[mamename]["size"])
 						else:
-							for x in ("desc", "manufacturer", "year", "genre", "players", "rating", "size"):
+							for x in ("desc", "manufacturer", "year", "genre",
+								"players", "rating", "size"):
 								self.romInfosWidget[x].set_text("--")
 
 					#Update specific configuration buttons.
@@ -393,7 +404,7 @@ class XGngeo:
 			available_rom = {}
 			for dir in self.romdir_list:
 				for mame, file in  self.emulator.scan_rom_in_directory(dir).items():
-					available_rom[mame] = os.path.join(dir,file)
+					available_rom[mame] = os.path.join(dir, file)
 			
 			#Adding ROM rows.
 			self.emulator.get_all_supported_roms()
@@ -414,8 +425,9 @@ class XGngeo:
 
 		def rom_directories(widget,parent):
 			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
-			dialog = gtk.Dialog(_("Setting ROM directories."), parent, gtk.DIALOG_MODAL,
-				(gtk.STOCK_APPLY, gtk.RESPONSE_APPLY, gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
+			dialog = gtk.Dialog(_("Setting ROM directories."), parent,
+				gtk.DIALOG_MODAL, (gtk.STOCK_APPLY, gtk.RESPONSE_APPLY,
+				gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
 			label = gtk.Label(_("Here you can add multiple directories to "
 				"scan for ROMs."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
@@ -433,8 +445,8 @@ class XGngeo:
 						liststore.append([dir])
 					else: #No need to put the same directory twice.
 						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
-							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK, _("This directory "
-							"is already in the ROM directory list!"))
+							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK, _("This "
+							"directory is already in the ROM directory list!"))
 						dialog2.connect("response", lambda *args: dialog2.destroy())
 						dialog2.show_all()
 
@@ -567,7 +579,7 @@ class XGngeo:
 			["rominfos"] == "true" and os.path.isfile(self.params["xgngeo"]\
 			["rominfoxml"]))):
 			notebook = gtk.Notebook()
-			rightside.pack_start(notebook, padding = 4)
+			rightside.pack_start(notebook, padding=4)
 			noteisthere = 1
 
 			#Preview images.
@@ -666,25 +678,26 @@ class XGngeo:
 		box2.pack_end(self.avail_image, False)
 		rightside.pack_start(box2, not noteisthere)
 
-		#ROM-specific configuration.
+		# ROM-specific configuration.
 		def delete_rom_conf(*args):
 			os.remove(os.path.join(gngeoUserDir,"%s.cf" % self.mamename))
-			#Update buttons.
+			# Update buttons.
 			self.widgets['specconf_new'].show()
 			self.widgets['specconf_properties'].hide()
 			self.widgets['specconf_clear'].hide()
 
 		self.specconf = {}
 		frame = gtk.Frame(_("Specific configuration:"))
-		frame.set_label_align(0.5,0.5) #Center is better. :p
+		frame.set_label_align(0.5, 0.5) # Center is better. :p
 		box2 = (gtk.VBox(),gtk.HBox())[noteisthere]
 
 		self.widgets['specconf_new'] = gtk.Button(stock=gtk.STOCK_NEW)
-		self.widgets['specconf_new'].connect("clicked",self.config,1,0,1)
+		self.widgets['specconf_new'].connect("clicked",self.config, 1, 0, 1)
 		box2.pack_start(self.widgets['specconf_new'])
 
 		self.widgets['specconf_properties'] = gtk.Button(stock=gtk.STOCK_EDIT)
-		self.widgets['specconf_properties'].connect("clicked",self.config,1,0,1)
+		self.widgets['specconf_properties'].connect("clicked",self.config, 1,
+			0, 1)
 		box2.pack_start(self.widgets['specconf_properties'])
 
 		self.widgets['specconf_clear'] = gtk.Button(stock=gtk.STOCK_CLEAR)
@@ -698,8 +711,8 @@ class XGngeo:
 		dialog.vbox.pack_start(table)
 		rightside.set_sensitive(False)
 
-		#Creating a list of of all availbable ROMs (after scanning all ROM
-		#directories).
+		# Creating a list of of all availbable ROMs (after scanning all ROM
+		# directories).
 		self.romdir_list = []
 		if os.path.exists(os.path.join(xgngeoUserDir, "romdirs")):
 			file = open(os.path.join(xgngeoUserDir, "romdirs"), "r")
@@ -711,8 +724,8 @@ class XGngeo:
 		#Initial ROM list generation.
 		refreshing_rom_list()
 
-		#Initialize ROM names (MAME <=> full name) correspondency list (only
-		#needed once).
+		# Initialize ROM names (MAME <=> full name) correspondency list (only
+		# needed once).
 		self.emulator.get_all_supported_roms()
 		romlist_fullname = self.emulator.get_rom_full_names()
 		romlist = self.emulator.get_rom_full_to_mame()
@@ -738,15 +751,18 @@ class XGngeo:
 			gtk.FILE_CHOOSER_ACTION_OPEN, gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)\
 			[dirselect], buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK, gtk.STOCK_CANCEL,
 			gtk.RESPONSE_CANCEL))
+
 		if folder:
-			self.widgets["fileselect_dialog"].set_current_folder((os.path.dirname(
-				folder), folder)[os.path.isdir(folder)])
+			self.widgets["fileselect_dialog"].set_current_folder(
+				os.path.dirname(folder))
 
 		if callback:
 			if type(callback) == str:
 				def response(dialog,response):
 					"""Ouputing the selected file or directory path to a 
-					particular text entry."""
+					particular text entry.
+					
+					"""
 					if response == gtk.RESPONSE_OK:
 						self.widgets["config"][callback].set_text(dialog.get_filename())
 
@@ -787,9 +803,9 @@ class XGngeo:
 						tuple =  self.params["temp"]["currdir_romscaninfos"][filename]
 
 						#With image mode.
-						if show_image=="true":
+						if show_image == "true":
 							if os.path.isfile(os.path.join(self.params["xgngeo"]\
-								["previewimagedir"],"%s.png" % tuple[0])):
+								["previewimagedir"], "%s.png" % tuple[0])):
 								self.widgets["fileselect_preview_image"].set_from_file(
 									os.path.join(self.params["xgngeo"]["previewimagedir"],
 									"%s.png" % tuple[0]))
@@ -800,12 +816,13 @@ class XGngeo:
 									"unavailable.png"))
 
 						#Full name label.
-						self.widgets["fileselect_preview_label"].set_text(((_( "Detected ROM: "
-							"<b>%s</b>."), "<b>%s</b>")[show_image=="true"]) % tuple[1])
+						self.widgets["fileselect_preview_label"].set_text(((_(
+							"Detected ROM: <b>%s</b>."), "<b>%s</b>")[
+							show_image == "true"]) % tuple[1])
 
 					else:
-						#Current selection has *not* been detected as a ROM: no preview.
-						if show_image=="true": #With image mode.
+						# Current selection has *not* been detected as a ROM: no preview.
+						if show_image == "true": # With image mode.
 							if os.path.isfile(os.path.join(self.params["xgngeo"]\
 								["previewimagedir"],"unavailable.png")):
 								self.widgets["fileselect_preview_image"]\
@@ -816,18 +833,20 @@ class XGngeo:
 							self.widgets["fileselect_preview_label"].set_text(_("Detected ROM: "
 								"<b>%s</b>.") % "--")
 
-				else: #Not a file: no preview. :p
-					if show_image=="true": #With image mode.
-						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
-							"unavailable.png")):
+				else: # Not a file: no preview. :p
+					if show_image == "true": # With image mode.
+						if os.path.isfile(os.path.join(self.params["xgngeo"]\
+							["previewimagedir"], "unavailable.png")):
 							self.widgets["fileselect_preview_image"].set_from_file(
-								os.path.join(self.params["xgngeo"]["previewimagedir"],"unavailable.png"))
-						self.widgets["fileselect_preview_label"].set_text("<b>--</b>")
+								os.path.join(self.params["xgngeo"]\
+									["previewimagedir"], "unavailable.png"))
+						self.widgets["fileselect_preview_label"].set_text(
+							"<b>--</b>")
 					else:
-						self.widgets["fileselect_preview_label"].set_text(_("Detected ROM: "
-							"<b>%s</b>.") % "--")
+						self.widgets["fileselect_preview_label"].set_text(_(
+							"Detected ROM: <b>%s</b>.") % "--")
 
-				#Setting use markup for the label which is displayed in any case.
+				# Setting use markup for the label which is displayed in any case.
 				self.widgets["fileselect_preview_label"].set_use_markup(True) 
 
 			box = gtk.VBox()
@@ -844,14 +863,16 @@ class XGngeo:
 			box.show_all()
 
 			if show_image=="true": #With image mode.
-				self.widgets["fileselect_preview_label"].set_size_request(280,-1)
+				self.widgets["fileselect_preview_label"].set_size_request(280,
+					-1)
 				self.widgets["fileselect_preview_label"].set_line_wrap(True)
 				self.widgets["fileselect_dialog"].set_preview_widget(box)
 				self.widgets["fileselect_dialog"].set_preview_widget_active(True)
 			else:
 				self.widgets["fileselect_dialog"].set_extra_widget(box)
 			
-			self.widgets["fileselect_dialog"].connect("selection-changed", update_preview)
+			self.widgets["fileselect_dialog"].connect("selection-changed",
+				update_preview)
 			self.widgets["fileselect_dialog"].connect("current-folder-changed",
 				scan_dir_for_roms)
 
@@ -870,13 +891,15 @@ class XGngeo:
 				self.setting_current_rom(path,archive_infos[0], archive_infos[1])
 
 			else: #Unknow ROM that cannot be loaded.
-				dialog = gtk.MessageDialog(flags = gtk.DIALOG_MODAL, type = gtk.MESSAGE_ERROR,
-					buttons = gtk.BUTTONS_OK, message_format=_("Gngeo is not "
-					"recognizing this ROM anymore!"))
-				dialog.format_secondary_text(_("Such an issue has two explanations: "
-					"the ROM archive has been corrupted or the driver that used to handle "
-					"this ROM has been altered/deleted (most probable)."))
-				dialog.connect("response",lambda *args: dialog.destroy())
+				dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,
+					type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK,
+					message_format=_("Gngeo is not recognizing this ROM "
+					"anymore!"))
+				dialog.format_secondary_text(_("Such an issue has two "
+					"explanations: the ROM archive has been corrupted or the "
+					"driver that used to handle this ROM has been altered/"
+					"deleted (most probable)."))
+				dialog.connect("response", lambda *args: dialog.destroy())
 				dialog.show_all()
 
 		else:
@@ -906,12 +929,12 @@ class XGngeo:
 			if os.path.isfile(path): #Does that file exist?
 				archive_infos = self.emulator.archive_recognition(path)
 
-				#Is the archive recognized as a ROM?
+				# Is the archive recognized as a ROM?
 				if archive_infos:
-					#Okay. Loading ROM using the obtained infos.
+					# Okay. Loading ROM using the obtained infos.
 					self.setting_current_rom(path,archive_infos[0],archive_infos[1])
 
-				else: #Unknow ROM that cannot be loaded.
+				else: # Unknow ROM that cannot be loaded.
 					dialog = gtk.MessageDialog(flags=gtk.DIALOG_MODAL,type=gtk.MESSAGE_ERROR,
 						buttons=gtk.BUTTONS_OK, message_format = _("This ROM "
 						"is unloadable because Gngeo could not find any "
@@ -919,7 +942,7 @@ class XGngeo:
 					dialog.connect("response", lambda *args: dialog.destroy())
 					dialog.show_all()
 
-			else: #Unexisting file!
+			else: # Unexisting file!
 				dialog = gtk.MessageDialog(flags = gtk.DIALOG_MODAL, type = gtk.MESSAGE_ERROR,
 					buttons = gtk.BUTTONS_OK, message_format = _("Error: file doesn't exist!"))
 				dialog.connect("response", lambda *args: dialog.destroy())
@@ -940,16 +963,17 @@ class XGngeo:
 	def history_menu_generation(self):
 		"""(Re)Generating ROM History menu from the current ROM History list."""
 
-		#Removing old entries (if any) but keeping the tear-off widget.
+		# Removing old entries (if any) but keeping the tear-off widget.
 		for x in self.widgets["history_menu"].get_children()[1:]:
 			self.widgets["history_menu"].remove(x) 
 
-		#Putting the new ones...
+		# Putting the new ones...
 		pos = 0
 		for val in self.history.get_list():
 			if val[2]: menu_item = gtk.MenuItem(val[0])
 			else:
-				#Adding a ``warning" icon when the ROM is not available on the file system.
+				# Adding a ``warning" icon when the ROM is not available on
+				# the file system.
 				image = gtk.Image()
 				image.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_MENU)
 				menu_item = gtk.ImageMenuItem(val[0])
@@ -967,8 +991,8 @@ class XGngeo:
 			fullname = infos[1]
 		# Add  the Rom
 		self.history.add_rom(fullname, path, size = int(self.params["xgngeo"]\
-			["historysize"])) #Updating ROM History file.
-		self.history_menu_generation() #Recreating ROM History menu.
+			["historysize"])) # Updating ROM History file.
+		self.history_menu_generation() # Recreating ROM History menu.
 
 	def history_remove(self,widget, menu_item, position):
 		self.history.remove_rom(position)
@@ -976,15 +1000,15 @@ class XGngeo:
 		self.history_menu_generation()
 
 	def setting_current_rom(self,path,mamename,fullname):
-		#Updating variables.
+		# Updating variables.
 		self.romPath = path
 		self.romMameName = mamename
 		self.romFullName = fullname
 
-		#Doing generic post-selection stuffs.
-		self.history_add(fullname,path) #Appending ROM to the History list.
+		# Doing generic post-selection stuffs.
+		self.history_add(fullname,path) # Appending ROM to the History list.
 		self.widgets["statusbar"].push(self.context_id,_("ROM: \"%s\" (%s)") %
-			(fullname,mamename)) #Updating status message.
+			(fullname,mamename)) # Updating status message.
 			
 		if self.params["xgngeo"]["autoexecrom"] == "true":
 			self.gngeo_exec() #Auto-executing the ROM...
@@ -1020,7 +1044,7 @@ class XGngeo:
 
 		frame = gtk.Frame(_("Credits"))
 		container = gtk.EventBox()
-		container.modify_bg(gtk.STATE_NORMAL,gtk.gdk.color_parse("#c9ddff"))
+		container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("#c9ddff"))
 		box = gtk.HBox(spacing=6)
 		box.set_border_width(3)
 
@@ -1046,8 +1070,8 @@ class XGngeo:
 			"Polish: Mateusz Wolsza.\n"
 			"Spanish: Sheng Long Gradilla.")))
 		buffer.apply_tag(buffer.create_tag(justification=gtk.JUSTIFY_CENTER,
-			editable=False),buffer.get_start_iter(),buffer.get_end_iter())
-		buffer.apply_tag(buffer.create_tag(weight=700),buffer.get_iter_at_line(4),
+			editable=False), buffer.get_start_iter(), buffer.get_end_iter())
+		buffer.apply_tag(buffer.create_tag(weight=700), buffer.get_iter_at_line(4),
 			buffer.get_iter_at_line(5))
 		textview = gtk.TextView(buffer)
 		textview.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse("#c9ddff"))
@@ -1063,9 +1087,11 @@ class XGngeo:
 	def config(self, widget = None, type = 0, firstrun = 0, romspecific = 0):
 		def set_path_icon(widget, image, dir = 0, special = None):
 			"""We check whether the path written in the text entry is an
-			existing file or directory, and change the icon	in consequence.
-			There might have some other special conditions for the icon
-			to get changed."""
+				existing file or directory, and change the icon	in consequence.
+				There might have some other special conditions for the icon
+				to get changed.
+			
+			"""
 			path = widget.get_text()
 
 			if not special:
@@ -1108,14 +1134,14 @@ class XGngeo:
 			image.set_from_stock((gtk.STOCK_NO, gtk.STOCK_YES)[stock],
 				gtk.ICON_SIZE_MENU)
 
-		self.widgets["config"]["main_dialog"] = gtk.Dialog(parent = self.window,
-			flags = gtk.DIALOG_MODAL)
+		self.widgets["config"]["main_dialog"] = gtk.Dialog(parent=self.window,
+			flags=gtk.DIALOG_MODAL)
 
 		if firstrun:
 			self.widgets["config"]["main_dialog"].connect("delete_event", self.quit)
 		elif not romspecific:
 			self.widgets["config"]["main_dialog"].connect("destroy", lambda *args:\
-				self.widgets["statusbar"].push(self.context_id,_("Configuration "
+				self.widgets["statusbar"].push(self.context_id, _("Configuration "
 				"was not saved.")))
 
 		if type==0:
@@ -1135,21 +1161,22 @@ class XGngeo:
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
-			box2.pack_start(self.imppathicons[0], False, padding = 3)
+			box2.pack_start(self.imppathicons[0], False, padding=3)
 			bios_label = gtk.Label()
-			box2.pack_start(bios_label, False, padding = 3)
+			box2.pack_start(bios_label, False, padding= 3)
 			self.widgets["config"]['biospath'] = gtk.Entry()
-			self.widgets["config"]['biospath'].connect("changed", set_path_icon,
-				self.imppathicons[0], 1, "biospath")
-			self.widgets["config"]['biospath'].set_text(self.params["gngeo"]["biospath"])
+			self.widgets["config"]['biospath'].connect("changed",
+				set_path_icon, self.imppathicons[0], 1, "biospath")
+			self.widgets["config"]['biospath'].set_text(self.params["gngeo"]\
+				["biospath"])
 			box2.pack_start(self.widgets["config"]['biospath'])
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked", self.file_select, _("Select the BIOS files "
-				"location."), self.widgets["config"]['biospath'].get_text(),
-				"biospath", 1)
+			button.connect("clicked", self.file_select, _("Select the BIOS"
+				"files location."), self.widgets["config"]['biospath']\
+				.get_text(), "biospath", 1)
 			box2.pack_end(button, False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -1162,31 +1189,31 @@ class XGngeo:
 			gngeoversion_label = gtk.Label()
 			box2.pack_start(gngeoversion_label, False, padding=3)
 			self.widgets["config"]['gngeopath'] = gtk.Entry()
-			self.widgets["config"]['gngeopath'].connect("changed",set_path_icon,
+			self.widgets["config"]['gngeopath'].connect("changed", set_path_icon,
 				self.imppathicons[1], 0, "gngeopath")
 			self.widgets["config"]['gngeopath'].set_text(self.params["xgngeo"]\
 				["gngeopath"])
 			box2.pack_start(self.widgets["config"]['gngeopath'])
 			button = gtk.Button()
 			image = gtk.Image()
-			image.set_from_stock(gtk.STOCK_OPEN,gtk.ICON_SIZE_MENU)
+			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked",self.file_select,_("Select the Gngeo executable."),
-				self.widgets["config"]['gngeopath'].get_text(),"gngeopath")
-			box2.pack_end(button,False)
+			button.connect("clicked", self.file_select, _("Select the Gngeo executable."),
+				self.widgets["config"]['gngeopath'].get_text(), "gngeopath")
+			box2.pack_end(button, False)
 			frame.add(box2)
 			box.pack_start(frame)
 
 			self.widgets["config"]["main_dialog"].vbox.pack_start(box)
 
 		elif type in (1,2,3,4):
-			#By default the parameters of these sections will be set with the values of
-			#the previously saved global emulation options.
+			# By default the parameters of these sections will be set with the
+			# values of the previously saved global emulation options.
 			temp_param = {}
-			for key,val in self.params["gngeo"].items(): temp_param[key] = val
+			for key, val in self.params["gngeo"].items(): temp_param[key] = val
 			if romspecific:
-				#Replace global params by (hypotheticaly) previously saved ROM-specific
-				#ones.
+				# Replace global params by (hypotheticaly) previously saved
+				# ROM-specific ones.
 				for key,val in self.configfile.get_params(self.mamename).items():
 					temp_param[key] = val
 
@@ -1207,37 +1234,37 @@ class XGngeo:
 			box.set_border_width(4)
 			notebook.append_page(box,gtk.Label(_("Graphic")))
 
-			table = gtk.Table(2,3)
+			table = gtk.Table(2, 3)
 
 			#Fullscreen.
 			self.widgets["config"]['fullscreen'] = gtk.CheckButton(_("Fullscreen"))
-			if temp_param["fullscreen"]=="true":
-				self.widgets["config"]['fullscreen']	.set_active(1)
+			if temp_param["fullscreen"] == "true":
+				self.widgets["config"]['fullscreen'].set_active(1)
 			table.attach(self.widgets["config"]['fullscreen'], 0, 1, 0, 1)
 			#Interpolation.
 			self.widgets["config"]['interpolation'] = gtk.CheckButton(_("Interpolation"))
-			if temp_param["interpolation"]=="true":
+			if temp_param["interpolation"] == "true":
 				self.widgets["config"]['interpolation'].set_active(1)
 			table.attach(self.widgets["config"]['interpolation'], 0, 1, 1, 2)
 			#Show FPS.
 			self.widgets["config"]['showfps'] = gtk.CheckButton(_("Show FPS"))
-			if temp_param["showfps"]=="true":
+			if temp_param["showfps"] == "true":
 				self.widgets["config"]['showfps'].set_active(1)
 			table.attach(self.widgets["config"]['showfps'], 1, 2, 0, 1)
 			#Auto Frameskip.
 			self.widgets["config"]['autoframeskip'] = gtk.CheckButton(_(
 				"Auto Frameskip"))
-			if temp_param["autoframeskip"]=="true":
+			if temp_param["autoframeskip"] == "true":
 				self.widgets["config"]['autoframeskip'].set_active(1)
 			table.attach(self.widgets["config"]['autoframeskip'], 1, 2, 1, 2)
 			#Raster effect.
 			self.widgets["config"]['raster'] = gtk.CheckButton(_("Raster effect"))
-			if temp_param["raster"]=="true":
+			if temp_param["raster"] == "true":
 				self.widgets["config"]['raster'].set_active(True)
 			table.attach(self.widgets["config"]['raster'], 0, 1, 2, 3)
 			#Hardware surface.
 			self.widgets["config"]['hwsurface'] = gtk.CheckButton(_("Hardware surface"))
-			if temp_param["hwsurface"]=="true":
+			if temp_param["hwsurface"] == "true":
 				self.widgets["config"]['hwsurface'].set_active(True)
 			table.attach(self.widgets["config"]['hwsurface'], 1, 2, 2, 3)
 
@@ -1257,7 +1284,7 @@ class XGngeo:
 
 			#320x224 window size.
 			self.widgets["config"]['screen320'] = gtk.CheckButton(_("Larger screen"))
-			if temp_param["screen320"]=="true": self.widgets["config"]\
+			if temp_param["screen320"] == "true": self.widgets["config"]\
 				['screen320'].set_active(True)
 			box2.pack_end(self.widgets["config"]['screen320'])
 
@@ -1317,24 +1344,24 @@ class XGngeo:
 				"doublex": _("Double the x resolution (soft blitter only)"),
 				"sai": _("SAI effect"),
 				"supersai": _("SuperSAI effect"),
-				"eagle":_("Eagle effect")}
+				"eagle": _("Eagle effect")}
 
 			self.widgets["config"]['effect'] = gtk.combo_box_new_text()
 			self.widgets["config"]['effect'].set_wrap_width(2)
 			i=0; effect_list = []
 			pipe = os.popen('"%s" --effect help' % self.params["xgngeo"]["gngeopath"]\
-				.replace('"','\"'))
+				.replace('"', '\"'))
 			for line in pipe.readlines():
 				plop = match("(\S*)\s*:(.*)",line) #Syntax is "REF : FULLNAME"
 				if plop:
-					ref,fullname = plop.group(1).strip(),plop.group(2).strip()
+					ref, fullname = plop.group(1).strip(), plop.group(2).strip()
 					self.widgets["config"]['effect'].append_text((fullname,
 						i18n_dict[ref])[i18n_dict.has_key(ref)])
 					effect_list.append(ref)
 					#Setting active the last selection.
-					if ref==temp_param["effect"]:
+					if ref == temp_param["effect"]:
 						self.widgets["config"]['effect'].set_active(i)
-					i+=1
+					i += 1
 			pipe.close()
 
 			self.combo_params['effect'] = effect_list
@@ -1344,7 +1371,9 @@ class XGngeo:
 			def bouyaka(*args):
 				"""Overlay does not support effect. So, when this blitter is selected, we
 				set the effect to ``none" and prevent it from being changed by user.
-				Effects are also not (yet) supported when enabling hardware surface."""
+				Effects are also not (yet) supported when enabling hardware surface.
+				
+				"""
 				if self.combo_params['blitter'][self.widgets["config"]['blitter']\
 					.get_active()]=="yuv" or self.widgets["config"]['hwsurface']\
 					.get_active():
@@ -1412,8 +1441,8 @@ class XGngeo:
 
 			self.widgets["config"]['samplerate'] = gtk.combo_box_new_text()
 			i=0
-			self.combo_params['samplerate'] = ["8192","11025","22050","32000","44100",
-				"48000"]
+			self.combo_params['samplerate'] = ["8192", "11025", "22050",
+				"32000", "44100", "48000"]
 			for val in self.combo_params['samplerate']:
 				self.widgets["config"]['samplerate'].append_text("%sHz" % val)
 				#Setting active the last selection
@@ -1447,7 +1476,7 @@ class XGngeo:
 				"/dev/js%s" % x)
 			#Setting active the last selection
 			self.widgets["config"]['p1joydev'].set_active(int(temp_param["p1joydev"])) 
-			table.attach(self.widgets["config"]['p1joydev'],1,2,0,1)
+			table.attach(self.widgets["config"]['p1joydev'], 1, 2, 0, 1)
 
 			label = gtk.Label(_("Player 2 device:"))
 			table.attach(label,0,1,1,2)
@@ -1456,7 +1485,7 @@ class XGngeo:
 				"/dev/js%s" % x)
 			#Setting active the last selection
 			self.widgets["config"]['p2joydev'].set_active(int(temp_param["p2joydev"])) 
-			table.attach(self.widgets["config"]['p2joydev'],1,2,1,2)
+			table.attach(self.widgets["config"]['p2joydev'], 1, 2, 1, 2)
 
 			#Bouyaka!
 			self.widgets["config"]['joystick'].connect("toggled",bouyaka,table)
@@ -1527,14 +1556,15 @@ class XGngeo:
 							self.p2key_int_vals[key_pos] = compliant_KeyMap[key_name]
 						else: self.p1key_int_vals[key_pos] = compliant_KeyMap[key_name]
 
-						#Put the key name (in an elegant form :p) as button label.
+						# Putting the key name (in an elegant form :p) as button label.
 						widget.set_label(capwords(key_name.replace("_", " ")))
 						if not key_name in ("return", "space"): widget.clicked()
 
 			def toggled(widget):
 				# Ensuring that only one key button is toggled...
 				if self.toggled and self.toggled != widget:
-					if self.toggled.get_active(): # Previous button goes back to normal state.
+					if self.toggled.get_active():
+						# Previous button goes back to normal state.
 						self.toggled.set_active(False)
 
 				#Changing current toggled button state.
@@ -1553,8 +1583,10 @@ class XGngeo:
 			table = gtk.Table(6, 6) # The sweet table O_o;;
 
 			def playerChanged(widget,justloaded=False):
-				"""Performing some interface modifications when another player selection
-				is changed."""
+				"""Perform some interface modifications when another player
+					selection is changed.
+				
+				"""
 				player = self.widgets["config"]['player1controls_radio']\
 					.get_active() or 2
 
@@ -1589,7 +1621,7 @@ class XGngeo:
 			def editHotkeys(widget):
 				player = int(self.widgets["config"]['player1controls_radio']\
 					.get_active()) or 2
-				buttval_convertion = {"1":"A","2":"B","4":"C","8":"D"}
+				buttval_convertion = {"1":  "A", "2": "B", "4": "C", "8": "D"}
 				hk_boxes = []
 
 				# Initial blank matrix (if not yet created & filled).
@@ -1626,12 +1658,12 @@ class XGngeo:
 					elif response == gtk.RESPONSE_REJECT:
 						# Restoring the previously saved matrix.
 						for hotkey in range(4):
-							i=0
+							i = 0
 							for butt in self.params["temp"]["backup_matrix_p%i" %
 								player][hotkey]:
 								self.params["temp"]["hotkey_matrix_p%i" %
 								player ][hotkey][i] = butt
-								i+=1
+								i += 1
 					widget.destroy()
 
 				def buttonClicked(button, event, image, player, hotkey, pos, 
@@ -1682,10 +1714,10 @@ class XGngeo:
 					menu.show_all()
 
 				def genHotkeyRow(row,firstgen=False):
-					if firstgen: #Creating & attaching the box.
+					if firstgen: # Creating & attaching the box.
 						hk_boxes.append(gtk.HBox())
 						table.attach(hk_boxes[row], 2, 3, row, row + 1)
-					else: #Emptying the box.
+					else: # Emptying the box.
 						for x in hk_boxes[row].get_children():
 							hk_boxes[row].remove(x)
 
@@ -1693,10 +1725,10 @@ class XGngeo:
 					for butt in self.params["temp"]["hotkey_matrix_p%i" %
 						player ][row]:
 						if not butt:
-							#Hot key's end has been reached, getting out the ``for".
+							# Hot key's end has been reached, getting out the ``for".
 							break
 
-						if firstgen: #Filling the hot key matrix with the right values.
+						if firstgen: # Filling the hot key matrix with the right values.
 							self.params["temp"]["hotkey_matrix_p%i" % player ]\
 								[row][ j -1] = butt
 
@@ -1751,7 +1783,7 @@ class XGngeo:
 				dialog.vbox.pack_end(table)
 				dialog.show_all()
 
-			#Hotkeys edition.
+			# Hotkeys edition.
 			button = gtk.Button()
 			self.widgets["config"]['edithotkeys_label'] = gtk.Label()
 			self.widgets["config"]['edithotkeys_label'].set_size_request(100, -1)
@@ -1763,9 +1795,9 @@ class XGngeo:
 			table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
 			if len(temp_param["p1key"].split(",")) == len(key_list):
-				#Given values seems to be okay.
+				# Given values seems to be okay.
 				plop = temp_param["p1key"]
-			else: #There's a crap, let's use default key values.
+			else: # There's a crap, let's use default key values.
 				plop = self.configfile.get_default_params()[0]["p1key"]
 			self.p1key_int_vals = plop.split(",")
 
@@ -1803,34 +1835,34 @@ class XGngeo:
 
 			p2keywidgets = []; i=0
 			for x in p2key_names:
-				#Generate P2key's buttons.
+				# Generate P2key's buttons.
 				p2keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
 				p2keywidgets[i].connect("toggled", toggled)
 				p2keywidgets[i].connect("key_press_event", get_pressed, i, 1)
 				p2keywidgets[i].set_use_underline(False)
 
-				#Displaying key's icon.
+				# Displaying key's icon.
 				image = gtk.Image()
 				if i<10: 
 					image.set_from_file(os.path.join(datarootpath, "img",
 						"key_%s.png" % key_list[i]))
-				else: #Hotkeys.
+				else: # Hotkeys.
 					image.set_from_file(os.path.join(datarootpath, "img",
 						"%s.png" % key_list[i]))
 
-				box2 = gtk.HBox() #A box...
+				box2 = gtk.HBox() # A box...
 				box2.set_size_request(70, 35)
-				box2.pack_start(p1keywidgets[i]) #with P1 key...
-				box2.pack_start(p2keywidgets[i]) #and P2 key :p
+				box2.pack_start(p1keywidgets[i]) # with P1 key...
+				box2.pack_start(p2keywidgets[i]) # and P2 key :p
 
-				#Put them in table...
-				if i<6: #First 6 keys (fire buttons + start/coin) on 2nd row.
+				# Put them in table...
+				if i<6: # First 6 keys (fire buttons + start/coin) on 2nd row.
 					table.attach(image, i, i+1, 2, 3)
 					table.attach(box2, i, i+1, 3, 4)
-				elif i<10: #Keys from 6 to 10 (arrows) on 1st row.
+				elif i<10: # Keys from 6 to 10 (arrows) on 1st row.
 					table.attach(image, i-4, i-3, 0, 1)
 					table.attach(box2, i-4, i-3,1, 2)
-				elif i<14: #Keys from 10 to 14 (hotkeys) on 3rd row.
+				elif i<14: # Keys from 10 to 14 (hotkeys) on 3rd row.
 					table.attach(image, i-8, i-7, 4, 5)
 					table.attach(box2, i-8, i-7, 5, 6)
 				i+=1
@@ -1905,7 +1937,7 @@ class XGngeo:
 				if value>=1: return "+%i%%" % value
 				else: return "%i%%" % value
 
-			#68kclock
+			# 68kclock
 			adjustment = gtk.Adjustment(float(temp_param["68kclock"]), -80, 80, 10)
 			label = gtk.Label(_("68K CPU clock:"))
 			table.attach(label,0,1,0,1)
@@ -1914,7 +1946,7 @@ class XGngeo:
 			self.widgets["config"]['68kclock'].connect("format-value",bouyaka)
 			table.attach(self.widgets["config"]['68kclock'],1,2,0,1)
 
-			#Z80clock.
+			# Z80clock.
 			adjustment = gtk.Adjustment(float(temp_param["z80clock"]), -80, 80, 10)
 			label = gtk.Label(_("Z80 CPU clock:"))
 			table.attach(label,0,1,1,2)
@@ -1923,7 +1955,7 @@ class XGngeo:
 			self.widgets["config"]['z80clock'].connect("format-value",bouyaka)
 			table.attach(self.widgets["config"]['z80clock'],1,2,1,2)
 
-			#Packing the Notebook
+			# Packing the Notebook
 			self.widgets["config"]["main_dialog"].vbox.pack_start(notebook) 
 
 		elif type==5:
@@ -1936,7 +1968,7 @@ class XGngeo:
 			table.set_row_spacings(5)
 			table.set_border_width(6)
 
-			#LibGL path.
+			# LibGL path.
 			frame = gtk.Frame(_("Path to libGL.so (optional):"))
 			box2 = gtk.HBox()
 			image = gtk.Image()
@@ -1957,13 +1989,13 @@ class XGngeo:
 			frame.add(box2)
 			table.attach(frame, 0, 1, 0, 1)
 
-			#Bouyaka!
+			# Bouyaka!
 			def bouyaka(widget, *targets):
 				"""Set list size widgets sensitive state according
 				to answer mode widget selected param."""
 				for x in targets: x.set_sensitive(widget.get_active())
 
-			#Preview image directory.
+			# Preview image directory.
 			frame = gtk.Frame(_("Preview image directory (optional):"))
 			box2 = gtk.HBox()
 			self.widgets["config"]['previewimages'] = gtk.CheckButton()
@@ -1986,7 +2018,7 @@ class XGngeo:
 			box2.pack_end(button,False)
 			frame.add(box2)
 			table.attach(frame, 0, 1, 1, 2)
-			#Bouyaka.
+			# Bouyaka.
 			if self.params["xgngeo"]['previewimages'] == "true":
 				self.widgets["config"]['previewimages'].set_active(1)
 			else: 
@@ -1995,7 +2027,7 @@ class XGngeo:
 			self.widgets["config"]['previewimages'].connect("toggled", bouyaka,
 				image, self.widgets["config"]['previewimagedir'], button)
 
-			#ROM infos XML.
+			# ROM infos XML.
 			frame = gtk.Frame(_("XML file containing ROM infos (optional):"))
 			box2 = gtk.HBox()
 			self.widgets["config"]['rominfos'] = gtk.CheckButton()
@@ -2017,7 +2049,7 @@ class XGngeo:
 			box2.pack_end(button, False)
 			frame.add(box2)
 			table.attach(frame, 0, 1, 2, 3)
-			#Bouyaka.
+			# Bouyaka.
 			if self.params["xgngeo"]['rominfos'] == "true":
 				self.widgets["config"]['rominfos'].set_active(1)
 			else:
@@ -2026,7 +2058,7 @@ class XGngeo:
 			self.widgets["config"]['rominfos'].connect("toggled", bouyaka, image,
 				self.widgets["config"]['rominfoxml'], button)
 
-			#History size
+			# History size
 			box2 = gtk.HBox()
 			label = gtk.Label(_("Maximum size of the ROM history menu:"))
 			box2.pack_start(label)
@@ -2036,33 +2068,33 @@ class XGngeo:
 			box2.pack_start(self.widgets["config"]['historysize'],False)
 			table.attach(box2, 0, 1, 3, 4)
 
-			#Column separation.
+			# Column separation.
 			table.attach(gtk.VSeparator(), 1, 2, 0, 4, xpadding=6, ypadding=8)
 
 			box2 = gtk.VBox(spacing=3)
 
-			#Auto-execute ROMs.
+			# Auto-execute ROMs.
 			self.widgets["config"]['autoexecrom'] = gtk.CheckButton(
 				_("Auto-execute ROMs after loading."))
 			if self.params["xgngeo"]["autoexecrom"] == "true":
 				self.widgets["config"]['autoexecrom'].set_active(True)
 			box2.pack_start(self.widgets["config"]['autoexecrom'])
 
-			#Center XGngeo window.
+			# Center XGngeo window.
 			self.widgets["config"]['centerwindow'] = gtk.CheckButton(
 				_("Center XGngeo window on start."))
 			if self.params["xgngeo"]["centerwindow"] == "true":
 				self.widgets["config"]['centerwindow'].set_active(True)
 			box2.pack_start(self.widgets["config"]['centerwindow'])
 
-			#Sleep when idle.
+			# Sleep when idle.
 			self.widgets["config"]['sleepidle'] = gtk.CheckButton(
 				_("Let emulator sleep when idle."))
 			if self.params["gngeo"]["sleepidle"] == "true":
 				self.widgets["config"]['sleepidle'].set_active(True)
 			box2.pack_start(self.widgets["config"]['sleepidle'])
 
-			#Benchmark mode.
+			# Benchmark mode.
 			self.widgets["config"]['bench'] = gtk.CheckButton(
 				_("Execute ROMs in benchmark mode."))
 			if self.params["gngeo"]["bench"] == "true":
@@ -2072,7 +2104,7 @@ class XGngeo:
 			frame = gtk.Frame(_("ROM list"))
 			table2 = gtk.Table(3, 2)
 			
-			#Show available ROMs only.
+			# Show available ROMs only.
 			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(
 				_("Only show available ROMs by default."))
 			if self.params["xgngeo"]["showavailableromsonly"] == "true":
@@ -2489,38 +2521,47 @@ class XGngeo:
 		container = gtk.EventBox()
 		container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("white"))
 		logo = gtk.Image()
-		logo.set_from_file(os.path.join(datarootpath,"img","xgngeo.png"))
-		logo.set_padding(25,2)
+		logo.set_from_file(os.path.join(datarootpath, "img", "xgngeo.png"))
+		logo.set_padding(25, 2)
 		container.add(logo)
 		box.pack_start(container)
 
 		#
 		# Statusbar
 		#
-		self.widgets["statusbar"].push(self.context_id,_(
-			"Welcome to XGngeo version %s.") % VERSION)
-		box.pack_end(self.widgets["statusbar"],False)
+		self.widgets["statusbar"].push(self.context_id, _("Welcome to XGngeo "
+			"version %s.") % VERSION)
+		box.pack_end(self.widgets["statusbar"], False)
 
 		#Window positioning.
-		if self.params["xgngeo"]["centerwindow"]=="true":
+		if self.params["xgngeo"]["centerwindow"] == "true":
 			self.window.set_position(gtk.WIN_POS_CENTER)
 		#Show all.
 		self.window.show_all()
 
-	def get_bios_presence(self, path,give_type=0):
-		"""Indicating whether any BIOS files are present on a given directory,
-		with optional information regarding its/their type."""
-		if give_type:
-			pass
-		else:
-			pass
-		
-		return True
+	def get_bios_presence(self, path):
+		"""Indicate whether any BIOS files are present on a given directory
+			(0 if not), with information regarding its/their type (particular
+			positive integer).
+			
+		"""
+		i = 0
+		if os.path.isfile(os.path.join(path, "uni-bios.rom")):
+				i += 2  # Universal BIOS detected.
+		if os.path.isfile(os.path.join(path, "aes-bios.bin")):
+				i += 4  # AES BIOS detected.
+		if os.path.isfile(os.path.join(path, "vs-bios.rom"))\
+			or os.path.isfile(os.path.join(path, "usa_2slt.bin"))\
+			or os.path.isfile(os.path.join(path, "asia-s3.rom"))\
+			or os.path.isfile(os.path.join(path, "sp-s2.sp1")):
+				i += 8  # Arcade BIOS detected.
+
+		return i
 
 	def boot(self):
 		if "--nobootcheck" in sys.argv:
-			print _('``No boot check" option enabled: going directly to the main '
-				'window (unsafe!).')
+			print _('``No boot check" option enabled: going directly to the '
+				'main window (unsafe!).')
 			self.main()
 
 		else: #Performing boot-time important checks.
@@ -2529,7 +2570,7 @@ class XGngeo:
 			if not self.get_bios_presence(self.params["gngeo"]["biospath"]): error = 1
 			#Is the Gngeo executable present and returning correct version informations?
 			version = self.emulator.get_gngeo_version()
-			if not version or version[0][1:3]<(6,11): error = 1
+			if not version or version[0][1:3] < (6, 11): error = 1
 
 			if error: self.check_error() #Display value setting invitation.
 			else: self.main() #Everything seems okay, so let's display the main window...
@@ -2538,4 +2579,3 @@ if __name__ == "__main__":
 	gtk.threads_init()
 	XGngeo().boot()
 	gtk.main()
-
