@@ -12,7 +12,7 @@ available).
 - (DONE) Ability to remove a ROM from the file system through the ROM
 list window.
 - ROM list generation progress bar.
-- (IN PROGRESS) Allowing the user to choose the universal BIOS only if the
+- (DONE) Allowing the user to choose the universal BIOS only if the
 corresponding files have been found in the BIOS directory.
 - (DONE) Ability to customize the background color of
 available ROMs in the list.

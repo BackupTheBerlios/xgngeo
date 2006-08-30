@@ -4,6 +4,9 @@
 
 * Changes in version 16 (2006-XX-XX):
 
+- The user may now only choose a certain BIOS type when it is
+available in his/her BIOS directory.
+corresponding files have been found in the BIOS directory
 - Ability to customize the background color of available ROMs 
 in the list.
 - Ignoring joystick device initialization message within Gngeo
