@@ -206,7 +206,7 @@ class XGngeo:
 						# certainly important, so we record it.
 						message += "%s\n" % line.strip()
 
-			if message!="": 
+			if message != "": 
 				# Oh dear! There was a f*ck! Let's display the info dialog.
 				dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL,
 					gtk.MESSAGE_INFO,  gtk.BUTTONS_OK)
@@ -229,8 +229,10 @@ class XGngeo:
 	
 	def rom_loading_in_progress(self):
 		"""Graphicaly indicate the user that, although he
-		see nothing, the program is actually working, trying
-		to load the ROM."""
+			see nothing, the program is actually working, trying
+			to load the ROM.
+		
+		"""
 		import time
 		message = _("Starting ROM (%s)") % self.romMameName
 		for x in range(42): #Don't panic!
@@ -242,7 +244,7 @@ class XGngeo:
 			time.sleep(0.42)
 
 	def gngeo_exec(self,widget=None):
-		Timer(0,self.rom_loading_in_progress).start()
+		Timer(0, self.rom_loading_in_progress).start()
 
 		# Performing some modifications on the menu.
 		self.loadrom_menu_item.set_sensitive(False)
@@ -276,7 +278,7 @@ class XGngeo:
 			if event.type == gtk.gdk.BUTTON_PRESS and event.button == 3:
 				def confirm_deletion_dial(*args):
 					liststore, iter = treeselection.get_selected()
-					if iter: # Is there anything selected?
+					if iter:  # Is there anything selected?
 						fullname =  liststore.get_value(iter, 0)
 						availability = liststore.get_value(iter, 1)
 						filepath =  liststore.get_value(iter, 2)
@@ -348,7 +350,8 @@ class XGngeo:
 
 					#Update mame name and availability icon.
 					self.mamename = mamename #The current selected mamename is exported.
-					self.widgets['mamename_label'].set_text("<b>%s</b>" % mamename)
+					self.widgets['mamename_label'].set_text("<b>%s</b>" %
+					mamename)
 					self.widgets['mamename_label'].set_use_markup(True)
 					self.avail_image.set_from_stock((gtk.STOCK_NO,
 						gtk.STOCK_YES)[availability], gtk.ICON_SIZE_MENU)
@@ -443,7 +446,7 @@ class XGngeo:
 					if not dir in temp_romdir_list:
 						temp_romdir_list.append(dir)
 						liststore.append([dir])
-					else: #No need to put the same directory twice.
+					else:  # No need to put the same directory twice.
 						dialog2 = gtk.MessageDialog(dialog, gtk.DIALOG_MODAL,
 							gtk.MESSAGE_ERROR,  gtk.BUTTONS_OK, _("This "
 							"directory is already in the ROM directory list!"))
@@ -459,9 +462,9 @@ class XGngeo:
 
 			def response(widget, response):
 				if response == gtk.RESPONSE_APPLY:
-					self.romdir_list = temp_romdir_list #Validating the ROM list.
+					self.romdir_list = temp_romdir_list  # Validating the ROM list.
 
-					#Saving it in the appropriate file.
+					# Saving it in the appropriate file.
 					content = ""
 					for dir in self.romdir_list:
 						content += "%s\n" % dir
@@ -469,7 +472,7 @@ class XGngeo:
 					file.write(content)
 					file.close()
 
-					#Refreshing ROM list (using the new ROM directories).
+					# Refreshing ROM list (using the new ROM directories).
 					refreshing_rom_list()
 
 				dialog.destroy()
@@ -519,8 +522,6 @@ class XGngeo:
 		label.set_use_markup(True)
 		label.set_line_wrap(True)
 		label.set_justify(gtk.JUSTIFY_CENTER)
-		# PyGTK bug on 2005-07-18, avoid by explicitly giving a ``xpadding" value...
-		# table.attach(label,0,2,0,1,yoptions=gtk.SHRINK,ypadding=2)
 		table.attach(label, 0, 3, 0, 1, yoptions=gtk.SHRINK, xpadding=0,
 			ypadding=2)
 
@@ -563,8 +564,8 @@ class XGngeo:
 
 		buttonShowAvailable = gtk.CheckButton(_("Show available ROMs only."))
 		if self.params["xgngeo"]["showavailableromsonly"] == "true":
-			buttonShowAvailable.set_active(True) #Activating button. 
-		#Connecting the toggled event (*after* potential button activation).
+			buttonShowAvailable.set_active(True)  # Activating button. 
+		# Connecting the toggled event (*after* potential button activation).
 		buttonShowAvailable.connect("toggled", refreshing_rom_list) 
 		table.attach(buttonShowAvailable, 2, 3, 2, 3, yoptions=gtk.SHRINK)
 
@@ -597,8 +598,8 @@ class XGngeo:
 				container.add(self.previewImage)
 				notebook.append_page(container, gtk.Label(_("Preview image")))
 
-			# ROM infos.
-			if(self.params["xgngeo"]["rominfos"]=="true" and os.path.isfile(
+			# ROM infos.s
+			if(self.params["xgngeo"]["rominfos"] == "true" and os.path.isfile(
 				self.params["xgngeo"]["rominfoxml"])):
 				self.romInfos = rominfos.Rominfos(path=self.params["xgngeo"]\
 					["rominfoxml"]).getDict()
@@ -614,7 +615,7 @@ class XGngeo:
 				textview.set_wrap_mode(gtk.WRAP_WORD)
 				scrolled_window = gtk.ScrolledWindow()
 				scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
-				box2.set_size_request(220, -1) #Set width.
+				box2.set_size_request(220, -1)  # Set width.
 				scrolled_window.add(textview)
 				frame = gtk.Frame(_("Description:"))
 				frame.add(scrolled_window)
@@ -680,7 +681,7 @@ class XGngeo:
 
 		# ROM-specific configuration.
 		def delete_rom_conf(*args):
-			os.remove(os.path.join(gngeoUserDir,"%s.cf" % self.mamename))
+			os.remove(os.path.join(gngeoUserDir, "%s.cf" % self.mamename))
 			# Update buttons.
 			self.widgets['specconf_new'].show()
 			self.widgets['specconf_properties'].hide()
@@ -721,7 +722,7 @@ class XGngeo:
 			file.close()
 		available_rom = {}
 
-		#Initial ROM list generation.
+		# Initial ROM list generation.
 		refreshing_rom_list()
 
 		# Initialize ROM names (MAME <=> full name) correspondency list (only
@@ -749,8 +750,8 @@ class XGngeo:
 		dirselect=0, filter=None, rompreview=False):
 		self.widgets["fileselect_dialog"] = gtk.FileChooserDialog(title, action=(
 			gtk.FILE_CHOOSER_ACTION_OPEN, gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)\
-			[dirselect], buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK, gtk.STOCK_CANCEL,
-			gtk.RESPONSE_CANCEL))
+			[dirselect], buttons=(gtk.STOCK_OPEN, gtk.RESPONSE_OK,
+			gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
 
 		if folder:
 			self.widgets["fileselect_dialog"].set_current_folder(
@@ -1182,11 +1183,33 @@ class XGngeo:
 			frame.add(box2)
 			box.pack_start(frame)
 
+			frame = gtk.Frame(_('ROM drivers directory:'))
+			box2 = gtk.HBox() 	 
+	
+			self.imppathicons.append(gtk.Image()) 	 
+			box2.pack_start(self.imppathicons[1], False, padding=3) 	 
+			self.widgets["config"]['romrcdir'] = gtk.Entry() 	 
+			self.widgets["config"]['romrcdir'].connect("changed", set_path_icon, 	 
+					self.imppathicons[1]) 	 
+			self.widgets["config"]['romrcdir'].set_text(self.params["gngeo"]\
+				["romrcdir"])
+			box2.pack_start(self.widgets["config"]['romrcdir']) 	 
+			button = gtk.Button() 	 
+			image = gtk.Image() 	 
+			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU) 	 
+			button.add(image) 	 
+			button.connect("clicked", self.file_select, _("Select the ROM "
+				"drivers directory."), self.widgets["config"]['romrcdir']\
+				.get_text(), "romrcdir", 1)
+			box2.pack_end(button, False) 	 
+			frame.add(box2) 	 
+			box.pack_start(frame)
+
 			frame = gtk.Frame(_("Gngeo executable:"))
 			box2 = gtk.HBox()
 
 			self.imppathicons.append(gtk.Image())
-			box2.pack_start(self.imppathicons[1], False, padding=3)
+			box2.pack_start(self.imppathicons[2], False, padding=3)
 			gngeoversion_label = gtk.Label()
 			box2.pack_start(gngeoversion_label, False, padding=3)
 			self.widgets["config"]['gngeopath'] = gtk.Entry()
@@ -1207,7 +1230,7 @@ class XGngeo:
 
 			self.widgets["config"]["main_dialog"].vbox.pack_start(box)
 
-		elif type in (1,2,3,4):
+		elif type in (1, 2, 3, 4):
 			# By default the parameters of these sections will be set with the
 			# values of the previously saved global emulation options.
 			temp_param = {}
@@ -2202,7 +2225,7 @@ class XGngeo:
 		self.widgets["config"]["main_dialog"].action_area.pack_start(button)
 
 		if not firstrun:
-			#"Cancel" Button (except for the first time configuration).
+			# "Cancel" Button (except for the first time configuration).
 			button = gtk.Button(stock=gtk.STOCK_CANCEL)
 			button.connect("clicked", lambda *args: self.widgets["config"]\
 				["main_dialog"].destroy())
@@ -2240,10 +2263,12 @@ class XGngeo:
 				dialog.show_all()
 			else:
 				#Updating important path configuration params.
-				self.params["gngeo"]["biospath"] = self.widgets["config"]['biospath']\
-					.get_text() #biospath
+				self.params["gngeo"]["biospath"] = self.widgets["config"]\
+					['biospath'].get_text()  #biospath
+				self.params["gngeo"]["romrcdir"]	= self.widgets["config"]\
+					['romrcdir'].get_text()  #romrcdir
 				self.params["xgngeo"]["gngeopath"] = self.widgets["config"]\
-					['gngeopath'].get_text() #gngeopath
+					['gngeopath'].get_text()  #gngeopath
 
 				letsWrite = 1 #Let's write!
 

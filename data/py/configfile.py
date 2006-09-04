@@ -50,30 +50,29 @@ class Configfile:
 		self.datarootpath = datarootpath
 		self.gngeorc_buffer = []
 		self.paths = {
-			#XGngeo local configuration directory.
+			# XGngeo local configuration directory.
 			"xgngeoUserDir" : xgngeoUserDir,
-			#Path to XGngeo config file.
+			# Path to XGngeo config file.
 			"xgngeoConf" : os.path.join(xgngeoUserDir,"xgngeo.conf"), 
-			#Gngeo local configuration directory.
+			# Gngeo local configuration directory.
 			"gngeoUserDir" : gngeoUserDir, 
-			#Path to Gngeo config file.
-			"gngeorc" : os.path.join(gngeoUserDir,"gngeorc"), }
+			# Path to Gngeo config file.
+			"gngeorc" : os.path.join(gngeoUserDir,"gngeorc") }
 
 		for directory in (self.paths["xgngeoUserDir"], self.paths["gngeoUserDir"]):
 			if not os.path.isdir(directory):
 				os.mkdir(directory)
 
 	def get_default_params(self):
-		""" Returns default options for the `gngeorc'/Rom-specific
+		""" Return default options for the `gngeorc'/Rom-specific
 			and XGngeo configuration files.
 		
 		"""
 
 		return { #GnGeo's default.
 			#Important path section.
-			"rompath": os.path.expanduser("~/..."),
 			"biospath": os.path.expanduser("~/..."),
-			"romrc":os.path.join(self.datarootpath, "xgngeo_romrc"),
+			"romrcdir": os.path.join(prefix, "gngeo", "romrc.d"),
 			#Display section.
 			"fullscreen": "false",
 			"interpolation": "false",
@@ -90,8 +89,8 @@ class Configfile:
 			"sound": "true",
 			"samplerate": "22050",
 			"joystick": "true",
-			"p1joydev":0,
-			"p2joydev":1,
+			"p1joydev": 0,
+			"p2joydev": 1,
 			#Controller section.
 			"p1key": "119,120,113,115,38,34,273,274,276,275,-1,-1,-1,-1",
 			"p2key": "108,109,111,112,233,39,264,261,260,262,-1,-1,-1,-1",
@@ -178,8 +177,8 @@ class Configfile:
 		return dictionary
 
 	def write_global_config(self, gngeoDict, xgngeoDict, version):
-		"""Creating/updatating global configuration files of GnGeo (`gngeorc')
-		and XGngeo (`xgngeo.conf').
+		"""Create / updatate global configuration files of GnGeo (`gngeorc')
+			and XGngeo (`xgngeo.conf').
 		
 		"""
 		
@@ -192,7 +191,7 @@ class Configfile:
 			"# This file is dedicated to customize XGngeo's own features. ^o^\n"
 			"# It uses same syntax as Gngeo's.\n\n")
 
-		#WAGLAMOT (``Write A Gngeorc Like A Maman Ours Technology") 
+		# WAGLAMOT (``Write A Gngeorc Like A Maman Ours Technology") 
 		# version 3 in action!
 		i = 0
 		for dictionary in gngeoDict, xgngeoDict:
@@ -216,7 +215,7 @@ class Configfile:
 													(key, dictionary[key])
 								yet_passed.append(key.strip())
 
-				#Removing top XGngeo comment if yet present.
+				# Removing top XGngeo comment if yet present.
 				mark = "(http://www.choplair.org/). ^o^\n\n"
 				pos = preserved_content.find(mark)
 				if pos > 0:
@@ -224,17 +223,17 @@ class Configfile:
 
 				content[i] += "%s\n" % preserved_content.rstrip()
 
-			#Then follows the classic, destructive method. :p
+			# Then follows the classic, destructive method. :p
 			for key, val in dictionary.items():
 				if i == 0 and key in yet_passed:
 					continue
-				#Unset value, simply display the param in a commented line.
+				# Unset value, simply display the param in a commented line.
 				if val == None:    
 					val = ""
 					content[i] += "#"
 				content[i] += "%s %s\n" % (key, val)
 
-			content[i] += "\n" #Final blank line.
+			content[i] += "\n"  # Final blank line.
 			i += 1
 
 		# Gernerating the two files.
@@ -257,16 +256,16 @@ class Configfile:
 			"\n\n" % (mamename,version)
 
 		for key, val in dictionary.items():
-			#Unset value, simply display the param in a commented line.
+			# Unsetting value, simply display the param in a commented line.
 			if val in (None, ""):    
 				val = ""
 				content += "#"
 
 			content += "%s %s\n" % (key, val)
-			content += "\n" #Final blank line.
+			content += "\n" # Final blank line.
 
-		handle = open(path, "w") #Openning (creating if doesn't exist)
-		handle.write(content) #Writing.
-		handle.close() #Then closing.
+		handle = open(path, "w")  # Openning (creating if doesn't exist)
+		handle.write(content)  # Writing.
+		handle.close()  # Then closing.
 
 # vim:ai:et:sw=4:ts=4:sts=4:tw=78:fenc=utf-8

@@ -1,5 +1,5 @@
 
-     XGngeo - Changelog
+	XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
 * Changes in version 16 (2006-XX-XX):
@@ -16,9 +16,8 @@ standart output.
 more, just single. :p
 - Ability to remove a ROM from the file system through the ROM
 list window.
-- New inclusion of a default and clean ROM divers file (aka
-romrc) into XGngeo to be sure to obtain something nice to
-handle within the frontend (correct ROM full names, etc.).
+- Support of a ROM drivers file switched  to a ROM drivers
+directory (the new standard since GnGeo 0.7).
 - LICENSE.txt updated (because of old FSF adress) [Achraf cherti]
 - Long name for all new history entry [Achraf cherti] 
 - xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
@@ -35,7 +34,7 @@ as one single big path because of lack of line break in the
 related configuration file [patch by Achraf Cherti].
 - Several code style improvement.
 
-/bin/bash: wq: command not found
+	Yet present in the beta version (2006-07-14):
 
 - Improved ROM detection in the list and file selection
 dialog (now directly based upon Gngeo's scaning results:
