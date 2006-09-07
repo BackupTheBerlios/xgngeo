@@ -72,7 +72,7 @@ class Configfile:
 		return { #GnGeo's default.
 			#Important path section.
 			"biospath": os.path.expanduser("~/..."),
-			"romrcdir": os.path.join(prefix, "gngeo", "romrc.d"),
+			"romrcdir": os.path.join(prefix, "share", "gngeo", "romrc.d"),
 			#Display section.
 			"fullscreen": "false",
 			"interpolation": "false",
