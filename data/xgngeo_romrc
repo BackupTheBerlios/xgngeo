@@ -1,10 +1,10 @@
 #
 #  NOTE:
-# This GnGeo ROM driver file is the one recommend to use withing XGngeo.
-# If features correct game full name for all ROMsets and is get rid of
-# duplicate entries.
+# This GnGeo 0.6.X ROM driver file (aka `romrc', obsolete since GnGeo 0.7) is
+# the one recommended to use within XGngeo as it features many ROM support,
+# correct game full name for all ROMsets, and is get rid of duplicate entries.
 #
-# $Id$
+# Last updated: 2006-07-31.
 #
 
 #mame set of  nam1975 
