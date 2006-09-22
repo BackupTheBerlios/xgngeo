@@ -2,12 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XGngeo 16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-03 17:02+0200\n"
-"PO-Revision-Date: 2006-03-13 01:17+0100\n"
-"Last-Translator: Choplair <contact-NOSP@M-choplair.org>\n"
-"Language-Team: Project-Id-Version: gtranslator 1.1.5\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 13:07+0700\n"
+"POT-Creation-Date: 2006-09-22 16:18+0200\n"
 "PO-Revision-Date: 2004-08-31 20:58+0200\n"
 "Last-Translator: Hendrik Brandt <eru@gmx.li>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -15,127 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "About XGngeo"
-msgstr "Über XGngeo"
-
-msgid "Arcade"
-msgstr "Arcade"
-
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Audio / Joystick"
-msgstr "Audio / Joystick"
-
-msgid "Auto Frameskip"
-msgstr "Auto Frameskip"
-
-msgid "Auto execute Roms."
-msgstr "Roms automatisch starten."
-
-msgid "Bios OK."
-msgstr "Bios OK."
-
-msgid "Blitter:"
-msgstr "Blitter:"
-
-msgid "Configuration has been saved."
-msgstr "Einstellung wurde gespeichert."
-
-msgid "Configuration was not saved."
-msgstr "Einstellung wurde nicht gespeichert."
-
-msgid "Controller:"
-msgstr "Controller:"
-
-msgid "Country:"
-msgstr "Land:"
-
-msgid "Credits"
-msgstr "Mitarbeiter"
-
-msgid "Description:"
-msgstr "Beschreibung:"
-
-msgid "Double the x resolution (soft blitter only)"
-msgstr "Verdoppelte X-Auflösung (nur Soft-Blitter)"
-
-msgid ""
-"Double-click on its name to select a Rom, then press Open to load it if "
-"available (blue background)."
-msgstr ""
-"Doppelklicken um eine Rom-Datei auszuwählen. \"Open\" klicken, um sie zu "
-"starten."
-
-msgid "Driver file supporting <b>%s</b> Roms."
-msgstr "Treiber-Datei unterstützt <b>%s</b> Roms."
-
-msgid "Eagle effect"
-msgstr "Eagle-Effekt"
-
-msgid "Effect:"
-msgstr "Effekt:"
-
-msgid "Enable joystick support"
-msgstr "Joystick-Unterstützung ein- / ausschalten"
-
-msgid "Enable sound"
-msgstr "Sound ein- / ausschalten"
-
-msgid ""
-"Error: Unable to open the file \"%s\"!\n"
-"You can read the GNU GPL license at:\n"
-"http://www.gnu.org/licenses/gpl.html"
-msgstr ""
-"Fehler: Konnte Datei \"%s\" nicht öffnen!\n"
-"Sie können die GNU GPL Lizenz hier nachlesen:\n"
-"http://www.gnu.org/licenses/gpl.html"
-
-msgid "Europe"
-msgstr "Europa"
-
-msgid "From _list"
-msgstr "_Liste"
-
-msgid "Fullscreen"
-msgstr "Vollbildschirm"
-
-msgid "Genre:"
-msgstr "Genre:"
-
-msgid "Global emulation configuration."
-msgstr "Globale Emulations-Einstellungen."
-
-msgid "Gngeo executable:"
-msgstr "Gngeo Startdatei:"
-
-msgid "Gngeo returned the following message:"
-msgstr "Gngeo gab folgende Nachricht aus:"
-
-msgid "Graphic"
-msgstr "Grafik"
-
-msgid "HQ2X effect. High quality"
-msgstr "HQ2X-Effekt - Hohe Qualität"
-
-msgid "HQ3X effect. High quality"
-msgstr "HQ3X-Effekt. - Hohe Qualität"
-
-msgid "History size:"
-msgstr "Verlaufs-Größe:"
-
-msgid "Home"
-msgstr "Home"
-
-msgid "Important path configuration"
-msgstr "Wichtige Pfad-Einstellungen"
-
-msgid "Informations"
-msgstr "Informationen"
-
-msgid "Interpolation"
-msgstr "Interpolation"
-
+#: data/py/__init__.py:112
 msgid ""
 "It seems that the important path parameters are not all valid. That is "
 "normal if Gngeo configuration file hasn't been yet created. Anyway, correct "
@@ -146,269 +21,757 @@ msgstr ""
 "Emulation zu ermöglichen, sollten die Werte richtig gesetzt werden. Drücken "
 "Sie OK, um dies zu tun..."
 
-msgid "Japan"
-msgstr "Japan"
+#: data/py/__init__.py:130
+#, python-format
+msgid ""
+"Error: Unable to open the file \"%s\"!\n"
+"You can read the GNU GPL license at:\n"
+"http://www.gnu.org/licenses/gpl.html"
+msgstr ""
+"Fehler: Konnte Datei \"%s\" nicht öffnen!\n"
+"Sie können die GNU GPL Lizenz hier nachlesen:\n"
+"http://www.gnu.org/licenses/gpl.html"
 
-msgid "Joystick"
-msgstr "Joystick"
-
-msgid "Keyboard"
-msgstr "Tastatur"
-
-msgid "LQ2X effect. Low quality"
-msgstr "LQ2X-Effekt. - Niedrige Qialität"
-
-msgid "LQ3X effect. Low quality"
-msgstr "LQ3X-Effekt. - Niedrige Qualität"
-
-msgid "Larger screen (windowed mode)"
-msgstr "Größerer Bildschirm (Fenster-Modus)"
-
+#: data/py/__init__.py:136
 msgid "License"
 msgstr "Lizenz"
 
-msgid "List of Roms from your driver file."
-msgstr "Liste der Roms ihrer Treiber-Datei."
-
-msgid ""
-"Main coder: Choplair.\n"
-"Assisted by: Pachilor."
-msgstr ""
-"Programmierer: Choplair.\n"
-"Assistiert von: Pachilor.\n"
-"Deutsche Übersetzung: Peter Kainrad."
-
-msgid "Manufacturer:"
-msgstr "Hersteller:"
-
-msgid "Neo Geo type:"
-msgstr "Neo Geo Typ:"
-
-msgid "No Bios."
-msgstr "Kein Bios."
-
-msgid "No effect"
-msgstr "Kein Effekt"
-
-msgid "OpenGL blitter"
-msgstr "OpenGL-Blitter"
-
-msgid "Other thing configuration"
-msgstr "Andere Einstellungen"
-
-msgid "Path to libGL.so (optional):"
-msgstr "Pfad zu libGL.so (optional):"
-
-msgid "Player 1"
-msgstr "Spieler 1"
-
-msgid "Player 1 device:"
-msgstr "Spieler 1 Device:"
-
-msgid "Player 2"
-msgstr "Spiler 2"
-
-msgid "Player 2 device:"
-msgstr "Spieler 2 Device:"
-
-msgid "Players:"
-msgstr "Spieler:"
-
-msgid "Please check it up then try to save again... ^^;"
-msgstr ""
-"Bitte kontrollieren Sie sie und versuchen Sie nochmals zu speichern... ^^;"
-
-msgid "Preview image"
-msgstr "Bildvorschau"
-
-msgid "Preview image directory (optional):"
-msgstr "Bild-Vorschau Verzeichnis (optional):"
-
-msgid "Raster effect"
-msgstr "Raster-Effekt"
-
-msgid "Rating:"
-msgstr "Bewertung:"
-
-msgid "Rom archive"
-msgstr "Rom-Archiv"
-
-msgid "Rom driver file (\"romrc\"):"
-msgstr "Rom-Treiber-Datei (\"romrc\"):"
-
-msgid "Rom stopped (%s)."
-msgstr "Rom gestoppt (%s)."
-
-msgid "Rom: \"%s\" (%s)"
-msgstr "Rom: \"%s\" (%s)"
-
-msgid "Roms & Bios directory:"
-msgstr "Roms & Bios Ordner:"
-
-msgid "Running Gngeo version %s."
-msgstr "Verwendete Gngeo-Version %s."
-
-msgid "SAI effect"
-msgstr "SAI-Effekt"
-
-msgid "Sample rate:"
-msgstr "Sample Rate:"
-
-msgid "Scale2x effect"
-msgstr "2x Skalierungs-Effekt"
-
-msgid "Scale2x effect with 50% scanline"
-msgstr "2x Skalierungs-Effekt mit 50% Scanlines"
-
-msgid "Scale2x effect with 75% scanline"
-msgstr "2x Skalierungs-Effekt mit 75% Scanlines"
-
-msgid "Scale3x effect"
-msgstr "3x Skalierungs-Effekt"
-
-msgid "Scale4x effect"
-msgstr "3x Skalierungs-Effekt"
-
-msgid "Scale:"
-msgstr "Skalierung:"
-
-msgid "Scanline 50% effect"
-msgstr "Scanline 50% Effekt"
-
-msgid "Scanline effect"
-msgstr "Scanline-Effekt"
-
-msgid "Select a Rom"
-msgstr "Wählen Sie eine Rom-Datei"
-
-msgid "Select the \"%s\" file."
-msgstr "Wählen Sie die \"%s\"-Datei."
-
-msgid "Select the Gngeo executable."
-msgstr "Wählen Sie die Gngeo Startdatei."
-
-msgid "Select the Rom driver file."
-msgstr "Wählen Sie die Rom-Treiber-Datei:"
-
-msgid "Select the Roms & Bios directory."
-msgstr "Wählen Sie das Roms & Bios Verzeichnis."
-
-msgid "Select the XML file containing Rom infos."
-msgstr "Wählen Sie die XML-Datei mit den Rom-Informationen."
-
-msgid "Select the preview image directory."
-msgstr "Wählen Sie das Bild-Vorschau-Verzeichnis."
-
-msgid "Show FPS"
-msgstr "Zeige FPS"
-
-msgid "Show available Roms only."
-msgstr "Zeige nur verfügbare Roms."
-
-msgid "Size:"
-msgstr "Größe:"
-
-msgid "Software blitter"
-msgstr "Software-Blitter"
-
-msgid ""
-"Sorry, this configuration cannot be saved because one or more parameters "
-"look not valid."
-msgstr ""
-"Leider kann diese Einstellung nicht gespeichert werden, da einige Parameter "
-"nicht richtig gesetzt sind."
-
-msgid "Specific configuration:"
-msgstr "Spezifische Einstellungen:"
-
-msgid "Specific emulation options for \"%s\"."
-msgstr "Spezifische Emulationseinstellungen für \"%s\"."
-
-msgid "Starting Rom (%s)"
-msgstr "Starte Rom (%s)"
-
-msgid "SuperSAI effect"
-msgstr "SuperSAI-Effekt"
-
-msgid "System"
-msgstr "System"
-
-msgid "These paths must be valid for a working emulation."
-msgstr ""
-"Für eine funktionierende Emulation müssen diese Pfäde richtig gesetzt sein."
-
+#: data/py/__init__.py:141 data/py/__init__.py:1043
 msgid ""
 "This program is released under the terms of the GNU General Public License."
 msgstr ""
 "Dieses Programm wurde unter der GNU General Public Lizenz veröffentlicht."
 
+#: data/py/__init__.py:174
+#, fuzzy, python-format
+msgid "ROM stopped (%s)."
+msgstr "Rom gestoppt (%s)."
+
+#: data/py/__init__.py:214
+msgid "Gngeo returned the following message:"
+msgstr "Gngeo gab folgende Nachricht aus:"
+
+#: data/py/__init__.py:237
+#, fuzzy, python-format
+msgid "Starting ROM (%s)"
+msgstr "Starte Rom (%s)"
+
+#: data/py/__init__.py:297
+msgid "An error occured while trying to delete the ROM archive."
+msgstr ""
+
+#: data/py/__init__.py:310
+#, python-format
 msgid ""
-"To modify a key, click the button then push your new key.\n"
-"This configuration is only for keyboard."
+"Should XGngeo proceed with the deletion of the ROM <b>%s</b> located at <i>%"
+"s</i>?"
+msgstr ""
+
+#: data/py/__init__.py:313
+msgid "Please note this operation is irremediable."
+msgstr ""
+
+#: data/py/__init__.py:318
+msgid "Cannot delete a ROM which unavailable!"
+msgstr ""
+
+#: data/py/__init__.py:427
+#, python-format
+msgid "<b>%s</b> available ROMs."
+msgstr ""
+
+#: data/py/__init__.py:433
+msgid "Setting ROM directories."
+msgstr ""
+
+#: data/py/__init__.py:436
+msgid ""
+"Here you can add multiple directories to scan for ROMs (this is not "
+"recursive)."
+msgstr ""
+
+#: data/py/__init__.py:453
+msgid "This directory is already in the ROM directory list!"
+msgstr ""
+
+#: data/py/__init__.py:490
+#, fuzzy
+msgid "Select a ROM directory to add."
+msgstr "Wählen Sie das Roms & Bios Verzeichnis."
+
+#: data/py/__init__.py:517
+msgid "Your Neo Geo ROM list."
+msgstr ""
+
+#: data/py/__init__.py:522
+#, fuzzy
+msgid ""
+"Select a ROM by clicking on its name, then press <b>Open</b> to load it if "
+"available (colored background)."
+msgstr ""
+"Doppelklicken um eine Rom-Datei auszuwählen. \"Open\" klicken, um sie zu "
+"starten."
+
+#: data/py/__init__.py:559
+msgid "ROM directories..."
+msgstr ""
+
+#: data/py/__init__.py:567
+#, fuzzy
+msgid "Show available ROMs only."
+msgstr "Zeige nur verfügbare Roms."
+
+#: data/py/__init__.py:601
+msgid "Preview image"
+msgstr "Bildvorschau"
+
+#: data/py/__init__.py:622
+msgid "Description:"
+msgstr "Beschreibung:"
+
+#: data/py/__init__.py:629
+msgid "Manufacturer:"
+msgstr "Hersteller:"
+
+#: data/py/__init__.py:636
+msgid "Year:"
+msgstr "Jahr:"
+
+#: data/py/__init__.py:643
+msgid "Genre:"
+msgstr "Genre:"
+
+#: data/py/__init__.py:650
+msgid "Players:"
+msgstr "Spieler:"
+
+#: data/py/__init__.py:657
+msgid "Rating:"
+msgstr "Bewertung:"
+
+#: data/py/__init__.py:664
+msgid "Size:"
+msgstr "Größe:"
+
+#: data/py/__init__.py:673
+msgid "Informations"
+msgstr "Informationen"
+
+#: data/py/__init__.py:693
+msgid "Specific configuration:"
+msgstr "Spezifische Einstellungen:"
+
+#: data/py/__init__.py:823 data/py/__init__.py:836 data/py/__init__.py:850
+#, python-format
+msgid "Detected ROM: <b>%s</b>."
+msgstr ""
+
+#: data/py/__init__.py:899
+msgid "Gngeo is not recognizing this ROM anymore!"
+msgstr ""
+
+#: data/py/__init__.py:901
+msgid ""
+"Such an issue has two explanations: the ROM archive has been corrupted or "
+"the driver that used to handle this ROM has been altered/deleted (most "
+"probable)."
+msgstr ""
+
+#: data/py/__init__.py:911
+msgid ""
+"Cannot continue: the ROM you wanted to load was not found on the file system!"
+msgstr ""
+
+#: data/py/__init__.py:919
+msgid "It is now indicated as unavailable in the ROM History menu."
+msgstr ""
+
+#: data/py/__init__.py:942
+msgid ""
+"This ROM is unloadable because Gngeo could not find any suitable driver to "
+"handle it."
+msgstr ""
+
+#: data/py/__init__.py:950
+msgid "Error: file doesn't exist!"
+msgstr ""
+
+#: data/py/__init__.py:1013
+#, fuzzy, python-format
+msgid "ROM: \"%s\" (%s)"
+msgstr "Rom: \"%s\" (%s)"
+
+#: data/py/__init__.py:1023
+msgid "About XGngeo"
+msgstr "Über XGngeo"
+
+#: data/py/__init__.py:1034
+msgid "XGngeo: a frontend for Gngeo. :p"
+msgstr "XGngeo: Eine Oberfläche für Gngeo. :p"
+
+#: data/py/__init__.py:1034
+#, fuzzy, python-format
+msgid "Version %s."
+msgstr "Version %i."
+
+#: data/py/__init__.py:1035
+#, python-format
+msgid "Running Gngeo version %s."
+msgstr "Verwendete Gngeo-Version %s."
+
+#: data/py/__init__.py:1049
+msgid "Credits"
+msgstr "Mitarbeiter"
+
+#: data/py/__init__.py:1067
+#, fuzzy
+msgid ""
+"Lead programmer: Choplair.\n"
+"Assisted by: Pachilor.\n"
+"Documentation: Ms. Marie-Claire."
+msgstr ""
+"Programmierer: Choplair.\n"
+"Assistiert von: Pachilor.\n"
+"Deutsche Übersetzung: Peter Kainrad."
+
+#: data/py/__init__.py:1070
+msgid "Translations"
+msgstr ""
+
+#: data/py/__init__.py:1071
+msgid ""
+"Brazilian: Matheus Villela.\n"
+"French: Choplair.\n"
+"German: Peter Kainrad.\n"
+"Polish: Mateusz Wolsza.\n"
+"Spanish: Sheng Long Gradilla."
+msgstr ""
+
+#: data/py/__init__.py:1110
+#, fuzzy
+msgid "BIOS OK."
+msgstr "Bios OK."
+
+#: data/py/__init__.py:1113
+#, fuzzy
+msgid "No BIOS."
+msgstr "Kein Bios."
+
+#: data/py/__init__.py:1148
+msgid "Configuration was not saved."
+msgstr "Einstellung wurde nicht gespeichert."
+
+#: data/py/__init__.py:1155
+msgid "Important path configuration"
+msgstr "Wichtige Pfad-Einstellungen"
+
+#: data/py/__init__.py:1161
+msgid "These paths must be valid for a working emulation."
+msgstr ""
+"Für eine funktionierende Emulation müssen diese Pfäde richtig gesetzt sein."
+
+#: data/py/__init__.py:1164
+msgid "BIOS files location:"
+msgstr ""
+
+#: data/py/__init__.py:1181
+#, fuzzy
+msgid "Select the BIOSfiles location."
+msgstr "Wählen Sie die \"%s\"-Datei."
+
+#: data/py/__init__.py:1188
+#, fuzzy
+msgid "ROM drivers directory:"
+msgstr "Roms & Bios Ordner:"
+
+#: data/py/__init__.py:1203
+#, fuzzy
+msgid "Select the ROM drivers directory."
+msgstr "Wählen Sie das Roms & Bios Verzeichnis."
+
+#: data/py/__init__.py:1210
+msgid "Gngeo executable:"
+msgstr "Gngeo Startdatei:"
+
+#: data/py/__init__.py:1227
+msgid "Select the Gngeo executable."
+msgstr "Wählen Sie die Gngeo Startdatei."
+
+#: data/py/__init__.py:1250
+msgid "Global emulation configuration."
+msgstr "Globale Emulations-Einstellungen."
+
+#: data/py/__init__.py:1256
+#, python-format
+msgid "Specific emulation options for \"%s\"."
+msgstr "Spezifische Emulationseinstellungen für \"%s\"."
+
+#: data/py/__init__.py:1274
+msgid "Graphic"
+msgstr "Grafik"
+
+#: data/py/__init__.py:1279
+msgid "Fullscreen"
+msgstr "Vollbildschirm"
+
+#: data/py/__init__.py:1285
+msgid "Interpolation"
+msgstr "Interpolation"
+
+#: data/py/__init__.py:1290
+msgid "Show FPS"
+msgstr "Zeige FPS"
+
+#: data/py/__init__.py:1296
+msgid "Auto Frameskip"
+msgstr "Auto Frameskip"
+
+#: data/py/__init__.py:1301
+msgid "Raster effect"
+msgstr "Raster-Effekt"
+
+#: data/py/__init__.py:1306
+msgid "Hardware surface"
+msgstr ""
+
+#: data/py/__init__.py:1312
+msgid "Windowed mode"
+msgstr ""
+
+#: data/py/__init__.py:1318
+msgid "Scale:"
+msgstr "Skalierung:"
+
+#: data/py/__init__.py:1327
+#, fuzzy
+msgid "Larger screen"
+msgstr "Größerer Bildschirm (Fenster-Modus)"
+
+#: data/py/__init__.py:1339
+msgid "Blitter:"
+msgstr "Blitter:"
+
+#: data/py/__init__.py:1343
+msgid "Software blitter"
+msgstr "Software-Blitter"
+
+#: data/py/__init__.py:1344
+msgid "OpenGL blitter"
+msgstr "OpenGL-Blitter"
+
+#: data/py/__init__.py:1345
+msgid "YUV blitter (YV12)"
+msgstr "YUV blitter (YV12)"
+
+#: data/py/__init__.py:1369
+msgid "Effect:"
+msgstr "Effekt:"
+
+#: data/py/__init__.py:1373
+msgid "No effect"
+msgstr "Kein Effekt"
+
+#: data/py/__init__.py:1374
+msgid "Scanline effect"
+msgstr "Scanline-Effekt"
+
+#: data/py/__init__.py:1375
+#, python-format
+msgid "Scanline 50% effect"
+msgstr "Scanline 50% Effekt"
+
+#: data/py/__init__.py:1376
+msgid "Scale2x effect"
+msgstr "2x Skalierungs-Effekt"
+
+#: data/py/__init__.py:1377
+msgid "Scale3x effect"
+msgstr "3x Skalierungs-Effekt"
+
+#: data/py/__init__.py:1378
+msgid "Scale4x effect"
+msgstr "3x Skalierungs-Effekt"
+
+#: data/py/__init__.py:1379
+#, fuzzy, python-format
+msgid "Scale2x effect with 50% scanline"
+msgstr "2x Skalierungs-Effekt mit 50% Scanlines"
+
+#: data/py/__init__.py:1380
+#, fuzzy, python-format
+msgid "Scale2x effect with 75% scanline"
+msgstr "2x Skalierungs-Effekt mit 75% Scanlines"
+
+#: data/py/__init__.py:1381
+msgid "HQ2X effect. High quality"
+msgstr "HQ2X-Effekt - Hohe Qualität"
+
+#: data/py/__init__.py:1382
+msgid "HQ3X effect. High quality"
+msgstr "HQ3X-Effekt. - Hohe Qualität"
+
+#: data/py/__init__.py:1383
+msgid "LQ2X effect. Low quality"
+msgstr "LQ2X-Effekt. - Niedrige Qialität"
+
+#: data/py/__init__.py:1384
+msgid "LQ3X effect. Low quality"
+msgstr "LQ3X-Effekt. - Niedrige Qualität"
+
+#: data/py/__init__.py:1385
+msgid "Double the x resolution (soft blitter only)"
+msgstr "Verdoppelte X-Auflösung (nur Soft-Blitter)"
+
+#: data/py/__init__.py:1386
+msgid "SAI effect"
+msgstr "SAI-Effekt"
+
+#: data/py/__init__.py:1387
+msgid "SuperSAI effect"
+msgstr "SuperSAI-Effekt"
+
+#: data/py/__init__.py:1388
+msgid "Eagle effect"
+msgstr "Eagle-Effekt"
+
+#: data/py/__init__.py:1436
+msgid "Transparency pack (optional):"
+msgstr ""
+
+#: data/py/__init__.py:1451
+msgid "Select a transparency pack."
+msgstr ""
+
+#: data/py/__init__.py:1462
+msgid "Audio / Joystick"
+msgstr "Audio / Joystick"
+
+#: data/py/__init__.py:1464
+msgid "Audio"
+msgstr "Audio"
+
+#: data/py/__init__.py:1474
+msgid "Enable sound"
+msgstr "Sound ein- / ausschalten"
+
+#: data/py/__init__.py:1480
+msgid "Sample rate:"
+msgstr "Sample Rate:"
+
+#: data/py/__init__.py:1503
+msgid "Joystick"
+msgstr "Joystick"
+
+#: data/py/__init__.py:1507
+msgid "Enable joystick support"
+msgstr "Joystick-Unterstützung ein- / ausschalten"
+
+#: data/py/__init__.py:1513
+msgid "Player 1 device:"
+msgstr "Spieler 1 Device:"
+
+#: data/py/__init__.py:1522
+msgid "Player 2 device:"
+msgstr "Spieler 2 Device:"
+
+#: data/py/__init__.py:1617
+#, fuzzy
+msgid "Controls"
+msgstr "Controller:"
+
+#: data/py/__init__.py:1619
+#, fuzzy
+msgid ""
+"To modify a key, click on the button under it's icon, then push your new "
+"key. It works for keyboard only."
 msgstr ""
 "Um eine Taste zu ändern, klicken Sie auf den Button, dann drücken Sie ihre "
 "gewünschte Taste.\n"
 "Diese Konfiguration ist nur für die Tastatür."
 
+#: data/py/__init__.py:1638
+#, python-format
+msgid "Edit player %i hotkeys..."
+msgstr ""
+
+#: data/py/__init__.py:1649
+msgid "Allocation:"
+msgstr ""
+
+#: data/py/__init__.py:1654
+msgid "Player 1"
+msgstr "Spieler 1"
+
+#: data/py/__init__.py:1659
+msgid "Player 2"
+msgstr "Spiler 2"
+
+#: data/py/__init__.py:1803
+#, python-format
+msgid "Hotkeys edition for player %i."
+msgstr ""
+
+#: data/py/__init__.py:1808
+msgid "Here you can bind hotkeys to your desired combinations of fire buttons."
+msgstr ""
+
+#: data/py/__init__.py:1922
+msgid "System"
+msgstr "System"
+
+#: data/py/__init__.py:1925
+#, fuzzy
+msgid "Neo Geo BIOS type:"
+msgstr "Neo Geo Typ:"
+
+#: data/py/__init__.py:1928
+msgid "Arcade"
+msgstr "Arcade"
+
+#: data/py/__init__.py:1932
+msgid "Home (AES)"
+msgstr ""
+
+#: data/py/__init__.py:1935
+msgid "Universal"
+msgstr ""
+
+#: data/py/__init__.py:1960
+msgid "Country:"
+msgstr "Land:"
+
+#: data/py/__init__.py:1964
+msgid "Japan"
+msgstr "Japan"
+
+#: data/py/__init__.py:1971
 msgid "USA"
 msgstr "USA"
 
-msgid "Version %i."
-msgstr "Version %i."
+#: data/py/__init__.py:1978
+msgid "Europe"
+msgstr "Europa"
 
-msgid "Welcome to XGngeo version %i."
-msgstr "Willkommen zur XGngeo-Version %i."
+#: data/py/__init__.py:2008
+msgid "68K CPU clock:"
+msgstr ""
 
-msgid "XGngeo: a frontend for Gngeo. :p"
-msgstr "XGngeo: Eine Oberfläche für Gngeo. :p"
+#: data/py/__init__.py:2018
+msgid "Z80 CPU clock:"
+msgstr ""
 
-msgid "XML file containing Rom infos (optional):"
+#: data/py/__init__.py:2033
+#, fuzzy
+msgid "Other things configuration"
+msgstr "Andere Einstellungen"
+
+#: data/py/__init__.py:2039
+msgid "Path to libGL.so (optional):"
+msgstr "Pfad zu libGL.so (optional):"
+
+#: data/py/__init__.py:2053
+#, python-format
+msgid "Select the \"%s\" file."
+msgstr "Wählen Sie die \"%s\"-Datei."
+
+#: data/py/__init__.py:2068
+msgid "Preview image directory (optional):"
+msgstr "Bild-Vorschau Verzeichnis (optional):"
+
+#: data/py/__init__.py:2084
+msgid "Select the preview image directory."
+msgstr "Wählen Sie das Bild-Vorschau-Verzeichnis."
+
+#: data/py/__init__.py:2100
+#, fuzzy
+msgid "XML file containing ROM infos (optional):"
 msgstr "XML-Datei mit Rom-Informationen (optional):"
 
-msgid "YUV blitter (YV12)"
-msgstr "YUV blitter (YV12)"
+#: data/py/__init__.py:2115
+#, fuzzy
+msgid "Select the XML file containing ROM infos."
+msgstr "Wählen Sie die XML-Datei mit den Rom-Informationen."
 
-msgid "Year:"
-msgstr "Jahr:"
+#: data/py/__init__.py:2132
+msgid "Maximum size of the ROM history menu:"
+msgstr ""
 
-msgid "_Audio / Joystick"
-msgstr "_Audio / Joystick"
+#: data/py/__init__.py:2147
+#, fuzzy
+msgid "Auto-execute ROMs after loading."
+msgstr "Roms automatisch starten."
 
-msgid "_Configuration"
-msgstr "_Einstellungen"
+#: data/py/__init__.py:2154
+msgid "Center XGngeo window on start."
+msgstr ""
 
+#: data/py/__init__.py:2161
+msgid "Let emulator sleep when idle."
+msgstr ""
+
+#: data/py/__init__.py:2168
+msgid "Execute ROMs in benchmark mode."
+msgstr ""
+
+#: data/py/__init__.py:2173
+msgid "ROM list"
+msgstr ""
+
+#: data/py/__init__.py:2178
+#, fuzzy
+msgid "Only show available ROMs by default."
+msgstr "Zeige nur verfügbare Roms."
+
+#: data/py/__init__.py:2198
+msgid "Set available ROM background color"
+msgstr ""
+
+#: data/py/__init__.py:2212
+msgid "Available ROM background color:"
+msgstr ""
+
+#: data/py/__init__.py:2278
+#, fuzzy
+msgid ""
+"Sorry, this configuration cannot be saved because one or more parameters "
+"does not look valid."
+msgstr ""
+"Leider kann diese Einstellung nicht gespeichert werden, da einige Parameter "
+"nicht richtig gesetzt sind."
+
+#: data/py/__init__.py:2280
+msgid "Please check it up then try to save again... ^^;"
+msgstr ""
+"Bitte kontrollieren Sie sie und versuchen Sie nochmals zu speichern... ^^;"
+
+#: data/py/__init__.py:2428
+msgid "Configuration has been saved."
+msgstr "Einstellung wurde gespeichert."
+
+#: data/py/__init__.py:2465
 msgid "_File"
 msgstr "_Datei"
 
-msgid "_Global emulation"
-msgstr "_Emulation"
-
-msgid "_Graphic"
-msgstr "_Grafik"
-
-msgid "_History"
-msgstr "_Verlauf"
-
-msgid "_Important paths"
-msgstr "_Wichtige Pfäde"
-
-msgid "_Info"
-msgstr "_Info"
-
-msgid "_Keyboard"
-msgstr "_Tastatur"
-
-msgid "_License"
-msgstr "_Lizenz"
-
-msgid "_Load Rom"
+#: data/py/__init__.py:2470
+#, fuzzy
+msgid "_Load ROM"
 msgstr "Rom _laden"
 
+#: data/py/__init__.py:2474
+msgid "From _list"
+msgstr "_Liste"
+
+#: data/py/__init__.py:2478
 msgid "_Manually"
 msgstr "_Manuell"
 
+#: data/py/__init__.py:2479
+msgid "Load a ROM manually..."
+msgstr ""
+
+#: data/py/__init__.py:2481
+msgid "All files"
+msgstr ""
+
+#: data/py/__init__.py:2482
+#, fuzzy
+msgid "ROM archive"
+msgstr "Rom-Archiv"
+
+#: data/py/__init__.py:2485
+msgid "_History"
+msgstr "_Verlauf"
+
+#: data/py/__init__.py:2516
+msgid "_Configuration"
+msgstr "_Einstellungen"
+
+#: data/py/__init__.py:2520
+msgid "_Important paths"
+msgstr "_Wichtige Pfäde"
+
+#: data/py/__init__.py:2525
+msgid "_Global emulation"
+msgstr "_Emulation"
+
+#: data/py/__init__.py:2529
+msgid "_Display"
+msgstr ""
+
+#: data/py/__init__.py:2533
+msgid "_Audio / Joystick"
+msgstr "_Audio / Joystick"
+
+#: data/py/__init__.py:2537
+#, fuzzy
+msgid "_Controls"
+msgstr "Controller:"
+
+#: data/py/__init__.py:2541
+msgid "_System"
+msgstr "_System"
+
+#: data/py/__init__.py:2545
 msgid "_Other"
 msgstr "_Andere"
 
-msgid "_System"
-msgstr "_System"
+#: data/py/__init__.py:2553
+msgid "_ROM drivers"
+msgstr ""
+
+#: data/py/__init__.py:2557
+msgid "_View/edit"
+msgstr ""
+
+#: data/py/__init__.py:2562
+msgid "_Add new"
+msgstr ""
+
+#: data/py/__init__.py:2571
+msgid "_Info"
+msgstr "_Info"
+
+#: data/py/__init__.py:2585
+msgid "_License"
+msgstr "_Lizenz"
+
+#: data/py/__init__.py:2606
+#, fuzzy, python-format
+msgid "Welcome to XGngeo version %s."
+msgstr "Willkommen zur XGngeo-Version %i."
+
+#: data/py/__init__.py:2637
+msgid ""
+"``No boot check\" option enabled: going directly to the main window "
+"(unsafe!)."
+msgstr ""
+
+#~ msgid "Driver file supporting <b>%s</b> Roms."
+#~ msgstr "Treiber-Datei unterstützt <b>%s</b> Roms."
+
+#~ msgid "History size:"
+#~ msgstr "Verlaufs-Größe:"
+
+#~ msgid "Home"
+#~ msgstr "Home"
+
+#~ msgid "Keyboard"
+#~ msgstr "Tastatur"
+
+#~ msgid "List of Roms from your driver file."
+#~ msgstr "Liste der Roms ihrer Treiber-Datei."
+
+#~ msgid "Rom driver file (\"romrc\"):"
+#~ msgstr "Rom-Treiber-Datei (\"romrc\"):"
+
+#~ msgid "Select a Rom"
+#~ msgstr "Wählen Sie eine Rom-Datei"
+
+#~ msgid "Select the Rom driver file."
+#~ msgstr "Wählen Sie die Rom-Treiber-Datei:"
+
+#~ msgid "_Graphic"
+#~ msgstr "_Grafik"
+
+#~ msgid "_Keyboard"
+#~ msgstr "_Tastatur"
