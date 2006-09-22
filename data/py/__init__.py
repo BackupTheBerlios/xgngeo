@@ -316,7 +316,7 @@ class XGngeo:
 						else: 
 							dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
 								gtk.MESSAGE_WARNING, gtk.BUTTONS_OK, _("Cannot "
-								"delete a ROM which unavailable!"))
+								"delete a ROM which is unavailable!"))
 							dialog.connect("response", lambda *args: dialog.destroy())
 						dialog.show_all()
 			
@@ -1989,8 +1989,8 @@ class XGngeo:
 			elif temp_param["country"] == "europe":
 				radio.set_active(1)
 				
-			table.attach(gtk.Label("This option has no effect for the "
-				"universal BIOS."), 0, 3, 2, 3)
+			table.attach(gtk.Label(_("This option has no effect for the "
+				"universal BIOS.")), 0, 3, 2, 3)
 
 			frame2.add(table)
 			box.pack_start(frame2)
