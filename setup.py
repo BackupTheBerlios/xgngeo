@@ -45,9 +45,8 @@ setup(
 	data_files=[
 		#Images.
 		(os.path.join("share", "xgngeo", "img"),glob.glob(os.path.join("data", "img", "*.png"))),
-		#ROM info and drivers.
+		#ROM info.
 		(os.path.join("share", "xgngeo"),glob.glob(os.path.join("data", "rominfos.*"))),
-		(os.path.join("share", "xgngeo"),[os.path.join("data", "xgngeo_romrc")]),
 		#License text.
 		(os.path.join("share", "xgngeo"),['LICENSE.txt']),
 		#Plain text documentation.
