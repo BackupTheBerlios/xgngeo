@@ -1,32 +1,39 @@
+# translation of xgngeo.po to Spanish
 # XGngeo.
 # Traducción al español
 # Copyright (C) 2003,2004,2005 Choplair-network
 # Este archivo se distribuye bajo la misma licencia que el
 # paquete XGngeo.
-# Sheng Long Gradilla <danygradilla@hotmail.com>, 2003
+# Sheng Long Gradilla <danygradilla@hotmail.com>, 2003, 2006.
 # Choplair <chopinou@choplair.org>, 2003.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: XGngeo 15\n"
+"Project-Id-Version: xgngeo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-22 16:49+0200\n"
-"PO-Revision-Date: 2005-07-03 17:05+0200\n"
+"POT-Creation-Date: 2006-09-26 20:09+0200\n"
+"PO-Revision-Date: 2006-09-25 16:37-0700\n"
 "Last-Translator: Sheng Long Gradilla <danygradilla@hotmail.com>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.10.2\n"
 
-#: ../py/__init__.py:112
+#: data/py/__init__.py:112
 msgid ""
 "It seems that the important path parameters are not all valid. That is "
 "normal if Gngeo configuration file hasn't been yet created. Anyway, correct "
 "values should be specified for the emulation to work. Press OK to do so..."
 msgstr ""
+"Parece que los parámetros de trayectoria importantes no son válidos en su "
+"totalidad. Eso es normal si el archivo de configuración de Gngeo no ha sido "
+"creado aun. De todas maneras, los valores correctos deberían ser "
+"especificados para que la emulación funcione. Presione Aceptar para "
+"hacerlo..."
 
-#: ../py/__init__.py:130
+#: data/py/__init__.py:130
 #, python-format
 msgid ""
 "Error: Unable to open the file \"%s\"!\n"
@@ -39,212 +46,223 @@ msgstr ""
 "http://gugs.sindominio.net/licencias/\n"
 "http://www.garaitia.com/new/gpl-spanish.php"
 
-#: ../py/__init__.py:136
+#: data/py/__init__.py:136
 msgid "License"
 msgstr "Licencia"
 
-#: ../py/__init__.py:141 ../py/__init__.py:1043
+#: data/py/__init__.py:141 data/py/__init__.py:1043
 msgid ""
 "This program is released under the terms of the GNU General Public License."
 msgstr "Este programa es distribuido bajo la licencia GNU GPL:"
 
-#: ../py/__init__.py:174
-#, fuzzy, python-format
+#: data/py/__init__.py:174
+#, python-format
 msgid "ROM stopped (%s)."
 msgstr "ROM detenido (%s)"
 
-#: ../py/__init__.py:214
+#: data/py/__init__.py:214
 msgid "Gngeo returned the following message:"
 msgstr "Gngeo regresó el siguiente mensaje:"
 
-#: ../py/__init__.py:237
-#, fuzzy, python-format
+#: data/py/__init__.py:237
+#, python-format
 msgid "Starting ROM (%s)"
 msgstr "Iniciando ROM (%s)"
 
-#: ../py/__init__.py:297
+#: data/py/__init__.py:297
 msgid "An error occured while trying to delete the ROM archive."
-msgstr ""
+msgstr "Ha ocurrido un error mientras se intentaba borrar el archivo de ROM."
 
-#: ../py/__init__.py:310
+#: data/py/__init__.py:310
 #, python-format
 msgid ""
 "Should XGngeo proceed with the deletion of the ROM <b>%s</b> located at <i>%"
 "s</i>?"
 msgstr ""
+"¿Debe proceder XGngeo con el borrado del ROM <b>%s</b> localizado en <i>%s</"
+"i>?"
 
-#: ../py/__init__.py:313
+#: data/py/__init__.py:313
 msgid "Please note this operation is irremediable."
-msgstr ""
+msgstr "Por favor note que esta operación es irremediable."
 
-#: ../py/__init__.py:318
+#: data/py/__init__.py:318
 msgid "Cannot delete a ROM which is unavailable!"
-msgstr ""
+msgstr "¡No se puede borrar una ROM que no está disponible!"
 
-#: ../py/__init__.py:427
+#: data/py/__init__.py:427
 #, python-format
 msgid "<b>%s</b> available ROMs."
-msgstr ""
+msgstr "<b>%s</b> ROMs disponibles."
 
-#: ../py/__init__.py:433
+#: data/py/__init__.py:433
 msgid "Setting ROM directories."
-msgstr ""
+msgstr "Configurando los directorios de ROMs."
 
-#: ../py/__init__.py:436
+#: data/py/__init__.py:436
 msgid ""
 "Here you can add multiple directories to scan for ROMs (this is not "
 "recursive)."
 msgstr ""
+"Aquí puede agregar múltiples directorios para buscar ROMs (esto no es "
+"recursivo)."
 
-#: ../py/__init__.py:453
+#: data/py/__init__.py:453
 msgid "This directory is already in the ROM directory list!"
-msgstr ""
+msgstr "¡Este directorio ya se encuentra en la lista de directorios de ROMs!"
 
-#: ../py/__init__.py:490
-#, fuzzy
+#: data/py/__init__.py:490
 msgid "Select a ROM directory to add."
-msgstr "Seleccione el directorio de ROMs y BIOS:"
+msgstr "Seleccione un directorio de ROMs a agregar."
 
-#: ../py/__init__.py:517
+#: data/py/__init__.py:517
 msgid "Your Neo Geo ROM list."
-msgstr ""
+msgstr "Su lista de ROMs de Neo Geo."
 
-#: ../py/__init__.py:522
+#: data/py/__init__.py:522
 msgid ""
 "Select a ROM by clicking on its name, then press <b>Open</b> to load it if "
 "available (colored background)."
 msgstr ""
+"Seleccione un ROM dando un click en su nombre, después presione <b>Abrir</b> "
+"para cargarlo si está disponible (fondo coloreado)."
 
-#: ../py/__init__.py:559
+#: data/py/__init__.py:559
 msgid "ROM directories..."
-msgstr ""
+msgstr "Directorios de ROMs..."
 
-#: ../py/__init__.py:567
-#, fuzzy
+#: data/py/__init__.py:567
 msgid "Show available ROMs only."
 msgstr "Mostrar ROMs disponibles solamente."
 
-#: ../py/__init__.py:601
+#: data/py/__init__.py:601
 msgid "Preview image"
 msgstr "Imagen de Previsualización"
 
-#: ../py/__init__.py:622
+#: data/py/__init__.py:622
 msgid "Description:"
 msgstr "Descripción:"
 
-#: ../py/__init__.py:629
+#: data/py/__init__.py:629
 msgid "Manufacturer:"
 msgstr "Fabricante:"
 
-#: ../py/__init__.py:636
+#: data/py/__init__.py:636
 msgid "Year:"
 msgstr "Año:"
 
-#: ../py/__init__.py:643
+#: data/py/__init__.py:643
 msgid "Genre:"
 msgstr "Género:"
 
-#: ../py/__init__.py:650
+#: data/py/__init__.py:650
 msgid "Players:"
 msgstr "Jugadores:"
 
-#: ../py/__init__.py:657
+#: data/py/__init__.py:657
 msgid "Rating:"
 msgstr "Puntuación:"
 
-#: ../py/__init__.py:664
+#: data/py/__init__.py:664
 msgid "Size:"
 msgstr "Tamaño:"
 
-#: ../py/__init__.py:673
+#: data/py/__init__.py:673
 msgid "Informations"
 msgstr "Informaciones"
 
-#: ../py/__init__.py:693
-#, fuzzy
+#: data/py/__init__.py:693
 msgid "Specific configuration:"
-msgstr "Configuración de otras cosas"
+msgstr "Configuración específica:"
 
-#: ../py/__init__.py:823 ../py/__init__.py:836 ../py/__init__.py:850
+#: data/py/__init__.py:823 data/py/__init__.py:836 data/py/__init__.py:850
 #, python-format
 msgid "Detected ROM: <b>%s</b>."
-msgstr ""
+msgstr "ROMs detectados: <b>%s</b>."
 
-#: ../py/__init__.py:899
+#: data/py/__init__.py:899
 msgid "Gngeo is not recognizing this ROM anymore!"
-msgstr ""
+msgstr "¡Gngeo ya no está reconociendo este ROM!"
 
-#: ../py/__init__.py:901
+#: data/py/__init__.py:901
 msgid ""
 "Such an issue has two explanations: the ROM archive has been corrupted or "
 "the driver that used to handle this ROM has been altered/deleted (most "
 "probable)."
 msgstr ""
+"Semejante problema tiene dos explicaciones: el archivo de ROM se ha "
+"corrompido o el driver que solía manejar este ROM ha sido alterado/borrado "
+"(lo más probable)."
 
-#: ../py/__init__.py:911
+#: data/py/__init__.py:911
 msgid ""
 "Cannot continue: the ROM you wanted to load was not found on the file system!"
 msgstr ""
+"No se puede continuar: ¡El ROM que deseaba cargar no fue encontrado en el "
+"sistema de archivos!"
 
-#: ../py/__init__.py:919
+#: data/py/__init__.py:919
 msgid "It is now indicated as unavailable in the ROM History menu."
 msgstr ""
+"Está ahora indicado como no disponible en el menú de Historial de ROMs."
 
-#: ../py/__init__.py:942
+#: data/py/__init__.py:942
 msgid ""
 "This ROM is unloadable because Gngeo could not find any suitable driver to "
 "handle it."
 msgstr ""
+"Este ROM no puede ser cargado porque Gngeo no pudo encontrar ningún driver "
+"adecuado para manejarlo."
 
-#: ../py/__init__.py:950
-#, fuzzy
+#: data/py/__init__.py:950
 msgid "Error: file doesn't exist!"
-msgstr "La ruta a \"romrc\" no existe."
+msgstr "Error: ¡El archivo no existe!"
 
-#: ../py/__init__.py:1013
-#, fuzzy, python-format
+#: data/py/__init__.py:1013
+#, python-format
 msgid "ROM: \"%s\" (%s)"
 msgstr "ROM: \"%s\" (%s)"
 
-#: ../py/__init__.py:1023
+#: data/py/__init__.py:1023
 msgid "About XGngeo"
 msgstr "Acerca de XGngeo"
 
-#: ../py/__init__.py:1034
+#: data/py/__init__.py:1034
 msgid "XGngeo: a frontend for Gngeo. :p"
 msgstr "XGngeo: un frontend para Gngeo. :p"
 
-#: ../py/__init__.py:1034
-#, fuzzy, python-format
+#: data/py/__init__.py:1034
+#, python-format
 msgid "Version %s."
-msgstr "Versión %i."
+msgstr "Versión %s."
 
-#: ../py/__init__.py:1035
+#: data/py/__init__.py:1035
 #, python-format
 msgid "Running Gngeo version %s."
 msgstr "Corriendo Gngeo versión %s."
 
-#: ../py/__init__.py:1049
+#: data/py/__init__.py:1049
 msgid "Credits"
 msgstr "Créditos"
 
 # HERE YOU CAN ADD THAT YOU'VE MADE THE TRANSLATION
-#: ../py/__init__.py:1067
-#, fuzzy
+#: data/py/__init__.py:1067
 msgid ""
 "Lead programmer: Choplair.\n"
 "Assisted by: Pachilor.\n"
+"Contribution: Achraf Cherti.\n"
 "Documentation: Ms. Marie-Claire."
 msgstr ""
 "Programador principal: Choplair.\n"
 "Asistido por: Pachilor.\n"
-"Traductor al Español: Sheng Long Gradilla."
+"Aportación: Achraf Cherti.\n"
+"Documentación: Ms. Marie-Claire."
 
-#: ../py/__init__.py:1070
+#: data/py/__init__.py:1071
 msgid "Translations"
-msgstr ""
+msgstr "Traducciones"
 
-#: ../py/__init__.py:1071
+#: data/py/__init__.py:1072
 msgid ""
 "Brazilian: Matheus Villela.\n"
 "French: Choplair.\n"
@@ -252,635 +270,491 @@ msgid ""
 "Polish: Mateusz Wolsza.\n"
 "Spanish: Sheng Long Gradilla."
 msgstr ""
+"Brasileño: Matheus Villela.\n"
+"Francés: Choplair.\n"
+"Alemán: Peter Kainrad.\n"
+"Polaco: Mateusz Wolsza.\n"
+"Español: Sheng Long Gradilla."
 
-#: ../py/__init__.py:1110
+#: data/py/__init__.py:1111
 msgid "BIOS OK."
-msgstr ""
+msgstr "BIOS correcto."
 
-#: ../py/__init__.py:1113
+#: data/py/__init__.py:1114
 msgid "No BIOS."
-msgstr ""
+msgstr "No hay BIOS."
 
-#: ../py/__init__.py:1148
+#: data/py/__init__.py:1149
 msgid "Configuration was not saved."
 msgstr "La configuración no se guardó."
 
-#: ../py/__init__.py:1155
+#: data/py/__init__.py:1156
 msgid "Important path configuration"
-msgstr "Configuración de rutas importantes"
+msgstr "Configuración de trayectorias importantes"
 
-#: ../py/__init__.py:1161
+#: data/py/__init__.py:1162
 msgid "These paths must be valid for a working emulation."
-msgstr ""
+msgstr "Estas trayectorias deben ser válidas para que funcione la emulación."
 
-#: ../py/__init__.py:1164
+#: data/py/__init__.py:1165
 msgid "BIOS files location:"
-msgstr ""
+msgstr "Localización de archivos de BIOS:"
 
-#: ../py/__init__.py:1181
-#, fuzzy
+#: data/py/__init__.py:1182
 msgid "Select the BIOSfiles location."
-msgstr "Seleccione el archivo \"%s\"."
+msgstr "Seleccione la localización de los archivos de BIOS."
 
-#: ../py/__init__.py:1188
-#, fuzzy
+#: data/py/__init__.py:1189
 msgid "ROM drivers directory:"
-msgstr "Directorio de ROMs y BIOS:"
+msgstr "Directorio de drivers de ROMs:"
 
-#: ../py/__init__.py:1203
-#, fuzzy
+#: data/py/__init__.py:1204
 msgid "Select the ROM drivers directory."
-msgstr "Seleccione el archivo \"%s\"."
+msgstr "Seleccione el directorio de drivers de ROMs."
 
-#: ../py/__init__.py:1210
+#: data/py/__init__.py:1211
 msgid "Gngeo executable:"
 msgstr "Ruta al ejecutable de Gngeo:"
 
-#: ../py/__init__.py:1227
-#, fuzzy
+#: data/py/__init__.py:1228
 msgid "Select the Gngeo executable."
-msgstr "Ruta al ejecutable de gngeo"
+msgstr "Seleccione el ejecutable de Gngeo."
 
-#: ../py/__init__.py:1250
+#: data/py/__init__.py:1251
 msgid "Global emulation configuration."
 msgstr "Configuración global de emulación."
 
-#: ../py/__init__.py:1256
+#: data/py/__init__.py:1257
 #, python-format
 msgid "Specific emulation options for \"%s\"."
 msgstr "Opciones específicas de emulación para \"%s\"."
 
-#: ../py/__init__.py:1274
+#: data/py/__init__.py:1275
 msgid "Graphic"
 msgstr "Gráficos"
 
-#: ../py/__init__.py:1279
+#: data/py/__init__.py:1280
 msgid "Fullscreen"
 msgstr "Pantalla completa"
 
-#: ../py/__init__.py:1285
+#: data/py/__init__.py:1286
 msgid "Interpolation"
 msgstr "Interpolación"
 
-#: ../py/__init__.py:1290
+#: data/py/__init__.py:1291
 msgid "Show FPS"
 msgstr "Mostrar CPS"
 
-#: ../py/__init__.py:1296
+#: data/py/__init__.py:1297
 msgid "Auto Frameskip"
 msgstr "Autoajuste de salto de cuadros"
 
-#: ../py/__init__.py:1301
+#: data/py/__init__.py:1302
 msgid "Raster effect"
 msgstr "Efectos Raster"
 
-#: ../py/__init__.py:1306
+#: data/py/__init__.py:1307
 msgid "Hardware surface"
-msgstr ""
+msgstr "Superficie por Hardware"
 
-#: ../py/__init__.py:1312
+#: data/py/__init__.py:1313
 msgid "Windowed mode"
-msgstr ""
+msgstr "Modalidad de Ventana"
 
-#: ../py/__init__.py:1318
+#: data/py/__init__.py:1319
 msgid "Scale:"
 msgstr "Escalar:"
 
-#: ../py/__init__.py:1327
-#, fuzzy
+#: data/py/__init__.py:1328
 msgid "Larger screen"
-msgstr "Pantalla más grande (modo ventana)"
+msgstr "Pantalla más grande"
 
-#: ../py/__init__.py:1339
+#: data/py/__init__.py:1340
 msgid "Blitter:"
 msgstr "Blitter:"
 
-#: ../py/__init__.py:1343
+#: data/py/__init__.py:1344
 msgid "Software blitter"
 msgstr "Blitter por software"
 
-#: ../py/__init__.py:1344
+#: data/py/__init__.py:1345
 msgid "OpenGL blitter"
 msgstr "Blitter OpenGL"
 
-#: ../py/__init__.py:1345
+#: data/py/__init__.py:1346
 msgid "YUV blitter (YV12)"
 msgstr "Blitter YUV (YV12)"
 
-#: ../py/__init__.py:1369
+#: data/py/__init__.py:1370
 msgid "Effect:"
 msgstr "Efecto:"
 
-#: ../py/__init__.py:1373
+#: data/py/__init__.py:1374
 msgid "No effect"
 msgstr "Sin efecto"
 
-#: ../py/__init__.py:1374
+#: data/py/__init__.py:1375
 msgid "Scanline effect"
 msgstr "Efecto Scanline"
 
-#: ../py/__init__.py:1375
-#, python-format
+#: data/py/__init__.py:1376
+#, fuzzy, python-format
 msgid "Scanline 50% effect"
 msgstr "Efecto Scanline 50%"
 
-#: ../py/__init__.py:1376
+#: data/py/__init__.py:1377
 msgid "Scale2x effect"
 msgstr "Efecto Scale2x"
 
-#: ../py/__init__.py:1377
+#: data/py/__init__.py:1378
 msgid "Scale3x effect"
 msgstr "Efecto Scale3x"
 
-#: ../py/__init__.py:1378
+#: data/py/__init__.py:1379
 msgid "Scale4x effect"
 msgstr "Efecto Scale4x"
 
-#: ../py/__init__.py:1379
-#, python-format
+#: data/py/__init__.py:1380
 msgid "Scale2x effect with 50% scanline"
 msgstr "Efecto Scale2x con scanline 50%"
 
-#: ../py/__init__.py:1380
-#, python-format
+#: data/py/__init__.py:1381
 msgid "Scale2x effect with 75% scanline"
 msgstr "Efecto Scale2x con scanline 75%"
 
-#: ../py/__init__.py:1381
+#: data/py/__init__.py:1382
 msgid "HQ2X effect. High quality"
 msgstr "Efecto HQ2X. Alta calidad"
 
-#: ../py/__init__.py:1382
+#: data/py/__init__.py:1383
 msgid "HQ3X effect. High quality"
 msgstr "Efecto HQ3X. Alta calidad"
 
-#: ../py/__init__.py:1383
+#: data/py/__init__.py:1384
 msgid "LQ2X effect. Low quality"
 msgstr "Efecto LQ2X. Baja calidad"
 
-#: ../py/__init__.py:1384
+#: data/py/__init__.py:1385
 msgid "LQ3X effect. Low quality"
 msgstr "Efecto LQ3X. Baja Calidad"
 
-#: ../py/__init__.py:1385
+#: data/py/__init__.py:1386
 msgid "Double the x resolution (soft blitter only)"
 msgstr "Duplicar la resolución x (sólo blitter por software)"
 
-#: ../py/__init__.py:1386
+#: data/py/__init__.py:1387
 msgid "SAI effect"
 msgstr "Efecto SAI"
 
-#: ../py/__init__.py:1387
+#: data/py/__init__.py:1388
 msgid "SuperSAI effect"
 msgstr "Efecto SuperSAI"
 
-#: ../py/__init__.py:1388
+#: data/py/__init__.py:1389
 msgid "Eagle effect"
 msgstr "Efecto Eagle"
 
-#: ../py/__init__.py:1436
+#: data/py/__init__.py:1437
 msgid "Transparency pack (optional):"
-msgstr ""
+msgstr "Paquete de transparencia (opcional):"
 
-#: ../py/__init__.py:1451
+#: data/py/__init__.py:1452
 msgid "Select a transparency pack."
-msgstr ""
+msgstr "Seleccione un paquete de transparencia."
 
-#: ../py/__init__.py:1462
+#: data/py/__init__.py:1463
 msgid "Audio / Joystick"
 msgstr "Audio / Joystick"
 
-#: ../py/__init__.py:1464
+#: data/py/__init__.py:1465
 msgid "Audio"
 msgstr "Audio"
 
-#: ../py/__init__.py:1474
+#: data/py/__init__.py:1475
 msgid "Enable sound"
 msgstr "Habilitar sonido"
 
-#: ../py/__init__.py:1480
+#: data/py/__init__.py:1481
 msgid "Sample rate:"
 msgstr "Calidad del sonido:"
 
-#: ../py/__init__.py:1503
+#: data/py/__init__.py:1504
 msgid "Joystick"
 msgstr "Joystick"
 
-#: ../py/__init__.py:1507
+#: data/py/__init__.py:1508
 msgid "Enable joystick support"
-msgstr ""
+msgstr "Habilitar soporte para joystick."
 
-#: ../py/__init__.py:1513
+#: data/py/__init__.py:1514
 msgid "Player 1 device:"
 msgstr "Dispositivo del jugador 1"
 
-#: ../py/__init__.py:1522
+#: data/py/__init__.py:1523
 msgid "Player 2 device:"
 msgstr "Dispositivo del jugador 2"
 
-#: ../py/__init__.py:1617
-#, fuzzy
+#: data/py/__init__.py:1618
 msgid "Controls"
-msgstr "País"
+msgstr "Controles"
 
-#: ../py/__init__.py:1619
-#, fuzzy
+#: data/py/__init__.py:1620
 msgid ""
 "To modify a key, click on the button under it's icon, then push your new "
 "key. It works for keyboard only."
 msgstr ""
-"Para modificar una tecla, haz click en el botón y después presiona la nueva "
+"Para modificar una tecla, haga click en el botón y después presione la nueva "
 "tecla.\n"
-"Esta configuración es solamente para el teclado."
+"Funciona solamente para el teclado."
 
-#: ../py/__init__.py:1638
+#: data/py/__init__.py:1639
 #, python-format
 msgid "Edit player %i hotkeys..."
-msgstr ""
+msgstr "Editar los hotkeys para el jugador %i ..."
 
-#: ../py/__init__.py:1649
+#: data/py/__init__.py:1650
 msgid "Allocation:"
-msgstr ""
+msgstr "Alocación:"
 
-#: ../py/__init__.py:1654
+#: data/py/__init__.py:1655
 msgid "Player 1"
 msgstr "Jugador 1"
 
-#: ../py/__init__.py:1659
+#: data/py/__init__.py:1660
 msgid "Player 2"
 msgstr "Jugador 2"
 
-#: ../py/__init__.py:1803
+#: data/py/__init__.py:1804
 #, python-format
 msgid "Hotkeys edition for player %i."
-msgstr ""
+msgstr "Edición de Hotkeys para el jugador %i."
 
-#: ../py/__init__.py:1808
+#: data/py/__init__.py:1809
 msgid "Here you can bind hotkeys to your desired combinations of fire buttons."
-msgstr ""
+msgstr "Aquí puede asignar hotkeys a sus combinaciones de botones deseados."
 
-#: ../py/__init__.py:1922
+#: data/py/__init__.py:1923
 msgid "System"
 msgstr "Sistema"
 
-#: ../py/__init__.py:1925
-#, fuzzy
+#: data/py/__init__.py:1926
 msgid "Neo Geo BIOS type:"
-msgstr "Tipo de Neo Geo:"
+msgstr "Tipo de BIOS de Neo Geo:"
 
-#: ../py/__init__.py:1928
+#: data/py/__init__.py:1929
 msgid "Arcade"
 msgstr "Arcadia"
 
-#: ../py/__init__.py:1932
+#: data/py/__init__.py:1933
 msgid "Home (AES)"
-msgstr ""
+msgstr "Casero (AES)"
 
-#: ../py/__init__.py:1935
+#: data/py/__init__.py:1936
 msgid "Universal"
-msgstr ""
+msgstr "Universal"
 
-#: ../py/__init__.py:1960
+#: data/py/__init__.py:1961
 msgid "Country:"
-msgstr "País"
+msgstr "País:"
 
-#: ../py/__init__.py:1964
+#: data/py/__init__.py:1965
 msgid "Japan"
 msgstr "Japón"
 
-#: ../py/__init__.py:1971
+#: data/py/__init__.py:1972
 msgid "USA"
 msgstr "EUA"
 
-#: ../py/__init__.py:1978
+#: data/py/__init__.py:1979
 msgid "Europe"
 msgstr "Europa"
 
-#: ../py/__init__.py:1992
+#: data/py/__init__.py:1993
 msgid "This option has no effect for the universal BIOS."
-msgstr ""
+msgstr "Esta opción no tiene efecto para el BIOS universal."
 
-#: ../py/__init__.py:2008
+#: data/py/__init__.py:2009
 msgid "68K CPU clock:"
-msgstr ""
+msgstr "Reloj del CPU 68K:"
 
-#: ../py/__init__.py:2018
+#: data/py/__init__.py:2019
 msgid "Z80 CPU clock:"
-msgstr ""
+msgstr "Reloj del CPU Z80:"
 
-#: ../py/__init__.py:2033
-#, fuzzy
+#: data/py/__init__.py:2034
 msgid "Other things configuration"
 msgstr "Configuración de otras cosas"
 
-#: ../py/__init__.py:2039
+#: data/py/__init__.py:2040
 msgid "Path to libGL.so (optional):"
 msgstr "Ruta a libGL.so (opcional):"
 
-#: ../py/__init__.py:2053
+#: data/py/__init__.py:2054
 #, python-format
 msgid "Select the \"%s\" file."
 msgstr "Seleccione el archivo \"%s\"."
 
-#: ../py/__init__.py:2068
+#: data/py/__init__.py:2069
 msgid "Preview image directory (optional):"
 msgstr "Directorio de imágenes de previsualización (opcional):"
 
-#: ../py/__init__.py:2084
+#: data/py/__init__.py:2085
 msgid "Select the preview image directory."
 msgstr "Seleccione el directorio de imágenes de previsualización."
 
-#: ../py/__init__.py:2100
-#, fuzzy
+#: data/py/__init__.py:2101
 msgid "XML file containing ROM infos (optional):"
 msgstr "Archivo XML conteniendo info de los ROMs (opcional):"
 
-#: ../py/__init__.py:2115
-#, fuzzy
+#: data/py/__init__.py:2116
 msgid "Select the XML file containing ROM infos."
 msgstr "Selecciona el archivo XML conteniendo info del ROM."
 
-#: ../py/__init__.py:2132
+#: data/py/__init__.py:2133
 msgid "Maximum size of the ROM history menu:"
-msgstr ""
+msgstr "Tamaño máximo del menú de historial de ROMs:"
 
-#: ../py/__init__.py:2147
-#, fuzzy
+#: data/py/__init__.py:2148
 msgid "Auto-execute ROMs after loading."
-msgstr "Auto ejecutar ROMs."
+msgstr "Auto ejecutar ROMs después de cargarlos."
 
-#: ../py/__init__.py:2154
+#: data/py/__init__.py:2155
 msgid "Center XGngeo window on start."
-msgstr ""
+msgstr "Centrar la ventana de XGngeo al iniciar."
 
-#: ../py/__init__.py:2161
+#: data/py/__init__.py:2162
 msgid "Let emulator sleep when idle."
-msgstr ""
+msgstr "Dejar que el emulador duerma cuando esté inactivo."
 
-#: ../py/__init__.py:2168
+#: data/py/__init__.py:2169
 msgid "Execute ROMs in benchmark mode."
-msgstr ""
+msgstr "Ejecutar ROMs en modalidad benchmark."
 
-#: ../py/__init__.py:2173
+#: data/py/__init__.py:2174
 msgid "ROM list"
-msgstr ""
+msgstr "Lista de ROMs"
 
-#: ../py/__init__.py:2178
-#, fuzzy
+#: data/py/__init__.py:2179
 msgid "Only show available ROMs by default."
 msgstr "Mostrar ROMs disponibles solamente."
 
-#: ../py/__init__.py:2198
-#, fuzzy
+#: data/py/__init__.py:2199
 msgid "Set available ROM background color"
-msgstr "Mostrar ROMs disponibles solamente."
+msgstr "Configurar el color de fondo para los ROMs disponibles"
 
-#: ../py/__init__.py:2212
+#: data/py/__init__.py:2213
 msgid "Available ROM background color:"
-msgstr ""
+msgstr "Color de fondo para los ROMs disponibles:"
 
-#: ../py/__init__.py:2278
+#: data/py/__init__.py:2280
 msgid ""
 "Sorry, this configuration cannot be saved because one or more parameters "
 "does not look valid."
 msgstr ""
+"Disculpe, esta configuración no puede ser guardada porque uno o más "
+"parámetros no parecen válidos."
 
-#: ../py/__init__.py:2280
+#: data/py/__init__.py:2282
 msgid "Please check it up then try to save again... ^^;"
 msgstr "Por favor revise bien y después guarde de nuevo... ^^;"
 
-#: ../py/__init__.py:2428
+#: data/py/__init__.py:2430
 msgid "Configuration has been saved."
 msgstr "La configuración ha sido guardada."
 
-#: ../py/__init__.py:2465
+#: data/py/__init__.py:2467
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../py/__init__.py:2470
-#, fuzzy
+#: data/py/__init__.py:2472
 msgid "_Load ROM"
 msgstr "_Cargar ROM"
 
-#: ../py/__init__.py:2474
+#: data/py/__init__.py:2476
 msgid "From _list"
 msgstr "Desde una _Lista"
 
-#: ../py/__init__.py:2478
+#: data/py/__init__.py:2480
 msgid "_Manually"
 msgstr "_Manualmente"
 
-#: ../py/__init__.py:2479
+#: data/py/__init__.py:2481
 msgid "Load a ROM manually..."
-msgstr ""
+msgstr "Cargar un ROM manualmente..."
 
-#: ../py/__init__.py:2481
+#: data/py/__init__.py:2483
 msgid "All files"
-msgstr ""
+msgstr "Todos los archivos"
 
-#: ../py/__init__.py:2482
-#, fuzzy
+#: data/py/__init__.py:2484
 msgid "ROM archive"
 msgstr "Archivo de ROM"
 
-#: ../py/__init__.py:2485
+#: data/py/__init__.py:2487
 msgid "_History"
 msgstr "_Historial"
 
-#: ../py/__init__.py:2516
+#: data/py/__init__.py:2518
 msgid "_Configuration"
 msgstr "_Configuración"
 
-#: ../py/__init__.py:2520
+#: data/py/__init__.py:2522
 msgid "_Important paths"
 msgstr "Rutas _Importantes"
 
-#: ../py/__init__.py:2525
+#: data/py/__init__.py:2527
 msgid "_Global emulation"
 msgstr "Emulación _Global"
 
-#: ../py/__init__.py:2529
+#: data/py/__init__.py:2531
 msgid "_Display"
-msgstr ""
+msgstr "_Despliegue"
 
-#: ../py/__init__.py:2533
+#: data/py/__init__.py:2535
 msgid "_Audio / Joystick"
 msgstr "_Audio / Joystick"
 
-#: ../py/__init__.py:2537
-#, fuzzy
+#: data/py/__init__.py:2539
 msgid "_Controls"
-msgstr "País"
+msgstr "_Controles"
 
-#: ../py/__init__.py:2541
+#: data/py/__init__.py:2543
 msgid "_System"
 msgstr "_Sistema"
 
-#: ../py/__init__.py:2545
+#: data/py/__init__.py:2547
 msgid "_Other"
-msgstr "_Otro"
+msgstr "_Otros"
 
-#: ../py/__init__.py:2553
+#: data/py/__init__.py:2555
 msgid "_ROM drivers"
-msgstr ""
+msgstr "Drivers de _ROMs"
 
-#: ../py/__init__.py:2557
+#: data/py/__init__.py:2559
 msgid "_View/edit"
-msgstr ""
+msgstr "_Ver/editar"
 
-#: ../py/__init__.py:2562
+#: data/py/__init__.py:2564
 msgid "_Add new"
-msgstr ""
+msgstr "_Agregar nuevo"
 
-#: ../py/__init__.py:2571
+#: data/py/__init__.py:2573
 msgid "_Info"
 msgstr "_Información"
 
-#: ../py/__init__.py:2585
+#: data/py/__init__.py:2587
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../py/__init__.py:2606
-#, fuzzy, python-format
+#: data/py/__init__.py:2608
+#, python-format
 msgid "Welcome to XGngeo version %s."
-msgstr "Bienvenido a XGngeo versión %i."
+msgstr "Bienvenido a XGngeo versión %s."
 
-#: ../py/__init__.py:2637
+#: data/py/__init__.py:2639
 msgid ""
 "``No boot check\" option enabled: going directly to the main window "
 "(unsafe!)."
 msgstr ""
-
-#, fuzzy
-#~ msgid "Select the main ROMs and BIOS directory."
-#~ msgstr "Seleccione el directorio de ROMs y BIOS:"
-
-#~ msgid "Home"
-#~ msgstr "Casero"
-
-#~ msgid "List of Roms from your driver file."
-#~ msgstr "Lista de ROMs en el archivo \"romrc\"."
-
-#~ msgid "Keyboard"
-#~ msgstr "Teclado"
-
-#~ msgid "History size:"
-#~ msgstr "Tamaño de Historial:"
-
-#~ msgid "Select a Rom"
-#~ msgstr "Seleccione una ROM"
-
-#~ msgid "_Graphic"
-#~ msgstr "_Gráficos"
-
-#~ msgid "_Keyboard"
-#~ msgstr "_Teclado"
-
-#~ msgid "XGngeo is released under the GNU GPL license:"
-#~ msgstr "XGngeo es distribuido bajo la licencia GNU GPL:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Please select the Rom you want to load from this list. ^^\n"
-#~ "Available Roms are displayed in blue..."
-#~ msgstr ""
-#~ "Por favor seleccione el ROM que quiere cargar de esta lista ^^\n"
-#~ "Los ROMs disponibles se muestran en azul..."
-
-#~ msgid "Welcome! ^_^"
-#~ msgstr "¡Bienvenido! ^_^"
-
-#~ msgid ""
-#~ "The configuration file of Gngeo was not found!\n"
-#~ "So, we have to set some required parameters.\n"
-#~ "Press OK to continue..."
-#~ msgstr ""
-#~ "¡El archivo de configuración no fue encontrado!\n"
-#~ "Entonces, tenemos que dar algunos parámetros requeridos.\n"
-#~ "Presione OK para continuar..."
-
-#~ msgid "Path to romrc:"
-#~ msgstr "Ruta a romrc:"
-
-#~ msgid "Roms &amp; Bios directory doesn't exist."
-#~ msgstr "El directorio de ROMs y BIOS no existe."
-
-#~ msgid "Roms &amp; Bios directory is not a directory! O_o;"
-#~ msgstr "¡El directorio de ROMs y BIOS no es un directorio! O_o;"
-
-#~ msgid "Path to \"romrc\" is not a file!"
-#~ msgstr "¡La ruta a \"romrc\" no es un archivo!"
-
-#~ msgid "Path to gngeo executable doesn't exist."
-#~ msgstr "La ruta al ejecutable de gngeo no existe."
-
-#~ msgid "Path to gngeo executable is not a file!"
-#~ msgstr "¡La ruta al ejecutable de gngeo no es un archivo!"
-
-#~ msgid "Sorry, I can't save the configuration because:"
-#~ msgstr "Disculpa, no puedo guardar la configuración porque:"
-
-#~ msgid "_About"
-#~ msgstr "_Acerca de"
-
-#~ msgid "<b>%s</b>"
-#~ msgstr "<b>%s</b>"
-
-#~ msgid "Rom infos"
-#~ msgstr "Info del ROM"
-
-#~ msgid "Rom:"
-#~ msgstr "ROM:"
-
-#~ msgid ""
-#~ "<span color='#008'><b>XGngeo: a frontend for Gngeo :p</b>\n"
-#~ "Version %i.\n"
-#~ "Running Gngeo version %s.\n"
-#~ "XGngeo's license is the GNU GPL.</span>"
-#~ msgstr ""
-#~ "<span color='#008'><b>XGngeo: un frontend para Gngeo :P</b>\n"
-#~ "Versión %i.\n"
-#~ "Corriendo Gngeo versión %s.\n"
-#~ "La licencia de XGngeo es la GNU GPL.</span>"
-
-#~ msgid "Path"
-#~ msgstr "Ruta"
-
-#~ msgid "Other"
-#~ msgstr "Otro"
-
-#~ msgid "Configuration error!"
-#~ msgstr "¡Error de configuración!"
-
-#~ msgid "Load from _File"
-#~ msgstr "Cargar desde _Archivo"
-
-#~ msgid "_Config"
-#~ msgstr "_Configurar"
-
-#~ msgid "_Path"
-#~ msgstr "_Ruta"
-
-#~ msgid "_Audio"
-#~ msgstr "_Audio"
-
-#~ msgid "_Keys"
-#~ msgstr "_Teclas"
-
-#~ msgid "Selected:"
-#~ msgstr "Seleccionado:"
-
-#~ msgid "Path to Roms & Bios:"
-#~ msgstr "Ruta a ROMs y BIOS:"
-
-#~ msgid "Path to \"LibGL.so\" doesn't exist."
-#~ msgstr "La ruta a libGL.so no existe."
-
-#~ msgid "Path to \"libGL.so\" is not a file!"
-#~ msgstr "¡La ruta a \"libGL.so\" no es un archivo!"
-
-#~ msgid "Run..."
-#~ msgstr "Correr..."
-
-#~ msgid "Quit"
-#~ msgstr "Salir"
+"Opción de \"No boot check\" habilitada: yendo directamente a la ventana "
+"principal (¡Inseguro!)."

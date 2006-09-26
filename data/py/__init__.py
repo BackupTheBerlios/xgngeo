@@ -1066,6 +1066,7 @@ class XGngeo:
 		buffer.set_text("%s\n\n%s\n%s" % (_(
 			"Lead programmer: Choplair.\n"
 			"Assisted by: Pachilor.\n"
+			"Contribution: Achraf Cherti.\n"
 			"Documentation: Ms. Marie-Claire."),
 			_("Translations"),
 			_("Brazilian: Matheus Villela.\n"
@@ -1119,7 +1120,7 @@ class XGngeo:
 				version = self.emulator.get_gngeo_version(path)
 				if version:
 					#Refusing obsolete Gngeo version.
-					if version[0][1:3] < (6, 11):
+					if version[0][1] < 7:
 						stock = 0
 						color = "red"
 					else:
@@ -2214,9 +2215,10 @@ class XGngeo:
 			self.params["temp"]["availableromcolor"] = self.params["xgngeo"]\
 				["availableromcolor"]
 			container = gtk.EventBox()
+			container.set_size_request(30,-1)
 			container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(
 				self.params["temp"]["availableromcolor"]))
-			table2.attach(container, 1, 2, 1, 2)
+			table2.attach(container, 1, 2, 1, 2, xpadding=2, ypadding=0)
 			button = gtk.Button()
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_SELECT_COLOR, gtk.ICON_SIZE_BUTTON)
@@ -2645,7 +2647,7 @@ class XGngeo:
 			# Is the GnGeo executable present and returning correct version
 			# values?
 			version = self.emulator.get_gngeo_version()
-			if not version or version[0][1:3] < (6, 11): error = 1
+			if not version or version[0][1] < 7: error = 1
 
 			if error: self.check_error()  # Display value setting invitation.
 			else:

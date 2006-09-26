@@ -124,7 +124,7 @@ class Configfile:
 			"rominfoxml": os.path.join(self.datarootpath, "rominfos.xml"),
 			"showavailableromsonly": "true",
 			"availableromcolor": "#9cf",
-			"centerwindow": "false"
+			"centerwindow": "true"
 			}
 
 	def exists(self):
