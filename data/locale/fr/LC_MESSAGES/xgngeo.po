@@ -9,12 +9,12 @@ msgstr ""
 "Project-Id-Version: xgngeo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-26 20:09+0200\n"
-"PO-Revision-Date: 2006-09-22 16:51+0200\n"
+"PO-Revision-Date: 2006-09-26 21:05+0200\n"
 "Last-Translator: Choplair <contact-NOSP@M-choplair.org>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: data/py/__init__.py:112
 msgid ""
@@ -75,8 +75,7 @@ msgid ""
 "Should XGngeo proceed with the deletion of the ROM <b>%s</b> located at <i>%"
 "s</i>?"
 msgstr ""
-"XGngeo doit-il procéder à la suppression de la ROM <b>%s</b> située à <i>%s</"
-"i> ?"
+"XGngeo doit-il procéder à la suppression de la ROM <b>%s</b> située à <i>%s</i> ?"
 
 #: data/py/__init__.py:313
 msgid "Please note this operation is irremediable."
@@ -174,7 +173,7 @@ msgstr "Configuration spécifique"
 #: data/py/__init__.py:823 data/py/__init__.py:836 data/py/__init__.py:850
 #, python-format
 msgid "Detected ROM: <b>%s</b>."
-msgstr "ROM détéctée: <b>%s</b>"
+msgstr "ROM détéctée : <b>%s</b>"
 
 #: data/py/__init__.py:899
 msgid "Gngeo is not recognizing this ROM anymore!"

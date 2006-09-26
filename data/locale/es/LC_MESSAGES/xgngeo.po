@@ -1,25 +1,24 @@
 # translation of xgngeo.po to Spanish
 # XGngeo.
 # Traducción al español
-# Copyright (C) 2003,2004,2005 Choplair-network
+# Copyright (C) 2003,2004,2005,2006 Choplair-network
 # Este archivo se distribuye bajo la misma licencia que el
 # paquete XGngeo.
 # Sheng Long Gradilla <danygradilla@hotmail.com>, 2003, 2006.
 # Choplair <chopinou@choplair.org>, 2003.
-#
-#
+# 
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: xgngeo\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-26 20:09+0200\n"
-"PO-Revision-Date: 2006-09-25 16:37-0700\n"
+"PO-Revision-Date: 2006-09-26 21:07+0200\n"
 "Last-Translator: Sheng Long Gradilla <danygradilla@hotmail.com>\n"
-"Language-Team: Spanish\n"
+"Language-Team: Spanish <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: data/py/__init__.py:112
 msgid ""
@@ -79,8 +78,7 @@ msgid ""
 "Should XGngeo proceed with the deletion of the ROM <b>%s</b> located at <i>%"
 "s</i>?"
 msgstr ""
-"¿Debe proceder XGngeo con el borrado del ROM <b>%s</b> localizado en <i>%s</"
-"i>?"
+"¿Debe proceder XGngeo con el borrado del ROM <b>%s</b> localizado en <i>%s</i>?"
 
 #: data/py/__init__.py:313
 msgid "Please note this operation is irremediable."
@@ -398,7 +396,7 @@ msgid "Scanline effect"
 msgstr "Efecto Scanline"
 
 #: data/py/__init__.py:1376
-#, fuzzy, python-format
+#, python-format
 msgid "Scanline 50% effect"
 msgstr "Efecto Scanline 50%"
 
@@ -415,10 +413,12 @@ msgid "Scale4x effect"
 msgstr "Efecto Scale4x"
 
 #: data/py/__init__.py:1380
+#, python-format
 msgid "Scale2x effect with 50% scanline"
 msgstr "Efecto Scale2x con scanline 50%"
 
 #: data/py/__init__.py:1381
+#, python-format
 msgid "Scale2x effect with 75% scanline"
 msgstr "Efecto Scale2x con scanline 75%"
 
@@ -758,3 +758,4 @@ msgid ""
 msgstr ""
 "Opción de \"No boot check\" habilitada: yendo directamente a la ventana "
 "principal (¡Inseguro!)."
+

@@ -308,8 +308,8 @@ class XGngeo:
 							dialog = gtk.MessageDialog(self.window, gtk.DIALOG_MODAL, 
 								gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO)
 							dialog.set_markup(_("Should XGngeo proceed with the "
-								"deletion of the ROM <b>%s</b> located at <i>%s</i>?" %
-								(fullname, filepath)))
+								"deletion of the ROM <b>%s</b> located at "
+								"<i>%s</i>?") % (fullname, filepath))
 							dialog. format_secondary_text(_("Please note this "
 								"operation is irremediable."))
 							dialog.connect("response", response)
@@ -1076,11 +1076,11 @@ class XGngeo:
 			"Spanish: Sheng Long Gradilla.")))
 		buffer.apply_tag(buffer.create_tag(justification=gtk.JUSTIFY_CENTER,
 			editable=False), buffer.get_start_iter(), buffer.get_end_iter())
-		buffer.apply_tag(buffer.create_tag(weight=700), buffer.get_iter_at_line(4),
-			buffer.get_iter_at_line(5))
+		buffer.apply_tag(buffer.create_tag(weight=700), buffer.get_iter_at_line(5),
+			buffer.get_iter_at_line(6))
 		textview = gtk.TextView(buffer)
 		textview.modify_base(gtk.STATE_NORMAL, gtk.gdk.color_parse("#c9ddff"))
-		box.pack_start(textview)
+		box.pack_start(textview, padding=5)
 
 		container.add(box)
 		frame.add(container)
@@ -1217,7 +1217,7 @@ class XGngeo:
 			box2.pack_start(gngeoversion_label, False, padding=3)
 			self.widgets["config"]['gngeopath'] = gtk.Entry()
 			self.widgets["config"]['gngeopath'].connect("changed", set_path_icon,
-				self.imppathicons[1], 0, "gngeopath")
+				self.imppathicons[2], 0, "gngeopath")
 			self.widgets["config"]['gngeopath'].set_text(self.params["xgngeo"]\
 				["gngeopath"])
 			box2.pack_start(self.widgets["config"]['gngeopath'])
