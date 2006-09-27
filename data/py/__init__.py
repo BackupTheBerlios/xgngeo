@@ -413,16 +413,16 @@ class XGngeo:
 			
 			#Adding ROM rows.
 			self.emulator.get_all_supported_roms()
-			romlist_fullname = self.emulator.get_rom_full_names()
-			romlist = self.emulator.get_rom_full_to_mame()
+			romlist_mamenames = self.emulator.get_rom_mame_names()
+			romlist_mame2full = self.emulator.get_rom_mame_to_full()
 			
-			for name in romlist_fullname:
-				if romlist[name] in available_rom:
+			for mamename in romlist_mamenames:
+				if mamename in available_rom:
 					#Alway putting available ROMs.
-					liststore.append([name,True,available_rom[romlist[name]]])
+					liststore.append([romlist_mame2full[mamename], True, available_rom[mamename]])
 				elif not buttonShowAvailable.get_active():
 					#Also putting unavailable ROMs if the box is unchecked.
-					liststore.append([name,False,''])
+					liststore.append([romlist_mame2full[mamename], False, ''])
 
 			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.")	%
 				len(available_rom.keys()))

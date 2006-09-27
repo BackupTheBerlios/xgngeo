@@ -1,5 +1,5 @@
 
- XGngeo - TODO list
+	XGngeo - TODO list
 ~~~~~~~~~~~~~~~~~~~~
 
 - (DONE) Including a default `romrc' file into XGngeo to be sure to
@@ -16,4 +16,3 @@ list window.
 corresponding files have been found in the BIOS directory.
 - (DONE) Ability to customize the background color of
 available ROMs in the list.
-

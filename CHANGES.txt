@@ -32,7 +32,8 @@ available ROM only"option is enabled).
 - Bug fix: multiple custom ROM directory paths were considered
 as one single big path because of lack of line break in the
 related configuration file [patch by Achraf Cherti].
-- Several code style improvement.
+- Even more improved ROM detection in the ROM list.
+- Several code style enhancements.
 
 	Yet present in the beta version (2006-07-14):
 
