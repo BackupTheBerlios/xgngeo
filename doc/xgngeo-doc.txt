@@ -1,4 +1,4 @@
-      Neo Geo emulation on Unix made easy!
+     Neo Geo emulation on Unix made easy!
      __  __  ____  _   _   ____  ____   __
      \ \/ / / ___|| \ | | / ___||  __| /  \
       \\// / / ___|  \| |/ / ___| |_  | /\ |
@@ -6,21 +6,22 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 16 beta, released on 2006-07-14.
+Version 16 final, released on 2006-09-28.
 Copyleft 2003, 2004, 2005, 2006 Choplair-network.
 
      Copying and distribution of this file, with or without
      modification, are permitted in any medium without royalty provided
      the copyleft notice and this notice are preserved.
 
-Table des matières
-*******************
+Table of Contents
+*****************
 
 1 Introduction
 2 Getting started
   2.1 Prerequisites
-    2.1.1 Emulator and Bios
-    2.1.2 Other requirements
+    2.1.1 Emulator
+    2.1.2 Neo Geo BIOS
+    2.1.3 Other requirements
   2.2 Getting and launching XGngeo
   2.3 First time important path configuration
   2.4 Main window
@@ -55,14 +56,14 @@ Table des matières
     4.1.1 The great duo
     4.1.2 Their dependencies
     4.1.3 Other
-  4.2 GnGeo mailling list
+  4.2 Mailling list
 5 Credits
 
 
 1 Introduction
 **************
 
-This is the official documentation for *XGngeo*, a frontend (graphical
+ This is the official documentation for *XGngeo*, a frontend (graphical
 user interface) for *GnGeo*, which a command line *Neo Geo* (arcade
 game playing system made by SNK) emulator for the _GNU/Linux_ and
 _FreeBSD_ operating systems (and may be some other Unices) with high
@@ -102,8 +103,8 @@ by step!
 2.1 Prerequisites
 =================
 
-2.1.1 Emulator and Bios
------------------------
+2.1.1 Emulator
+--------------
 
 XGngeo is a frontend for GnGeo, so this one must be installed somewhere
 on your computer! You can download the last version from its home page
@@ -111,8 +112,8 @@ on your computer! You can download the last version from its home page
 various binary formats (deb, RPM...), keep in mind that these packages
 may be older than the classic source code archive.
 
-   As of XGngeo version 16, the minimum version of GnGeo we ask you to
-use is the *0.6.11*. Trying to launch the frontend with an older
+   As of XGngeo version 16 (final), the minimum version of GnGeo we ask
+you to use is the *0.7*. Trying to launch the frontend with an older
 version of the emulator will make XGngeo refusing to start untill you
 indicated where to find a supported version of GnGeo on your computer.
 
@@ -133,19 +134,29 @@ format it was grabed into. If, for some reasons, the installation does
 not work, you may ask for help from the GnGeo mailling list (chapter 4
 section 2).
 
-   To be able to launch ROMs, GnGeo will need a Neo Geo BIOS. It is an
-archive which consists of the following files: `neo-geo.rom',
-`ng-sfix.rom' and `ng-lo.rom'. They have to be put (decompressed) into
-the same directory as your Roms (the so called `ROM and Bios
-directory'!).
+2.1.2 Neo Geo BIOS
+------------------
 
-2.1.2 Other requirements
+To be able to launch ROMs, GnGeo will need a Neo Geo BIOS.  The
+supported BIOS kinds are: _arcade_, _home_ (aka AES) and _universal_.
+
+   The content of one or more (in that case you may select your
+favorite in the option) BIOS archives has to be put, as uncompressed
+files, into a same directory, which will be indicated later in the
+options.
+
+   Assuming you are not violating international copyright laws since
+you already own an original genuine Neo Geo hardware, BIOS archive may
+be obtained in various ways, like from the internet...
+
+2.1.3 Other requirements
 ------------------------
 
 Especially for XGngeo, you also need the following softwares to be
 installed:
 
-   - The *Python* programming language: version 2.2 or more.
+   - The *Python* programming language: version 2.2 or more (including
+     devel package for the install).
 
    - The *Gimp Tool Kit* aka GTK+: version 2.6 or more.
 
@@ -177,8 +188,8 @@ version number).
 indicated above.*
 
    Since Python code is interpreted, XGngeo doesn't require any
-compilation phase. T You just have to install the files on your
-computer by entering, _as root_: `python setup.py install'.
+compilation phase. You just have to install the files on your computer
+by entering, the following command _as root_: `python setup.py install'.
 
    After the installation process quickly ended up, you may just, _as a
 normal user_ now, type the `xgngeo' command to launch the frontend. If
@@ -191,13 +202,14 @@ Otherwise, you are entering the serious things! :)
 At the beggining, XGngeo should invite you to set up some important
 parameters that are required to build up basic configuration files with
 three important options required for a working emulation. The first
-one, the path to your ROM driver file (`romrc'), is set with the
-default value, like the path to the GnGeo executable. Actually, you
-would have just to tell the directory where are located your Neo Geo
-ROMs and BIOS.
+one, the path to your ROM driver directory (aka `romrc.d'), is set with
+a default value, like the path to the GnGeo executable.  Actually, you
+would have just to indicate the directory where are located your Neo
+Geo BIOS.
 
-   Once you have finished, press SAVE. Of course, these parameters can
-be modified at any time thereafter, using the same configuration window.
+   Once you have finished, press SAVE. Of course, these parameters
+could be modified at any time thereafter, using the same configuration
+window.
 
    If for some reason you want to pass out this important path check at
 boot time, it is possible by just giving `--nobootcheck' as a command
@@ -226,7 +238,7 @@ Of course, you may fall in love with the great XGngeo logo, but
 actually your attention should go to the menu bar, on the upper part,
 which you'll be able to control everything with!
 
-   It is primarily composed of the FILE  menu, which permits you do
+   It is primarily composed of the FILE menu, which permits you do
 simple operations such as loading ROM, starting or stopping it, and
 exiting the program.
 
@@ -254,11 +266,12 @@ There are 3 different ways to load a ROM for being executed...
 ---------------------------------
 
 Actually, you would generaly use the ROM list window which brings you
-an overall view of all the ROMs available in your `ROM and Bios
-directory' (plus any other dictory you mentioned), and select one from
-those. From there, you can also set specific emulation configuration
-for any ROM, and even see game preview and/or information (see chapter
-3 section 2.1)
+an overall view of all the available ROMs in the various place you
+mentioned (using the special window that appear when clicking on the
+ROM DIRECTORY... buttons).  You may click on any entry on the ROM list
+to see game preview and / or information (if those add-ons are enabled,
+see chapter 3 section 2.1), set a specific emulation configuration, and
+of course, choose it for loading.
 
 2.5.2 Through the file chooser
 ------------------------------
@@ -277,9 +290,11 @@ to be a valid ROM archive, detected by GnGeo.
 -----------------------------------------
 
 The recent ROM history is no more than a simple menu providing quick
-loading function for the last ROMs you have previously chosen. Note
-that you can remove a ROM from that list by right clicking over its
-name.
+loading function for the last ROMs you have previously chosen.
+
+   Note that you can remove any ROM from that list by right clicking
+over its name, and that inaccessible archives are flagged out by a
+small warning icon.
 
 
 
@@ -288,8 +303,8 @@ playable only a few seconds later! `The future is now', enjoy the Neo
 Geo! :-D
 While playing, you still can perform some special actions in the
 emulator, like toggling beetween fullscreen/windowed mode,
-saving/loading state, etc. (see chapter 3 section 3). By the way, you
-can also disable the auto ROM execution feature (if you prefer to do so
+saving/loading state, etc. (see chapter 3 section 3).  By the way, you
+can also disable the ROM auto-execution feature (if you prefer to do so
 manually) in the OTHER THINGS configuration window.
 
 3 Details
@@ -342,17 +357,14 @@ XGngeo, as detailed in the next section...
 3.1.3 ROM drivers
 -----------------
 
-ROM drivers are actualy defined a single driver file, named `romrc'.
-This ASCII file is very important as it contains all the instructions
-for the emulator to correctly handle all the ROMs.
-
-   A more convenient to let the user add/modify/delete ROM drivers to
-GnGeo than editing this very large file (presently more than 12.000
-lines long!), would be to split all drivers into several ROM-specific
-driver files that would be put in a `romrc.d' directory. This is hoped
-to soon become the default in GnGeo, since it would among others really
-facilitate a `ROM drivers editing interface' to be implemented in
-future XGngeo version...
+ROM drivers, since GnGeo version 0.7, are defined using numerous
+per-ROM ASCII files grouped into a common ROM driver dictory (aka
+`romrc.d') and named like each ROM's mamename with the `.rc' extension
+(ie.: `kof97.rc').
+This new default way to handle ROM drivers (compared to the huge
+all-in-one driver file previously used) has been awaited for a while
+and will facilitate a sort of `ROM drivers editing interface' which
+should be implemented in future XGngeo version... :-)
 
 3.1.4 History file
 ------------------
@@ -369,7 +381,7 @@ created and updated by the frontend and not the emulator.
 3.2.1 ROM list
 --------------
 
-There are also optional features (add-on) which bring you a more
+There are also optional features (add-ons) which bring you a more
 comfortable game selection in the ROM list window. Here they are...
 
 3.2.1.1 Preview images
@@ -500,11 +512,11 @@ following languages:
 
    - French
 
-   - German
+   - German*
 
    - Polish*
 
-   - Portuguese of Brazil
+   - Portuguese of Brazil*
 
    - Spanish
 
@@ -529,7 +541,7 @@ Choplair-network's website (see address below).
 4.1.1 The great duo
 -------------------
 
-   - GnGeo homepage: `http://m.peponas.free.fr/gngeo/'.
+   - GnGeo homepage: `http://gngeo.berlios.de/'.
 
    - Choplair-network home page (for XGngeo):
      `http://www.choplair.org/'.
@@ -558,8 +570,8 @@ Choplair-network's website (see address below).
    - GGF (previous frontend) homepage:
      `http://gngeofrontend.sourceforge.net/'.
 
-4.2 GnGeo mailling list
-=======================
+4.2 Mailling list
+=================
 
 If you get any problem using GnGeo, directly or through a frontend such
 as XGngeo, the best way is certainly to ask for help on the official
@@ -568,10 +580,10 @@ from its little community, including XGngeo developers.
 Here is how to:
 
    - *Suscribe:* send a blank email, with the word `subscribe' as a
-     subject, to <gngeo-request[AT]ml.free.fr>. Note that prior
+     subject, to <gngeo-request [AT] ml.free.fr>. Note that prior
      subscribtion is mandatory to post any new message.
 
-   - *Post:* send your messages to <gngeo[AT]ml.free.fr>.
+   - *Post:* send your messages to <gngeo [AT] ml.free.fr>.
 
    By the way, list archives are available on the web at the following
 address: `http://www.mail-archive.com/gngeo@ml.free.fr/'. You would
@@ -585,26 +597,31 @@ XGngeo forms a part of the projects conducted by the Choplair-network,
 an independant libre software development crew.  Here comes the people
 involved in the making of this program since the beginning:
 
-   - *Choplair* (<chopinou[AT]choplair.org>): development director and
-     main programmer, French translator.
+   - *Choplair* (<chopinou [AT] choplair.org>): development director
+     and main programmer, French translator.
 
-   - *Pachilor* (<pachilor[AT]choplair.org>): assistant programmer.
+   - *Pachilor* (<pachilor [AT] choplair.org>): assistant programmer.
 
-   - *hori*(1) (<x_psyence[AT]hotmail.com>): English spelling corrector.
+   - *Achraf Cherti* (<achrafcherti [AT] gmail dot com>): various
+     patches and code contributions, Ubuntu packager.
 
-   - *Peter Kainrad* (<peter.kainrad[AT]inode.at>): German translator.
+   - *hori*(1) (<x_psyence [AT] hotmail.com>): past English spelling
+     corrector.
 
-   - *Shilon* (<sheng.long.gradilla[AT]gmail.com>): Spanish translator.
+   - *Peter Kainrad*: old German translator.
 
-   - *Matma* (<matma[AT]irc.pl>): Polish translator.
+   - *Shilon* (<sheng.long.gradilla [AT] gmail.com>): Spanish
+     translator.
 
-   - *Matheus Villela* (<villela[AT]inf.ufsc.br>): Brazilian translator.
+   - *Matma*: old Polish translator.
 
-   - *Paulo Eduardo Chiva* (<paulo.chiva[AT]ig.com.br>): previous
+   - *Matheus Villela*: old Brazilian translator.
+
+   - *Paulo Eduardo Chiva* (<paulo.chiva [AT] ig.com.br>): previous
      Brazilian translator.
 
-   - *Ms. Marie-Claire* (<marie-claire[AT]choplair.org>): documentation
-     editor.
+   - *Ms. Marie-Claire* (<marie-claire [AT] choplair.org>):
+     documentation editor.
 
    Special thanks to the GnGeo author, *Mathieu Peponas*, for writing
 such a great emulator!
