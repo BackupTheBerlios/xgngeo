@@ -185,8 +185,8 @@ class XGngeo:
 		# We do not so when the game was stopped from XGngeo.
 		if not self.gngeokilledbyme:
 			output = self.emulator.rom_get_process_output() #Raw ouput of Gngeo.
-			message = "" #Nothing for start!
-			#Parsing the output, line per line, looking for error...
+			message = "" # Nothing for start!
+			# Parsing the output, line per line, looking for error...
 			for line in output.split("\n"):
 				for line in line.split("\r"):
 					# We ignore usual messages:
@@ -195,12 +195,12 @@ class XGngeo:
 					# 4: ROM driver creation message (in Gngeo 0.6.5beta).
 					# 5: Screenshot saving message.
 					# 6: Joystick device init message.
-					if not line.strip()=="" \
+					if not line.strip() == "" \
 						and not match(".* [[][\-|\*]{62}[]]?", line)\
 						and not match("Update sai .*", line)\
 						and not match("deltaptr=(\S)* sai", line)\
-						and not line[:4]=="Add "\
-						and not line[:8]=="save to "\
+						and not line[:4] == "Add "\
+						and not line[:8] == "save to "\
 						and not match("joy .*, axe:\d+, button:\d+", line):
 						# The line contains a unexpected message which is thus
 						# certainly important, so we record it.
@@ -224,7 +224,7 @@ class XGngeo:
 		for x in self.widgets["history_menu"].get_children(): x.set_sensitive(True)
 		self.stopMenu_item.set_sensitive(False)
 		self.execMenu_item.set_sensitive(True)
-		for x in self.configMenu.get_children(): x.set_sensitive(True)
+		for x in self.widgets["config_menu"].get_children(): x.set_sensitive(True)
 		gtk.threads_leave()
 	
 	def rom_loading_in_progress(self):
@@ -243,7 +243,7 @@ class XGngeo:
 			gtk.threads_leave()
 			time.sleep(0.42)
 
-	def gngeo_exec(self,widget=None):
+	def gngeo_exec(self, widget=None):
 		Timer(0, self.rom_loading_in_progress).start()
 
 		# Performing some modifications on the menu.
@@ -253,13 +253,13 @@ class XGngeo:
 			x.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
-		for x in self.configMenu.get_children(): x.set_sensitive(False)
+		for x in self.widgets["config_menu"].get_children(): x.set_sensitive(False)
 
 		self.emulator.rom_launching(self.romPath)
 
 		self.gngeokilledbyme = 0
 		# Starting another thread which watchs out the last one!
-		Timer(0,self.gngeo_get_output).start()
+		Timer(0, self.gngeo_get_output).start()
 
 	def gngeo_stop(self, widget=None):
 		"""``Close you eyes and prey, Gngeo!"
@@ -400,7 +400,7 @@ class XGngeo:
 		def set_rom_from_list(widget):
 			if self.romFromList:  # Is something selected?
 				self.setting_current_rom(self.romFromListPath, self.romFromList,
-				self.romFromListName)
+					self.romFromListName)
 			dialog.destroy()
 
 		def refreshing_rom_list(*args):
@@ -411,25 +411,26 @@ class XGngeo:
 				for mame, file in  self.emulator.scan_rom_in_directory(dir).items():
 					available_rom[mame] = os.path.join(dir, file)
 			
-			#Adding ROM rows.
+			# Adding ROM rows.
 			self.emulator.get_all_supported_roms()
 			romlist_mamenames = self.emulator.get_rom_mame_names()
 			romlist_mame2full = self.emulator.get_rom_mame_to_full()
 			
 			for mamename in romlist_mamenames:
 				if mamename in available_rom:
-					#Alway putting available ROMs.
-					liststore.append([romlist_mame2full[mamename], True, available_rom[mamename]])
+					# Alway putting available ROMs.
+					liststore.append([romlist_mame2full[mamename], True,
+						available_rom[mamename]])
 				elif not buttonShowAvailable.get_active():
-					#Also putting unavailable ROMs if the box is unchecked.
+					# Also putting unavailable ROMs if the box is unchecked.
 					liststore.append([romlist_mame2full[mamename], False, ''])
 
-			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.")	%
+			labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.") %
 				len(available_rom.keys()))
 			labelAvailableRoms.set_use_markup(True)
 
 		def rom_directories(widget, parent):
-			temp_romdir_list = list(tuple(self.romdir_list)) #Not affecting in-use param (yet).
+			temp_romdir_list = list(tuple(self.romdir_list)) # Not affecting in-use param (yet).
 			dialog = gtk.Dialog(_("Setting ROM directories."), parent,
 				gtk.DIALOG_MODAL, (gtk.STOCK_APPLY, gtk.RESPONSE_APPLY,
 				gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
@@ -890,6 +891,7 @@ class XGngeo:
 			archive_infos = self.emulator.archive_recognition(path)
 
 			if archive_infos:
+				self.widgets["file_menu"].popdown()
 				# Okay. Loading ROM using the obtained infos.
 				self.setting_current_rom(path,archive_infos[0], archive_infos[1])
 
@@ -2463,26 +2465,26 @@ class XGngeo:
 		#
 		# FILE Menu
 		#
-		menu = gtk.Menu()
+		self.widgets["file_menu"] = gtk.Menu()
 		self.file_menu_item = gtk.MenuItem(_("_File"))
-		self.file_menu_item.set_submenu(menu)
-		menu_bar.append(self.file_menu_item )
+		self.file_menu_item.set_submenu(self.widgets["file_menu"])
+		menu_bar.append(self.file_menu_item)
 
-		menu2 = gtk.Menu()
+		menu = gtk.Menu()
 		self.loadrom_menu_item = gtk.MenuItem(_("_Load ROM"))
-		self.loadrom_menu_item.set_submenu(menu2)
-		menu.append(self.loadrom_menu_item)
+		self.loadrom_menu_item.set_submenu(menu)
+		self.widgets["file_menu"].append(self.loadrom_menu_item)
 
 		menu_item = gtk.MenuItem(_("From _list"))
 		menu_item.connect("activate",self.rom_list)
-		menu2.append(menu_item)
+		menu.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Manually"))
 		menu_item.connect("activate", self.file_select, _("Load a ROM "
 			"manually..."), self.params["gngeo"]["biospath"], 
 			self.manual_rom_loading, 0,	{ _("All files") : "*",
 			_("ROM archive") :  "*.zip"}, True)
-		menu2.append(menu_item)
+		menu.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
 		self.widgets["history_menu"] = gtk.Menu()
@@ -2491,42 +2493,42 @@ class XGngeo:
 		self.history.refresh_list(size=int(self.params["xgngeo"]\
 			["historysize"]))  # Building ROM History list.
 		self.history_menu_generation()  # Generating ROM History menu.
-		menu.append(self.history_menu_item)
+		self.widgets["file_menu"].append(self.history_menu_item)
 
-		menu.append(gtk.SeparatorMenuItem())  # Separator
+		self.widgets["file_menu"].append(gtk.SeparatorMenuItem())  # Separator
 
 		self.execMenu_item = gtk.ImageMenuItem(gtk.STOCK_EXECUTE)
 		self.execMenu_item.connect("activate", self.gngeo_exec)
 		self.execMenu_item.set_state(gtk.STATE_INSENSITIVE)
-		menu.append(self.execMenu_item)
+		self.widgets["file_menu"].append(self.execMenu_item)
 
 		self.stopMenu_item = gtk.ImageMenuItem(gtk.STOCK_STOP)
 		self.stopMenu_item.connect("activate", self.gngeo_stop)
 		self.stopMenu_item.set_state(gtk.STATE_INSENSITIVE)
-		menu.append(self.stopMenu_item)
+		self.widgets["file_menu"].append(self.stopMenu_item)
 
-		menu.append(gtk.SeparatorMenuItem())  # Separator
+		self.widgets["file_menu"].append(gtk.SeparatorMenuItem())  # Separator
 
 		menu_item = gtk.ImageMenuItem(gtk.STOCK_QUIT)
 		menu_item.connect("activate", self.quit)		
-		menu.append(menu_item)
+		self.widgets["file_menu"].append(menu_item)
 
 		#
 		# CONFIG Menu
 		#
-		self.configMenu = gtk.Menu()
+		self.widgets["config_menu"] = gtk.Menu()
 		menu_item = gtk.MenuItem(_("_Configuration"))
-		menu_item.set_submenu(self.configMenu)
+		menu_item.set_submenu(self.widgets["config_menu"])
 		menu_bar.append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Important paths"))
 		menu_item.connect("activate", self.config, 0)
-		self.configMenu.append(menu_item)
+		self.widgets["config_menu"].append(menu_item)
 
 		menu2 = gtk.Menu()
 		menu_item = gtk.MenuItem(_("_Global emulation"))
 		menu_item.set_submenu(menu2)
-		self.configMenu.append(menu_item)
+		self.widgets["config_menu"].append(menu_item)
 
 		menu_item = gtk.MenuItem(_("_Display"))
 		menu_item.connect("activate", self.config, 1)
@@ -2546,7 +2548,7 @@ class XGngeo:
 
 		menu_item = gtk.MenuItem(_("_Other"))
 		menu_item.connect("activate", self.config, 5)
-		self.configMenu.append(menu_item)
+		self.widgets["config_menu"].append(menu_item)
 
 		#
 		# DRIVERS Menu
@@ -2588,7 +2590,7 @@ class XGngeo:
 		menu_item.connect("activate", self.display_file, "LICENSE.txt")
 		menu.append(menu_item)
 
-		# Pack MemuBar into the Box
+		# Packing MemuBar into the Box
 		box.pack_start(menu_bar, False)
 
 		#
@@ -2644,6 +2646,8 @@ class XGngeo:
 			error = 0
 			# Are BIOS files present?
 			if not self.get_bios_presence(self.params["gngeo"]["biospath"]): error = 1
+			# Does the ROM driver directory exist?
+			if not (os.path.isdir(self.params["gngeo"]["romrcdir"])): error = 1
 			# Is the GnGeo executable present and returning correct version
 			# values?
 			version = self.emulator.get_gngeo_version()
