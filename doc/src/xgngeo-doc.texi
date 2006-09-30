@@ -2,7 +2,7 @@
 
 @set title XGngeo documentation
 @set xgngeo-version 16 final
-@set subtitle Version @value{xgngeo-version}, released on 2006-09-28.
+@set subtitle Version @value{xgngeo-version}, released on 2006-09-30.
 
 @settitle @value{title}
 
@@ -99,7 +99,7 @@ Thereafter, unpack the archive, then move to the directory which have just been 
 @sp 1
 @strong{At this time, we @emph{do} assume that you have installed everything indicated above.}
 @sp 1
-Since Python code is interpreted, XGngeo doesn't require any compilation phase. You just have to install the files on your computer by entering, the following command @emph{as root}: @command{python setup.py install}.
+Since Python code is interpreted, XGngeo doesn't require any compilation phase. You just have to install the files on your computer by entering the following command, @emph{as root}: @command{python setup.py install}.
 @sp 1
 After the installation process quickly ended up, you may just, @emph{as a normal user} now, type the @command{xgngeo} command to launch the frontend. If you get an error doing so, please refer to the chapter 4 section 2. Otherwise, you are entering the serious things! :)
 

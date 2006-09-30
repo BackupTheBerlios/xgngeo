@@ -2,7 +2,7 @@
 	XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
-* Changes in version 16 (2006-XX-XX):
+* Changes in version 16 (2006-09-30):
 
 - The user may now only choose a certain BIOS type when it is
 available in his/her BIOS directory.
@@ -14,26 +14,27 @@ standart output.
 - Bug fix in the manual ROM selection window.
 - ROM selection in the list doesn't require double click any
 more, just single. :p
+- Increased ROM list displaying speed (especialy when ``Show
+- Improved ROM list refreshing feature (now applied just after
 - Ability to remove a ROM from the file system through the ROM
 list window.
 - Support of a ROM drivers file switched  to a ROM drivers
 directory (the new standard since GnGeo 0.7).
-- LICENSE.txt updated (because of old FSF adress) [Achraf cherti]
+- Minimum accepted Gngeo version increased to 0.7 (current :p).
 - Long name for all new history entry [Achraf cherti] 
-- xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 - Optional use of Psyco (if module is available) to boost
 XGngeo's overall speed performance [Achraf Cherti].
 - Bug fix: no more crash when removing an entry which was below
+- xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 a just removed one in the ROM History menu [Achraf Cherti].
-- Improved ROM list refreshing feature (now applied just after
 having updated the ROM directory list).
-- Increased ROM list displaying speed (especialy when ``Show
 available ROM only"option is enabled).
 - Bug fix: multiple custom ROM directory paths were considered
 as one single big path because of lack of line break in the
 related configuration file [patch by Achraf Cherti].
 - Even more improved ROM detection in the ROM list.
 - Several code style enhancements.
+- LICENSE.txt updated (because of old FSF adress) [Achraf cherti]
 
 	Yet present in the beta version (2006-07-14):
 

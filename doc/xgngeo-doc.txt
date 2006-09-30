@@ -6,7 +6,7 @@
      /_/\_\ \___/ |_| \_| \___/ |____| \__/
 
 XGngeo - DOCUMENTATION
-Version 16 final, released on 2006-09-28.
+Version 16 final, released on 2006-09-30.
 Copyleft 2003, 2004, 2005, 2006 Choplair-network.
 
      Copying and distribution of this file, with or without
@@ -189,7 +189,7 @@ indicated above.*
 
    Since Python code is interpreted, XGngeo doesn't require any
 compilation phase. You just have to install the files on your computer
-by entering, the following command _as root_: `python setup.py install'.
+by entering the following command, _as root_: `python setup.py install'.
 
    After the installation process quickly ended up, you may just, _as a
 normal user_ now, type the `xgngeo' command to launch the frontend. If
