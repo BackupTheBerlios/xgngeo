@@ -15,7 +15,9 @@ standart output.
 - ROM selection in the list doesn't require double click any
 more, just single. :p
 - Increased ROM list displaying speed (especialy when ``Show
+available ROM only"option is enabled).
 - Improved ROM list refreshing feature (now applied just after
+having updated the ROM directory list).
 - Ability to remove a ROM from the file system through the ROM
 list window.
 - Support of a ROM drivers file switched  to a ROM drivers
@@ -25,10 +27,8 @@ directory (the new standard since GnGeo 0.7).
 - Optional use of Psyco (if module is available) to boost
 XGngeo's overall speed performance [Achraf Cherti].
 - Bug fix: no more crash when removing an entry which was below
-- xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 a just removed one in the ROM History menu [Achraf Cherti].
-having updated the ROM directory list).
-available ROM only"option is enabled).
+- xgngeo.desktop : Freedesktop.org menu entry [Achraf cherti]
 - Bug fix: multiple custom ROM directory paths were considered
 as one single big path because of lack of line break in the
 related configuration file [patch by Achraf Cherti].

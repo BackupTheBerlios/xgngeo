@@ -4,4 +4,5 @@ include data/img/*.png
 include data/rominfos.*
 include data/xgngeo_romrc
 include data/misc/*.desktop
+include data/script/xgngeo_startup.py
 recursive-include data/locale *.pot *.po *.mo

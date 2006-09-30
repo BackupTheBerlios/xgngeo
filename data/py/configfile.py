@@ -17,7 +17,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 """
-
 __author__ = "Choplair-network"
 __copyright__ = "Copyleft 2003, 2004, 2005, 2006 Choplair-network"
 __license__ = "GPL"
@@ -25,8 +24,8 @@ __revision__ = "$Revision$"
 # $Source$
 __date__ = "$Date$"
 
-from re import match
 import os.path
+from re import match
 from sys import prefix
 
 class Configfile:
@@ -44,7 +43,6 @@ class Configfile:
 		as the `gngeorc'.
 	
 	"""
-
 	def __init__(self, datarootpath, xgngeoUserDir, gngeoUserDir):
 		#Initial attributes.
 		self.datarootpath = datarootpath
@@ -68,7 +66,6 @@ class Configfile:
 			and XGngeo configuration files.
 		
 		"""
-
 		return { #GnGeo's default.
 			#Important path section.
 			"biospath": os.path.expanduser("~/..."),
@@ -139,7 +136,6 @@ class Configfile:
 			dict stays empty.
 		
 		"""
-
 		if not mamename:
 			#Parsing default main configuration files.
 			dictionary = [{}, {}]
@@ -180,8 +176,7 @@ class Configfile:
 		"""Create / updatate global configuration files of GnGeo (`gngeorc')
 			and XGngeo (`xgngeo.conf').
 		
-		"""
-		
+		"""		
 		#Top comments. :p
 		content = []
 		content.append("# Gngeo global configuration file.\n"
@@ -247,7 +242,6 @@ class Configfile:
 
 	def write_rom_config(self, dictionary, mamename, version):
 		"""Creating/updatating GnGeo configuration file for  a specific ROM."""
-		
 		path = os.path.join(self.paths["gngeoUserDir"], "%s.cf" % mamename)
 
 		# Top comment. :p
