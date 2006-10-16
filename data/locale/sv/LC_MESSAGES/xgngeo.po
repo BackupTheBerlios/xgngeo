@@ -1,0 +1,713 @@
+# Swedish translation of xgngeo.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the xgngeo package.
+# Daniel Nylander <po@danielnylander.se>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: xgngeo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-09-26 20:09+0200\n"
+"PO-Revision-Date: 2006-10-16 14:46+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/py/__init__.py:112
+msgid "It seems that the important path parameters are not all valid. That is normal if Gngeo configuration file hasn't been yet created. Anyway, correct values should be specified for the emulation to work. Press OK to do so..."
+msgstr "Det verkar som om viktiga sökvägsparametrar inte är giltiga. Det är normalt om Gngeos konfigurationsfil ännu inte har skapats. Hur som helst, korrekta värden ska anges för att emuleringen ska fungera. Tryck OK för att göra det..."
+
+#: data/py/__init__.py:130
+#, python-format
+msgid ""
+"Error: Unable to open the file \"%s\"!\n"
+"You can read the GNU GPL license at:\n"
+"http://www.gnu.org/licenses/gpl.html"
+msgstr ""
+"Fel: Kunde inte öppna filen \"%s\"!\n"
+"Du kan läsa GNU GPL-licensen på:\n"
+"http://www.gnu.org/licenses/gpl.html"
+
+#: data/py/__init__.py:136
+msgid "License"
+msgstr "Licens"
+
+#: data/py/__init__.py:141
+#: data/py/__init__.py:1043
+msgid "This program is released under the terms of the GNU General Public License."
+msgstr "Det här programmet är utgivet under villkoren för GNU General Public License."
+
+#: data/py/__init__.py:174
+#, python-format
+msgid "ROM stopped (%s)."
+msgstr "ROM stoppad (%s)."
+
+#: data/py/__init__.py:214
+msgid "Gngeo returned the following message:"
+msgstr "Gngeo returnerade följande meddelande:"
+
+#: data/py/__init__.py:237
+#, python-format
+msgid "Starting ROM (%s)"
+msgstr "Startar ROM (%s)"
+
+#: data/py/__init__.py:297
+msgid "An error occured while trying to delete the ROM archive."
+msgstr "Ett fel inträffade vid försök att ta bort ROM-arkivet."
+
+#: data/py/__init__.py:310
+#, python-format
+msgid "Should XGngeo proceed with the deletion of the ROM <b>%s</b> located at <i>%s</i>?"
+msgstr "Ska XGngeo fortsätta med borttagningen av ROM-filen <b>%s</b> som finns på <i>%s</i>?"
+
+#: data/py/__init__.py:313
+msgid "Please note this operation is irremediable."
+msgstr "Observera att den här åtgärden är oåterkallelig."
+
+#: data/py/__init__.py:318
+msgid "Cannot delete a ROM which is unavailable!"
+msgstr "Kan inte ta bort en ROM som är otillgänglig!"
+
+#: data/py/__init__.py:427
+#, python-format
+msgid "<b>%s</b> available ROMs."
+msgstr "<b>%s</b> tillgängliga ROM-filer."
+
+#: data/py/__init__.py:433
+msgid "Setting ROM directories."
+msgstr "Ställer in ROM-kataloger."
+
+#: data/py/__init__.py:436
+msgid "Here you can add multiple directories to scan for ROMs (this is not recursive)."
+msgstr "Här kan du lägga till flera kataloger att söka av efter ROM-filer (det här är inte rekursivt)."
+
+#: data/py/__init__.py:453
+msgid "This directory is already in the ROM directory list!"
+msgstr "Den här katalogen finns redan i listan över ROM-kataloger!"
+
+#: data/py/__init__.py:490
+msgid "Select a ROM directory to add."
+msgstr "Välj en ROM-katalog att lägga till."
+
+#: data/py/__init__.py:517
+msgid "Your Neo Geo ROM list."
+msgstr "Din Neo Geo ROM-lista."
+
+#: data/py/__init__.py:522
+msgid "Select a ROM by clicking on its name, then press <b>Open</b> to load it if available (colored background)."
+msgstr "Välj en ROM-fil genom att klicka på dess namn, tryck sedan på <b>Öppna</b> för att läsa in den, om den är tillgänglig (färgad bakgrund)."
+
+#: data/py/__init__.py:559
+msgid "ROM directories..."
+msgstr "ROM-kataloger..."
+
+#: data/py/__init__.py:567
+msgid "Show available ROMs only."
+msgstr "Visa endast tillgängliga ROM-filer."
+
+#: data/py/__init__.py:601
+msgid "Preview image"
+msgstr "Förhandsvisa bild"
+
+#: data/py/__init__.py:622
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: data/py/__init__.py:629
+msgid "Manufacturer:"
+msgstr "Tillverkare:"
+
+#: data/py/__init__.py:636
+msgid "Year:"
+msgstr "År:"
+
+#: data/py/__init__.py:643
+msgid "Genre:"
+msgstr "Genre:"
+
+#: data/py/__init__.py:650
+msgid "Players:"
+msgstr "Spelare:"
+
+#: data/py/__init__.py:657
+msgid "Rating:"
+msgstr "Betyg:"
+
+#: data/py/__init__.py:664
+msgid "Size:"
+msgstr "Storlek:"
+
+#: data/py/__init__.py:673
+msgid "Informations"
+msgstr "Information"
+
+#: data/py/__init__.py:693
+msgid "Specific configuration:"
+msgstr "Specifik konfiguration:"
+
+#: data/py/__init__.py:823
+#: data/py/__init__.py:836
+#: data/py/__init__.py:850
+#, python-format
+msgid "Detected ROM: <b>%s</b>."
+msgstr "Hittad ROM-fil: <b>%s</b>."
+
+#: data/py/__init__.py:899
+msgid "Gngeo is not recognizing this ROM anymore!"
+msgstr "Gngeo känner inte till den här ROM-filen längre!"
+
+#: data/py/__init__.py:901
+msgid "Such an issue has two explanations: the ROM archive has been corrupted or the driver that used to handle this ROM has been altered/deleted (most probable)."
+msgstr "Ett sådant problem har två förklaringar: ROM-arkivet har skadats eller att drivrutinen som används för att hantera ROM-filen har ändrats/tagits bort (mest troligt)."
+
+#: data/py/__init__.py:911
+msgid "Cannot continue: the ROM you wanted to load was not found on the file system!"
+msgstr "Kan inte fortsätta: ROM-filen du ville läsa in hittades inte på filsystemet!"
+
+#: data/py/__init__.py:919
+msgid "It is now indicated as unavailable in the ROM History menu."
+msgstr "Det indikeras nu som inte tillgängligt i ROM-historikmenyn."
+
+#: data/py/__init__.py:942
+msgid "This ROM is unloadable because Gngeo could not find any suitable driver to handle it."
+msgstr "Den här ROM-filen är inte läsbar därför att Gngeo inte kunde hitta en lämplig drivrutin för att hantera den."
+
+#: data/py/__init__.py:950
+msgid "Error: file doesn't exist!"
+msgstr "Fel: filen finns inte!"
+
+#: data/py/__init__.py:1013
+#, python-format
+msgid "ROM: \"%s\" (%s)"
+msgstr "ROM: \"%s\" (%s)"
+
+#: data/py/__init__.py:1023
+msgid "About XGngeo"
+msgstr "Om XGngeo"
+
+#: data/py/__init__.py:1034
+msgid "XGngeo: a frontend for Gngeo. :p"
+msgstr "XGngeo: en framände för Gngeo. :p"
+
+#: data/py/__init__.py:1034
+#, python-format
+msgid "Version %s."
+msgstr "Version %s."
+
+#: data/py/__init__.py:1035
+#, python-format
+msgid "Running Gngeo version %s."
+msgstr "Kör Gngeo version %s."
+
+#: data/py/__init__.py:1049
+msgid "Credits"
+msgstr "Tack till"
+
+#: data/py/__init__.py:1067
+msgid ""
+"Lead programmer: Choplair.\n"
+"Assisted by: Pachilor.\n"
+"Contribution: Achraf Cherti.\n"
+"Documentation: Ms. Marie-Claire."
+msgstr ""
+"Huvudprogrammerare: Choplair.\n"
+"Assisterad av: Pachilor.\n"
+"Bidragsgivare: Achraf Cherti.\n"
+"Dokumentation: Ms. Marie-Claire."
+
+#: data/py/__init__.py:1071
+msgid "Translations"
+msgstr "Översättningar"
+
+#: data/py/__init__.py:1072
+msgid ""
+"Brazilian: Matheus Villela.\n"
+"French: Choplair.\n"
+"German: Peter Kainrad.\n"
+"Polish: Mateusz Wolsza.\n"
+"Spanish: Sheng Long Gradilla."
+msgstr ""
+"Brasilianska: Matheus Villela.\n"
+"Franska: Choplair.\n"
+"Tyska: Peter Kainrad.\n"
+"Polska: Mateusz Wolsza.\n"
+"Spanska: Sheng Long Gradilla.\n"
+"Svenska: Daniel Nylander."
+
+#: data/py/__init__.py:1111
+msgid "BIOS OK."
+msgstr "BIOS OK."
+
+#: data/py/__init__.py:1114
+msgid "No BIOS."
+msgstr "Inget BIOS."
+
+#: data/py/__init__.py:1149
+msgid "Configuration was not saved."
+msgstr "Konfigurationen sparades inte."
+
+#: data/py/__init__.py:1156
+msgid "Important path configuration"
+msgstr "Konfiguration av viktiga sökvägar"
+
+#: data/py/__init__.py:1162
+msgid "These paths must be valid for a working emulation."
+msgstr "Dessa sökvägar måste vara giltiga för att emuleringen ska fungera."
+
+#: data/py/__init__.py:1165
+msgid "BIOS files location:"
+msgstr "Plats för BIOS-filer:"
+
+#: data/py/__init__.py:1182
+msgid "Select the BIOSfiles location."
+msgstr "Välj platsen för BIOS-filerna."
+
+#: data/py/__init__.py:1189
+msgid "ROM drivers directory:"
+msgstr "Katalog för ROM-drivrutiner:"
+
+#: data/py/__init__.py:1204
+msgid "Select the ROM drivers directory."
+msgstr "Välj katalogen för ROM-drivrutiner."
+
+#: data/py/__init__.py:1211
+msgid "Gngeo executable:"
+msgstr "Körbar Gngeo-fil:"
+
+#: data/py/__init__.py:1228
+msgid "Select the Gngeo executable."
+msgstr "Välj körbar fil för Gngeo."
+
+#: data/py/__init__.py:1251
+msgid "Global emulation configuration."
+msgstr "Konfiguration av global emulering."
+
+#: data/py/__init__.py:1257
+#, python-format
+msgid "Specific emulation options for \"%s\"."
+msgstr "Specifika emuleringsalternativ för \"%s\"."
+
+#: data/py/__init__.py:1275
+msgid "Graphic"
+msgstr "Grafik"
+
+#: data/py/__init__.py:1280
+msgid "Fullscreen"
+msgstr "Helskärm"
+
+#: data/py/__init__.py:1286
+msgid "Interpolation"
+msgstr "Interpolering"
+
+#: data/py/__init__.py:1291
+msgid "Show FPS"
+msgstr "Visa bilder/s"
+
+#: data/py/__init__.py:1297
+msgid "Auto Frameskip"
+msgstr "Hoppa automatiskt över bildrutor"
+
+#: data/py/__init__.py:1302
+msgid "Raster effect"
+msgstr "Rastereffekt"
+
+#: data/py/__init__.py:1307
+msgid "Hardware surface"
+msgstr "Hårdvaruyta"
+
+#: data/py/__init__.py:1313
+msgid "Windowed mode"
+msgstr "Fönsterläge"
+
+#: data/py/__init__.py:1319
+msgid "Scale:"
+msgstr "Skala:"
+
+#: data/py/__init__.py:1328
+msgid "Larger screen"
+msgstr "Större skärm"
+
+#: data/py/__init__.py:1340
+msgid "Blitter:"
+msgstr "Blitter:"
+
+#: data/py/__init__.py:1344
+msgid "Software blitter"
+msgstr "Programvarublitter"
+
+#: data/py/__init__.py:1345
+msgid "OpenGL blitter"
+msgstr "OpenGL-blitter"
+
+#: data/py/__init__.py:1346
+msgid "YUV blitter (YV12)"
+msgstr "YUV-blitter (YV12)"
+
+#: data/py/__init__.py:1370
+msgid "Effect:"
+msgstr "Effekt:"
+
+#: data/py/__init__.py:1374
+msgid "No effect"
+msgstr "Ingen effekt"
+
+#: data/py/__init__.py:1375
+msgid "Scanline effect"
+msgstr "Sveplinjeseffekt"
+
+#: data/py/__init__.py:1376
+#, python-format
+msgid "Scanline 50% effect"
+msgstr "Sveplinje 50% effekt"
+
+#: data/py/__init__.py:1377
+msgid "Scale2x effect"
+msgstr "Scale2x-effekt"
+
+#: data/py/__init__.py:1378
+msgid "Scale3x effect"
+msgstr "Scale3x-effekt"
+
+#: data/py/__init__.py:1379
+msgid "Scale4x effect"
+msgstr "Scale4x-effekt"
+
+#: data/py/__init__.py:1380
+#, python-format
+msgid "Scale2x effect with 50% scanline"
+msgstr "Scale2x-effekt med 50% sveplinje"
+
+#: data/py/__init__.py:1381
+#, python-format
+msgid "Scale2x effect with 75% scanline"
+msgstr "Scale2x-effekt med 75% sveplinje"
+
+#: data/py/__init__.py:1382
+msgid "HQ2X effect. High quality"
+msgstr "HQ2X-effekt. Hög kvalitet"
+
+#: data/py/__init__.py:1383
+msgid "HQ3X effect. High quality"
+msgstr "HQ3X-effekt. Hög kvalitet"
+
+#: data/py/__init__.py:1384
+msgid "LQ2X effect. Low quality"
+msgstr "LQ2X-effekt. Låg kvalitet"
+
+#: data/py/__init__.py:1385
+msgid "LQ3X effect. Low quality"
+msgstr "LQ3X-effekt. Låg kvalitet"
+
+#: data/py/__init__.py:1386
+msgid "Double the x resolution (soft blitter only)"
+msgstr "Dubbla x-upplösningen (endast programvarublitter)"
+
+#: data/py/__init__.py:1387
+msgid "SAI effect"
+msgstr "SAI-effekt"
+
+#: data/py/__init__.py:1388
+msgid "SuperSAI effect"
+msgstr "SuperSAI-effekt"
+
+#: data/py/__init__.py:1389
+msgid "Eagle effect"
+msgstr "Eagle-effekt"
+
+# Unsure about this one
+#: data/py/__init__.py:1437
+msgid "Transparency pack (optional):"
+msgstr "Paket för genomskinlighet (valfritt):"
+
+# Unsure about this one
+#: data/py/__init__.py:1452
+msgid "Select a transparency pack."
+msgstr "Välj ett paket för genomskinlighet."
+
+#: data/py/__init__.py:1463
+msgid "Audio / Joystick"
+msgstr "Ljud / Styrspak"
+
+#: data/py/__init__.py:1465
+msgid "Audio"
+msgstr "Ljud"
+
+#: data/py/__init__.py:1475
+msgid "Enable sound"
+msgstr "Aktivera ljud"
+
+#: data/py/__init__.py:1481
+msgid "Sample rate:"
+msgstr "Samplingshastighet:"
+
+#: data/py/__init__.py:1504
+msgid "Joystick"
+msgstr "Styrspak"
+
+#: data/py/__init__.py:1508
+msgid "Enable joystick support"
+msgstr "Aktivera stöd för styrspak"
+
+#: data/py/__init__.py:1514
+msgid "Player 1 device:"
+msgstr "Enhet för spelare 1:"
+
+#: data/py/__init__.py:1523
+msgid "Player 2 device:"
+msgstr "Enhet för spelare 2:"
+
+#: data/py/__init__.py:1618
+msgid "Controls"
+msgstr "Kontroller"
+
+#: data/py/__init__.py:1620
+msgid "To modify a key, click on the button under it's icon, then push your new key. It works for keyboard only."
+msgstr "För att redigera en tangent, klicka på knappen under dess ikon, tryck sedan på den nya tangenten. Det fungerar endast för tangentbord."
+
+#: data/py/__init__.py:1639
+#, python-format
+msgid "Edit player %i hotkeys..."
+msgstr "Redigera snabbtangenter för spelare %i..."
+
+#: data/py/__init__.py:1650
+msgid "Allocation:"
+msgstr "Allokering:"
+
+#: data/py/__init__.py:1655
+msgid "Player 1"
+msgstr "Spelare 1"
+
+#: data/py/__init__.py:1660
+msgid "Player 2"
+msgstr "Spelare 2"
+
+#: data/py/__init__.py:1804
+#, python-format
+msgid "Hotkeys edition for player %i."
+msgstr "Redigerar snabbtangenter för spelare %i."
+
+#: data/py/__init__.py:1809
+msgid "Here you can bind hotkeys to your desired combinations of fire buttons."
+msgstr "Här är du binda snabbtangenter till dina önskade kombinationer för skjutknappar."
+
+#: data/py/__init__.py:1923
+msgid "System"
+msgstr "System"
+
+#: data/py/__init__.py:1926
+msgid "Neo Geo BIOS type:"
+msgstr "Neo Geo BIOS-typ:"
+
+#: data/py/__init__.py:1929
+msgid "Arcade"
+msgstr "Arkad"
+
+#: data/py/__init__.py:1933
+msgid "Home (AES)"
+msgstr "Home (AES)"
+
+#: data/py/__init__.py:1936
+msgid "Universal"
+msgstr "Universal"
+
+#: data/py/__init__.py:1961
+msgid "Country:"
+msgstr "Land:"
+
+#: data/py/__init__.py:1965
+msgid "Japan"
+msgstr "Japan"
+
+#: data/py/__init__.py:1972
+msgid "USA"
+msgstr "USA"
+
+#: data/py/__init__.py:1979
+msgid "Europe"
+msgstr "Europa"
+
+#: data/py/__init__.py:1993
+msgid "This option has no effect for the universal BIOS."
+msgstr "Det här alternativet har ingen effekt för universellt BIOS."
+
+#: data/py/__init__.py:2009
+msgid "68K CPU clock:"
+msgstr "68K CPU-klocka:"
+
+#: data/py/__init__.py:2019
+msgid "Z80 CPU clock:"
+msgstr "Z80 CPU-klocka:"
+
+#: data/py/__init__.py:2034
+msgid "Other things configuration"
+msgstr "Övrig konfiguration"
+
+#: data/py/__init__.py:2040
+msgid "Path to libGL.so (optional):"
+msgstr "Sökväg till libGL.so (valfritt):"
+
+#: data/py/__init__.py:2054
+#, python-format
+msgid "Select the \"%s\" file."
+msgstr "Välj filen \"%s\"."
+
+#: data/py/__init__.py:2069
+msgid "Preview image directory (optional):"
+msgstr "Katalog för förhandsvisningsbilder (valfritt):"
+
+#: data/py/__init__.py:2085
+msgid "Select the preview image directory."
+msgstr "Välj katalog för förhandsvisningsbilder."
+
+#: data/py/__init__.py:2101
+msgid "XML file containing ROM infos (optional):"
+msgstr "XML-fil som innehåller ROM-information (valfritt):"
+
+#: data/py/__init__.py:2116
+msgid "Select the XML file containing ROM infos."
+msgstr "Välj XML-filen som innehåller ROM-information."
+
+#: data/py/__init__.py:2133
+msgid "Maximum size of the ROM history menu:"
+msgstr "Maximal storlek på ROM-historikmenyn:"
+
+#: data/py/__init__.py:2148
+msgid "Auto-execute ROMs after loading."
+msgstr "Kör ROM-filer automatiskt efter inläsning."
+
+#: data/py/__init__.py:2155
+msgid "Center XGngeo window on start."
+msgstr "Centrera XGngeo-fönstret vid uppstart."
+
+#: data/py/__init__.py:2162
+msgid "Let emulator sleep when idle."
+msgstr "Låt emulatorn sova när den är inaktiv."
+
+#: data/py/__init__.py:2169
+msgid "Execute ROMs in benchmark mode."
+msgstr "Kör ROM-filer i mätningsläge."
+
+#: data/py/__init__.py:2174
+msgid "ROM list"
+msgstr "ROM-lista"
+
+#: data/py/__init__.py:2179
+msgid "Only show available ROMs by default."
+msgstr "Visa endast tillgängliga ROM-filer som standard."
+
+#: data/py/__init__.py:2199
+msgid "Set available ROM background color"
+msgstr "Ställ in bakgrundsfärg för tillgänglig ROM"
+
+#: data/py/__init__.py:2213
+msgid "Available ROM background color:"
+msgstr "Bakgrundsfärg för tillgänglig ROM-fil:"
+
+#: data/py/__init__.py:2280
+msgid "Sorry, this configuration cannot be saved because one or more parameters does not look valid."
+msgstr "Tyvärr, den här konfigurationen kan inte sparas därför att en eller flera parametrar inte ser ut att vara giltiga."
+
+#: data/py/__init__.py:2282
+msgid "Please check it up then try to save again... ^^;"
+msgstr "Kontrollera det och försök att spara igen... ^^;"
+
+#: data/py/__init__.py:2430
+msgid "Configuration has been saved."
+msgstr "Konfigurationen har sparats."
+
+#: data/py/__init__.py:2467
+msgid "_File"
+msgstr "_Arkiv"
+
+#: data/py/__init__.py:2472
+msgid "_Load ROM"
+msgstr "_Läs in ROM-fil"
+
+#: data/py/__init__.py:2476
+msgid "From _list"
+msgstr "Från _lista"
+
+#: data/py/__init__.py:2480
+msgid "_Manually"
+msgstr "_Manuellt"
+
+#: data/py/__init__.py:2481
+msgid "Load a ROM manually..."
+msgstr "Läs in en ROM-fil manuellt..."
+
+#: data/py/__init__.py:2483
+msgid "All files"
+msgstr "Alla filer"
+
+#: data/py/__init__.py:2484
+msgid "ROM archive"
+msgstr "ROM-arkiv"
+
+#: data/py/__init__.py:2487
+msgid "_History"
+msgstr "_Historik"
+
+#: data/py/__init__.py:2518
+msgid "_Configuration"
+msgstr "_Konfiguration"
+
+#: data/py/__init__.py:2522
+msgid "_Important paths"
+msgstr "_Viktiga sökvägar"
+
+#: data/py/__init__.py:2527
+msgid "_Global emulation"
+msgstr "_Global emulering"
+
+#: data/py/__init__.py:2531
+msgid "_Display"
+msgstr "_Visning"
+
+#: data/py/__init__.py:2535
+msgid "_Audio / Joystick"
+msgstr "_Ljud / Styrspak"
+
+#: data/py/__init__.py:2539
+msgid "_Controls"
+msgstr "_Kontroller"
+
+#: data/py/__init__.py:2543
+msgid "_System"
+msgstr "_System"
+
+#: data/py/__init__.py:2547
+msgid "_Other"
+msgstr "_Övrigt"
+
+#: data/py/__init__.py:2555
+msgid "_ROM drivers"
+msgstr "_ROM-drivrutiner"
+
+#: data/py/__init__.py:2559
+msgid "_View/edit"
+msgstr "_Visa/redigera"
+
+#: data/py/__init__.py:2564
+msgid "_Add new"
+msgstr "_Lägg till ny"
+
+#: data/py/__init__.py:2573
+msgid "_Info"
+msgstr "_Info"
+
+#: data/py/__init__.py:2587
+msgid "_License"
+msgstr "_Licens"
+
+#: data/py/__init__.py:2608
+#, python-format
+msgid "Welcome to XGngeo version %s."
+msgstr "Välkommen till XGngeo version %s."
+
+#: data/py/__init__.py:2639
+msgid "``No boot check\" option enabled: going directly to the main window (unsafe!)."
+msgstr "Alternativet \"No boot check\" aktiverat: går direkt till huvudfönstret (osäkert!)."
+
+

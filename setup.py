@@ -26,7 +26,7 @@ import sys
 
 setup(
 	name='XGngeo',
-	version='16',
+	version='17 CVS',
 	description='A frontend for the Gngeo emulator.',
 	long_description="""
 		``XGngeo" is a frontend providing a complete, practical and
@@ -68,10 +68,13 @@ setup(
 			[os.path.join("data", "locale", "pl", "LC_MESSAGES", "xgngeo.mo")]),
 		#Portuguese of Brazil
 		(os.path.join("share", "xgngeo", "locale", "pt_BR", "LC_MESSAGES"),
-			[os.path.join("data", "locale", "pt_BR", "LC_MESSAGES", "xgngeo.mo")])
+			[os.path.join("data", "locale", "pt_BR", "LC_MESSAGES", "xgngeo.mo")]),
+		#Sweedish
+		(os.path.join("share", "xgngeo", "locale", "sv", "LC_MESSAGES"),
+			[os.path.join("data", "locale", "sv", "LC_MESSAGES", "xgngeo.mo")])
 		]
 	)
-	
+
 if "install" in sys.argv:
 	#Post-install stuffs (Unix).
 	if os.name == "posix":
@@ -89,8 +92,9 @@ if "install" in sys.argv:
 
 		startup_script = os.path.join(prefix, "bin", "xgngeo") #Startup script path.
 		startup_script_dir = os.path.dirname(startup_script) 
-		
+
 		import shutil
 		if not os.path.exists(startup_script_dir): os.makedirs(startup_script_dir)
 		shutil.copy("./data/script/xgngeo_startup.py", startup_script)
 		print "XGngeo start-up script put into `%s'." % startup_script_dir
+

@@ -57,7 +57,7 @@ import history
 import rominfos
 
 # Global variables
-VERSION = "16"
+VERSION = "17"
 xgngeoUserDir = os.path.expanduser("~/.xgngeo")
 gngeoUserDir = os.path.expanduser("~/.gngeo")
 datarootpath = os.path.join(sys.prefix, 'share', 'xgngeo')

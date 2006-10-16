@@ -2,6 +2,12 @@
 	XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
+* Changes in version 17 (CVS):
+
+- New Sweedish translation by Daniel Nylander.
+
+
+
 * Changes in version 16 (2006-09-30):
 
 - The user may now only choose a certain BIOS type when it is
