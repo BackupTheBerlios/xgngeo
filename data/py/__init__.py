@@ -1621,20 +1621,19 @@ class XGngeo:
 
 			label = gtk.Label(_("To modify a key, click on the button under "
 				"it's icon, then push your new key. It works for keyboard "
-				"only."))
+				"and joystick."))
 			label.set_justify(gtk.JUSTIFY_CENTER)
 			label.set_line_wrap(True)
 			box.pack_start(label, False)
 
 			table = gtk.Table(6, 6)  # The sweet table O_o;;
 
-			def playerChanged(widget,justloaded=False):
-				"""Perform some interface modifications when another player
-					selection is changed.
+			def player_changed(widget, justloaded = False):
+				"""Perform some interface modifications when the player number
+					is changed.
 				
 				"""
-				player = self.widgets["config"]['player1controls_radio']\
-					.get_active() or 2
+				player = player_controls_combo.get_active() or 2
 
 				#Changing the hotkey edition label.
 				self.widgets["config"]['edithotkeys_label'].set_text(
@@ -1648,24 +1647,22 @@ class XGngeo:
 					for x in p2keywidgets: x.show()
 					for x in p1keywidgets: x.hide()
 
-			# Control allocation.
-			frame = gtk.Frame(_("Allocation:"))
-			frame.set_border_width(4)
-			box2 = gtk.VBox()
-			frame.add(box2)
-			self.widgets["config"]['player1controls_radio'] = gtk.RadioButton(
-				None, _("Player 1"))
-			self.widgets["config"]['player1controls_radio'].connect("toggled",
-				playerChanged)
-			box2.pack_start(self.widgets["config"]['player1controls_radio'])
-			radio = gtk.RadioButton(self.widgets["config"]['player1controls_radio'],
-				_("Player 2"))
-			radio.connect("toggled", playerChanged)
-			box2.pack_start(radio)
-			table.attach(frame, 0, 2, 0, 2, xpadding=15, ypadding=0)
+			# Player number.
+			box2 = gtk.HBox()
+			label = gtk.Label(_("Player:"))
+			box2.pack_start(label)
 
-			def editHotkeys(widget):
-				player = int(self.widgets["config"]['player1controls_radio']\
+			player_controls_combo = gtk.combo_box_new_text()
+			player_controls_combo.append_text("1")
+			player_controls_combo.append_text("2")
+			player_controls_combo.set_active(0)
+			player_controls_combo.connect("changed", player_changed)
+			box2.pack_start(player_controls_combo)
+			
+			table.attach(box2, 0, 2, 0, 2, xpadding=15, ypadding=0)
+
+			def edit_hot_keys(widget):
+				player = int(player_controls_combo\
 					.get_active()) or 2
 				buttval_convertion = {"1":  "A", "2": "B", "4": "C", "8": "D"}
 				hk_boxes = []
@@ -1839,7 +1836,7 @@ class XGngeo:
 			self.widgets["config"]['edithotkeys_label'].set_justify\
 				(gtk.JUSTIFY_CENTER)
 			button.add(self.widgets["config"]['edithotkeys_label'])
-			button.connect("clicked",editHotkeys)
+			button.connect("clicked", edit_hot_keys)
 			table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
 			if len(temp_param["p1key"].split(",")) == len(key_list):
@@ -2257,10 +2254,10 @@ class XGngeo:
 		self.widgets["config"]["main_dialog"].show_all()
 
 		#Post ``show all" operations...
-		if type in (1,2,3,4):
+		if type in (1, 2, 3, 4):
 			#Showing the right section in global emulation configuration.
-			notebook.set_current_page(type-1) 
-			playerChanged(None,True) #Selecting player 1 controls by default.
+			notebook.set_current_page(type - 1) 
+			player_changed(None, True) #Selectng player 1 controls by default.
 
 		#Enlarging the window width if too small.
 		if self.widgets["config"]["main_dialog"].get_size()[0] < 380:
