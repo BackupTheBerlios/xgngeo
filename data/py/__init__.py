@@ -587,7 +587,7 @@ class XGngeo:
 			rightside.pack_start(notebook, padding=4)
 			noteisthere = 1
 
-			#Preview images.
+			# Preview images.
 			if self.params["xgngeo"]["previewimages"] == "true"\
 				and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
 				self.previewImage = gtk.Image()
@@ -763,7 +763,7 @@ class XGngeo:
 
 		if callback:
 			if type(callback) == str:
-				def response(dialog,response):
+				def response(dialog, response):
 					"""Ouputing the selected file or directory path to a 
 						particular text entry.
 					
@@ -856,14 +856,15 @@ class XGngeo:
 
 			box = gtk.VBox()
 
-			if show_image=="true": #With image mode.
+			if show_image == "true": #With image mode.
 				self.widgets["fileselect_preview_image"] = gtk.Image()
 				frame = gtk.Frame()
 				frame.add(self.widgets["fileselect_preview_image"])
 				box.pack_start(frame,False)
 
 			self.widgets["fileselect_preview_label"] = gtk.Label()
-			self.widgets["fileselect_preview_label"].set_justify(gtk.JUSTIFY_CENTER)
+			self.widgets["fileselect_preview_label"].set_justify(
+				gtk.JUSTIFY_CENTER)
 			box.pack_start(self.widgets["fileselect_preview_label"])
 			box.show_all()
 
@@ -909,8 +910,9 @@ class XGngeo:
 				dialog.show_all()
 
 		else:
-			# ROM not found: no loading but display of warning message and rebuilding
-			# of the ROM History menu (with visual marks next to unavailable ROM).
+			# ROM not found: no loading but display of warning message and
+			# rebuilding of the ROM History menu (with visual marks next to
+			# unavailable ROM).
 			message = _("Cannot continue: the ROM you wanted to load was not "
 				"found on the file system!")
 
@@ -932,7 +934,7 @@ class XGngeo:
 		if response == gtk.RESPONSE_OK:
 			path = dialog.get_filename()
 
-			if os.path.isfile(path): #Does that file exist?
+			if os.path.isfile(path): # Does that file exist?
 				archive_infos = self.emulator.archive_recognition(path)
 
 				# Is the archive recognized as a ROM?
@@ -956,9 +958,9 @@ class XGngeo:
 
 	def history_item_clicked(self,widget, event,*args):
 		if event.type == gtk.gdk.BUTTON_PRESS:
-			if event.button == 1: #Left click: loading ROM.
+			if event.button == 1: # Left click: loading ROM.
 				self.load_rom_from_history(args[0], args[1], args[2])
-			elif event.button == 3: #Right click: popping-up a menu.
+			elif event.button == 3: # Right click: popping-up a menu.
 				menu = gtk.Menu()
 				item = gtk.ImageMenuItem(gtk.STOCK_REMOVE)
 				item.connect("activate", self.history_remove, widget, args[3])
@@ -1076,7 +1078,8 @@ class XGngeo:
 			"French: Choplair.\n"
 			"German: Peter Kainrad.\n"
 			"Polish: Mateusz Wolsza.\n"
-			"Spanish: Sheng Long Gradilla.")))
+			"Spanish: Sheng Long Gradilla.\n"
+			"Sweedish: Daniel Nylander.")))
 		buffer.apply_tag(buffer.create_tag(justification=gtk.JUSTIFY_CENTER,
 			editable=False), buffer.get_start_iter(), buffer.get_end_iter())
 		buffer.apply_tag(buffer.create_tag(weight=700), buffer.get_iter_at_line(5),
@@ -1130,8 +1133,8 @@ class XGngeo:
 						stock = 1
 						color = "#008"
 
-					gngeoversion_label.set_text("<span color='%s'>v%s</span> " % (color,
-					version[1]))
+					gngeoversion_label.set_text("<span color='%s'>v%s</span> "\
+						% (color, version[1]))
 					gngeoversion_label.set_use_markup(True)
 					gngeoversion_label.show()
 
@@ -1162,8 +1165,8 @@ class XGngeo:
 			box.set_border_width(4)
 			self.imppathicons = []
 
-			box.pack_start(gtk.Label(_("These paths must be valid for a working "
-				"emulation.")))
+			box.pack_start(gtk.Label(_("These paths must be valid for a "
+				"working emulation.")))
 
 			frame = gtk.Frame(_("BIOS files location:"))
 			box2 = gtk.HBox()
@@ -1190,25 +1193,25 @@ class XGngeo:
 			box.pack_start(frame)
 
 			frame = gtk.Frame(_('ROM drivers directory:'))
-			box2 = gtk.HBox() 	 
-	
-			self.imppathicons.append(gtk.Image()) 	 
-			box2.pack_start(self.imppathicons[1], False, padding=3) 	 
-			self.widgets["config"]['romrcdir'] = gtk.Entry() 	 
-			self.widgets["config"]['romrcdir'].connect("changed", set_path_icon, 	 
-					self.imppathicons[1], 1) 	 
+			box2 = gtk.HBox()
+
+			self.imppathicons.append(gtk.Image())
+			box2.pack_start(self.imppathicons[1], False, padding=3)
+			self.widgets["config"]['romrcdir'] = gtk.Entry()
+			self.widgets["config"]['romrcdir'].connect("changed",
+				set_path_icon, self.imppathicons[1], 1)
 			self.widgets["config"]['romrcdir'].set_text(self.params["gngeo"]\
 				["romrcdir"])
-			box2.pack_start(self.widgets["config"]['romrcdir']) 	 
-			button = gtk.Button() 	 
-			image = gtk.Image() 	 
-			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU) 	 
-			button.add(image) 	 
+			box2.pack_start(self.widgets["config"]['romrcdir'])
+			button = gtk.Button()
+			image = gtk.Image()
+			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
+			button.add(image) 
 			button.connect("clicked", self.file_select, _("Select the ROM "
 				"drivers directory."), self.widgets["config"]['romrcdir']\
 				.get_text(), "romrcdir", 1)
-			box2.pack_end(button, False) 	 
-			frame.add(box2) 	 
+			box2.pack_end(button, False)
+			frame.add(box2)
 			box.pack_start(frame)
 
 			frame = gtk.Frame(_("Gngeo executable:"))
@@ -1228,8 +1231,9 @@ class XGngeo:
 			image = gtk.Image()
 			image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
 			button.add(image)
-			button.connect("clicked", self.file_select, _("Select the Gngeo executable."),
-				self.widgets["config"]['gngeopath'].get_text(), "gngeopath")
+			button.connect("clicked", self.file_select, _("Select the Gngeo "
+				"executable."), self.widgets["config"]['gngeopath'].get_text(),
+				"gngeopath")
 			box2.pack_end(button, False)
 			frame.add(box2)
 			box.pack_start(frame)
@@ -1280,7 +1284,8 @@ class XGngeo:
 			table = gtk.Table(2, 3)
 
 			# Fullscreen.
-			self.widgets["config"]['fullscreen'] = gtk.CheckButton(_("Fullscreen"))
+			self.widgets["config"]['fullscreen'] = gtk.CheckButton(
+				_("Fullscreen"))
 			if temp_param["fullscreen"] == "true":
 				self.widgets["config"]['fullscreen'].set_active(1)
 			table.attach(self.widgets["config"]['fullscreen'], 0, 1, 0, 1)
@@ -1302,7 +1307,8 @@ class XGngeo:
 				self.widgets["config"]['autoframeskip'].set_active(1)
 			table.attach(self.widgets["config"]['autoframeskip'], 1, 2, 1, 2)
 			# Raster effect.
-			self.widgets["config"]['raster'] = gtk.CheckButton(_("Raster effect"))
+			self.widgets["config"]['raster'] = gtk.CheckButton(_("Raster"
+				" effect"))
 			if temp_param["raster"] == "true":
 				self.widgets["config"]['raster'].set_active(True)
 			table.attach(self.widgets["config"]['raster'], 0, 1, 2, 3)
@@ -1861,52 +1867,38 @@ class XGngeo:
 			button.connect("clicked", edit_hot_keys)
 			table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
-			if len(temp_param["p1key"].split(",")) == len(button_list):
-				# Given values seems to be okay.
-				plop = temp_param["p1key"]
-			else: # There's a crap, let's use default key values.
-				plop = self.configfile.get_default_params()[0]["p1key"]
-			self.p1key_int_vals = plop.split(",")
+			# Player control values (keyboard & joystick).
+			self.player_controls_vals = {}
+			self.player_controls_widgets = []
+			for type in ("key", "joy"):
+				for player in (1, 2):
+					param = "p%i%s" % (player, type)
 
-			p1key_names = []
-			# Displaying the names of known key values.
-			for x in self.p1key_int_vals:
-				if int(x) in compliant_keymap_reverse.keys():
-					p1key_names.append(capwords(compliant_keymap_reverse\
-						[int(x)].replace("_", " ")))
-				else: p1key_names.append(x)
+					if len(temp_param[param].split(",")) == len(button_list):
+						# Given values seems to be okay.
+						plop = temp_param[param]
+					else: # There's a crap, let's use default key values.
+						plop = self.configfile.get_default_params()[0][param]
 
-			p1keywidgets = []; i = 0
-			for x in p1key_names:
-				# Generating P1key's buttons.
-				p1keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
-				p1keywidgets[i].connect("toggled", toggled)
-				p1keywidgets[i].connect("key_press_event", get_pressed, i)
-				p1keywidgets[i].set_use_underline(False)
-				i += 1
+					self.player_controls_vals[param] =\
+						[int(x) for x in plop.split(",")]
 
-			if len(temp_param["p2key"].split(",")) == len(button_list):
-				#Given values seems to be okay.
-				plop = temp_param["p2key"]
-			else: #There's a crap, let's use default key values.
-				plop = self.configfile.get_default_params()[0]["p2key"]
-			self.p2key_int_vals = plop.split(",")
+			# Generating player controls' buttons (using P1 keyboard
+			# values by default).
+			for i in range(14):
+				val = self.player_controls_vals["p1key"][i]
+				if val in compliant_keymap_reverse.keys():
+					key_name = capwords(compliant_keymap_reverse\
+						[val].replace("_", " "))
+				else: key_name = str(val)
 
-			p2key_names = []
-			# Displaying the names of known key values.
-			for x in self.p2key_int_vals:
-				if int(x) in compliant_keymap_reverse.keys():
-					p2key_names.append(capwords(compliant_keymap_reverse\
-						[int(x)].replace("_", " ")))
-				else: p2key_names.append(x)
-
-			p2keywidgets = []; i = 0
-			for x in p2key_names:
-				# Generating P2key's buttons.
-				p2keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
-				p2keywidgets[i].connect("toggled", toggled)
-				p2keywidgets[i].connect("key_press_event", get_pressed, i, 1)
-				p2keywidgets[i].set_use_underline(False)
+				self.player_controls_widgets.append(
+					gtk.ToggleButton((key_name, "--")[key_name ==\
+						-1]))
+				self.player_controls_widgets[i].connect("toggled", toggled)
+				self.player_controls_widgets[i].connect("key_press_event",
+					get_pressed, i)
+				self.player_controls_widgets[i].set_use_underline(False)
 
 				# Displaying key's icon.
 				image = gtk.Image()
@@ -1917,22 +1909,18 @@ class XGngeo:
 					image.set_from_file(os.path.join(datarootpath, "img",
 						"%s.png" % button_list[i]))
 
-				box2 = gtk.HBox()  # A box...
-				box2.set_size_request(70, 35)
-				box2.pack_start(p1keywidgets[i])  # with P1 key...
-				box2.pack_start(p2keywidgets[i])  # and P2 key :p
+				self.player_controls_widgets[i].set_size_request(70, 35)
 
 				# Putting them in table...
 				if i < 6:  # First 6 keys (fire buttons + start/coin) on 2nd row.
 					table.attach(image, i, i + 1, 2, 3)
-					table.attach(box2, i, i + 1, 3, 4)
+					table.attach(self.player_controls_widgets[i], i, i + 1, 3, 4)
 				elif i < 10:  # Keys from 6 to 10 (arrows) on 1st row.
 					table.attach(image, i - 4, i - 3, 0, 1)
-					table.attach(box2, i - 4, i - 3, 1, 2)
+					table.attach(self.player_controls_widgets[i], i - 4, i - 3, 1, 2)
 				elif i < 14:  # Keys from 10 to 14 (hotkeys) on 3rd row.
 					table.attach(image, i - 8, i - 7, 4, 5)
-					table.attach(box2, i - 8, i - 7, 5, 6)
-				i+=1
+					table.attach(self.player_controls_widgets[i], i - 8, i - 7, 5, 6)
 
 			box.pack_start(table)
 
