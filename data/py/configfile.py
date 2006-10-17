@@ -91,8 +91,8 @@ class Configfile:
 			#Controller section.
 			"p1key": "119,120,113,115,38,34,273,274,276,275,-1,-1,-1,-1",
 			"p2key": "108,109,111,112,233,39,264,261,260,262,-1,-1,-1,-1",
-			"p1joy" : "2,3,0,1,5,4,0,1,1,1",
-			"p2joy" : "1,0,3,2,7,6,0,1,1,1",
+			"p1joy" : "2,3,0,1,5,4,0,1,1,1,-1,-1,-1,-1",
+			"p2joy" : "1,0,3,2,7,6,0,1,1,1,-1,-1,-1,-1",
 			"p1hotkey0": "4,8",
 			"p1hotkey1": "2,4",
 			"p1hotkey2": "1,2,4",
@@ -129,7 +129,7 @@ class Configfile:
 			os.path.isfile(self.paths["xgngeoConf"]))
 
 	def get_params(self, mamename=None):
-		""" Try to get the params of the global or a Rom-specific 
+		"""Try to get the params of the global or a Rom-specific 
 			configuration file.
 
 			If the file doesn't exist, there is no error but the param 

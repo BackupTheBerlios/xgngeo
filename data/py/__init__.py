@@ -137,7 +137,7 @@ class XGngeo:
 				"LICENSE.txt"], self.window, gtk.DIALOG_NO_SEPARATOR |
 				gtk.DIALOG_MODAL, (gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE))
 
-			if filename[-11:]=="LICENSE.txt":
+			if filename[-11:] == "LICENSE.txt":
 				label = gtk.Label(_("This program is released under the terms "
 					"of the GNU General Public License."))
 				label.set_padding(2, 4)
@@ -170,8 +170,8 @@ class XGngeo:
 		gtk.threads_enter() # Without this, it often bugs. :p
 		
 		# Simple post-execution instruction.
-		self.history_add(self.romFullName,self.romPath) # Appendding ROM too history.
-		self.widgets["statusbar"].push(self.context_id,_("ROM stopped (%s).") %
+		self.history_add(self.romFullName, self.romPath) # Appendding ROM too history.
+		self.widgets["statusbar"].push(self.context_id, _("ROM stopped (%s).") %
 			self.romMameName) # Updating status bar.
 
 		# --------------------------------------------------------
@@ -253,7 +253,8 @@ class XGngeo:
 			x.set_sensitive(False)
 		self.stopMenu_item.set_sensitive(True)
 		self.execMenu_item.set_sensitive(False)
-		for x in self.widgets["config_menu"].get_children(): x.set_sensitive(False)
+		for x in self.widgets["config_menu"].get_children():
+			x.set_sensitive(False)
 
 		self.emulator.rom_launching(self.romPath)
 
@@ -266,7 +267,7 @@ class XGngeo:
 		This function kills gngeo if it is alive."""
 		if self.emulator.rom_running_state():
 			Timer(0, os.system,('killall -9 "%s"' %
-				self.params["xgngeo"]["gngeopath"].replace('"','\"'),)).start()
+				self.params["xgngeo"]["gngeopath"].replace('"', '\"'),)).start()
 			self.gngeokilledbyme = 1
 
 	def rom_list(self, widget):
@@ -459,7 +460,7 @@ class XGngeo:
 			def rem_directory(*args):
 				model,iter = treeview.get_selection().get_selected()
 				if iter:
-					dir = model.get_value(iter,0)
+					dir = model.get_value(iter, 0)
 					temp_romdir_list.remove(dir)
 					liststore.remove(iter)
 
@@ -1514,7 +1515,7 @@ class XGngeo:
 			box2.pack_end(table)
 
 			label = gtk.Label(_("Player 1 device:"))
-			table.attach(label,0,1,0,1)
+			table.attach(label, 0, 1, 0, 1)
 			self.widgets["config"]['p1joydev'] = gtk.combo_box_new_text()
 			for x in range(4): self.widgets["config"]['p1joydev'].append_text(
 				"/dev/js%s" % x)
@@ -1523,7 +1524,7 @@ class XGngeo:
 			table.attach(self.widgets["config"]['p1joydev'], 1, 2, 0, 1)
 
 			label = gtk.Label(_("Player 2 device:"))
-			table.attach(label,0,1,1,2)
+			table.attach(label, 0, 1, 1, 2)
 			self.widgets["config"]['p2joydev'] = gtk.combo_box_new_text()
 			for x in range(4): self.widgets["config"]['p2joydev'].append_text(
 				"/dev/js%s" % x)
@@ -1532,10 +1533,10 @@ class XGngeo:
 			table.attach(self.widgets["config"]['p2joydev'], 1, 2, 1, 2)
 
 			#Bouyaka!
-			self.widgets["config"]['joystick'].connect("toggled",bouyaka,table)
-			if temp_param['joystick']=='true':
+			self.widgets["config"]['joystick'].connect("toggled", bouyaka, table)
+			if temp_param['joystick'] == 'true':
 				self.widgets["config"]['joystick'].set_active(1)
-			else: bouyaka(self.widgets["config"]['joystick'],table)
+			else: bouyaka(self.widgets["config"]['joystick'], table)
 
 			frame.add(box2)
 			box.pack_start(frame)
@@ -1545,13 +1546,13 @@ class XGngeo:
 			#
 			self.toggled = None
 
-			# Key order : A, B, C, D, START, COIN, UP, DOWN, LEFT, RIGHT,
+			# Button order : A, B, C, D, START, COIN, UP, DOWN, LEFT, RIGHT,
 			#                       hotkey1, hotkey2, hotkey3, hotkey4
-			key_list = ["A", "B", "C", "D", "START", "COIN", "UP", "DOWN",
+			button_list = ["A", "B", "C", "D", "START", "COIN", "UP", "DOWN",
 				"LEFT", "RIGHT", "hotkey1", "hotkey2", "hotkey3", "hotkey4"]
 
 			# The Gngeo compliant keymap (all in lowercase)!
-			compliant_KeyMap = {
+			compliant_keymap = {
 				"backspace":8, "tab":9, "return":13, "pause":19, "space":32, "exclam":33,
 				"quotedbl":34, "dollar":36, "ampersand":38, "apostrophe":39, "parenleft":\
 				40, "parenright":41, "comma":44, "minus":45, "colon":58, "semicolon":59,
@@ -1569,7 +1570,7 @@ class XGngeo:
 				"scroll_lock":302, "shift_r":303, "shift_l":304, "control_r":305,
 				"control_l":306, "super_l":311, "super_r":312, "print":316}
 			# Reverse mode.
-			compliant_KeyMap_reverse = {
+			compliant_keymap_reverse = {
 				8:"backspace", 9:"tab", 13:"return", 19:"pause", 32:"space", 33:"exclam",
 				34:"quotedbl", 36:"dollar", 38:"ampersand", 39:"apostrophe", 40:\
 				"parenleft", 41:"parenright", 44:"comma", 45:"minus", 58:"colon", 59:\
@@ -1588,7 +1589,7 @@ class XGngeo:
 				"control_r", 306:"control_l", 311:"super_l", 312:"super_r", 316:"print"}
 
 			def get_pressed(widget, event, key_pos, secondplayer=0):
-				if widget.get_active() and event.keyval:  # Only when widget is active.
+				if device_radio.get_active() and widget.get_active() and event.keyval: 
 					key_val = gtk.gdk.keyval_to_lower(event.keyval)  # Get the value (lower only).
 
 					# GTK's keys of XGngeo are not same as SDL's used by Gngeo. T_T
@@ -1596,10 +1597,10 @@ class XGngeo:
 					# GTK's name (set in lowercase).
 					key_name = gtk.gdk.keyval_name(key_val).lower()
 
-					if key_name in compliant_KeyMap.keys():
+					if key_name in compliant_keymap.keys():
 						if secondplayer:
-							self.p2key_int_vals[key_pos] = compliant_KeyMap[key_name]
-						else: self.p1key_int_vals[key_pos] = compliant_KeyMap[key_name]
+							self.p2key_int_vals[key_pos] = compliant_keymap[key_name]
+						else: self.p1key_int_vals[key_pos] = compliant_keymap[key_name]
 
 						# Putting the key name (in an elegant form :p) as button label.
 						widget.set_label(capwords(key_name.replace("_", " ")))
@@ -1612,8 +1613,12 @@ class XGngeo:
 						# Previous button goes back to normal state.
 						self.toggled.set_active(False)
 
-				#Changing current toggled button state.
+				# Changing current toggled button state.
 				self.toggled = widget
+				
+				# Calling SDL window if configuring joystick.
+				if self.toggled.get_active() and (not device_radio.get_active()):
+					print "Pygame, I need you!"
 
 			box = gtk.VBox(spacing=4) # The box. :p
 			box.set_border_width(4)
@@ -1627,13 +1632,14 @@ class XGngeo:
 			box.pack_start(label, False)
 
 			table = gtk.Table(6, 6)  # The sweet table O_o;;
+			table.set_row_spacings(3)
 
 			def player_changed(widget, justloaded = False):
 				"""Perform some interface modifications when the player number
 					is changed.
 				
 				"""
-				player = player_controls_combo.get_active() or 2
+				player = player_controls_combo.get_active() + 1
 
 				#Changing the hotkey edition label.
 				self.widgets["config"]['edithotkeys_label'].set_text(
@@ -1647,23 +1653,38 @@ class XGngeo:
 					for x in p2keywidgets: x.show()
 					for x in p1keywidgets: x.hide()
 
+			def device_changed(*args):
+				pass
+
 			# Player number.
-			box2 = gtk.HBox()
+			box2 = gtk.VBox()
+			box3 = gtk.HBox()
 			label = gtk.Label(_("Player:"))
-			box2.pack_start(label)
+			box3.pack_start(label)
 
 			player_controls_combo = gtk.combo_box_new_text()
 			player_controls_combo.append_text("1")
 			player_controls_combo.append_text("2")
 			player_controls_combo.set_active(0)
 			player_controls_combo.connect("changed", player_changed)
-			box2.pack_start(player_controls_combo)
+			box3.pack_start(player_controls_combo)
+			box2.pack_start(box3, False)
+
+			# Device.
+			box3 = gtk.HBox()
+			device_radio = gtk.RadioButton(None, _("Keyboard"))
+			device_radio.connect("toggled", device_changed)
+			box3.pack_start(device_radio)
+			radio = gtk.RadioButton(device_radio, _("Joystick"))
+			box3.pack_start(radio)
+			box2.pack_start(box3)
 			
-			table.attach(box2, 0, 2, 0, 2, xpadding=15, ypadding=0)
+			frame = gtk.Frame()
+			frame.add(box2)
+			table.attach(frame, 0, 2, 0, 2, xpadding=15, ypadding=6)
 
 			def edit_hot_keys(widget):
-				player = int(player_controls_combo\
-					.get_active()) or 2
+				player = player_controls_combo.get_active() + 1
 				buttval_convertion = {"1":  "A", "2": "B", "4": "C", "8": "D"}
 				hk_boxes = []
 
@@ -1671,11 +1692,12 @@ class XGngeo:
 				if not self.params["temp"].has_key("hotkey_matrix_p%i" %
 					player):
 					self.params["temp"]["hotkey_matrix_p%i" % player]  =  \
-						[[None] * 4, [None] * 4, [None] * 4, [None] * 4]
+						[[None] * 4] * 4
 					# The initial matrix is used to revert previous hotkeys
 					# configuration (if the changes are cancelled).
 					self.params["temp"]["backup_matrix_p%i" % player]  =  \
-						[[None] * 4, [None] * 4, [None] * 4, [None] * 4]
+						[[None] * 4] * 4
+
 					for hotkey in range(4):
 						if self.params["gngeo"]["p%ihotkey%i" % (player,
 							hotkey)]:
@@ -1683,12 +1705,12 @@ class XGngeo:
 							for butt in self.params["gngeo"]["p%ihotkey%i" %
 								(player, hotkey)].split(","):
 								self.params["temp"]["hotkey_matrix_p%i" %
-									player ][hotkey][i] = butt
+									player][hotkey][i] = butt
 								self.params["temp"]["backup_matrix_p%i" %
 									player][hotkey][i] = butt
 								i += 1
 
-				def dialResponse(widget, response):
+				def dial_response(widget, response):
 					if response == gtk.RESPONSE_ACCEPT:
 						# Saving current matrix for hypothetical restoration.
 						for hotkey in range(4):
@@ -1783,7 +1805,7 @@ class XGngeo:
 						button.connect("button_press_event", button_clicked, image,
 							player, row, j - 1)
 						hk_boxes[row].pack_start(button)
-						if j<4:
+						if j < 4:
 							label = gtk.Label("+")
 							hk_boxes[row].pack_start(label)
 						j += 1
@@ -1804,7 +1826,7 @@ class XGngeo:
 					self.widgets["config"]["main_dialog"],gtk.DIALOG_MODAL,(
 					gtk.STOCK_OK,	gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL,
 					gtk.RESPONSE_REJECT))
-				dialog.connect("response", dialResponse)
+				dialog.connect("response", dial_response)
 				label = gtk.Label(_("Here you can bind hotkeys to your desired "
 					"combinations of fire buttons."))
 				label.set_justify(gtk.JUSTIFY_CENTER)
@@ -1839,7 +1861,7 @@ class XGngeo:
 			button.connect("clicked", edit_hot_keys)
 			table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
-			if len(temp_param["p1key"].split(",")) == len(key_list):
+			if len(temp_param["p1key"].split(",")) == len(button_list):
 				# Given values seems to be okay.
 				plop = temp_param["p1key"]
 			else: # There's a crap, let's use default key values.
@@ -1847,23 +1869,23 @@ class XGngeo:
 			self.p1key_int_vals = plop.split(",")
 
 			p1key_names = []
-			#Display the names of known key values.
+			# Displaying the names of known key values.
 			for x in self.p1key_int_vals:
-				if int(x) in compliant_KeyMap_reverse.keys():
-					p1key_names.append(capwords(compliant_KeyMap_reverse\
+				if int(x) in compliant_keymap_reverse.keys():
+					p1key_names.append(capwords(compliant_keymap_reverse\
 						[int(x)].replace("_", " ")))
 				else: p1key_names.append(x)
 
-			p1keywidgets = []; i=0
+			p1keywidgets = []; i = 0
 			for x in p1key_names:
-				#Generate P1key's buttons.
+				# Generating P1key's buttons.
 				p1keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
 				p1keywidgets[i].connect("toggled", toggled)
 				p1keywidgets[i].connect("key_press_event", get_pressed, i)
 				p1keywidgets[i].set_use_underline(False)
-				i+=1
+				i += 1
 
-			if len(temp_param["p2key"].split(",")) == len(key_list):
+			if len(temp_param["p2key"].split(",")) == len(button_list):
 				#Given values seems to be okay.
 				plop = temp_param["p2key"]
 			else: #There's a crap, let's use default key values.
@@ -1871,16 +1893,16 @@ class XGngeo:
 			self.p2key_int_vals = plop.split(",")
 
 			p2key_names = []
-			#Display the names of known key values.
+			# Displaying the names of known key values.
 			for x in self.p2key_int_vals:
-				if int(x) in compliant_KeyMap_reverse.keys():
-					p2key_names.append(capwords(compliant_KeyMap_reverse\
+				if int(x) in compliant_keymap_reverse.keys():
+					p2key_names.append(capwords(compliant_keymap_reverse\
 						[int(x)].replace("_", " ")))
 				else: p2key_names.append(x)
 
 			p2keywidgets = []; i = 0
 			for x in p2key_names:
-				# Generate P2key's buttons.
+				# Generating P2key's buttons.
 				p2keywidgets.append(gtk.ToggleButton((x, "--")[x == "-1"]))
 				p2keywidgets[i].connect("toggled", toggled)
 				p2keywidgets[i].connect("key_press_event", get_pressed, i, 1)
@@ -1888,19 +1910,19 @@ class XGngeo:
 
 				# Displaying key's icon.
 				image = gtk.Image()
-				if i<10: 
+				if i < 10: 
 					image.set_from_file(os.path.join(datarootpath, "img",
-						"key_%s.png" % key_list[i]))
+						"key_%s.png" % button_list[i]))
 				else: # Hotkeys.
 					image.set_from_file(os.path.join(datarootpath, "img",
-						"%s.png" % key_list[i]))
+						"%s.png" % button_list[i]))
 
 				box2 = gtk.HBox()  # A box...
 				box2.set_size_request(70, 35)
 				box2.pack_start(p1keywidgets[i])  # with P1 key...
 				box2.pack_start(p2keywidgets[i])  # and P2 key :p
 
-				# Put them in table...
+				# Putting them in table...
 				if i < 6:  # First 6 keys (fire buttons + start/coin) on 2nd row.
 					table.attach(image, i, i + 1, 2, 3)
 					table.attach(box2, i, i + 1, 3, 4)
@@ -1999,7 +2021,7 @@ class XGngeo:
 			box.pack_start(table)
 
 			def bouyaka(widget, value):
-				if value>=1: return "+%i%%" % value
+				if value >= 1: return "+%i%%" % value
 				else: return "%i%%" % value
 
 			# 68kclock
