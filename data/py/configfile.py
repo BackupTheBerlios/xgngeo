@@ -121,7 +121,8 @@ class Configfile:
 			"rominfoxml": os.path.join(self.datarootpath, "rominfos.xml"),
 			"showavailableromsonly": "true",
 			"availableromcolor": "#9cf",
-			"centerwindow": "true"
+			"centerwindow": "true",
+			"unavailable_rom_preview_grayscale": "true"
 			}
 
 	def exists(self):
@@ -152,7 +153,7 @@ class Configfile:
 						if line[0] != "#" and line != "\n":
 							plop = match("(\S*) (.*)", line)
 							dictionary[i][plop.group(1).strip()] = \
-												plop.group(2).strip()
+								plop.group(2).strip()
 				i += 1
 		else:
 			#Parsing ROM-specific configuration file.
@@ -168,7 +169,7 @@ class Configfile:
 						plop = match("(\S*) (.*)", line)
 						if plop:
 							dictionary[plop.group(1).strip()] = \
-												plop.group(2).strip()
+								plop.group(2).strip()
 
 		return dictionary
 

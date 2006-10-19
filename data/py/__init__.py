@@ -271,6 +271,10 @@ class XGngeo:
 			self.gngeokilledbyme = 1
 
 	def rom_list(self, widget):
+		"""Display the Neo Geo ROM list dialog."""
+		unavailablepreview_path = os.path.join(self.params["xgngeo"]\
+			["previewimagedir"], "unavailable.png")
+		
 		def button_pressed(widget, event):
 			"""Popping-up a menu on rigth clicking over an available ROM
 				in the list.
@@ -349,25 +353,38 @@ class XGngeo:
 							self.romFromListPath = None, None, None
 					open_button.set_sensitive(availability)
 
-					# Updating mame name and availability icon.
+					# Updating MAME name and availability icon.
 					self.mamename = mamename  # The current selected mamename is exported.
 					self.fullname = fullname # Same for the full name.
 					self.widgets['mamename_label'].set_text("<b>%s</b>" %
-					mamename)
+						mamename)
 					self.widgets['mamename_label'].set_use_markup(True)
 					self.avail_image.set_from_stock((gtk.STOCK_NO,
 						gtk.STOCK_YES)[availability], gtk.ICON_SIZE_MENU)
 
-					# Updating preview image.
+					# Updating ROM preview image.
 					if self.params["xgngeo"]["previewimages"] == "true":
-						if os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
-							"%s.png" % mamename)): 
-							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
-								["previewimagedir"], "%s.png" % mamename))
-						elif os.path.isfile(os.path.join(self.params["xgngeo"]["previewimagedir"],
-							"unavailable.png")):
-							self.previewImage.set_from_file(os.path.join(self.params["xgngeo"]\
-								["previewimagedir"], "unavailable.png"))
+						rompreview_path = os.path.join(self.params["xgngeo"]\
+							["previewimagedir"], "%s.png" % mamename)
+
+						if os.path.isfile(rompreview_path): 
+							pixbuf = gtk.gdk.pixbuf_new_from_file(rompreview_path)
+							if not availability and self.params['xgngeo']\
+								['unavailable_rom_preview_grayscale'] == "true":
+								# Grayscale rendering.
+								pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
+							self.widgets["romlist_previewimage"]\
+								.set_from_pixbuf(pixbuf)
+
+						elif os.path.isfile(unavailablepreview_path):
+							pixbuf = gtk.gdk.pixbuf_new_from_file(
+								unavailablepreview_path)
+							if not availability and self.params['xgngeo']\
+								['unavailable_rom_preview_grayscale'] == "true":
+								# Grayscale rendering.
+								pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
+							self.widgets["romlist_previewimage"]\
+								.set_from_pixbuf(pixbuf)
 
 					# Updating rom infos.
 					if self.params["xgngeo"]["rominfos"] == "true" and \
@@ -549,7 +566,8 @@ class XGngeo:
 
 		# Rendering data.
 		cell = gtk.CellRendererText()
-		cell.set_property("cell-background", self.params["xgngeo"]["availableromcolor"])
+		cell.set_property("cell-background", self.params["xgngeo"]\
+			["availableromcolor"])
 		tvcolumn.pack_start(cell,True)
 		tvcolumn.set_attributes(cell, text=0, cell_background_set=1)
 
@@ -590,19 +608,25 @@ class XGngeo:
 			# Preview images.
 			if self.params["xgngeo"]["previewimages"] == "true"\
 				and os.path.isdir(self.params["xgngeo"]["previewimagedir"]):
-				self.previewImage = gtk.Image()
-				self.previewImage.set_padding(3, 3)
-				path = os.path.join(self.params["xgngeo"]["previewimagedir"],
-					"unavailable.png")
-				if os.path.isfile(path):
-					# Displaying the ``unavailable" image by default.
-					self.previewImage.set_from_file(path) 
+				self.widgets["romlist_previewimage"] = gtk.Image()
+				self.widgets["romlist_previewimage"].set_padding(3, 3)
+				
+				# Displaying ``unavailable" image by default.
+				if os.path.isfile(unavailablepreview_path):
+					pixbuf = gtk.gdk.pixbuf_new_from_file(
+						unavailablepreview_path)
+					if self.params['xgngeo']['unavailable_rom_preview'
+						'_grayscale'] == "true": # Grayscale rendering.
+						pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
+					self.widgets["romlist_previewimage"].set_from_pixbuf(
+						pixbuf)
+
 				container = gtk.EventBox()
 				container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse("black"))
-				container.add(self.previewImage)
+				container.add(self.widgets["romlist_previewimage"])
 				notebook.append_page(container, gtk.Label(_("Preview image")))
 
-			# ROM infos.s
+			# ROM infos.
 			if(self.params["xgngeo"]["rominfos"] == "true" and os.path.isfile(
 				self.params["xgngeo"]["rominfoxml"])):
 				self.romInfos = rominfos.Rominfos(path=self.params["xgngeo"]\
@@ -619,7 +643,7 @@ class XGngeo:
 				textview.set_wrap_mode(gtk.WRAP_WORD)
 				scrolled_window = gtk.ScrolledWindow()
 				scrolled_window.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
-				box2.set_size_request(220, -1)  # Set width.
+				box2.set_size_request(220, -1)  # Setting width.
 				scrolled_window.add(textview)
 				frame = gtk.Frame(_("Description:"))
 				frame.add(scrolled_window)
