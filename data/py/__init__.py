@@ -370,7 +370,7 @@ class XGngeo:
 						if os.path.isfile(rompreview_path): 
 							pixbuf = gtk.gdk.pixbuf_new_from_file(rompreview_path)
 							if not availability and self.params['xgngeo']\
-								['unavailable_rom_preview_grayscale'] == "true":
+								['graypreview'] == "true":
 								# Grayscale rendering.
 								pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
 							self.widgets["romlist_previewimage"]\
@@ -380,7 +380,7 @@ class XGngeo:
 							pixbuf = gtk.gdk.pixbuf_new_from_file(
 								unavailablepreview_path)
 							if not availability and self.params['xgngeo']\
-								['unavailable_rom_preview_grayscale'] == "true":
+								['graypreview'] == "true":
 								# Grayscale rendering.
 								pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
 							self.widgets["romlist_previewimage"]\
@@ -615,8 +615,8 @@ class XGngeo:
 				if os.path.isfile(unavailablepreview_path):
 					pixbuf = gtk.gdk.pixbuf_new_from_file(
 						unavailablepreview_path)
-					if self.params['xgngeo']['unavailable_rom_preview'
-						'_grayscale'] == "true": # Grayscale rendering.
+					# Grayscale rendering.
+					if self.params['xgngeo']['graypreview'] == "true":
 						pixbuf.saturate_and_pixelate(pixbuf, 0.0, False)
 					self.widgets["romlist_previewimage"].set_from_pixbuf(
 						pixbuf)
@@ -1715,7 +1715,7 @@ class XGngeo:
 
 			def edit_hot_keys(widget):
 				player = player_controls_combo.get_active() + 1
-				buttval_convertion = {"1":  "A", "2": "B", "4": "C", "8": "D"}
+				buttval_convertion = {"1": "A", "2": "B", "4": "C", "8": "D"}
 				hk_boxes = []
 
 				# Initial blank matrix (if not yet created & filled).
@@ -2059,13 +2059,13 @@ class XGngeo:
 			# Packing the Notebook
 			self.widgets["config"]["main_dialog"].vbox.pack_start(notebook) 
 
-		elif type==5:
+		elif type == 5:
 			#
 			# Other things configuration.
 			#
 			self.widgets["config"]["main_dialog"].set_title(
 				_("Other things configuration"))
-			table = gtk.Table(3, 4) #The box :p
+			table = gtk.Table(3, 5) #The box :p
 			table.set_row_spacings(5)
 			table.set_border_width(6)
 
@@ -2205,7 +2205,7 @@ class XGngeo:
 			box2.pack_start(self.widgets["config"]['bench'])
 
 			frame = gtk.Frame(_("ROM list"))
-			table2 = gtk.Table(3, 2)
+			table2 = gtk.Table(3, 3)
 			
 			# Show available ROMs only.
 			self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(
@@ -2242,7 +2242,7 @@ class XGngeo:
 				dialog.connect("response", callback)
 				dialog.show_all()
 
-			#Available ROM background color.
+			# Available ROM background color.
 			label = gtk.Label(_("Available ROM background color:"))
 			table2.attach(label, 0, 1, 1, 2)
 			self.params["temp"]["availableromcolor"] = self.params["xgngeo"]\
@@ -2258,6 +2258,14 @@ class XGngeo:
 			button.add(image)
 			button.connect_object("clicked", color_select, container)
 			table2.attach(button, 2, 3, 1, 2)
+
+			# Gray unavailable ROM image preview.
+			self.widgets["config"]['graypreview'] = gtk.CheckButton(
+				_("Gray unavailable ROM image preview."))
+			if self.params["xgngeo"]["graypreview"] == "true":
+				self.widgets["config"]['graypreview'].set_active(True)
+			table2.attach(self.widgets["config"]['graypreview'], 0,
+				3, 2, 3)
 
 			frame.add(table2)
 			box2.pack_start(frame)
@@ -2415,6 +2423,8 @@ class XGngeo:
 				[self.widgets["config"]['previewimages'].get_active()] # previewimage
 			self.params["xgngeo"]["previewimagedir"] = self.widgets["config"]\
 				['previewimagedir'].get_text() # previewimagedir
+			self.params["xgngeo"]["graypreview"] = ("false", "true")\
+				[self.widgets["config"]["graypreview"].get_active()] #graypreview
 			self.params["xgngeo"]["rominfos"] = ("false","true")\
 				[self.widgets["config"]['rominfos'].get_active()] # rominfo
 			self.params["xgngeo"]["rominfoxml"] = self.widgets["config"]['rominfoxml']\
@@ -2513,8 +2523,8 @@ class XGngeo:
 		menu_item = gtk.MenuItem(_("_Manually"))
 		menu_item.connect("activate", self.file_select, _("Load a ROM "
 			"manually..."), self.params["gngeo"]["biospath"], 
-			self.manual_rom_loading, 0,	{ _("All files") : "*",
-			_("ROM archive") :  "*.zip"}, True)
+			self.manual_rom_loading, 0, { _("All files") : "*",
+			_("ROM archive"): "*.zip"}, True)
 		menu.append(menu_item)
 
 		self.history_menu_item = gtk.MenuItem(_("_History"))
@@ -2686,8 +2696,8 @@ class XGngeo:
 
 			if error: self.check_error()  # Display value setting invitation.
 			else:
-					# Everything seems okay, so let's display the main window...
-					self.main()
+				# Everything seems okay, so let's display the main window...
+				self.main()
 
 if __name__ == "__main__":
 	gtk.threads_init()

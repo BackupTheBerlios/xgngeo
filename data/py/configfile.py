@@ -43,26 +43,26 @@ class Configfile:
 		as the `gngeorc'.
 	
 	"""
-	def __init__(self, datarootpath, xgngeoUserDir, gngeoUserDir):
+	def __init__(self, datarootpath, xgngeo_user_dir, gngeo_user_dir):
 		#Initial attributes.
 		self.datarootpath = datarootpath
 		self.gngeorc_buffer = []
 		self.paths = {
 			# XGngeo local configuration directory.
-			"xgngeoUserDir" : xgngeoUserDir,
+			"xgngeo_user_dir" : xgngeo_user_dir,
 			# Path to XGngeo config file.
-			"xgngeoConf" : os.path.join(xgngeoUserDir,"xgngeo.conf"), 
+			"xgngeoConf" : os.path.join(xgngeo_user_dir, "xgngeo.conf"), 
 			# Gngeo local configuration directory.
-			"gngeoUserDir" : gngeoUserDir, 
+			"gngeo_user_dir" : gngeo_user_dir, 
 			# Path to Gngeo config file.
-			"gngeorc" : os.path.join(gngeoUserDir,"gngeorc") }
+			"gngeorc" : os.path.join(gngeo_user_dir,"gngeorc") }
 
-		for directory in (self.paths["xgngeoUserDir"], self.paths["gngeoUserDir"]):
+		for directory in (self.paths["xgngeo_user_dir"], self.paths["gngeo_user_dir"]):
 			if not os.path.isdir(directory):
 				os.mkdir(directory)
 
 	def get_default_params(self):
-		""" Return default options for the `gngeorc'/Rom-specific
+		""" Return default options for the `gngeorc'/ROM-specific
 			and XGngeo configuration files.
 		
 		"""
@@ -122,7 +122,7 @@ class Configfile:
 			"showavailableromsonly": "true",
 			"availableromcolor": "#9cf",
 			"centerwindow": "true",
-			"unavailable_rom_preview_grayscale": "true"
+			"graypreview": "true"
 			}
 
 	def exists(self):
@@ -158,7 +158,7 @@ class Configfile:
 		else:
 			#Parsing ROM-specific configuration file.
 			dictionary = {}
-			path = os.path.join(self.paths["gngeoUserDir"], "%s.cf" % mamename)
+			path = os.path.join(self.paths["gngeo_user_dir"], "%s.cf" % mamename)
 			if os.path.isfile(path):
 				handle = open(path, "r") #Opening.
 				content = handle.readlines() #Reading.
@@ -243,7 +243,7 @@ class Configfile:
 
 	def write_rom_config(self, dictionary, mamename, version):
 		"""Creating/updatating GnGeo configuration file for  a specific ROM."""
-		path = os.path.join(self.paths["gngeoUserDir"], "%s.cf" % mamename)
+		path = os.path.join(self.paths["gngeo_user_dir"], "%s.cf" % mamename)
 
 		# Top comment. :p
 		content = "# Specific configuration file for the \"%s\" Rom.\n"\

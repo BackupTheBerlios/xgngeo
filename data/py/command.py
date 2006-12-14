@@ -27,7 +27,7 @@ __revision__ = "$Revision$"
 __date__ = "$Date$"
 
 from threading import Thread
-from gtk import threads_enter, threads_leave
+from gtk.gdk import threads_enter, threads_leave
 from os import popen
 
 class ThreadedCmd(Thread):

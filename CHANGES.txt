@@ -6,7 +6,9 @@
 
 - New Sweedish translation by Daniel Nylander.
 - Possibility to set display of unavailable ROM's preview
-images in gray scale. [IN PROGRESS]
+images in gray scale.
+- Replace some thread function marked like deprecated in the
+latest version of PyGTK.
 
 
 * Changes in version 16 (2006-09-30):
