@@ -1,9 +1,11 @@
 
-	XGngeo - Changelog
+ XGngeo - Changelog
 ~~~~~~~~~~~~~~~~~~~~
 
 * Changes in version 17 (CVS):
 
+- More information given in the ``Important Paths" configu-
+ration window.
 - New Sweedish translation by Daniel Nylander.
 - Possibility to set display of unavailable ROM's preview
 images in gray scale.
