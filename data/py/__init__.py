@@ -1162,8 +1162,8 @@ class XGngeo:
                txt = "<span color='darkgreen'>%s</span>  " % _("BIOS files "
                   "found.")
                
-               bios_list = ("", " %s -" % _("Arcade"))[val in (1, 3, 5, 7)] +\
-                  ("", " %s -" % _("Home (AES)"))[val in (2, 3, 6, 7)] +\
+               bios_list = ("", " %s -" % _("Arcade (MVS)"))[val in (1, 3, 5,
+                  7)] + ("", " %s -" % _("Home (AES)"))[val in (2, 3, 6, 7)] +\
                   ("", " %s -" % _("Universal"))[val in (4, 5, 6, 7)]
               
                txt += "<span color='#008'>%s</span>" % (_("Type: %s."),
@@ -2013,7 +2013,7 @@ class XGngeo:
          frame2 = gtk.Frame(_("Neo Geo BIOS type:"))
          box2 = gtk.HBox()
          self.widgets["config"]['system_arcade'] = gtk.RadioButton(None,
-            _("Arcade"))
+            _("Arcade (MVS)"))
          box2.pack_start(self.widgets["config"]['system_arcade'])
          self.widgets["config"]['system_home'] = \
             gtk.RadioButton(self.widgets["config"]['system_arcade'],
@@ -2729,9 +2729,9 @@ class XGngeo:
          or os.path.isfile(os.path.join(path, "usa_2slt.bin"))\
          or os.path.isfile(os.path.join(path, "asia-s3.rom"))\
          or os.path.isfile(os.path.join(path, "sp-s2.sp1")):
-            i += 1  # Arcade BIOS detected.
+            i += 1  # Arcade (MVS) BIOS detected.
       if os.path.isfile(os.path.join(path, "aes-bios.bin")):
-            i += 2  # AES BIOS detected.
+            i += 2  # Home (AES) BIOS detected.
       if os.path.isfile(os.path.join(path, "uni-bios.rom")):
             i += 4  # Universal BIOS detected.
 
