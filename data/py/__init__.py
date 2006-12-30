@@ -1159,8 +1159,7 @@ class XGngeo:
             if val:
                stock = 1
  
-               txt = "<span color='darkgreen'>%s</span>  " % _("BIOS files "
-                  "found.")
+               txt = "<span color='darkgreen'>%s</span>  " % _("BIOS found.")
                
                bios_list = ("", " %s -" % _("Arcade (MVS)"))[val in (1, 3, 5,
                   7)] + ("", " %s -" % _("Home (AES)"))[val in (2, 3, 6, 7)] +\
@@ -1172,7 +1171,7 @@ class XGngeo:
             else:
                stock = 0
                txt = "<span color='#d00'>%s</span>  <span color='#008'>%s"\
-                  "</span>" % (_("No BIOS file found."), _("Please note they "\
+                  "</span>" % (_("No BIOS found."), _("Please note files "\
                   "must be uncompressed."))
 
             bios_label.set_text(txt)
@@ -1226,21 +1225,24 @@ class XGngeo:
             "working emulation.")))
 
          frame = gtk.Frame(_("BIOS files location:"))
-         table = gtk.Table(2, 3)
+         table = gtk.Table(3, 3)
+
+         table.attach(gtk.Label("At least one type of Neo Geo BIOS is required "
+            "for booting the system."), 0, 3, 0, 1)
 
          self.imppathicons.append(gtk.Image())
-         table.attach(self.imppathicons[0], 0, 1, 0, 1, False, xpadding=3,
+         table.attach(self.imppathicons[0], 0, 1, 1, 2, False, xpadding=3,
             ypadding=0)
          
          bios_label = gtk.Label()
-         table.attach(bios_label, 0, 3, 1, 2)
+         table.attach(bios_label, 0, 3, 2, 3)
 
          self.widgets["config"]['biospath'] = gtk.Entry()
          self.widgets["config"]['biospath'].connect("changed",
             set_path_icon, self.imppathicons[0], 1, "biospath")
          self.widgets["config"]['biospath'].set_text(self.params["gngeo"]\
             ["biospath"])
-         table.attach(self.widgets["config"]['biospath'], 1, 2, 0, 1)
+         table.attach(self.widgets["config"]['biospath'], 1, 2, 1, 2)
          
          button = gtk.Button()
          image = gtk.Image()
@@ -1249,21 +1251,25 @@ class XGngeo:
          button.connect("clicked", self.file_select, _("Select the BIOS"
             "files location."), self.widgets["config"]['biospath']\
             .get_text(), "biospath", 1)
-         table.attach(button, 2, 3, 0, 1, False)
+         table.attach(button, 2, 3, 1, 2, False)
          frame.add(table)
          box.pack_start(frame)
 
-         frame = gtk.Frame(_('Global ROM drivers directory:'))
-         box2 = gtk.HBox()
+         frame = gtk.Frame(_('Main ROM driver library:'))
+         table = gtk.Table(2, 3)
+
+         table.attach(gtk.Label(_("This is the main place where GnGeo will "
+            "look for drivers to handle ROMs.")), 0, 3, 0, 1)
 
          self.imppathicons.append(gtk.Image())
-         box2.pack_start(self.imppathicons[1], False, padding=3)
+         table.attach(self.imppathicons[1], 0, 1, 1, 2, False, xpadding=3,
+            ypadding=0)
          self.widgets["config"]['romrcdir'] = gtk.Entry()
          self.widgets["config"]['romrcdir'].connect("changed",
             set_path_icon, self.imppathicons[1], 1)
          self.widgets["config"]['romrcdir'].set_text(self.params["gngeo"]\
             ["romrcdir"])
-         box2.pack_start(self.widgets["config"]['romrcdir'])
+         table.attach(self.widgets["config"]['romrcdir'], 1, 2, 1, 2)
          button = gtk.Button()
          image = gtk.Image()
          image.set_from_stock(gtk.STOCK_OPEN, gtk.ICON_SIZE_MENU)
@@ -1271,8 +1277,8 @@ class XGngeo:
          button.connect("clicked", self.file_select, _("Select the global ROM "
             "drivers directory."), self.widgets["config"]['romrcdir']\
             .get_text(), "romrcdir", 1)
-         box2.pack_end(button, False)
-         frame.add(box2)
+         table.attach(button, 2, 3, 1, 2, False)
+         frame.add(table)
          box.pack_start(frame)
 
          frame = gtk.Frame(_("GnGeo executable:"))
