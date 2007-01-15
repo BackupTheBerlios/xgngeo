@@ -96,7 +96,7 @@ class XGngeo:
          "icon.png"))
    
    def check_error(self):
-      #Checking for GnGeo's home directory.
+      # Checking for GnGeo's home directory.
       if not os.path.isdir(gngeoUserDir):
          os.mkdir(gngeoUserDir)
 
@@ -170,7 +170,7 @@ class XGngeo:
       gtk.gdk.threads_enter() # Without this, it often bugs. :p
       
       # Simple post-execution instruction.
-      self.history_add(self.romFullName, self.romPath) # Appendding ROM too
+      self.history_add(self.romFullName, self.romPath) # Appendding ROM to
          # history.
       self.widgets["statusbar"].push(self.context_id, _("ROM stopped (%s).") %
          self.romMameName) # Updating status bar.
@@ -217,7 +217,7 @@ class XGngeo:
                '&amp;')))
             dialog.connect("response", lambda *args: dialog.destroy())
             dialog.show_all()
-      #-------------------------------------------------------------------------
+      # -----------------------------------------------------------------------
 
       # Performing some modifications on the menu.
       self.loadrom_menu_item.set_sensitive(True)
@@ -1723,28 +1723,67 @@ class XGngeo:
          table = gtk.Table(6, 6)  # The sweet table O_o;;
          table.set_row_spacings(3)
 
-         def player_changed(widget, justloaded = False):
-            """Perform some interface modifications when the player number
-               is changed.
-            
-            """
-            player = player_controls_combo.get_active() + 1
+         def player_or_device_changed(widget, firsttime=False):
+            """Perform various modifications when a new player number or
+            device value is selected.
 
+            """
+            # Get current player & device then the corresponding key list.
+            player = player_controls_combo.get_active() + 1
+            device = PHUQUE
+            key_list = self.player_controls_vals["p%i%s" % (player, device)]
+            
             # Changing the hotkey edition label.
             self.widgets["config"]['edithotkeys_label'].set_text(
                _("Edit player %i hotkeys...") % player)
+ 
+            for i in range(14):
+               key = key_list[i]
+               if key in compliant_keymap_reverse.keys():
+                  key_name = capwords(compliant_keymap_reverse\
+                     [val].replace("_", " "))
+               else: key_name = str(key)
+               butt_text = (key_name, "--")[key_name == "-1"]
 
-            if player == 1:  # Showing P1 keys and hidding P2's.
-               if not justloaded:  # P1 keys are already shown after window
-                  # loading.
-                  for x in p1keywidgets: x.show()
-               for x in p2keywidgets: x.hide()
-            else:  # Showing P2 keys and hidding P1's.
-               for x in p2keywidgets: x.show()
-               for x in p1keywidgets: x.hide()
+               if not firsttime:
+                  # Updating key button's text.
+                  self.player_controls.widgets[i].set_text(butt_text)
+               
+               # First time only actions.
+               else:
+                  # Creating (and filling) key button widget.
+                  self.player_controls_widgets.append(gtk.ToggleButton(
+                     butt_text))
+                  self.player_controls_widgets[i].connect("toggled", toggled)
+                  self.player_controls_widgets[i].connect("key_press_event",
+                     get_pressed, i)
+                  self.player_controls_widgets[i].set_use_underline(False)
 
-         def device_changed(*args):
-            pass
+                  # Displaying icons.
+                  image = gtk.Image()
+                  if i < 10: 
+                     image.set_from_file(os.path.join(datarootpath, "img",
+                        "key_%s.png" % button_list[i]))
+                  else:  # Hotkeys.
+                     image.set_from_file(os.path.join(datarootpath, "img",
+                        "%s.png" % button_list[i]))
+
+                  self.player_controls_widgets[i].set_size_request(70, 35)
+
+                  # Putting all in table...
+                  if i < 6:
+                     # First 6 keys (fire buttons + start/coin) on 2nd row.
+                     table.attach(image, i, i + 1, 2, 3)
+                     table.attach(self.player_controls_widgets[i], i, i + 1, 3,
+                        4)
+                  elif i < 10:  # Keys from 6 to 10 (arrows) on 1st row.
+                     table.attach(image, i - 4, i - 3, 0, 1)
+                     table.attach(self.player_controls_widgets[i], i - 4, i - 3,
+                        1, 2)
+                  elif i < 14:  # Keys from 10 to 14 (hotkeys) on 3rd row.
+                     table.attach(image, i - 8, i - 7, 4, 5)
+                     table.attach(self.player_controls_widgets[i], i - 8, i - 7,
+                        5, 6)
 
          # Player number.
          box2 = gtk.VBox()
@@ -1756,7 +1795,7 @@ class XGngeo:
          player_controls_combo.append_text("1")
          player_controls_combo.append_text("2")
          player_controls_combo.set_active(0)
-         player_controls_combo.connect("changed", player_changed)
+         player_controls_combo.connect("changed", player_or_device_changed)
          box3.pack_start(player_controls_combo)
          box2.pack_start(box3, False)
 
@@ -1966,45 +2005,6 @@ class XGngeo:
 
                self.player_controls_vals[param] =\
                   [int(x) for x in plop.split(",")]
-
-         # Generating player controls' buttons (using P1 keyboard
-         # values by default).
-         for i in range(14):
-            val = self.player_controls_vals["p1key"][i]
-            if val in compliant_keymap_reverse.keys():
-               key_name = capwords(compliant_keymap_reverse\
-                  [val].replace("_", " "))
-            else: key_name = str(val)
-
-            self.player_controls_widgets.append(
-               gtk.ToggleButton((key_name, "--")[key_name ==\
-                  -1]))
-            self.player_controls_widgets[i].connect("toggled", toggled)
-            self.player_controls_widgets[i].connect("key_press_event",
-               get_pressed, i)
-            self.player_controls_widgets[i].set_use_underline(False)
-
-            # Displaying key's icon.
-            image = gtk.Image()
-            if i < 10: 
-               image.set_from_file(os.path.join(datarootpath, "img",
-                  "key_%s.png" % button_list[i]))
-            else: # Hotkeys.
-               image.set_from_file(os.path.join(datarootpath, "img",
-                  "%s.png" % button_list[i]))
-
-            self.player_controls_widgets[i].set_size_request(70, 35)
-
-            # Putting them in table...
-            if i < 6:  # First 6 keys (fire buttons + start/coin) on 2nd row.
-               table.attach(image, i, i + 1, 2, 3)
-               table.attach(self.player_controls_widgets[i], i, i + 1, 3, 4)
-            elif i < 10:  # Keys from 6 to 10 (arrows) on 1st row.
-               table.attach(image, i - 4, i - 3, 0, 1)
-               table.attach(self.player_controls_widgets[i], i - 4, i - 3, 1, 2)
-            elif i < 14:  # Keys from 10 to 14 (hotkeys) on 3rd row.
-               table.attach(image, i - 8, i - 7, 4, 5)
-               table.attach(self.player_controls_widgets[i], i - 8, i - 7, 5, 6)
 
          box.pack_start(table)
 
@@ -2361,9 +2361,10 @@ class XGngeo:
 
       # Post ``show all" operations...
       if type in (1, 2, 3, 4):
-         #Showing the right section in global emulation configuration.
-         notebook.set_current_page(type - 1) 
-         player_changed(None, True) #Selectng player 1 controls by default.
+         # Showing the right section in global emulation configuration.
+         notebook.set_current_page(type - 1)
+         # Selecting player 1 keyboard controls by default.
+         player_or_device_changed(None, firsttime=True) 
 
       # Enlarging the window width if too small.
       if self.widgets["config"]["main_dialog"].get_size()[0] < 380:
