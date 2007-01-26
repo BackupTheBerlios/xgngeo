@@ -447,17 +447,17 @@ class XGngeo:
                # Also putting unavailable ROMs if the box is unchecked.
                liststore.append([romlist_mame2full[mamename], False, ''])
 
-         labelAvailableRoms.set_text(_("<b>%s</b> available ROMs.") %
-            len(available_rom.keys()))
+         labelAvailableRoms.set_text(_("<b>%s</b> available ROMs\n(%s "\
+            "supported).") % (len(available_rom.keys()), "X"))
          labelAvailableRoms.set_use_markup(True)
 
       def rom_directories(widget, parent):
          temp_romdir_list = list(tuple(self.romdir_list)) # Not affecting in-use param (yet).
-         dialog = gtk.Dialog(_("Setting ROM directories."), parent,
+         dialog = gtk.Dialog(_("Manage ROM directories."), parent,
             gtk.DIALOG_MODAL, (gtk.STOCK_APPLY, gtk.RESPONSE_APPLY,
             gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL))
          label = gtk.Label(_("Here you can add multiple directories to "
-            "scan for ROMs (this is not recursive)."))
+            "scan for ROMs (this is not recursive) as well as remove them."))
          label.set_justify(gtk.JUSTIFY_CENTER)
          label.set_padding(3, 4)
          label.set_line_wrap(True)
@@ -581,7 +581,7 @@ class XGngeo:
 
       scrolled_window.add_with_viewport(treeview)
 
-      button = gtk.Button(_("ROM directories..."))
+      button = gtk.Button(_("Manage\nROM directories..."))
       button.connect("clicked", rom_directories, dialog)
       table.attach(button, 0, 1, 2, 3, yoptions=gtk.SHRINK)
 
@@ -1139,7 +1139,7 @@ class XGngeo:
       dialog.show_all()
 
    def config(self, widget = None, type = 0, firstrun = 0, romspecific = 0):
-      def set_path_icon(widget, image, dir = 0, special = None):
+      def set_path_icon(widget, image, dir = 0, special = None, label = None):
          """We check whether the path written in the text entry is an
             existing file or directory, and change the icon in consequence.
             There might have some other special conditions for the icon
@@ -1147,11 +1147,11 @@ class XGngeo:
          
          """
          path = widget.get_text()
+         stock = 0
 
          if not special:
             if (dir and os.path.isdir(path)) or os.path.isfile(path):
                stock = 1
-            else: stock = 0
 
          elif special == "biospath":
             # Checking for BIOS files.
@@ -1169,33 +1169,54 @@ class XGngeo:
                   _("Types: %s."))[not val in (1, 2, 4)] % bios_list[1:-2]
 
             else:
-               stock = 0
                txt = "<span color='#d00'>%s</span>  <span color='#008'>%s"\
-                  "</span>" % (_("No BIOS found."), _("Please note files "\
+                  "</span>" % (_("No BIOS found."), _("Please note archives "\
                   "must be uncompressed."))
 
-            bios_label.set_text(txt)
-            bios_label.set_use_markup(True)
+            label.set_text(txt)
+            label.set_use_markup(True)
+
+         elif special == "romrcdir":
+            if os.path.isdir(path):
+               i = 0
+               for x in os.listdir(path):
+                  if match("(\S)+(\.rc)$", x): i += 1
+
+               if i > 0:
+                  stock = 1
+                  txt = "<span color='darkgreen'>%s</span>  <span color="\
+                     "'#008'>%s</span>" % (_("Valid library."), _("Providing "\
+                     "%s ROM drivers.") % i)
+               else:
+                  txt = "<span color='#d00'>%s</span>  <span color='#008'>%s"\
+                     "</span>" % (_("Invalid library."),
+                     _("No ROM driver detected."))
+            else:
+               txt = "<span color='#d00'>%s</span>  <span color='#008'>%s"\
+                  "</span>" % (_("Invalid library."),
+                  _("Path must be a directory."))
+
+            label.set_text(txt)
+            label.set_use_markup(True)
+              
 
          elif special == "gngeopath":
             version = self.emulator.get_gngeo_version(path)
             if version:
                # Refusing obsolete GnGeo version.
                if version[0][1] < 7:
-                  stock = 0
                   color = "red"
                else:
                   stock = 1
                   color = "#008"
 
-               gngeoversion_label.set_text("<span color='%s'>v%s</span> "\
-                  % (color, version[1]))
-               gngeoversion_label.set_use_markup(True)
-               gngeoversion_label.show()
+               label.set_text("<span color='%s'>v%s</span> " % (color,
+                  version[1]))
+               label.set_use_markup(True)
+               label.show()
 
             else:
-               stock = 0
-               gngeoversion_label.hide()
+               label.hide()
 
          image.set_from_stock((gtk.STOCK_NO, gtk.STOCK_YES)[stock],
             gtk.ICON_SIZE_MENU)
@@ -1234,12 +1255,12 @@ class XGngeo:
          table.attach(self.imppathicons[0], 0, 1, 1, 2, False, xpadding=3,
             ypadding=0)
          
-         bios_label = gtk.Label()
-         table.attach(bios_label, 0, 3, 2, 3)
+         label = gtk.Label()
+         table.attach(label, 0, 3, 2, 3)
 
          self.widgets["config"]['biospath'] = gtk.Entry()
          self.widgets["config"]['biospath'].connect("changed",
-            set_path_icon, self.imppathicons[0], 1, "biospath")
+            set_path_icon, self.imppathicons[0], 1, "biospath", label)
          self.widgets["config"]['biospath'].set_text(self.params["gngeo"]\
             ["biospath"])
          table.attach(self.widgets["config"]['biospath'], 1, 2, 1, 2)
@@ -1255,8 +1276,11 @@ class XGngeo:
          frame.add(table)
          box.pack_start(frame)
 
+
+         #-------------------------------
+  
          frame = gtk.Frame(_('Main ROM driver library:'))
-         table = gtk.Table(2, 3)
+         table = gtk.Table(3, 3)
 
          table.attach(gtk.Label(_("This is the main place where GnGeo will "
             "look for drivers to handle ROMs.")), 0, 3, 0, 1)
@@ -1264,9 +1288,13 @@ class XGngeo:
          self.imppathicons.append(gtk.Image())
          table.attach(self.imppathicons[1], 0, 1, 1, 2, False, xpadding=3,
             ypadding=0)
+
+         label = gtk.Label()
+         table.attach(label, 0, 3, 2, 3)
+
          self.widgets["config"]['romrcdir'] = gtk.Entry()
          self.widgets["config"]['romrcdir'].connect("changed",
-            set_path_icon, self.imppathicons[1], 1)
+            set_path_icon, self.imppathicons[1], 1, "romrcdir", label)
          self.widgets["config"]['romrcdir'].set_text(self.params["gngeo"]\
             ["romrcdir"])
          table.attach(self.widgets["config"]['romrcdir'], 1, 2, 1, 2)
@@ -1281,16 +1309,18 @@ class XGngeo:
          frame.add(table)
          box.pack_start(frame)
 
+         #-------------------------------
+
          frame = gtk.Frame(_("GnGeo executable:"))
          box2 = gtk.HBox()
 
          self.imppathicons.append(gtk.Image())
          box2.pack_start(self.imppathicons[2], False, padding=3)
-         gngeoversion_label = gtk.Label()
-         box2.pack_start(gngeoversion_label, False, padding=3)
+         label = gtk.Label()
+         box2.pack_start(label, False, padding=3)
          self.widgets["config"]['gngeopath'] = gtk.Entry()
          self.widgets["config"]['gngeopath'].connect("changed", set_path_icon,
-            self.imppathicons[2], 0, "gngeopath")
+            self.imppathicons[2], 0, "gngeopath", label)
          self.widgets["config"]['gngeopath'].set_text(self.params["xgngeo"]\
             ["gngeopath"])
          box2.pack_start(self.widgets["config"]['gngeopath'])
