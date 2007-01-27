@@ -1750,8 +1750,8 @@ class XGngeo:
          label.set_line_wrap(True)
          box.pack_start(label, False)
 
-         table = gtk.Table(6, 6)  # The sweet table O_o;;
-         table.set_row_spacings(3)
+         ctrl_table = gtk.Table(6, 6)  # The sweet table O_o;;
+         ctrl_table.set_row_spacings(3)
 
          def player_or_device_changed(widget, firsttime=False):
             """Perform various modifications when a new player number or
@@ -1760,7 +1760,7 @@ class XGngeo:
             """
             # Get current player & device then the corresponding key list.
             player = player_controls_combo.get_active() + 1
-            device = PHUQUE
+            device = ("joy", "key")[device_radio.get_active()]
             key_list = self.player_controls_vals["p%i%s" % (player, device)]
             
             # Changing the hotkey edition label.
@@ -1771,13 +1771,13 @@ class XGngeo:
                key = key_list[i]
                if key in compliant_keymap_reverse.keys():
                   key_name = capwords(compliant_keymap_reverse\
-                     [val].replace("_", " "))
+                     [key].replace("_", " "))
                else: key_name = str(key)
                butt_text = (key_name, "--")[key_name == "-1"]
 
                if not firsttime:
                   # Updating key button's text.
-                  self.player_controls.widgets[i].set_text(butt_text)
+                  self.player_controls_widgets[i].set_label(butt_text)
                
                # First time only actions.
                else:
@@ -1803,17 +1803,19 @@ class XGngeo:
                   # Putting all in table...
                   if i < 6:
                      # First 6 keys (fire buttons + start/coin) on 2nd row.
-                     table.attach(image, i, i + 1, 2, 3)
-                     table.attach(self.player_controls_widgets[i], i, i + 1, 3,
-                        4)
+                     ctrl_table.attach(image, i, i + 1, 2, 3)
+                     ctrl_table.attach(self.player_controls_widgets[i], i,
+                        i + 1, 3, 4)
                   elif i < 10:  # Keys from 6 to 10 (arrows) on 1st row.
-                     table.attach(image, i - 4, i - 3, 0, 1)
-                     table.attach(self.player_controls_widgets[i], i - 4, i - 3,
-                        1, 2)
+                     ctrl_table.attach(image, i - 4, i - 3, 0, 1)
+                     ctrl_table.attach(self.player_controls_widgets[i], i - 4,
+                        i - 3, 1, 2)
                   elif i < 14:  # Keys from 10 to 14 (hotkeys) on 3rd row.
-                     table.attach(image, i - 8, i - 7, 4, 5)
-                     table.attach(self.player_controls_widgets[i], i - 8, i - 7,
-                        5, 6)
+                     ctrl_table.attach(image, i - 8, i - 7, 4, 5)
+                     ctrl_table.attach(self.player_controls_widgets[i], i - 8,
+                        i - 7, 5, 6)
+
+                  ctrl_table.show_all()
 
          # Player number.
          box2 = gtk.VBox()
@@ -1832,7 +1834,7 @@ class XGngeo:
          # Device.
          box3 = gtk.HBox()
          device_radio = gtk.RadioButton(None, _("Keyboard"))
-         device_radio.connect("toggled", device_changed)
+         device_radio.connect("toggled", player_or_device_changed)
          box3.pack_start(device_radio)
          radio = gtk.RadioButton(device_radio, _("Joystick"))
          box3.pack_start(radio)
@@ -1840,7 +1842,7 @@ class XGngeo:
          
          frame = gtk.Frame()
          frame.add(box2)
-         table.attach(frame, 0, 2, 0, 2, xpadding=15, ypadding=6)
+         ctrl_table.attach(frame, 0, 2, 0, 2, xpadding=15, ypadding=6)
 
          def edit_hot_keys(widget):
             player = player_controls_combo.get_active() + 1
@@ -1952,7 +1954,8 @@ class XGngeo:
                      # Hot key's end has been reached, getting out the ``for".
                      break
 
-                  if firstgen: # Filling the hot key matrix with the right values.
+                  # Filling the hot key matrix with the right values.
+                  if firstgen:
                      self.params["temp"]["hotkey_matrix_p%i" % player ]\
                         [row][ j - 1] = butt
 
@@ -2018,14 +2021,14 @@ class XGngeo:
             (gtk.JUSTIFY_CENTER)
          button.add(self.widgets["config"]['edithotkeys_label'])
          button.connect("clicked", edit_hot_keys)
-         table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
+         ctrl_table.attach(button, 0, 2, 4, 6, xpadding=15, ypadding=15)
 
          # Player control values (keyboard & joystick).
          self.player_controls_vals = {}
          self.player_controls_widgets = []
-         for type in ("key", "joy"):
+         for device in ("key", "joy"):
             for player in (1, 2):
-               param = "p%i%s" % (player, type)
+               param = "p%i%s" % (player, device)
 
                if len(temp_param[param].split(",")) == len(button_list):
                   # Given values seems to be okay.
@@ -2036,7 +2039,7 @@ class XGngeo:
                self.player_controls_vals[param] =\
                   [int(x) for x in plop.split(",")]
 
-         box.pack_start(table)
+         box.pack_start(ctrl_table)
 
          #
          # SYSTEM section.
@@ -2396,10 +2399,6 @@ class XGngeo:
          # Selecting player 1 keyboard controls by default.
          player_or_device_changed(None, firsttime=True) 
 
-      # Enlarging the window width if too small.
-      if self.widgets["config"]["main_dialog"].get_size()[0] < 380:
-         self.widgets["config"]["main_dialog"].set_size_request(380, -1)
-
    def config_write(self, widget, type, special=0, mamename=None):
       letsWrite = 0
 
@@ -2481,20 +2480,15 @@ class XGngeo:
          temp_param["z80clock"] = int(self.widgets["config"]\
             ['z80clock'].get_value())  # z80clock
 
-         # Controls.
-         # Player 1.
-         temp_param["p1key"] = str()
-         for val in self.p1key_int_vals:
-            temp_param["p1key"] += "%s," %  (val, "-1")[val == "--"]
-         temp_param["p1key"] = temp_param["p1key"][:-1]
-         # Player 2.
-         temp_param["p2key"] = str()
-         for val in self.p2key_int_vals:
-            temp_param["p2key"] += "%s," % (val, "-1")[val == "--"]
-         temp_param["p2key"] = temp_param["p2key"][:-1]
-
-         # Hotkeys' config.
+         # 2 player controls (excluding joystick ATM).
          for x in (1, 2):
+            # Basic keys.
+            temp_param["p%skey" % x] = str()
+            for val in self.player_controls_vals["p%skey" % x]:
+               temp_param["p%skey" % x] += "%s," %  (val, "-1")[val == "--"]
+            temp_param["p%skey" % x] = temp_param["p%skey" % x][:-1]
+
+            # Hotkeys.
             if self.params["temp"].has_key("hotkey_matrix_p%i" % x):
                i = 0
                for row in self.params["temp"]["hotkey_matrix_p%i" % x]:
