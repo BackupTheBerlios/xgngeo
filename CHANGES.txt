@@ -5,12 +5,14 @@
 * Changes in version 17 (CVS):
 
 - More information given in the ``Important Paths" configu-
-ration window.
+ration window (detected BIOS type, number of ROM drivers).
 - New Sweedish translation by Daniel Nylander.
 - Possibility to set display of unavailable ROM's preview
 images in gray scale.
+- Now successfully loads ROMs located in wierd paths
+(containing space and / or other special characters).
 - Replace some thread function marked like deprecated in the
-latest version of PyGTK.
+latest versions of PyGTK.
 
 
 * Changes in version 16 (2006-09-30):
