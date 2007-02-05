@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """ XGngeo: a frontend for Gngeo in GTK. ^_^.
 
-   Copyleft 2003, 2004, 2005, 2006 Choplair-network
+   Copyleft 2003, 2004, 2005, 2006, 2007 Choplair-network
    $Id$
 
    This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 """
 
 __author__ = "Choplair-network"
-__copyright__ = "Copyleft 2003, 2004, 2005, 2006 Choplair-network"
+__copyright__ = "Copyleft 2003, 2004, 2005, 2006, 2007 Choplair-network"
 __license__ = "GPL"
 __revision__ = "$Revision$"
 # $Source$
@@ -1276,7 +1276,6 @@ class XGngeo:
          frame.add(table)
          box.pack_start(frame)
 
-
          #-------------------------------
   
          frame = gtk.Frame(_('Main ROM driver library:'))
@@ -1364,6 +1363,7 @@ class XGngeo:
                "interaction params which will be specific to the game "
                "<b>%s</b>." % self.fullname)
             label.set_use_markup(True)
+         label.set_size_request(420, -1)
          label.set_line_wrap(True)
          label.set_justify(gtk.JUSTIFY_CENTER)
          self.widgets["config"]["main_dialog"].vbox.pack_start(label,

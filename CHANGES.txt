@@ -11,8 +11,8 @@ ration window (detected BIOS type, number of ROM drivers).
 images in gray scale.
 - Now successfully loads ROMs located in wierd paths
 (containing space and / or other special characters).
-- Replace some thread function marked like deprecated in the
-latest versions of PyGTK.
+- Some thread function marked like deprecated in the latest
+versions of PyGTK have been replaced.
 
 
 * Changes in version 16 (2006-09-30):
