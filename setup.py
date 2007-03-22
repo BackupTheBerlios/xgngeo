@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """XGngeo: a frontend for Gngeo in GTK. ^_^.
 
-	Copyleft 2003, 2004, 2005, 2006 Choplair-network
+	Copyleft 2003, 2004, 2005, 2006, 2007 Choplair-network
 	$Id$
 
 	This program is free software; you can redistribute it and/or
@@ -24,35 +24,45 @@ import os
 import glob
 import sys
 
+if "install" in sys.argv:
+   #XGngeo startup script.
+   scriptfiles = [os.path.join("data", "script", "xgngeo")]
+else: scriptfiles = []
+
 setup(
-	name='XGngeo',
-	version='17 CVS',
-	description='A frontend for the Gngeo emulator.',
-	long_description="""
+	name = 'XGngeo',
+	version = '17 CVS',
+	description = 'A frontend for the Gngeo emulator.',
+	long_description = """
 		``XGngeo" is a frontend providing a complete, practical and
 		user-friendly GTK+ interface over ``Gngeo" which is a fast and
 		powerful command line Neo Geo emulator for the Unix platforms
 		(GNU/Linux, FreeBSD...).
 		""",
-	author='Choplair-network',
-	author_email='contact@choplair.org',
-	url='http://www.choplair.org/',
-	download_url='http://developer.berlios.de/project/showfiles.php?group_id=1276',
-	license='GNU General Public License',
-	platforms='Unix',
-	packages=['xgngeo'],
-	package_dir={'xgngeo': 'data/py'},
+	author = 'Choplair-network',
+	author_email = 'contact@choplair.org',
+	url = 'http://www.choplair.org/',
+	download_url = 'http://developer.berlios.de/project/showfiles.php?group_id=1276',
+	license = 'GNU General Public License',
+	platforms = 'Unix',
+	packages = ['xgngeo'],
+	package_dir = {'xgngeo': 'data/py'},
+   scripts =  scriptfiles,
 	data_files=[
 		#Images.
-		(os.path.join("share", "xgngeo", "img"),glob.glob(os.path.join("data", "img", "*.png"))),
+		(os.path.join("share", "xgngeo", "img"),
+         glob.glob(os.path.join("data", "img", "*.png"))),
 		#ROM info.
-		(os.path.join("share", "xgngeo"),glob.glob(os.path.join("data", "rominfos.*"))),
+		(os.path.join("share", "xgngeo"),
+         glob.glob(os.path.join("data", "rominfos.*"))),
 		#License text.
-		(os.path.join("share", "xgngeo"),['LICENSE.txt']),
+		(os.path.join("share", "xgngeo"), ['LICENSE.txt']),
 		#Plain text documentation.
-		(os.path.join("share", "xgngeo","doc"),[os.path.join("doc", "xgngeo-doc.txt")]),
+		(os.path.join("share", "xgngeo","doc"),
+         [os.path.join("doc", "xgngeo-doc.txt")]),
 		# *.desktop (menu entry)
-		(os.path.join("share", "applications"), [os.path.join("data", "misc", "xgngeo.desktop")]),
+		(os.path.join("share", "applications"),
+         [os.path.join("data", "misc", "xgngeo.desktop")]),
 		#Localization files.
 		#Spanish
 		(os.path.join("share", "xgngeo", "locale", "es", "LC_MESSAGES"),
@@ -76,25 +86,8 @@ setup(
 	)
 
 if "install" in sys.argv:
-	#Post-install stuffs (Unix).
-	if os.name == "posix":
-		#Determining the best start-up script path prefix.
-		prefix = None
-		str = "--prefix="
-
-		for val in sys.argv: #Check if mentioned as command parameter.
-			if val[:len(str)] == str:
-				prefix = val[len(str):]
-				break
-
-		if not prefix:
-			prefix = sys.prefix #Use Python prefix.
-
-		startup_script = os.path.join(prefix, "bin", "xgngeo") #Startup script path.
-		startup_script_dir = os.path.dirname(startup_script) 
-
-		import shutil
-		if not os.path.exists(startup_script_dir): os.makedirs(startup_script_dir)
-		shutil.copy("./data/script/xgngeo_startup.py", startup_script)
-		print "XGngeo start-up script put into `%s'." % startup_script_dir
+   # Post-installing stuffs (Unix).
+   if os.name == "posix":
+      print "XGngeo has been successfully installed!\n"\
+         "You may now use the 'xgngeo' command to run the program."
 

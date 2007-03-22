@@ -2304,7 +2304,7 @@ class XGngeo:
          frame = gtk.Frame(_("ROM list"))
          table2 = gtk.Table(3, 3)
          
-         # Show available ROMs only.
+         # Showing available ROMs only.
          self.widgets["config"]['showavailableromsonly'] = gtk.CheckButton(
             _("Only show available ROMs by default."))
          if self.params["xgngeo"]["showavailableromsonly"] == "true":
@@ -2316,15 +2316,13 @@ class XGngeo:
             def callback(widget, response):
                if response == gtk.RESPONSE_OK:
                   # Updating color value and the container background.
-
                   self.params["temp"]["availableromcolor"] = \
                      gtk.color_selection_palette_to_string(
                      [colorsel.get_current_color()])
-                     
                   container.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse(
                      self.params["temp"]["availableromcolor"]))
 
-               dialog.destroy() # Closing the dialog in any case.
+               dialog.destroy()  # Closing the dialog in any case.
 
             dialog = gtk.Dialog(title=_("Set available ROM background color"),
                flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
@@ -2384,7 +2382,7 @@ class XGngeo:
       self.widgets["config"]["main_dialog"].action_area.pack_start(button)
 
       if not firstrun:
-         # "Cancel" Button (except for the first time configuration).
+         # ``Cancel" Button (except for the first time configuration).
          button = gtk.Button(stock=gtk.STOCK_CANCEL)
          button.connect("clicked", lambda *args: self.widgets["config"]\
             ["main_dialog"].destroy())
@@ -2792,8 +2790,7 @@ class XGngeo:
             # Everything seems okay, so let's display the main window...
             self.main()
 
-if __name__ == "__main__":
-   gtk.gdk.threads_init()
-   XGngeo().boot()
-   gtk.main()
+gtk.gdk.threads_init()
+XGngeo().boot()
+gtk.main()
 
