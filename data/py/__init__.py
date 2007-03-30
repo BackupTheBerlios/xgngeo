@@ -2789,8 +2789,3 @@ class XGngeo:
          else:
             # Everything seems okay, so let's display the main window...
             self.main()
-
-gtk.gdk.threads_init()
-XGngeo().boot()
-gtk.main()
-
