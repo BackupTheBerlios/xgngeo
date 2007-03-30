@@ -90,6 +90,6 @@ setup(
 if "install" in sys.argv:
    # Post-installing stuffs (Unix).
    if os.name == "posix":
-      print "XGngeo has been successfully installed!\n"\
-         "You may now use the 'xgngeo' command to run the program." %
+      print "XGngeo v%s has been successfully installed!\n"\
+         "You may now use the 'xgngeo' command to run the program." %\
          VERSION
